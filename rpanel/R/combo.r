@@ -9,6 +9,8 @@ w.combo <- function(parent, prompt = NULL, values, pos = NULL, action = I,
     action(val)
   }
                
+  handshake(tclRequire, "BWidget")
+  
   maxlen <- function(values) {
     len <- 0
     for(i in 1:length(values)) {

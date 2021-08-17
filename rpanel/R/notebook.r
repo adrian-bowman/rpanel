@@ -43,7 +43,7 @@ rp.notebook.raise <- function(panel, parentname, label) {
 w.notebook <- function(parent, width=NULL, height=NULL, pos=NULL, foreground=NULL, background="lightgray", font=NULL) {
   widget <- w.createwidget(parent, pos, background)
   widget$.type = "notebook"  
-  # handshake(.Tcl, 'package require BWidget')
+  handshake(.Tcl, 'package require BWidget')
   widget$.widget <- handshake(tkwidget, parent$.handle, "NoteBook")
   if ( (!is.null(width)) && (!is.null(height)) )
      handshake(tkconfigure, widget$.widget, width=width, height=height,

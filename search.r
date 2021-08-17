@@ -1,15 +1,15 @@
 #     Search for text in all files
 
-target    <- "combo"
+target    <- "tclRequire"
 diry      <- "."
 diry      <- "~/research/rpanel/testing"
-diry      <- "~/research/rpanel/rpanel_without_bwidget"
-recursive <- FALSE
+diry      <- "~/research/rpanel/rpanel"
+recursive <- TRUE
 recursive <- TRUE
 
 files <- list.files(diry, full.names = TRUE)
 files <- list.files(diry, full.names = TRUE, recursive = recursive)
-ind   <- grep(".rda", files)
+ind   <- c(grep(".rda", files), grep(".gif", files))
 files <- files[-ind]
 
 for (ifl in files) {

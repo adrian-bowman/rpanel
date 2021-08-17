@@ -1,16 +1,13 @@
 #     Test code for rp.block
 
-detach(package:rpanel)
-unloadNamespace("rpanel")
-library(rpanel)
+devtools::install("rpanel")
 
 fn <- function(panel) {
-  cat("hello\n")
+  cat("Hello\n")
   panel
 }
-# Create an rpanel and add the button "Simulate" to it.
 panel <- rp.control()
-rp.button(panel, action = fn, title = "Simulate")
+rp.button(panel, action = fn, title = "Hello")
 rp.block(panel)
 
 
@@ -19,5 +16,5 @@ boxp.sim <- function(panel) {
   panel
 }
 panel <- rp.control()
-rp.button(panel, action = boxp.sim, title = "Test")
+rp.button(panel, action = boxp.sim, title = "Boxplot")
 rp.block(panel)

@@ -3,27 +3,24 @@
 Installation
 ------------
 
-Install without bwidget:
+To install using devtools to unload the current version:
+      install("rpanel")
+      
+To install the old-fashioned way:
       install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
 
+To install from GitHub:
+		    library(devtools)
+		    install_github("adrian-bowman/rpanel/rpanel")
 
-If there are problems with BWidgets, download the package and place the folder in /usr/local/lib.
+To install from a terminal:  
+      cd ~/research/rpanel
+      R CMD INSTALL rpanel
 
-Code to detach the current package and install a new one:
+R code to detach the current package and install a new one:
       detach(package:rpanel)
       unloadNamespace("rpanel")
       install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
-
-
-In a terminal window, go to the level where the rpanel directory is found.  
-
-      cd ~/research/rpanel_1.1-5-not-yet-released
-
-Type
-
-      R CMD INSTALL rpanel
-
-to install the library.
 
 
 Checking
@@ -32,8 +29,10 @@ Checking
 Update the history, ChangeLog, NAMESPACE, DESCRIPTION, rpanel.r (onAttach) 
 CITATION and rpanel.package.Rd (date, version number, function names) files as required.
 
-The checking procedure is invoked by
+From the devtools package, use
+      check("rpanel")
 
+The old-fashioned checking procedure is invoked from a terminal by
       R CMD build rpanel
       R CMD CHECK --as-cran rpanel    
       
