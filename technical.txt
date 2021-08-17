@@ -1,0 +1,55 @@
+#         Technical details for the rpanel library
+
+Installation
+------------
+
+Install without bwidget:
+      install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
+
+
+If there are problems with BWidgets, download the package and place the folder in /usr/local/lib.
+
+Code to detach the current package and install a new one:
+      detach(package:rpanel)
+      unloadNamespace("rpanel")
+      install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
+
+
+In a terminal window, go to the level where the rpanel directory is found.  
+
+      cd ~/research/rpanel_1.1-5-not-yet-released
+
+Type
+
+      R CMD INSTALL rpanel
+
+to install the library.
+
+
+Checking
+--------
+
+Update the history, ChangeLog, NAMESPACE, DESCRIPTION, rpanel.r (onAttach) 
+CITATION and rpanel.package.Rd (date, version number, function names) files as required.
+
+The checking procedure is invoked by
+
+      R CMD build rpanel
+      R CMD CHECK --as-cran rpanel    
+      
+Check package dependencies
+      R
+      library(tools)
+      check_packages_in_dir(".")
+
+If data needs to be saved more efficiently, then this should be
+      R CMD build --resave-data rpanel
+
+A Windows binary version can be created by uploading this file to
+      win-builder.r-project.org/
+      
+Submission to CRAN
+------------------
+
+Send this to CRAN through the web form at
+          https://cran.r-project.org/submit.html

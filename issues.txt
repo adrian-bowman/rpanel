@@ -1,0 +1,167 @@
+--------------------------------------------------------------
+	               Immediate changes to rpanel
+--------------------------------------------------------------
+
+rp.one/twosample
+  - does this mean add a two-sample setting?
+  - also add binomial proportions?
+
+rp.regression
+  - the specification of models is very inflexible.  Can this be improved?
+    See CoFE slides in the teaching material for an example.
+
+Example involving group in rp.plot4d help file.
+
+rp.mururoa
+   Error about figure margins if hspace left to default.  (Windows?)
+   
+Allow rp.spacetime to exploit regular data, with marginal space and time input and a matrix of spacetime values.
+
+
+--------------------------------------------------------------
+	               Future changes to rpanel
+--------------------------------------------------------------
+
+rp.anova
+  - the model specifications are very messy.  Use "interaction", "additive", etc. in some way?
+
+Stuart Jones: e-mail 27.08.13
+First, thank you so much for developing rpanel. It is a really great tool.  In my use of the package I've noticed one little bug that turns out to be quite bothersome in some applications.  This has to do with the slider widget. Because the action function is called on movement of the slider, rather than release of the mouse button or movement and mouse button release, there is a lag in updating of a graph that is dependent on a slider.  Are you actively maintaining or updating rpanel in any way? Would this be an easy fix or fairly difficult?
+
+See errors reported by Megan: research/rpanel/megan/Rpanel Report/r panel 1.1-3 errors
+
+Is this still a problem?
+Communication from level 2.  See the rp.sample (new) cartoon and the passing of display and display.old.  Stripped down version could help to isolate the problem.
+
+A function to create R-Shiny code in simple cases?
+
+rp.text: 
+ - this is centred.  More flexibility?
+
+Probably OK to remove all the statements of type:
+  if (!exists(panel$panelname, .rpenv, inherits = FALSE))
+    panelname <- deparse(substitute(panel))
+  else 
+    panelname <- panel$panelname
+
+randomfields package is due to change at the end of Nov. 2013.  
+This may require changes to rp.geosim, rp.mururoa and rp.firth.
+
+rp.table: 
+ - code exists but this is not yet tested.
+ - what does this do?  Example doesn't seem to work properly.
+ 
+rp.notebook
+  - using rp.regression within a notebook (draft for Megan)
+  - extension to other functions
+  
+Use global variables in rp.cartoons to set hscale and vscale, so the user can adjust this through a doublebutton or slider when using the functions live.
+
+The new hostpanel system (project with Megan) should really keep the information required by the inserted function in a separate place from the main panel, otherwise there is the risk of name conflicts with panel items.
+
+Use globalVariables() to stop the messages about global bindings when the package is checked.  See the code at the foot of the utilities.r file in the sm package for an example of how to do this.
+
+rp.plot4d:
+  - Allow a function to control the plotting for the data inside the probe.
+    Can/should aspects such as ylim be controllable here?  Easier not to in 
+    the first instance.  This might work perfectly well for non-response
+    data too (in which case the radiobuttons for histogram and density 
+    might be removed?).
+  - provide an argument which defines a function to be used to create the 
+    location plot, with default function(x, y) points(x, y).
+  - Allow axes to be suppressed (for example for map plotting).
+    In fact, more general plotting control parameters might be passed by ....
+  - Change l in hcl rather than s in hsv, to avoid grey points when a
+    normal window is used.
+
+rp.logistic:
+  - binomial example
+  
+The set up of a panel can be very jittery, presumably because of handshaking.  For example:
+   data(CofE)
+   attach(CofE)
+   rp.regression(Employ, Giving)
+This may partly be due to the addition of individual items in a radiogroup etc.
+Is there a `hide' mechanism which could help, with the panel appearing once everything is in place?
+
+If the higher level rp functions (rp.anova etc.) are used repeatedly, the windows become slow to disappear when they are closed.  Is there any issue about memory building up?
+
+I've had a go at creating an rp.checkbox.change function.  There are one or two things I can't do and which I need to ask you.  Where is the varname and the action function to be found?  At the moment I have to pass them again as arguments.  See test-rp-ancova.r.  The presence of the overall mean is not corrected properly.
+If this works, it should probably be transferred to rp-anova.r too.
+
+Replace rp.control.put by rp.update(panel) which simply calls 
+the equivalent of rp.control.put(panel$panelname, panel)?  I can do this.
+(There is a possibility of being in the wrong environment.)
+
+Check that the panel is returned by the action function and report if it isn't.  This is very helpful to users.
+
+Consider a demo.  Does this suffer from the same ask=TRUE problem as example?
+
+rp.mururoa, rp.firth:
+  - put in a yes/no dialogue box when the `Take sample' button is pressed,
+    to confirm that this is a once-only opportunity.
+
+rp.surface:
+ - rgl option
+
+rp.curve:
+ - create this to match rp.surface?  Animate (linear regression) until a 
+   request to stop, with other forms of display including density shading.
+   uncertainty-sm1.r in India files - strange behaviour in trying to call
+   a function repeatedly.
+
+Can we change the fontsize in rp.text?  (rp.plot4d)  Not at the moment.
+
+Construct a general distribution plotter, with controls added and curves  
+added for each new selected distribution?  Use a menu to select distributions.
+
+Homer cartoon.  How to create a button-launched video?
+
+Can the positions and values of controls be set by command?
+For example, it could be useful to set a slider in reaction to
+some other gui.
+
+Tab facility
+   Create a sampling tool, which contains rp.correlation, rp.sample etc.
+   as separate tabs?
+   
+Create a Help button which can launch the help page for the application.
+   See rp.mururoa.  The help page needs to be called at the global level
+   which is problematic in standard rpanel operations.
+   More flexible options?
+
+Layout issues:
+   Trap and handle mixtures of presence and absence of row and column
+      specification in all functions.  (Grid and other layouts cannot
+      be mixed.)
+   Bounding boxes
+      - rp.checkbox, rp.textentry: no box by default but optional
+      - rp.radiogroup: box by default but option to remove
+
+Allow other types of graphic files (not just gif) in rp.image.
+
+rp.textentry keeps re-entering a clicked box as character
+once is has been changed.  (The cursor is still clicking
+there.)  It would also be good to have the option to force
+the entered text to be numeric. 
+(gamm.r in teaching/inference/scripts)
+
+rp.power: notice the existence of power.t.test in R.
+This also allows the identification of n from a given power.
+This could give more flexibility to the rp.power function.
+
+Could the draw/redraw scheme of things allow the same code
+to be written but draw or redraw invoked by some automatic
+means?  See tables.r for repeated code, with only draw/redraw
+different in the action functions.
+Should the .draw/.redraw convention be forced?
+
+rp.tables
+    Add a vertical line at the appropriate value when using
+      a fixed probability (as with p-values)?
+    The t density function doesn't go to zero for small df's.
+    Extend the range of distributions, with parameter buttons
+      for each one.
+
+It would be useful to have an rp.lines function which does the
+same as lines in R.  Also rp.points (and rp.segments).

@@ -1,0 +1,21 @@
+#     Two-way anova
+
+detach(package:rpanel)
+unloadNamespace("rpanel")
+install.packages("~/research/rpanel_1.1-5-not-yet-released/rpanel/", repos = NULL, type = "source")
+library(rpanel)
+rp.anova(1/stime, treatment, model = c(TRUE, TRUE), model0 = c(TRUE, FALSE), panel = FALSE)
+
+attach(poisons)
+poison <- paste("poison", poison)
+
+rp.anova(1/stime, treatment)
+rp.anova(1/stime, treatment, poison)
+rp.anova(1/stime, treatment, model = c(TRUE, TRUE), model0 = c(TRUE, TRUE), panel = FALSE)
+rp.anova(1/stime, treatment, model = c(TRUE, TRUE), model0 = c(TRUE, TRUE), panel.plot = FALSE)
+
+rp.anova(1/stime, treatment, poison,
+   model = c(TRUE, TRUE, FALSE, FALSE),
+   model0 = c(TRUE, TRUE, FALSE, FALSE))
+
+rp.anova(1/stime, treatment, poison, hscale = 1.5)

@@ -1,0 +1,4 @@
+See https://www.stat.berkeley.edu/~spector/s133/Bwidget.html.
+   
+There is some discussion of the problems of installing BWidgets at:
+   https://stackoverflow.com/questions/21729873/r-having-trouble-installing-rpanel

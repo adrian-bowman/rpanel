@@ -1,0 +1,18 @@
+Dear 
+
+Thanks for your e-mail.  The root of the problem is that, annoyingly, an additional Tcl file called BWidget is need to run panel but this is not now routinely distributed with the main TCL package on a Mac.  (It is on Windows.)  I have given the instructions below to install BWidget on your machine.  Panel should then install without difficulty.
+
+Let me know how you get on.
+
+Best wishes,
+
+Adrian
+
+
+1. Download bwidget  from:
+          https://sourceforge.net/projects/tcllib/files/BWidget/
+Expand the compressed file into a folder.
+
+2. Install bwidget by copying the downloaded folder into the folder containing the Tcl libraries.  This should be in a location such as
+          /usr/local/bin/tcl8.6   or    /usr/local/lib
+That is just an example.  You may need to poke around a little to find the precise location on your machine.
