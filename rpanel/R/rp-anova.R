@@ -140,7 +140,7 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
         	   plt <- plt + ggplot2::coord_flip()
          	if (type == "Two-way") plt <- plt + ggplot2::facet_grid(. ~ z)
         	   if (!interactive) {
-        	      plt   <- plt + ggtitle(paste("p-value:", round(p.value, 3)))
+        	      plt   <- plt + ggplot2::ggtitle(paste("p-value:", round(p.value, 3)))
         	      panel <- plt
         	   }
             print(plt)

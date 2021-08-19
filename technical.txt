@@ -26,29 +26,35 @@ R code to detach the current package and install a new one:
 Checking
 --------
 
-Update the history, ChangeLog, NAMESPACE, DESCRIPTION, rpanel.r (onAttach) 
-CITATION and rpanel.package.Rd (date, version number, function names) files as required.
+Update the inst/history, ChangeLog, NAMESPACE, DESCRIPTION, R/rpanel.r (onAttach) 
+inst/CITATION and man/rpanel.package.Rd (date, version number, function names) files as required.
 
 From the devtools package, use
-      check("rpanel")
+      devtools::check("rpanel")
+
+To check that it can be built under Windows
+      devtools::check_win_devel("rpanel")
+      devtools::check_win_release("rpanel")
+      devtools::check_win_oldrelease("rpanel")
+
+Check package dependencies
+      tools::check_packages_in_dir("rpanel")
+
+If data needs to be saved more efficiently, then this should be
+      R CMD build --resave-data rpanel
 
 The old-fashioned checking procedure is invoked from a terminal by
       R CMD build rpanel
       R CMD CHECK --as-cran rpanel    
       
-Check package dependencies
-      R
-      library(tools)
-      check_packages_in_dir(".")
-
-If data needs to be saved more efficiently, then this should be
-      R CMD build --resave-data rpanel
-
-A Windows binary version can be created by uploading this file to
+The old-fashioned method of creating a Windows binary version is to upload to
       win-builder.r-project.org/
       
 Submission to CRAN
 ------------------
 
-Send this to CRAN through the web form at
+Submit by
+      release("sm")
+      
+The old web form is at
           https://cran.r-project.org/submit.html

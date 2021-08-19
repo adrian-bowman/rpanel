@@ -1,12 +1,19 @@
-detach(package:rpanel)
-unloadNamespace("rpanel")
+#     ests for the rp.regression function
+
+devtools::install("rpanel")
 library(rpanel)
 
-attach(CofE)
-rp.regression(Giving ~ Employ + Elect + Attend, range = c(-60, 40), col = "green")
-rp.regression(Giving ~ Employ         + Attend, range = c(-60, 40))
+with(CofE, 
+  rp.regression(Giving ~ Employ + Elect + Attend, yrange = c(-60, 40), col = "green"))
+with(CofE, 
+  rp.regression(Giving ~ Employ         + Attend, yrange = c(-60, 40)))
 
-model <- lm(Giving ~ Employ + Elect + Attend, x = TRUE)
+model <- lm(Giving ~ Employ + Elect + Attend, data = CofE, x = TRUE)
+rp.regression(model, yrange = c(-60, 40))
 
-rp.regression(Employ, Giving)
-rp.regression(cbind(Employ, Attend), Giving)
+with(CofE, 
+  rp.regression(Employ, Giving))
+
+
+with(CofE, 
+  rp.regression(cbind(Employ, Attend), Giving))

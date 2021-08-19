@@ -9,10 +9,4 @@ Best wishes,
 Adrian
 
 
-1. Download bwidget  from:
-          https://sourceforge.net/projects/tcllib/files/BWidget/
-Expand the compressed file into a folder.
-
-2. Install bwidget by copying the downloaded folder into the folder containing the Tcl libraries.  This should be in a location such as
-          /usr/local/bin/tcl8.6   or    /usr/local/lib
-That is just an example.  You may need to poke around a little to find the precise location on your machine.
+Download BWidget from https://sourceforge.net/projects/tcllib/files/BWidget/ and expand the compressed file into a folder.  On a Windows machine, this folder should then be copied into the folder containing the Tcl libraries that were installed as part of R.  This may be in a location such as C:\Program Files\R\R-4.0.2\Tcl\lib (with an obvious change to the version number of R being used).  On a Mac, the downloaded folder should be copied into the folder where the main Tcl package is located.  This should be in a location such as /usr/local/lib.

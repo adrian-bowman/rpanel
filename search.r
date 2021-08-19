@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "tclRequire"
+target    <- "ggtitle"
 diry      <- "."
 diry      <- "~/research/rpanel/testing"
 diry      <- "~/research/rpanel/rpanel"
