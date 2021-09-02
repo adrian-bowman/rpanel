@@ -16,7 +16,7 @@ up to more sophisticated mini-applications.  In addition to functions which crea
 Package: \tab rpanel\cr
 Type: \tab Package\cr
 Version: \tab 1.1-5\cr
-Date: \tab 2021-08-19\cr
+Date: \tab 2021-09-02\cr
 License: \tab GNU\cr
 }
 
