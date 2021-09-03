@@ -1,0 +1,1232 @@
+Hmm ... looks like a package
+
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2017-04-15>
+Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
+
+(./Rd2.tex
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.112, 2017/01/04 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+No file Rd2.aux.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [1{/usr/local/texl
+ive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+[2]
+Overfull \hbox (14.78088pt too wide) in paragraph at lines 130--131
+[][][]\T1/zi4/m/n/10 rp.control[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.butt
+on[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.slider[][][]\T1/ptm/m/n/10 ,[][]\
+T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.texten
+try[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.checkbox[][][]\T1/ptm/m/n/10 ,[]
+[]\T1/zi4/m/n/10 rp.radiogroup[][][] 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (2.75702pt too wide) in paragraph at lines 147--153
+\T1/ptm/m/n/10 service-hours, be-tween fail-ures of the air-conditioning equip-
+ment in a Boe-ing 720 air-craft. (Proschan
+[3] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [4]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [5]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [6]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (16.3794pt too wide) in paragraph at lines 481--481
+ []\T1/zi4/m/n/10 rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = 
+NA, zlab = NA, title = NULL,[] 
+[9] [10] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [11] [12]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [13]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [14]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (8.13824pt too wide) in paragraph at lines 803--805
+[]\T1/ptm/m/n/10 the ti-tle of the check-box group. This de-faults to the name 
+of the vari-able \T1/zi4/m/n/10 variable\T1/ptm/m/n/10 . 
+[15] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 886--886
+ []   \T1/zi4/m/n/10 rp.ci(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200
+, 500), confidence = 0.95,[] 
+[16] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [17]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (19.72977pt too wide) in paragraph at lines 990--990
+ []\T1/zi4/m/n/10 rp.colour.key(cols, brks, par.mar = c(5, 0, 4, 3) + 0.1, natu
+ral = TRUE, margin = FALSE)[] 
+[18] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [19] [20]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [21]
+Overfull \hbox (13.92102pt too wide) in paragraph at lines 1156--1170
+[][][]\T1/zi4/m/n/10 rp.button[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.chec
+kbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.combo[][][]\T1/ptm/m/n/10 , []
+[]\T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.gr
+id[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.image[][][]\T1/ptm/m/n/10 , [][]
+\T1/zi4/m/n/10 rp.listbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.menu[][][
+]\T1/ptm/m/n/10 ,
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 1210--1211
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 . 
+[22] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [23]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [24]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [25] [26]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.41006pt too wide) in paragraph at lines 1456--1456
+ []\T1/zi4/m/n/10 rp.firth(hscale = NA, col.palette = rev(heat.colors(40)), col
+.se = "blue", file = NA,[] 
+[27]
+Overfull \hbox (63.88884pt too wide) in paragraph at lines 1479--1480
+\T1/ptm/m/n/10 rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 firth.dmp
+\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-ment to
+ \T1/zi4/m/n/10 file.path(getwd(),"firth.dmp")\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [28] [29]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [30]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [31]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.76044pt too wide) in paragraph at lines 1711--1711
+ []\T1/zi4/m/n/10 rp.image(panel, filename, imagename, action=NA, mousedrag=NA,
+ mouseup=NA, pos=NULL,[] 
+[32] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [33]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [34]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+Overfull \hbox (1.39984pt too wide) in paragraph at lines 1850--1850
+ []\T1/zi4/m/n/10 rp.line(panel, imagename, x1, y1, x2, y2, color = "black", wi
+dth = 2, id = \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 rpline\TS1/zi4/m/n/10 '\T1/zi4/m/
+n/10 )[] 
+[35] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [36] [37]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [38]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [39]
+Overfull \hbox (58.64835pt too wide) in paragraph at lines 2105--2107
+[]\T1/ptm/m/n/10 The list for a menu con-sist-ing of "File" and "Edit" only wou
+ld be de-fined as \T1/zi4/m/n/10 list(list("File"),list("Edit"))\T1/ptm/m/n/10 
+. 
+
+Overfull \hbox (31.97005pt too wide) in paragraph at lines 2108--2110
+\T1/ptm/m/n/10 and "Paste", would be de-fined as \T1/zi4/m/n/10 list(list("File
+","Quit"),list("Edit","Copy","Cut","Paste"))\T1/ptm/m/n/10 . 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [40]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [41]
+Overfull \hbox (21.41006pt too wide) in paragraph at lines 2206--2206
+ []\T1/zi4/m/n/10 rp.mururoa(hscale = NA, col.palette = rev(heat.colors(40)), c
+ol.se = "blue", file = NA,[] 
+
+Overfull \hbox (91.66873pt too wide) in paragraph at lines 2229--2230
+\T1/ptm/m/n/10 di-rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 mururo
+a.dmp\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-me
+nt to \T1/zi4/m/n/10 file.path(getwd(),"mururoa.dmp")\T1/ptm/m/n/10 .
+[42] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [43]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (23.02776pt too wide) in paragraph at lines 2352--2353
+[]\T1/ptm/m/n/10 The role of this func-tion is to spec-ify a note-book. Nest-in
+g of note-books is per-mit-ted. \T1/zi4/m/n/10 rp.notebook.raise
+[44] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [45]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [46] [47]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (36.41006pt too wide) in paragraph at lines 2533--2533
+ []   \T1/zi4/m/n/10 rp.spacetime(space, time, y, model, group, subset, col.pal
+ette, col.breaks, col.labels,[] 
+[48] [49] [50] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71808pt too wide) in paragraph at lines 2713--2715
+[]\T1/ptm/m/n/10 place If \T1/zi4/m/n/10 pos \T1/ptm/m/n/10 is set to a vec-tor
+ of four in-te-ger val-ues, these are in-ter-preted as \T1/zi4/m/n/10 (x,y,widt
+h,height)
+[51]
+Overfull \hbox (11.52783pt too wide) in paragraph at lines 2724--2725
+[]\T1/ptm/m/n/10 columnspanAn in-te-ger which spec-i-fies how many columns the 
+con-trol should span. Columns
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [52]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [53]
+Overfull \hbox (24.76044pt too wide) in paragraph at lines 2813--2813
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("radiogro
+up", .nc(), sep=""), ...)[] 
+[54] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [55] [56]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [57]
+Overfull \hbox (12.99763pt too wide) in paragraph at lines 2997--2998
+\T1/ptm/m/n/10 able de-ter-mines the type of plot pro-duced. It can be set to "
+all", "mean", "mean+bar"
+[58] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.3794pt too wide) in paragraph at lines 3049--3049
+ []   \T1/zi4/m/n/10 rp.sample(mu = 0, sigma = 1, n = 25, panel.plot = TRUE, hs
+cale = NA, vscale = hscale)[] 
+[59] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (8.09036pt too wide) in paragraph at lines 3133--3133
+ []\T1/zi4/m/n/10 rp.slider(panel, variable, from, to, action=I, labels=NULL, n
+ames=NULL, title=NULL,[] 
+
+Overfull \hbox (4.76044pt too wide) in paragraph at lines 3137--3137
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("slider",
+ .nc(), sep=""), ...)[] 
+[60]
+Underfull \hbox (badness 10000) in paragraph at lines 3187--3194
+
+[61] [62] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [63]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [64]
+Overfull \hbox (8.88837pt too wide) in paragraph at lines 3354--3355
+[]\T1/ptm/m/n/10 a char-ac-ter string which de-ter-mines whether the lower (\T1
+/zi4/m/n/10 "lower"\T1/ptm/m/n/10 ), up-per (\T1/zi4/m/n/10 "upper"\T1/ptm/m/n/
+10 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [65] [66]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (33.08014pt too wide) in paragraph at lines 3472--3472
+ []  \T1/zi4/m/n/10 parentname = deparse(substitute(panel)), name = paste("text
+entry", .nc(), sep=""), ...)[] 
+[67] [68] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [69]
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 3627--3627
+ []           \T1/zi4/m/n/10 vscale=1, pos=NULL, foreground=NULL, background=NU
+LL, margins=c(0, 0, 0, 0),[] 
+[70] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3720--3721
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+[71] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3751--3752
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [72]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [73]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (203.78905pt too wide) in paragraph at lines 3866--3873
+[]\T1/ptm/m/n/10 These data are pro-vided by the World Bank through the databas
+e at \T1/zi4/m/n/10 http://data.worldbank.org/data-catalog/world-development-in
+dicators
+
+Overfull \hbox (58.63878pt too wide) in paragraph at lines 3866--3873
+\T1/ptm/m/n/10 The data are also used use in the Google Pub-lic Data Ex-plorer 
+\T1/zi4/m/n/10 http://www.google.com/publicdata/directory
+No file Rd2.ind.
+[74]
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information){/usr/local/texlive/2017/te
+xmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2017/texmf-
+dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/
+dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2017/texmf-dist/fonts/type1/p
+ublic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1
+/urw/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times
+/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pf
+b></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (74 pages, 244702 bytes).
+Transcript written on Rd2.log.
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2017-04-15>
+Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
+
+(./Rd2.tex
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.112, 2017/01/04 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.out)
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.toc [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pd
+ftex.map}]) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+[3]
+Overfull \hbox (14.78088pt too wide) in paragraph at lines 130--131
+[][][]\T1/zi4/m/n/10 rp.control[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.butt
+on[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.slider[][][]\T1/ptm/m/n/10 ,[][]\
+T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.texten
+try[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.checkbox[][][]\T1/ptm/m/n/10 ,[]
+[]\T1/zi4/m/n/10 rp.radiogroup[][][] 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (2.75702pt too wide) in paragraph at lines 147--153
+\T1/ptm/m/n/10 service-hours, be-tween fail-ures of the air-conditioning equip-
+ment in a Boe-ing 720 air-craft. (Proschan
+[4] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [5]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [6]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [9]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [10]
+Overfull \hbox (16.3794pt too wide) in paragraph at lines 481--481
+ []\T1/zi4/m/n/10 rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = 
+NA, zlab = NA, title = NULL,[] 
+[11] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [12]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [13]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [14]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [15]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [16]
+Overfull \hbox (8.13824pt too wide) in paragraph at lines 803--805
+[]\T1/ptm/m/n/10 the ti-tle of the check-box group. This de-faults to the name 
+of the vari-able \T1/zi4/m/n/10 variable\T1/ptm/m/n/10 . 
+[17] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 886--886
+ []   \T1/zi4/m/n/10 rp.ci(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200
+, 500), confidence = 0.95,[] 
+[18] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [19]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (19.72977pt too wide) in paragraph at lines 990--990
+ []\T1/zi4/m/n/10 rp.colour.key(cols, brks, par.mar = c(5, 0, 4, 3) + 0.1, natu
+ral = TRUE, margin = FALSE)[] 
+[20] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [21]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [22]
+Overfull \hbox (13.92102pt too wide) in paragraph at lines 1156--1170
+[][][]\T1/zi4/m/n/10 rp.button[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.chec
+kbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.combo[][][]\T1/ptm/m/n/10 , []
+[]\T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.gr
+id[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.image[][][]\T1/ptm/m/n/10 , [][]
+\T1/zi4/m/n/10 rp.listbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.menu[][][
+]\T1/ptm/m/n/10 ,
+[23] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 1210--1211
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 . 
+[24] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [25]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [26]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [27] [28]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.41006pt too wide) in paragraph at lines 1456--1456
+ []\T1/zi4/m/n/10 rp.firth(hscale = NA, col.palette = rev(heat.colors(40)), col
+.se = "blue", file = NA,[] 
+[29]
+Overfull \hbox (63.88884pt too wide) in paragraph at lines 1479--1480
+\T1/ptm/m/n/10 rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 firth.dmp
+\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-ment to
+ \T1/zi4/m/n/10 file.path(getwd(),"firth.dmp")\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [30] [31]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [32]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [33]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.76044pt too wide) in paragraph at lines 1711--1711
+ []\T1/zi4/m/n/10 rp.image(panel, filename, imagename, action=NA, mousedrag=NA,
+ mouseup=NA, pos=NULL,[] 
+[34] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [35]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [36]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+Overfull \hbox (1.39984pt too wide) in paragraph at lines 1850--1850
+ []\T1/zi4/m/n/10 rp.line(panel, imagename, x1, y1, x2, y2, color = "black", wi
+dth = 2, id = \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 rpline\TS1/zi4/m/n/10 '\T1/zi4/m/
+n/10 )[] 
+[37] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [38] [39]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [40]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [41]
+Overfull \hbox (58.64835pt too wide) in paragraph at lines 2105--2107
+[]\T1/ptm/m/n/10 The list for a menu con-sist-ing of "File" and "Edit" only wou
+ld be de-fined as \T1/zi4/m/n/10 list(list("File"),list("Edit"))\T1/ptm/m/n/10 
+. 
+
+Overfull \hbox (31.97005pt too wide) in paragraph at lines 2108--2110
+\T1/ptm/m/n/10 and "Paste", would be de-fined as \T1/zi4/m/n/10 list(list("File
+","Quit"),list("Edit","Copy","Cut","Paste"))\T1/ptm/m/n/10 . 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [42]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [43]
+Overfull \hbox (21.41006pt too wide) in paragraph at lines 2206--2206
+ []\T1/zi4/m/n/10 rp.mururoa(hscale = NA, col.palette = rev(heat.colors(40)), c
+ol.se = "blue", file = NA,[] 
+
+Overfull \hbox (91.66873pt too wide) in paragraph at lines 2229--2230
+\T1/ptm/m/n/10 di-rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 mururo
+a.dmp\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-me
+nt to \T1/zi4/m/n/10 file.path(getwd(),"mururoa.dmp")\T1/ptm/m/n/10 .
+[44] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [45]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (23.02776pt too wide) in paragraph at lines 2352--2353
+[]\T1/ptm/m/n/10 The role of this func-tion is to spec-ify a note-book. Nest-in
+g of note-books is per-mit-ted. \T1/zi4/m/n/10 rp.notebook.raise
+[46] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [47]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [48] [49]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (36.41006pt too wide) in paragraph at lines 2533--2533
+ []   \T1/zi4/m/n/10 rp.spacetime(space, time, y, model, group, subset, col.pal
+ette, col.breaks, col.labels,[] 
+[50] [51] [52] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71808pt too wide) in paragraph at lines 2713--2715
+[]\T1/ptm/m/n/10 place If \T1/zi4/m/n/10 pos \T1/ptm/m/n/10 is set to a vec-tor
+ of four in-te-ger val-ues, these are in-ter-preted as \T1/zi4/m/n/10 (x,y,widt
+h,height)
+[53]
+Overfull \hbox (11.52783pt too wide) in paragraph at lines 2724--2725
+[]\T1/ptm/m/n/10 columnspanAn in-te-ger which spec-i-fies how many columns the 
+con-trol should span. Columns
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [54]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [55]
+Overfull \hbox (24.76044pt too wide) in paragraph at lines 2813--2813
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("radiogro
+up", .nc(), sep=""), ...)[] 
+[56] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [57] [58]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [59]
+Overfull \hbox (12.99763pt too wide) in paragraph at lines 2997--2998
+\T1/ptm/m/n/10 able de-ter-mines the type of plot pro-duced. It can be set to "
+all", "mean", "mean+bar"
+[60] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.3794pt too wide) in paragraph at lines 3049--3049
+ []   \T1/zi4/m/n/10 rp.sample(mu = 0, sigma = 1, n = 25, panel.plot = TRUE, hs
+cale = NA, vscale = hscale)[] 
+[61] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (8.09036pt too wide) in paragraph at lines 3133--3133
+ []\T1/zi4/m/n/10 rp.slider(panel, variable, from, to, action=I, labels=NULL, n
+ames=NULL, title=NULL,[] 
+
+Overfull \hbox (4.76044pt too wide) in paragraph at lines 3137--3137
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("slider",
+ .nc(), sep=""), ...)[] 
+[62]
+Underfull \hbox (badness 10000) in paragraph at lines 3187--3194
+
+[63] [64] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [65]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [66]
+Overfull \hbox (8.88837pt too wide) in paragraph at lines 3354--3355
+[]\T1/ptm/m/n/10 a char-ac-ter string which de-ter-mines whether the lower (\T1
+/zi4/m/n/10 "lower"\T1/ptm/m/n/10 ), up-per (\T1/zi4/m/n/10 "upper"\T1/ptm/m/n/
+10 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [67] [68]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (33.08014pt too wide) in paragraph at lines 3472--3472
+ []  \T1/zi4/m/n/10 parentname = deparse(substitute(panel)), name = paste("text
+entry", .nc(), sep=""), ...)[] 
+[69] [70] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [71]
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 3627--3627
+ []           \T1/zi4/m/n/10 vscale=1, pos=NULL, foreground=NULL, background=NU
+LL, margins=c(0, 0, 0, 0),[] 
+[72] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3720--3721
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+[73] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3751--3752
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [74]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [75]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (203.78905pt too wide) in paragraph at lines 3866--3873
+[]\T1/ptm/m/n/10 These data are pro-vided by the World Bank through the databas
+e at \T1/zi4/m/n/10 http://data.worldbank.org/data-catalog/world-development-in
+dicators
+
+Overfull \hbox (58.63878pt too wide) in paragraph at lines 3866--3873
+\T1/ptm/m/n/10 The data are also used use in the Google Pub-lic Data Ex-plorer 
+\T1/zi4/m/n/10 http://www.google.com/publicdata/directory
+No file Rd2.ind.
+[76]
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux) )
+(see the transcript file for additional information){/usr/local/texlive/2017/te
+xmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2017/texmf-
+dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/
+dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2017/texmf-dist/fonts/type1/p
+ublic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1
+/urw/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times
+/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pf
+b></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (76 pages, 250627 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2017] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (338 entries accepted, 0 rejected).
+Sorting entries......done (3016 comparisons).
+Generating output file Rd2.ind....done (324 lines written, 1 warning).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2017-04-15>
+Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
+
+(./Rd2.tex
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.112, 2017/01/04 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.out)
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.toc [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pd
+ftex.map}]) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+[3]
+Overfull \hbox (14.78088pt too wide) in paragraph at lines 130--131
+[][][]\T1/zi4/m/n/10 rp.control[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.butt
+on[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.slider[][][]\T1/ptm/m/n/10 ,[][]\
+T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.texten
+try[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.checkbox[][][]\T1/ptm/m/n/10 ,[]
+[]\T1/zi4/m/n/10 rp.radiogroup[][][] 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (2.75702pt too wide) in paragraph at lines 147--153
+\T1/ptm/m/n/10 service-hours, be-tween fail-ures of the air-conditioning equip-
+ment in a Boe-ing 720 air-craft. (Proschan
+[4] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [5]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [6]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [9]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [10]
+Overfull \hbox (16.3794pt too wide) in paragraph at lines 481--481
+ []\T1/zi4/m/n/10 rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = 
+NA, zlab = NA, title = NULL,[] 
+[11] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [12]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [13]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [14]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [15]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [16]
+Overfull \hbox (8.13824pt too wide) in paragraph at lines 803--805
+[]\T1/ptm/m/n/10 the ti-tle of the check-box group. This de-faults to the name 
+of the vari-able \T1/zi4/m/n/10 variable\T1/ptm/m/n/10 . 
+[17] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 886--886
+ []   \T1/zi4/m/n/10 rp.ci(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200
+, 500), confidence = 0.95,[] 
+[18] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [19]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (19.72977pt too wide) in paragraph at lines 990--990
+ []\T1/zi4/m/n/10 rp.colour.key(cols, brks, par.mar = c(5, 0, 4, 3) + 0.1, natu
+ral = TRUE, margin = FALSE)[] 
+[20] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [21]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [22]
+Overfull \hbox (13.92102pt too wide) in paragraph at lines 1156--1170
+[][][]\T1/zi4/m/n/10 rp.button[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.chec
+kbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.combo[][][]\T1/ptm/m/n/10 , []
+[]\T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.gr
+id[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.image[][][]\T1/ptm/m/n/10 , [][]
+\T1/zi4/m/n/10 rp.listbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.menu[][][
+]\T1/ptm/m/n/10 ,
+[23] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 1210--1211
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 . 
+[24] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [25]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [26]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [27] [28]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.41006pt too wide) in paragraph at lines 1456--1456
+ []\T1/zi4/m/n/10 rp.firth(hscale = NA, col.palette = rev(heat.colors(40)), col
+.se = "blue", file = NA,[] 
+[29]
+Overfull \hbox (63.88884pt too wide) in paragraph at lines 1479--1480
+\T1/ptm/m/n/10 rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 firth.dmp
+\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-ment to
+ \T1/zi4/m/n/10 file.path(getwd(),"firth.dmp")\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [30] [31]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [32]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [33]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.76044pt too wide) in paragraph at lines 1711--1711
+ []\T1/zi4/m/n/10 rp.image(panel, filename, imagename, action=NA, mousedrag=NA,
+ mouseup=NA, pos=NULL,[] 
+[34] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [35]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [36]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+Overfull \hbox (1.39984pt too wide) in paragraph at lines 1850--1850
+ []\T1/zi4/m/n/10 rp.line(panel, imagename, x1, y1, x2, y2, color = "black", wi
+dth = 2, id = \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 rpline\TS1/zi4/m/n/10 '\T1/zi4/m/
+n/10 )[] 
+[37] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [38] [39]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [40]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [41]
+Overfull \hbox (58.64835pt too wide) in paragraph at lines 2105--2107
+[]\T1/ptm/m/n/10 The list for a menu con-sist-ing of "File" and "Edit" only wou
+ld be de-fined as \T1/zi4/m/n/10 list(list("File"),list("Edit"))\T1/ptm/m/n/10 
+. 
+
+Overfull \hbox (31.97005pt too wide) in paragraph at lines 2108--2110
+\T1/ptm/m/n/10 and "Paste", would be de-fined as \T1/zi4/m/n/10 list(list("File
+","Quit"),list("Edit","Copy","Cut","Paste"))\T1/ptm/m/n/10 . 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [42]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [43]
+Overfull \hbox (21.41006pt too wide) in paragraph at lines 2206--2206
+ []\T1/zi4/m/n/10 rp.mururoa(hscale = NA, col.palette = rev(heat.colors(40)), c
+ol.se = "blue", file = NA,[] 
+
+Overfull \hbox (91.66873pt too wide) in paragraph at lines 2229--2230
+\T1/ptm/m/n/10 di-rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 mururo
+a.dmp\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-me
+nt to \T1/zi4/m/n/10 file.path(getwd(),"mururoa.dmp")\T1/ptm/m/n/10 .
+[44] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [45]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (23.02776pt too wide) in paragraph at lines 2352--2353
+[]\T1/ptm/m/n/10 The role of this func-tion is to spec-ify a note-book. Nest-in
+g of note-books is per-mit-ted. \T1/zi4/m/n/10 rp.notebook.raise
+[46] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [47]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [48] [49]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (36.41006pt too wide) in paragraph at lines 2533--2533
+ []   \T1/zi4/m/n/10 rp.spacetime(space, time, y, model, group, subset, col.pal
+ette, col.breaks, col.labels,[] 
+[50] [51] [52] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71808pt too wide) in paragraph at lines 2713--2715
+[]\T1/ptm/m/n/10 place If \T1/zi4/m/n/10 pos \T1/ptm/m/n/10 is set to a vec-tor
+ of four in-te-ger val-ues, these are in-ter-preted as \T1/zi4/m/n/10 (x,y,widt
+h,height)
+[53]
+Overfull \hbox (11.52783pt too wide) in paragraph at lines 2724--2725
+[]\T1/ptm/m/n/10 columnspanAn in-te-ger which spec-i-fies how many columns the 
+con-trol should span. Columns
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [54]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [55]
+Overfull \hbox (24.76044pt too wide) in paragraph at lines 2813--2813
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("radiogro
+up", .nc(), sep=""), ...)[] 
+[56] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [57] [58]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [59]
+Overfull \hbox (12.99763pt too wide) in paragraph at lines 2997--2998
+\T1/ptm/m/n/10 able de-ter-mines the type of plot pro-duced. It can be set to "
+all", "mean", "mean+bar"
+[60] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.3794pt too wide) in paragraph at lines 3049--3049
+ []   \T1/zi4/m/n/10 rp.sample(mu = 0, sigma = 1, n = 25, panel.plot = TRUE, hs
+cale = NA, vscale = hscale)[] 
+[61] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (8.09036pt too wide) in paragraph at lines 3133--3133
+ []\T1/zi4/m/n/10 rp.slider(panel, variable, from, to, action=I, labels=NULL, n
+ames=NULL, title=NULL,[] 
+
+Overfull \hbox (4.76044pt too wide) in paragraph at lines 3137--3137
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("slider",
+ .nc(), sep=""), ...)[] 
+[62]
+Underfull \hbox (badness 10000) in paragraph at lines 3187--3194
+
+[63] [64] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [65]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [66]
+Overfull \hbox (8.88837pt too wide) in paragraph at lines 3354--3355
+[]\T1/ptm/m/n/10 a char-ac-ter string which de-ter-mines whether the lower (\T1
+/zi4/m/n/10 "lower"\T1/ptm/m/n/10 ), up-per (\T1/zi4/m/n/10 "upper"\T1/ptm/m/n/
+10 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [67] [68]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (33.08014pt too wide) in paragraph at lines 3472--3472
+ []  \T1/zi4/m/n/10 parentname = deparse(substitute(panel)), name = paste("text
+entry", .nc(), sep=""), ...)[] 
+[69] [70] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [71]
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 3627--3627
+ []           \T1/zi4/m/n/10 vscale=1, pos=NULL, foreground=NULL, background=NU
+LL, margins=c(0, 0, 0, 0),[] 
+[72] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3720--3721
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+[73] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3751--3752
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [74]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [75]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (203.78905pt too wide) in paragraph at lines 3866--3873
+[]\T1/ptm/m/n/10 These data are pro-vided by the World Bank through the databas
+e at \T1/zi4/m/n/10 http://data.worldbank.org/data-catalog/world-development-in
+dicators
+
+Overfull \hbox (58.63878pt too wide) in paragraph at lines 3866--3873
+\T1/ptm/m/n/10 The data are also used use in the Google Pub-lic Data Ex-plorer 
+\T1/zi4/m/n/10 http://www.google.com/publicdata/directory
+
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.ind [76] [77]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 133.
+
+[78] [79])
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information){/usr/local/texlive/2017/te
+xmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2017/texmf-
+dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/
+dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2017/texmf-dist/fonts/type1/p
+ublic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts
+/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/
+urw/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/
+utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (79 pages, 273058 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2017] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (338 entries accepted, 0 rejected).
+Sorting entries......done (3016 comparisons).
+Generating output file Rd2.ind....done (324 lines written, 1 warning).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2017-04-15>
+Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
+
+(./Rd2.tex
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.112, 2017/01/04 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/local/texlive/2017/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 377.
+
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.out)
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.toc [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pd
+ftex.map}]) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--115
+
+[3]
+Overfull \hbox (14.78088pt too wide) in paragraph at lines 130--131
+[][][]\T1/zi4/m/n/10 rp.control[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.butt
+on[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.slider[][][]\T1/ptm/m/n/10 ,[][]\
+T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.texten
+try[][][]\T1/ptm/m/n/10 ,[][]\T1/zi4/m/n/10 rp.checkbox[][][]\T1/ptm/m/n/10 ,[]
+[]\T1/zi4/m/n/10 rp.radiogroup[][][] 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (2.75702pt too wide) in paragraph at lines 147--153
+\T1/ptm/m/n/10 service-hours, be-tween fail-ures of the air-conditioning equip-
+ment in a Boe-ing 720 air-craft. (Proschan
+[4] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [5]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [6]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [9]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [10]
+Overfull \hbox (16.3794pt too wide) in paragraph at lines 481--481
+ []\T1/zi4/m/n/10 rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = 
+NA, zlab = NA, title = NULL,[] 
+[11] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [12]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [13]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [14]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [15]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [16]
+Overfull \hbox (8.13824pt too wide) in paragraph at lines 803--805
+[]\T1/ptm/m/n/10 the ti-tle of the check-box group. This de-faults to the name 
+of the vari-able \T1/zi4/m/n/10 variable\T1/ptm/m/n/10 . 
+[17] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 886--886
+ []   \T1/zi4/m/n/10 rp.ci(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200
+, 500), confidence = 0.95,[] 
+[18] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [19]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (19.72977pt too wide) in paragraph at lines 990--990
+ []\T1/zi4/m/n/10 rp.colour.key(cols, brks, par.mar = c(5, 0, 4, 3) + 0.1, natu
+ral = TRUE, margin = FALSE)[] 
+[20] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [21]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [22]
+Overfull \hbox (13.92102pt too wide) in paragraph at lines 1156--1170
+[][][]\T1/zi4/m/n/10 rp.button[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.chec
+kbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.combo[][][]\T1/ptm/m/n/10 , []
+[]\T1/zi4/m/n/10 rp.doublebutton[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.gr
+id[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.image[][][]\T1/ptm/m/n/10 , [][]
+\T1/zi4/m/n/10 rp.listbox[][][]\T1/ptm/m/n/10 , [][]\T1/zi4/m/n/10 rp.menu[][][
+]\T1/ptm/m/n/10 ,
+[23] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 1210--1211
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 . 
+[24] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [25]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [26]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [27] [28]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.41006pt too wide) in paragraph at lines 1456--1456
+ []\T1/zi4/m/n/10 rp.firth(hscale = NA, col.palette = rev(heat.colors(40)), col
+.se = "blue", file = NA,[] 
+[29]
+Overfull \hbox (63.88884pt too wide) in paragraph at lines 1479--1480
+\T1/ptm/m/n/10 rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 firth.dmp
+\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-ment to
+ \T1/zi4/m/n/10 file.path(getwd(),"firth.dmp")\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [30] [31]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [32]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [33]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.76044pt too wide) in paragraph at lines 1711--1711
+ []\T1/zi4/m/n/10 rp.image(panel, filename, imagename, action=NA, mousedrag=NA,
+ mouseup=NA, pos=NULL,[] 
+[34] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [35]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [36]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+Overfull \hbox (1.39984pt too wide) in paragraph at lines 1850--1850
+ []\T1/zi4/m/n/10 rp.line(panel, imagename, x1, y1, x2, y2, color = "black", wi
+dth = 2, id = \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 rpline\TS1/zi4/m/n/10 '\T1/zi4/m/
+n/10 )[] 
+[37] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [38] [39]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [40]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [41]
+Overfull \hbox (58.64835pt too wide) in paragraph at lines 2105--2107
+[]\T1/ptm/m/n/10 The list for a menu con-sist-ing of "File" and "Edit" only wou
+ld be de-fined as \T1/zi4/m/n/10 list(list("File"),list("Edit"))\T1/ptm/m/n/10 
+. 
+
+Overfull \hbox (31.97005pt too wide) in paragraph at lines 2108--2110
+\T1/ptm/m/n/10 and "Paste", would be de-fined as \T1/zi4/m/n/10 list(list("File
+","Quit"),list("Edit","Copy","Cut","Paste"))\T1/ptm/m/n/10 . 
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [42]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [43]
+Overfull \hbox (21.41006pt too wide) in paragraph at lines 2206--2206
+ []\T1/zi4/m/n/10 rp.mururoa(hscale = NA, col.palette = rev(heat.colors(40)), c
+ol.se = "blue", file = NA,[] 
+
+Overfull \hbox (91.66873pt too wide) in paragraph at lines 2229--2230
+\T1/ptm/m/n/10 di-rec-tory, for ex-am-ple to a file named \T1/zi4/m/n/10 mururo
+a.dmp\T1/ptm/m/n/10 , is to set the \T1/zi4/m/n/10 file \T1/ptm/m/n/10 ar-gu-me
+nt to \T1/zi4/m/n/10 file.path(getwd(),"mururoa.dmp")\T1/ptm/m/n/10 .
+[44] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [45]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (23.02776pt too wide) in paragraph at lines 2352--2353
+[]\T1/ptm/m/n/10 The role of this func-tion is to spec-ify a note-book. Nest-in
+g of note-books is per-mit-ted. \T1/zi4/m/n/10 rp.notebook.raise
+[46] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [47]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [48] [49]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (36.41006pt too wide) in paragraph at lines 2533--2533
+ []   \T1/zi4/m/n/10 rp.spacetime(space, time, y, model, group, subset, col.pal
+ette, col.breaks, col.labels,[] 
+[50] [51] [52] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (9.71808pt too wide) in paragraph at lines 2713--2715
+[]\T1/ptm/m/n/10 place If \T1/zi4/m/n/10 pos \T1/ptm/m/n/10 is set to a vec-tor
+ of four in-te-ger val-ues, these are in-ter-preted as \T1/zi4/m/n/10 (x,y,widt
+h,height)
+[53]
+Overfull \hbox (11.52783pt too wide) in paragraph at lines 2724--2725
+[]\T1/ptm/m/n/10 columnspanAn in-te-ger which spec-i-fies how many columns the 
+con-trol should span. Columns
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [54]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [55]
+Overfull \hbox (24.76044pt too wide) in paragraph at lines 2813--2813
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("radiogro
+up", .nc(), sep=""), ...)[] 
+[56] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [57] [58]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [59]
+Overfull \hbox (12.99763pt too wide) in paragraph at lines 2997--2998
+\T1/ptm/m/n/10 able de-ter-mines the type of plot pro-duced. It can be set to "
+all", "mean", "mean+bar"
+[60] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (11.3794pt too wide) in paragraph at lines 3049--3049
+ []   \T1/zi4/m/n/10 rp.sample(mu = 0, sigma = 1, n = 25, panel.plot = TRUE, hs
+cale = NA, vscale = hscale)[] 
+[61] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (8.09036pt too wide) in paragraph at lines 3133--3133
+ []\T1/zi4/m/n/10 rp.slider(panel, variable, from, to, action=I, labels=NULL, n
+ames=NULL, title=NULL,[] 
+
+Overfull \hbox (4.76044pt too wide) in paragraph at lines 3137--3137
+ []  \T1/zi4/m/n/10 parentname=deparse(substitute(panel)), name=paste("slider",
+ .nc(), sep=""), ...)[] 
+[62]
+Underfull \hbox (badness 10000) in paragraph at lines 3187--3194
+
+[63] [64] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [65]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [66]
+Overfull \hbox (8.88837pt too wide) in paragraph at lines 3354--3355
+[]\T1/ptm/m/n/10 a char-ac-ter string which de-ter-mines whether the lower (\T1
+/zi4/m/n/10 "lower"\T1/ptm/m/n/10 ), up-per (\T1/zi4/m/n/10 "upper"\T1/ptm/m/n/
+10 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [67] [68]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (33.08014pt too wide) in paragraph at lines 3472--3472
+ []  \T1/zi4/m/n/10 parentname = deparse(substitute(panel)), name = paste("text
+entry", .nc(), sep=""), ...)[] 
+[69] [70] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [71]
+Overfull \hbox (9.71954pt too wide) in paragraph at lines 3627--3627
+ []           \T1/zi4/m/n/10 vscale=1, pos=NULL, foreground=NULL, background=NU
+LL, margins=c(0, 0, 0, 0),[] 
+[72] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3720--3721
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+[73] (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (12.85812pt too wide) in paragraph at lines 3751--3752
+[]\T1/ptm/m/n/10 the pan-el-name of the rel-e-vant panel. This is usu-ally iden
+-ti-fied as \T1/zi4/m/n/10 panel$panelname\T1/ptm/m/n/10 .
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [74]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [75]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (203.78905pt too wide) in paragraph at lines 3866--3873
+[]\T1/ptm/m/n/10 These data are pro-vided by the World Bank through the databas
+e at \T1/zi4/m/n/10 http://data.worldbank.org/data-catalog/world-development-in
+dicators
+
+Overfull \hbox (58.63878pt too wide) in paragraph at lines 3866--3873
+\T1/ptm/m/n/10 The data are also used use in the Google Pub-lic Data Ex-plorer 
+\T1/zi4/m/n/10 http://www.google.com/publicdata/directory
+
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.ind [76] [77]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 133.
+
+[78] [79])
+(/private/var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T/RtmplAdP9o/Rd2pdf4d76
+ce3106e/Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information){/usr/local/texlive/2017/te
+xmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2017/texmf-
+dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/
+dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2017/texmf-dist/fonts/type1/p
+ublic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts
+/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/
+urw/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/
+utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (79 pages, 273408 bytes).
+Transcript written on Rd2.log.
+Saving output to ‘rpanel-manual.pdf’ ...
+Done
+You may want to clean up by 'rm -Rf /var/folders/n8/g_bt9wl975lgkq_jqf34l2s40000gq/T//RtmplAdP9o/Rd2pdf4d76ce3106e'

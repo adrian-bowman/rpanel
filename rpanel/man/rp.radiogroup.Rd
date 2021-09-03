@@ -18,7 +18,7 @@ rp.radiogroup(panel, variable, vals, labels=NULL, initval=vals[1], pos=NULL,
 \arguments{
   \item{panel}{the panel in which the radiobuttons should appear.}
   \item{variable}{the name of the variable whose values are set by the buttons.}
-  \item{vals}{the values attached to the labels for return from the action function. NOTE: for implmentation.}
+  \item{vals}{the values attached to the labels for return from the action function. NOTE: for implementation.}
   \item{labels}{the labels for the radiobuttons.}
   \item{initval}{the initial value for the variable (optional). The initial value can also be specified in the call to \code{rp.control}.}
   \item{pos}{the layout instructions. Please see the \code{\link{rp.pos}} example and help for full details.}

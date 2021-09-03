@@ -25,11 +25,18 @@ R code to detach the current package and install a new one:
 Checking
 --------
 
+To check that rpanel works without BWidget, use a terminal to move the BWidget directory to and from its storage location.
+      cd /usr/local/lib
+      mv ~/research/rpanel/bwidget/bwidget-1.9.10 .
+      mv bwidget-1.9.10 ~/research/rpanel/bwidget/
+
 Update the inst/history, ChangeLog, NAMESPACE, DESCRIPTION, R/rpanel.r (onAttach) 
 inst/CITATION and man/rpanel.package.Rd (date, version number, function names) files as required.
 
-From the devtools package, use
+From the devtools and related packages, use
       devtools::check("rpanel")
+      devtools::spell_check("rpanel")
+      devtools::check_rhub("rpanel")
 
 To check that it can be built under Windows
       devtools::check_win_devel("rpanel")
@@ -37,12 +44,21 @@ To check that it can be built under Windows
       devtools::check_win_oldrelease("rpanel")
 
 Check package dependencies
-      tools::check_packages_in_dir("rpanel")
+      R CMD build rpanel (from a terminal)
+      tools::check_packages_in_dir(".", reverse = list())
+      tools::summarize_check_packages_in_dir_results(".")
+      
+The approved way of checking dependencies is the revdepcheck page but I can't get this to work. On a Mac, the current CRAN version of rpanel can't be installed while other things go wrong on Windows.
+      devtools::revdep("rpanel")
+      setwd("rpanel")
+      usethis::use_revdep()
+      setwd("..")
+      revdepcheck::revdep_check("rpanel")
 
 If data needs to be saved more efficiently, then this should be
       R CMD build --resave-data rpanel
 
-The old-fashioned checking procedure is invoked from a terminal by
+The old-fashioned checking procedure, which is also worth doing, is invoked from a terminal by
       R CMD build rpanel
       R CMD CHECK --as-cran rpanel    
       
@@ -53,7 +69,7 @@ Submission to CRAN
 ------------------
 
 Submit by
-      devtools::release("sm")
+      devtools::release("rpanel")
       
 The old web form is at
           https://cran.r-project.org/submit.html
