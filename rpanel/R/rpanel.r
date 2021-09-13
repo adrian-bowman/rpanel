@@ -35,7 +35,7 @@ handshakereverse <- function(fun, ...) {
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Package `rpanel', version 1.1-5: type help(rpanel) for summary information")
+  packageStartupMessage("Package `rpanel', version 1.1-6: type help(rpanel) for summary information")
 }
 
 .nc <- function()

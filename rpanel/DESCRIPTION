@@ -1,7 +1,7 @@
 Package: rpanel
 Type: Package
 Title: Simple Interactive Controls for R using the 'tcltk' Package
-Version: 1.1-5
+Version: 1.1-6
 Date: 2021-09-02
 Author: Bowman, Bowman, Gibson and Crawford
 Maintainer: Adrian Bowman <adrian.bowman@glasgow.ac.uk>
