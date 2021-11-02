@@ -1,8 +1,12 @@
 #     Test code for rp.sample
 
-detach(package:rpanel)
-unloadNamespace("rpanel")
 library(rpanel)
+if (reinstall) devtools::install("rpanel")
+
+rp.sample()
+
+# This does not work without restaring R.  Why is that?
+rp.sample(shiny = FALSE)
 
 rp.sample(hscale = 1.5)
 
