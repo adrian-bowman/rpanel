@@ -22,8 +22,8 @@
 \item{confidence}{the available confidence levels (\code{0.90}, \code{0.95}, \code{0.99}).}
 \item{panel}{a logical parameter which determines whether interactive controls are provided or a simple static plot is produced.}
 \item{shiny}{a logical parameter which determines whether a \code{shiny} (\code{TRUE}) is launched. When this argument is set to \code{FALSE} a \code{tcltk} app is launched.}
-\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \code{tkrplot} library is required.}
-\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+\item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \code{tkrplot} library is required.}
+\item{hscale, vscale}{scaling parameters, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 }
 
 \details{A button is provided to sample repeatedly from the current settings.  Confidence intervals which cover the population mean are coloured blue while those which miss are coloured red.  Repeated simulations illustrate the property of confidence intervals to capture the true value with probability determined by the confidence level (which here is set to 0.95).}

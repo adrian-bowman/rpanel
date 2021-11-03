@@ -1,12 +1,9 @@
 #     Test of rp.tables
 
-# setwd("/Volumes/adrian/research/rpanel")
-# setwd("~/Desktop")
-setwd("rpanel_1.1-0-not-yet-released/rpanel/R")
-
-detach(package:rpanel)
-unloadNamespace("rpanel")
 library(rpanel)
+if (reinstall) devtools::install("rpanel")
+
+rp.tables()
 
 rp.tables(panel = FALSE)
 rp.tables(panel = FALSE, observed.value = 1)

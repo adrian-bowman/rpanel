@@ -17,8 +17,9 @@ This function launches a panel which allows standard normal, t, chi-squared and 
 
 \arguments{
 \item{panel}{a logical parameter which determines whether interactive controls are provided or a simple static plot is produced.}
-\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the tkrplot package is required.}
-\item{hscale, vscale}{horizontal and vertical scaling factors for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  It can be useful to adjust these for projection on a screen, for example.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+\item{shiny}{a logical parameter which determines whether interactive controls are provided or a simple static plot is produced.}
+\item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the tkrplot package is required.}
+\item{hscale, vscale}{horizontal and vertical scaling factors, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  It can be useful to adjust these for projection on a screen, for example.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 \item{distribution}{a character string which determines which distribution is to be plotted.  Current options are "normal" (default), "t", "chi-squared" and "F".}
 \item{degf1, degf2}{The degrees of freedom used for the chi-squared (\code{degf1}) and F (\code{degf1}, \code{degf2}) distributions.}
 \item{observed.value}{a numerical value, or a character string which will be converted by \code{as.numeric}, which identifies an observed value whose location within the distribution is of interest.}

@@ -69,17 +69,23 @@ ci_server <- function(input, output) {
 }
 
 rp.ci <- function(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), confidence = 0.95,
-                  shiny = TRUE, panel = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale) {
+                  panel = TRUE, shiny = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale) {
 
-   if (panel & shiny & require(shiny, quietly = TRUE)) {
-      sample.sizes <- as.list(sample.sizes)
-      names(sample.sizes) <- as.character(sample.sizes)
-      panel <- list(pars = c("mean" = mu, "s.d." = sigma), ssize = 30, confidence = confidence,
-                    coverage = 0, nsim = 0, first = TRUE, nopanel = !panel)
-      runApp(shinyApp(ci_ui, ci_server))
-      return(invisible())
+   if (!interactive()) panel <- FALSE
+   if (panel) {
+      if (shiny) {
+         if (require(shiny, quietly = TRUE)) {
+            sample.sizes <- as.list(sample.sizes)
+            names(sample.sizes) <- as.character(sample.sizes)
+            panel <- list(pars = c("mean" = mu, "s.d." = sigma), ssize = 30, confidence = confidence,
+                          coverage = 0, nsim = 0, first = TRUE, nopanel = !panel)
+            runApp(shinyApp(ci_ui, ci_server))
+            return(invisible())
+         }
+         else
+            cat("the shiny package is not available - reverting to tcltk.")
+      }
    }
-   else if (shiny) cat("the shiny package is not available - reverting to tcltk.")
    
    if (is.na(hscale)) {
       if (.Platform$OS.type == "unix") hscale <- 1

@@ -9,17 +9,16 @@
 }
 
 \usage{
-   rp.sample(mu = 0, sigma = 1, n = 25, panel.plot = TRUE, hscale = NA, vscale = hscale)
+   rp.sample(mu = 0, sigma = 1, n = 25, shiny = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale)
 }
 
 \arguments{
 \item{mu}{the mean of the normal distribution.}
 \item{sigma}{the standard deviation of the normal distribution.}
 \item{n}{the size of the sample.}
-\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE). If the plot is to be placed inside the panel then the tkrplot library is required.}
-\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel} is
-	set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows
-	platforms.}
+\item{shiny}{a logical parameter which determines whether a \code{shiny} (\code{TRUE}) is launched. When this argument is set to \code{FALSE} a \code{tcltk} app is launched.}
+\item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE). If the plot is to be placed inside the panel then the tkrplot library is required.}
+\item{hscale, vscale}{scaling parameters, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 }
 
 \details{

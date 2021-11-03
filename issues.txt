@@ -2,6 +2,9 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.tables
+  - create an alias rp.distributions
+
 rp.one/twosample
   - does this mean add a two-sample setting?
   - also add binomial proportions?
