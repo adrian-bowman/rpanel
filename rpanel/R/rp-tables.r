@@ -138,7 +138,7 @@ tables.draw <- function(tables) {
   tables
 }
 
-rp.tables <- function(panel = TRUE, shiny = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale,
+rp.tables <- function(panel = TRUE, display = "shiny", panel.plot = TRUE, hscale = NA, vscale = hscale,
                       distribution = "normal", degf1 = 5, degf2 = 30,
                       observed.value = " ", observed.value.showing = !is.na(observed.value),
                       probability = 0.05, tail.probability, tail.direction, heading) {
@@ -147,7 +147,7 @@ rp.tables <- function(panel = TRUE, shiny = TRUE, panel.plot = TRUE, hscale = NA
   
   if (!interactive()) panel <- FALSE
   if (panel) {
-    if (shiny) {
+    if (display = "shiny") {
       if (require(shiny, quietly = TRUE)) {
         runApp(shinyApp(tables_ui, tables_server))
         return(invisible())

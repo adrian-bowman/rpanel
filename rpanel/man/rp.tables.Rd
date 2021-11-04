@@ -16,8 +16,8 @@ This function launches a panel which allows standard normal, t, chi-squared and 
 }
 
 \arguments{
-\item{panel}{a logical parameter which determines whether interactive controls are provided or a simple static plot is produced.}
-\item{shiny}{a logical parameter which determines whether interactive controls are provided or a simple static plot is produced.}
+\item{panel}{a logical value determining whether an interactive panel is created or a static plot is produced.}
+\item{display}{a logical parameter which can take values \code{"shiny"} or \code{"tcltk"} determines whether a \code{shiny} or \code{tcltk} app is launched when \code{panel} is set to \code{TRUE}.}
 \item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the tkrplot package is required.}
 \item{hscale, vscale}{horizontal and vertical scaling factors, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  It can be useful to adjust these for projection on a screen, for example.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 \item{distribution}{a character string which determines which distribution is to be plotted.  Current options are "normal" (default), "t", "chi-squared" and "F".}

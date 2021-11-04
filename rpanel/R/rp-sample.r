@@ -112,7 +112,7 @@ sample.draw <- function(panel) {
 }
 
 
-rp.sample <- function(mu = 0, sigma = 1, n = 25, shiny = TRUE, panel.plot = TRUE,
+rp.sample <- function(mu = 0, sigma = 1, n = 25, display = "shiny", panel.plot = TRUE,
                       hscale = NA, vscale = hscale) {
 
    # sample.draw <- function(panel) {
@@ -188,7 +188,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25, shiny = TRUE, panel.plot = TRUE
    #    panel
    # }
    
-   if (shiny) {
+   if (display == "shiny") {
       if (require(shiny, quietly = TRUE)) {
          runApp(shinyApp(sample_ui, sample_server))
          return(invisible())

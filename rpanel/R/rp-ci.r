@@ -69,11 +69,11 @@ ci_server <- function(input, output) {
 }
 
 rp.ci <- function(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), confidence = 0.95,
-                  panel = TRUE, shiny = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale) {
+                  panel = TRUE, display = "shiny", panel.plot = TRUE, hscale = NA, vscale = hscale) {
 
    if (!interactive()) panel <- FALSE
    if (panel) {
-      if (shiny) {
+      if (display = "shiny") {
          if (require(shiny, quietly = TRUE)) {
             sample.sizes <- as.list(sample.sizes)
             names(sample.sizes) <- as.character(sample.sizes)

@@ -20,8 +20,8 @@
 \item{mu, sigma}{the population mean and standard deviation.}
 \item{sample.sizes}{the available sample sizes (\code{30}, \code{50}, \code{100}, \code{200}, \code{500}) for simulated data.}
 \item{confidence}{the available confidence levels (\code{0.90}, \code{0.95}, \code{0.99}).}
-\item{panel}{a logical parameter which determines whether interactive controls are provided or a simple static plot is produced.}
-\item{shiny}{a logical parameter which determines whether a \code{shiny} (\code{TRUE}) is launched. When this argument is set to \code{FALSE} a \code{tcltk} app is launched.}
+\item{panel}{a logical value determining whether an interactive panel is created or a static display is produced.}
+\item{display}{a logical parameter which can take values \code{"shiny"} or \code{"tcltk"} determines whether a \code{shiny} or \code{tcltk} app is launched when \code{panel} is set to \code{TRUE}.}
 \item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \code{tkrplot} library is required.}
 \item{hscale, vscale}{scaling parameters, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 }
