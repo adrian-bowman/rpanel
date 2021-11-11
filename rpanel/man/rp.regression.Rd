@@ -38,7 +38,7 @@ When there are one or two covariates, the function \code{rp.regression} creates 
 \item{hscale, vscale}{scaling parameters for the size of the plot when there is one covariate and \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
    \item{model}{a character variable defining the model to be fitted when the function starts. 
                The valid values are "None", the name of the first and second covariates and the 
-               combination of these names with an "&".  This is relevant only to the case of two 
+               combination of these names combined with " and ".  This is relevant only to the case of two 
                covariates.}
    \item{line.showing}{a logical value determining whether a regression line is shown on the plot
                when the function starts.  This is relevant only to the case of one covariates.}
@@ -73,6 +73,7 @@ If \code{x} is a formula, then a static plot of the regression effects is create
     rp.regression(Employ, Giving)
     rp.regression(cbind(Employ, Attend), Giving)
     rp.regression(Giving ~ Employ + Elect + Attend)
+    rp.regression(cbind(Employ, Attend), Giving, model = "Employ and Attend", panel = FALSE)
   })
 }}
 
