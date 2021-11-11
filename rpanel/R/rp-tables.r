@@ -147,7 +147,7 @@ rp.tables <- function(panel = TRUE, display = "shiny", panel.plot = TRUE, hscale
   
   if (!interactive()) panel <- FALSE
   if (panel) {
-    if (display = "shiny") {
+    if (display == "shiny") {
       if (require(shiny, quietly = TRUE)) {
         runApp(shinyApp(tables_ui, tables_server))
         return(invisible())
