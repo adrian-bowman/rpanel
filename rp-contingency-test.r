@@ -1,8 +1,7 @@
 #     A cartoon for contingency tables
 
-setwd("~/ownCloud/rpanel_1.1-4-not-yet-released")
-
 library(rpanel)
+if (reinstall) devtools::install("rpanel")
 
 x <- t(matrix(c(87,73,64,15,25,16,109,84,92), ncol = 3))
 rownames(x) <- c("red", "yellow", "blue")
@@ -28,6 +27,7 @@ rp.contingency(x, structure = "row populations", scale = "proportions", panel = 
    margins = margins)
 dev.off()
 rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots", margins = margins)
+library(colorspace)
 rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots",
    scale = "proportions", col.data = rainbow_hcl(2)[1], margins = margins)
 pdf("figures/contingency-5.pdf")

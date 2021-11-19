@@ -1,10 +1,11 @@
 #     Two-way anova
 
-detach(package:rpanel)
-unloadNamespace("rpanel")
-install.packages("~/research/rpanel_1.1-5-not-yet-released/rpanel/", repos = NULL, type = "source")
 library(rpanel)
-rp.anova(1/stime, treatment, model = c(TRUE, TRUE), model0 = c(TRUE, FALSE), panel = FALSE)
+if (reinstall) devtools::install("rpanel")
+
+with(poisons, 
+   rp.anova(1/stime, treatment, model = c(TRUE, TRUE), model0 = c(TRUE, FALSE), panel = FALSE)
+)
 
 attach(poisons)
 poison <- paste("poison", poison)

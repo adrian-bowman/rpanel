@@ -222,22 +222,27 @@ rp.contingency <- function(x, names = list(rownames(x), colnames(x)),
                   	 grid.segments(rep(0, nscl - 2), scl[-c(1, nscl)] / max(scl), 
                   	               rep(1, nscl - 2), scl[-c(1, nscl)] / max(scl),
                    	               gp = gpar(col = col.lines))
-                   	 if (reference.model & superimpose) {
-                   	 	ncells <- nrow(x) * ncol(x)
-                   	 	est0   <- if (scale == "counts") props0[j] * rtots[i]
-                   	 	          else                   props0[j]
+                   	 est  <- if (scale == "counts") x[i, j] else props[i, j]
+                   	 wdth <- if (scale == "counts")     0.2 else 0.8 * rtots[i] / sum(rtots)
+                     grid.rect(0.5, 0, width = wdth, height = est / max(scl),
+                        just = c("centre", "bottom"),
+                        gp = gpar(fill = NULL, col = col.data))
+                     if (reference.model & superimpose) {
+                        ncells <- nrow(x) * ncol(x)
+                        est0   <- if (scale == "counts") props0[j] * rtots[i]
+                        else                   props0[j]
                         se.i   <- if (scale == "counts") sqrt(props0[j] * rtots[i] / (nr * nc))
-                                  else                   sqrt(props0[j] / (rtots[i] * nr * nc))
-#                       Block
-#                        grid.rect(0.5, 0, width = 0.8, height = props0[j],
-#                           just = c("centre", "bottom"),
-#                           gp = gpar(fill = col.model, col = col.model))
-#                       Lines
-#                        zgrid <- c(props0[j] - 2 * se.i, props0[j] + 2 * se.i)
-#                        zgrid[zgrid < 0] <- 0
-#                        zgrid[zgrid > 1] <- 1
-#                        grid.segments(rep(0.1, 2), zgrid, rep(0.9, 2), zgrid, gp = gpar(lty = 2))
-#                        Shading
+                        else                   sqrt(props0[j] / (rtots[i] * nr * nc))
+                        #                       Block
+                        #                        grid.rect(0.5, 0, width = 0.8, height = props0[j],
+                        #                           just = c("centre", "bottom"),
+                        #                           gp = gpar(fill = col.model, col = col.model))
+                        #                       Lines
+                        #                        zgrid <- c(props0[j] - 2 * se.i, props0[j] + 2 * se.i)
+                        #                        zgrid[zgrid < 0] <- 0
+                        #                        zgrid[zgrid > 1] <- 1
+                        #                        grid.segments(rep(0.1, 2), zgrid, rep(0.9, 2), zgrid, gp = gpar(lty = 2))
+                        #                        Shading
                         if (variation) {
                            zgrid <- seq(est0 - 3 * se.i, est0 + 3 * se.i, length = 100)
                            zmax  <- if (scale == "counts") max(scl) else 1
@@ -245,27 +250,23 @@ rp.contingency <- function(x, names = list(rownames(x), colnames(x)),
                            lvl   <- as.numeric(substr(col.background, 5, 6))
                            shft  <- lvl - as.numeric(substr(col.model, 5, 6))
                            # grid.segments(0.05, zgrid / max(scl), 0.95, zgrid / max(scl),
-                              # gp = gpar(col = paste("grey", 
-                                # lvl - round(shft * exp(-0.5 * (est0 - zgrid)^2 / se.i^2))), sep = ""))
+                           # gp = gpar(col = paste("grey", 
+                           # lvl - round(shft * exp(-0.5 * (est0 - zgrid)^2 / se.i^2))), sep = ""))
                            back  <- c(col2rgb(col.background) / 255)
                            front <- c(col2rgb(col.model) / 255)
                            wts   <- exp(-0.5 * (est0 - zgrid)^2 / se.i^2)
-                           clr   <- rbind((1 - wts) * back[1] + wts * front[1],
-                                          (1 - wts) * back[2] + wts * front[2],
-                                          (1 - wts) * back[3] + wts * front[3])
-                           clr   <- apply(clr, 2, function(x) rgb(x[1], x[2], x[3]))
+                           # clr   <- rbind((1 - wts) * back[1] + wts * front[1],
+                           #                (1 - wts) * back[2] + wts * front[2],
+                           #                (1 - wts) * back[3] + wts * front[3])
+                           # clr   <- apply(clr, 2, function(x) rgb(x[1], x[2], x[3]))
+                           clr   <- rgb(front[1], front[2], front[3], wts)
                            grid.segments(0.05, zgrid / max(scl), 0.95, zgrid / max(scl),
-                              gp = gpar(col = clr))
+                                         gp = gpar(col = clr))
                         }
                         else
                            grid.lines(c(0.05, 0.05, 0.95, 0.95), c(0, rep(est0, 2), 0) / max(scl),
-                              gp = gpar(col = col.model, lwd = 2))
-                   	 }
-                   	 est  <- if (scale == "counts") x[i, j] else props[i, j]
-                   	 wdth <- if (scale == "counts")     0.2 else 0.8 * rtots[i] / sum(rtots)
-                     grid.rect(0.5, 0, width = wdth, height = est / max(scl),
-                        just = c("centre", "bottom"),
-                        gp = gpar(fill = NULL, col = col.data))
+                                      gp = gpar(col = col.model, lwd = 2))
+                     }
                      # grid.lines(c(0.5 - wdth / 2, 0.5 + wdth / 2), rep(props[i, j], 2),
                         # gp = gpar(col = "blue"))
 #                     grid.points(0.5, props[i, j], pch = 16, gp = gpar(col = "black"))

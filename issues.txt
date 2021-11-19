@@ -24,6 +24,18 @@ rp.mururoa
    
 Allow rp.spacetime to exploit regular data, with marginal space and time input and a matrix of spacetime values.
 
+rp.sample
+   Allow binomial data to be specified.
+   This needs a proportion instead of a mean, for both population and sample.
+   The standard deviation is also irrelevant.
+   Can this be done by changing the displayed guis?
+   The vertical location of 2 se in the sample mean plot seems rather high.
+
+rp.contingency
+   Integrate into the package rather than as a separate file.
+   
+Comparison of reference and observed.
+   Use of transparency, as in rp.contingency, everywhere.
 
 --------------------------------------------------------------
 	               Future changes to rpanel
