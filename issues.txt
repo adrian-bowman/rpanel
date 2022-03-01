@@ -34,8 +34,14 @@ rp.sample
 rp.contingency
    Integrate into the package rather than as a separate file.
    
-Comparison of reference and observed.
-   Use of transparency, as in rp.contingency, everywhere.
+rp.anova
+   Use of transparency to compare reference density and observed, as in rp.contingency.
+   Other functions which need this?
+   
+rp.geosim
+  This has been changed to allow panel = FALSE but more extensive changes are required for consistency.
+  Some thinking to be done here.
+  The help file also needs to be updated.
 
 --------------------------------------------------------------
 	               Future changes to rpanel
