@@ -4,6 +4,8 @@ rp.regression3 <- function (model, prng, col) {
       stop("the denstrip package is not available.")
 
 	if (class(model) == "formula") model <- lm(model, x = TRUE)
+	if (!("x" %in% names(model)))
+	   stop("the 'model' argument needs to be created by calling 'lm' with the argument 'x = TRUE'")
 	if (is.na(col)) {
       col <- if (requireNamespace("colorspace", quietly = TRUE)) colorspace::rainbow_hcl(2)[2]
    	       else grey(0.5)

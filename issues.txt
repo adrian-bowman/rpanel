@@ -16,6 +16,11 @@ rp.one/twosample
 rp.regression
   - the specification of models is very inflexible.  Can this be improved?
     See CoFE slides in the teaching material for an example.
+  - Add the BMJ paper ideas into rp.regression.
+    See the comment from Richard Parker in e-mail (23.03.22) about checking the form
+    of the input information.
+  - should each density strip be scaled to have the same intensity at the maximum?
+  - can glm's be covered?
 
 Example involving group in rp.plot4d help file.
 
@@ -39,21 +44,29 @@ rp.anova
    Other functions which need this?
    
 rp.geosim
-  This has been changed to allow panel = FALSE but more extensive changes are required for consistency.
+  This has been changed to allow panel = FALSE but more extensive changes
+  are required for consistency.
   Some thinking to be done here.
   The help file also needs to be updated.
+
+rp.power
+  Notice the existence of power.t.test in R.
+  This also allows the identification of n from a given power.
+  This could give more flexibility to the rp.power function.
+
 
 --------------------------------------------------------------
 	               Future changes to rpanel
 --------------------------------------------------------------
 
 rp.anova
-  - the model specifications are very messy.  Use "interaction", "additive", etc. in some way?
+  - the model specifications are very messy.
+    Use "interaction", "additive", etc. in some way?
 
 Stuart Jones: e-mail 27.08.13
 First, thank you so much for developing rpanel. It is a really great tool.  In my use of the package I've noticed one little bug that turns out to be quite bothersome in some applications.  This has to do with the slider widget. Because the action function is called on movement of the slider, rather than release of the mouse button or movement and mouse button release, there is a lag in updating of a graph that is dependent on a slider.  Are you actively maintaining or updating rpanel in any way? Would this be an easy fix or fairly difficult?
 
-See errors reported by Megan: research/rpanel/megan/Rpanel Report/r panel 1.1-3 errors
+See errors reported by Megan: research/rpanel/megan/Rpanel Report/rpanel 1.1-3 errors
 
 Is this still a problem?
 Communication from level 2.  See the rp.sample (new) cartoon and the passing of display and display.old.  Stripped down version could help to isolate the problem.
@@ -170,10 +183,6 @@ once is has been changed.  (The cursor is still clicking
 there.)  It would also be good to have the option to force
 the entered text to be numeric. 
 (gamm.r in teaching/inference/scripts)
-
-rp.power: notice the existence of power.t.test in R.
-This also allows the identification of n from a given power.
-This could give more flexibility to the rp.power function.
 
 Could the draw/redraw scheme of things allow the same code
 to be written but draw or redraw invoked by some automatic
