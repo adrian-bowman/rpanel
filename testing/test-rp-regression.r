@@ -40,6 +40,17 @@ model    <- lm(1/stime ~ treat * poison, data = d, x = TRUE)
 rp.regression(model)
 
 # ------------------------------------------------------------------------
+test_label("Logistic regression", test.prompt)
+Conc   <- c(0.375, 0.75, 1.5, 3, 6, 12, 24)
+fac    <- c(0, 1, 0, 1, 0, 1, 0)
+Killed <- c(0, 1, 8, 11, 16, 18, 20)
+N      <- rep(20, 7)
+p      <- Killed / N
+x      <- log(Conc)
+model  <- glm(cbind(Killed, N - Killed) ~ x + fac, family = "binomial", x = TRUE)
+rp.regression(model)
+
+# ------------------------------------------------------------------------
 test_label("Regression with one variable", test.prompt)
 with(CofE, 
   rp.regression(Employ, Giving))

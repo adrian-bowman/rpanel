@@ -23,11 +23,8 @@ rp.regression
   - the specification of models is very inflexible in the one and two 
     covariate cases.  Can this be improved? See CoFE slides in the teaching
     material for an example.
-  - allow the model term labels to be changed in the general case?
-  - should each density strip be scaled to have the same intensity at the maximum?
   - display to show the significance of complete factors or covariates?
     Multiples of error variance?
-  - can glm's be covered?
 
 rp.mururoa
   - error about figure margins if hspace left to default.  (Windows?)

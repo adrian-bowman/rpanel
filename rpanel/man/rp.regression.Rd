@@ -57,7 +57,7 @@ In the case of one covariate, the control panel allows a line to be drawn on the
   
 In the case of two covariates, the plot is constructed with the aid of the rgl package for three-dimensional display, through the \code{rpanel} function \code{\link{rp.plot3d}}.  This display can be rotated and linear models involving one, two or none of the covariates can be displayed.  Residuals can also be superimposed.  Static plots, for printing or other purposes can be created by setting the panel argument to FALSE and specifying \code{model} and \code{residuals.showing} as required.
 
-If \code{x} is a formula or a fitted linear model, then a static plot of the regression effects is created.  Each coefficient is scaled by the length of the range of corresponding covariate values, in order to display the regression effects in a manner which allows these to be compared.  Density strips are used to indicate the uncertainty involved.
+If \code{x} is a formula or a fitted linear model, then a static plot of the regression effects is created.  Each coefficient is scaled by the length of the range of corresponding covariate values, in order to display the regression effects in a manner which allows these to be compared.  Density strips are used to indicate the uncertainty involved.  The uncertainty strips have a common maximum intensity, as this makes it easier to assess the 'extremity' of values of interest for distributions which are very diffuse.
 }
 
 \value{

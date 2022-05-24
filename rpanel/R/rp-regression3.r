@@ -3,7 +3,7 @@ rp.regression3 <- function(model, yrng, ci, point.estimate, labels, subset, col,
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
 
-	if (class(model) == "formula") model <- lm(model, x = TRUE)
+	if ("formula" %in% class(model)) model <- lm(model, x = TRUE)
 	if (!("x" %in% names(model)))
 	   stop("the 'model' argument needs to be created by calling 'lm' with the argument 'x' = TRUE'")
 	if (is.na(col)) {
