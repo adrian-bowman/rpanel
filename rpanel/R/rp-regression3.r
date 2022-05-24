@@ -1,4 +1,4 @@
-rp.regression3 <- function(model, yrng, ci, subset, col, ngrid) {
+rp.regression3 <- function(model, yrng, ci, point.estimate, labels, subset, col, ngrid) {
 
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
@@ -10,43 +10,48 @@ rp.regression3 <- function(model, yrng, ci, subset, col, ngrid) {
       col <- if (requireNamespace("colorspace", quietly = TRUE)) colorspace::rainbow_hcl(3)[2]
    	       else grey(0.5)
 	}
+	mlabels <- rownames(summary(model)$coefficients)[-1]
+	if (any(is.na(labels))) labels <- mlabels
+	if (length(labels) != length(mlabels))
+	   stop("the 'labels' argument does not match the number of model terms.")
 	
 	tbl   <- summary(model)$coefficients[-1, ]
 	if (all(is.na(subset))) subset <- 1:nrow(tbl)
 	coeff <- tbl[subset, 1]
 	se    <- tbl[subset, 2]
-	if (any(is.na(yrng))) yrng <- c(min(coeff - 3 * se), max(coeff + 3 * se))
 	x     <- model$x[ , -1][ , subset]
 	rng   <- t(apply(x, 2, range))
-	vnms  <- names(coeff)
+	vnms  <- labels[subset]
 	for (i in 1:length(coeff)) {
 	   if (abs(diff(rng[i, ]) - 1) > 1e-8)
 	         vnms[i] <- paste(vnms[i], "\n(", signif(rng[i, 1], 5),
 	                                   " - ", signif(rng[i, 2], 5), ")", sep = "")
 	}
-	# Ensure that the order of the terms is retained
-	vnms  <- factor(vnms, levels = vnms)
+	vnms  <- factor(vnms, levels = vnms)	# Order of the terms retained
 	ngp   <- length(coeff)
 	coeff <- coeff * (rng[ , 2] - rng[ , 1])
 	se    <- se * (rng[ , 2] - rng[ , 1])
+	yrng  <- if (any(is.na(yrng))) c(min(coeff - 3 * se), max(coeff + 3 * se)) else yrng
 	coeff <- rep(coeff, each = ngrid)
 	se    <- rep(se,    each = ngrid)
-	xgrid <- seq(yrng[1], yrng[2], length = ngrid)
+	xgrid <- seq(yrng[1], yrng[2], length = ngrid + 2)[2:(ngrid + 1)] # Avoid end-points
 	xgrid <- rep(xgrid, ngp)
 	mn    <- if (ci) coeff else 0
-	dgrid <- dnorm(xgrid, mn, se)
+	dgrid <- dnorm(xgrid, mn, se) * se
 	dfrm  <- data.frame(x = xgrid, y = rep(vnms, each = ngrid), d = dgrid)
 	plt   <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y, fill = d)) +
 	         ggplot2::geom_tile(height = 0.6, show.legend = FALSE) +
 	         ggplot2::scale_fill_gradient(low = "grey92", high = col) +
-	         ggplot2::geom_segment(ggplot2::aes(x = x, y = y - 0.4, xend = x, yend = y  + 0.4,
-	                                fill = NULL, col = "red"),
-	                            data = data.frame(x = unique(coeff), y = as.numeric(vnms))) +
 	         ggplot2::geom_vline(xintercept = 0, linetype = "dashed") +
 	         ggplot2::xlab("Effect size") + ggplot2::ylab("Model terms") +
 	         ggplot2::xlim(yrng[1], yrng[2]) +
 	         ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.position = "none")
-	
+	if (point.estimate)
+	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y - 0.4,
+	                                                  xend = x, yend = y  + 0.4,
+	                                                  fill = NULL, col = "red"),
+	                          data = data.frame(x = unique(coeff), y = as.numeric(vnms)))
+	   
 	print(plt)
 	invisible(plt)
 }

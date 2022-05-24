@@ -7,61 +7,88 @@ https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-wi
 This uses shinyOptions.
 
 rp.tables
-  - create an alias rp.distributions
+  - add a vertical line at the appropriate value when using
+    a fixed probability (as with p-values)?
+  - the t density function doesn't go to zero for small df's.
+  - construct a general distribution plotter, with controls added and
+    curves added for each new selected distribution?
+    Use a menu to select distributions.
+  - create an alias rp.distributions?
 
 rp.one/twosample
   - does this mean add a two-sample setting?
   - also add binomial proportions?
 
 rp.regression
-  - the specification of models is very inflexible.  Can this be improved?
-    See CoFE slides in the teaching material for an example.
-  - Add the BMJ paper ideas into rp.regression.
-    See the comment from Richard Parker in e-mail (23.03.22) about checking the form
-    of the input information.
+  - the specification of models is very inflexible in the one and two 
+    covariate cases.  Can this be improved? See CoFE slides in the teaching
+    material for an example.
+  - allow the model term labels to be changed in the general case?
   - should each density strip be scaled to have the same intensity at the maximum?
+  - display to show the significance of complete factors or covariates?
+    Multiples of error variance?
   - can glm's be covered?
 
-Example involving group in rp.plot4d help file.
-
 rp.mururoa
-   Error about figure margins if hspace left to default.  (Windows?)
+  - error about figure margins if hspace left to default.  (Windows?)
    
-Allow rp.spacetime to exploit regular data, with marginal space and time input and a matrix of spacetime values.
+rp.spacetime
+  - allow regular data to be exploited, with marginal space and time input
+    and a matrix of spacetime values.
 
 rp.sample
-   Allow binomial data to be specified.
-   This needs a proportion instead of a mean, for both population and sample.
-   The standard deviation is also irrelevant.
-   Can this be done by changing the displayed guis?
-   The vertical location of 2 se in the sample mean plot seems rather high.
+  - allow binomial data to be specified.
+    This needs a proportion instead of a mean, for both population and sample.
+    The standard deviation is also irrelevant.
+    Can this be done by changing the displayed guis?
+  - the vertical location of 2 se in the sample mean plot seems rather high.
 
 rp.contingency
-   Integrate into the package rather than as a separate file.
+  - integrate into the package rather than as a separate file.
    
 rp.anova
-   Use of transparency to compare reference density and observed, as in rp.contingency.
-   Other functions which need this?
-   
-rp.geosim
-  This has been changed to allow panel = FALSE but more extensive changes
-  are required for consistency.
-  Some thinking to be done here.
-  The help file also needs to be updated.
-
-rp.power
-  Notice the existence of power.t.test in R.
-  This also allows the identification of n from a given power.
-  This could give more flexibility to the rp.power function.
-
-
---------------------------------------------------------------
-	               Future changes to rpanel
---------------------------------------------------------------
-
-rp.anova
+  - use of transparency to compare reference density and observed, as in rp.contingency.
+    Other functions which need this?
   - the model specifications are very messy.
     Use "interaction", "additive", etc. in some way?
+
+rp.geosim
+  - this has been changed to allow panel = FALSE but more extensive changes
+    are required for consistency. Some thinking to be done here.
+  - the help file also needs to be updated.
+
+rp.power
+  - notice the existence of power.t.test in R. This also allows the 
+    identification of n from a given power. This could give more 
+    flexibility to the rp.power function.
+
+rp.plot4d:
+  - example involving group in help file.
+  - allow a function to control the plotting for the data inside the probe.
+    Can/should aspects such as ylim be controllable here?  Easier not to in 
+    the first instance.  This might work perfectly well for non-response
+    data too (in which case the radiobuttons for histogram and density 
+    might be removed?).
+  - provide an argument which defines a function to be used to create the 
+    location plot, with default function(x, y) points(x, y).
+  - allow axes to be suppressed (for example for map plotting).
+    In fact, more general plotting control parameters might be passed by ....
+  - change l in hcl rather than s in hsv, to avoid grey points when a
+    normal window is used.
+
+rp.logistic:
+  - binomial example
+  
+rp.curve:
+  - create this to match rp.surface?  Animate (linear regression) until a 
+    request to stop, with other forms of display including density shading.
+    uncertainty-sm1.r in India files - strange behaviour in trying to call
+    a function repeatedly.
+
+
+--------------------------------------------------------------
+	               Issues relevant to the tcltk material
+--------------------------------------------------------------
 
 Stuart Jones: e-mail 27.08.13
 First, thank you so much for developing rpanel. It is a really great tool.  In my use of the package I've noticed one little bug that turns out to be quite bothersome in some applications.  This has to do with the slider widget. Because the action function is called on movement of the slider, rather than release of the mouse button or movement and mouse button release, there is a lag in updating of a graph that is dependent on a slider.  Are you actively maintaining or updating rpanel in any way? Would this be an easy fix or fairly difficult?
@@ -99,22 +126,6 @@ The new hostpanel system (project with Megan) should really keep the information
 
 Use globalVariables() to stop the messages about global bindings when the package is checked.  See the code at the foot of the utilities.r file in the sm package for an example of how to do this.
 
-rp.plot4d:
-  - Allow a function to control the plotting for the data inside the probe.
-    Can/should aspects such as ylim be controllable here?  Easier not to in 
-    the first instance.  This might work perfectly well for non-response
-    data too (in which case the radiobuttons for histogram and density 
-    might be removed?).
-  - provide an argument which defines a function to be used to create the 
-    location plot, with default function(x, y) points(x, y).
-  - Allow axes to be suppressed (for example for map plotting).
-    In fact, more general plotting control parameters might be passed by ....
-  - Change l in hcl rather than s in hsv, to avoid grey points when a
-    normal window is used.
-
-rp.logistic:
-  - binomial example
-  
 The set up of a panel can be very jittery, presumably because of handshaking.  For example:
    data(CofE)
    attach(CofE)
@@ -142,16 +153,7 @@ rp.mururoa, rp.firth:
 rp.surface:
  - rgl option
 
-rp.curve:
- - create this to match rp.surface?  Animate (linear regression) until a 
-   request to stop, with other forms of display including density shading.
-   uncertainty-sm1.r in India files - strange behaviour in trying to call
-   a function repeatedly.
-
 Can we change the fontsize in rp.text?  (rp.plot4d)  Not at the moment.
-
-Construct a general distribution plotter, with controls added and curves  
-added for each new selected distribution?  Use a menu to select distributions.
 
 Homer cartoon.  How to create a button-launched video?
 
@@ -189,13 +191,6 @@ to be written but draw or redraw invoked by some automatic
 means?  See tables.r for repeated code, with only draw/redraw
 different in the action functions.
 Should the .draw/.redraw convention be forced?
-
-rp.tables
-    Add a vertical line at the appropriate value when using
-      a fixed probability (as with p-values)?
-    The t density function doesn't go to zero for small df's.
-    Extend the range of distributions, with parameter buttons
-      for each one.
 
 It would be useful to have an rp.lines function which does the
 same as lines in R.  Also rp.points (and rp.segments).

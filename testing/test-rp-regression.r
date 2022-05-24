@@ -21,10 +21,17 @@ test_label("Regression with more than two variables using a fitted model", test.
 fac   <- rep("C", nrow(CofE))
 fac   <- rep(c("A", "B", "C"), each = nrow(CofE) / 3)
 model <- lm(Giving ~ Employ + Elect + Attend + fac, data = CofE)
-cat("Fail with 'x' not set to 'TRUE'\n")
+cat("Failure with 'x' not set to 'TRUE' ...\n")
 try(rp.regression(model))
+cat("Success with 'x' set to 'TRUE' ...\n")
 model <- lm(Giving ~ Employ + Elect + Attend + fac, data = CofE, x = TRUE)
 rp.regression(model)
+cat("Change labels ...\n")
+lbls <- rownames(summary(model)$coefficients)[-1]
+lbls[5] <- "Sex (M vs. F)"
+rp.regression(model, labels = lbls)
+cat("Other arguments ...\n")
+rp.regression(model, subset = 1:3, point.estimate = TRUE)
 
 d        <- poisons
 d$treat  <- factor(d$treatment)

@@ -1,15 +1,18 @@
 #   Simple regression with R graphics
 
-rp.regression <- function (x, y, ylab = NA, x1lab = NA, x2lab = NA, xlab = NA, yrange,
-                           ci = TRUE, subset, ngrid = 200,
-           panel = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale,
-           model = "None", line.showing = TRUE, residuals.showing = FALSE, size = 3, col) {
+rp.regression <- function (x, y,
+                           ylab = NA, x1lab = NA, x2lab = NA, xlab = NA, model = "None",
+                           line.showing = TRUE, residuals.showing = FALSE, size = 3,
+                           panel = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale,
+                           yrange, ci = TRUE, point.estimate = FALSE, labels, subset,
+                           ngrid = 200, col) {
 
    prng <- if (missing(yrange)) NA else yrange
+   lbls <- if (missing(labels)) NA else labels
    sbst <- if (missing(subset)) NA else subset
    if (missing(col)) col <- NA
    if (any(class(x) %in% c("formula", "lm")))
-      return(rp.regression3(x, prng, ci, sbst, col, ngrid))
+      return(rp.regression3(x, prng, ci, point.estimate, lbls, sbst, col, ngrid))
    if (is.na(col)) col <- "red"
 
    if (is.na(hscale)) {
