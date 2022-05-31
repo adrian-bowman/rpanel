@@ -25,6 +25,10 @@ rp.regression
     material for an example.
   - display to show the significance of complete factors or covariates?
     Multiples of error variance?
+  - glms: change the axis label to refer to 'linear predictor'.
+  - mixed models?
+  - allow different funtions to control the calculation of effect size?
+    range, iqr, user-supplied?
 
 rp.mururoa
   - error about figure margins if hspace left to default.  (Windows?)
