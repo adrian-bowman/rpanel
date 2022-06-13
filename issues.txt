@@ -2,6 +2,10 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.geosim
+  - variogram does not diplay.  Missing call to geoR for as.geodata function?
+  - add the covariance function as an alternative to the variogram?
+
 Passing values from the function arguments to the shiny app?  See the post at:
 https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-with-arguments-passed-to-the-shiny-app
 This uses shinyOptions.
