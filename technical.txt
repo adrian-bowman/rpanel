@@ -89,7 +89,9 @@ Alternatively, try
 In RStudio:
   gitcreds::gitcreds_set()
 This will give a prompt for the new PAT.
+Restart R and RStudio.
 
+15.11.22_3: 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
 15.11.22_2: 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
 15.11.22: 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
 23.08.22: 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
