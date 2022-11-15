@@ -5,7 +5,7 @@
 rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa = 10,
                       max.aniso.ratio = 5,
                       min.ngrid = 10, max.ngrid = 25, hscale = NA, vscale = hscale,
-                      smgrid = 25, ngrid = 15, Range = 0.1, pSill = 0.5, Nugget = 0, kappa = 4,
+                      smgrid = 40, ngrid = 15, Range = 0.1, pSill = 0.5, Nugget = 0, kappa = 4,
                       aniso.angle = 0, aniso.ratio = 1,
                       col.palette = terrain.colors(40), panel = TRUE) {
 
@@ -21,18 +21,23 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       warn <- options()$warn
       options(warn = -1)
       if (!panel$points.only | pars.changed) {
-      	 angle <- panel$aniso.angle
-      	 ratio <- panel$aniso.ratio
-      	 mdl <- RandomFields::RMmatern(nu = panel$kappa, scale = panel$Range /sqrt(2), var = panel$pSill,
-                          Aniso = diag(c(1, 1 / ratio)) %*%
-                              matrix(c(cos(angle), sin(angle), -sin(angle), cos(angle)), ncol = 2))
+      	angle <- panel$aniso.angle
+      	ratio <- panel$aniso.ratio
          x.seq <- seq(0, 1, length = panel$smgrid) 
          y.seq <- seq(0, 1, length = panel$smgrid)
-         panel$fieldsm <- list()
-         panel$fieldsm$data <- RandomFields::RFsimulate(mdl, x = x.seq, y = y.seq)$variable1
+         grid  <- list(x = seq(0, 5, length = panel$smgrid),
+                       y = seq(0, 5, length = panel$smgrid)) 
+         obj   <- circulantEmbeddingSetup(grid, Covariance = "Matern",
+                       aRange = panel$Range, smoothness = panel$kappa)
+         panel$fieldsm      <- list()
+         panel$fieldsm$data <- circulantEmbedding(obj)
+         # 	 mdl <- RandomFields::RMmatern(nu = panel$kappa, scale = panel$Range /sqrt(2), var = panel$pSill,
+         #                     Aniso = diag(c(1, 1 / ratio)) %*%
+         #                         matrix(c(cos(angle), sin(angle), -sin(angle), cos(angle)), ncol = 2))
+         # panel$fieldsm$data <- RandomFields::RFsimulate(mdl, x = x.seq, y = y.seq)$variable1
          # panel$fieldsm <- grf(panel$smgrid^2, grid = "reg", cov.model = panel$family,
-            # cov.pars = c(panel$pSill, r), nugget = 0, messages = FALSE, kappa = panel$kappa,
-            # aniso.pars = c(panel$aniso.angle, panel$aniso.ratio))
+         #   cov.pars = c(panel$pSill, r), nugget = 0, messages = FALSE, kappa = panel$kappa,
+         #   aniso.pars = c(panel$aniso.angle, panel$aniso.ratio))
       }
       panel$fieldnug <- geoR::grf(panel$ngrid^2, grid = "reg", cov.model = "pure.nugget",
          cov.pars = c(panel$Nugget, 0), messages = FALSE)
@@ -40,7 +45,7 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       # igrid <- seq(1, panel$smgrid, by = cgrid)
       igrid <- 1 + round(((1:panel$ngrid) - 1) * (panel$smgrid - 1) / (panel$ngrid - 1))
       igrid <- as.matrix(expand.grid(igrid, igrid))
-      panel$fieldsm$data <- matrix(panel$fieldsm$data, ncol = panel$smgrid)
+      # panel$fieldsm$data <- matrix(panel$fieldsm$data, ncol = panel$smgrid)
       panel$data <- panel$fieldsm$data[igrid] + panel$fieldnug$data
       
       panel$ngrid.old  <- panel$ngrid
@@ -186,10 +191,12 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       panel
    }
 
+   if (!requireNamespace("fields", quietly = TRUE))
+      stop("the fields package is not available.")
    if (!requireNamespace("geoR", quietly = TRUE))
       stop("the geoR package is not available.")
-   if (!requireNamespace("RandomFields", quietly = TRUE))
-      stop("the RandomFields package is not available.")
+   # if (!requireNamespace("RandomFields", quietly = TRUE))
+   #    stop("the RandomFields package is not available.")
    
    display.checks.init <- c(TRUE, FALSE)
    checks.lbls <- c("surface", "points")

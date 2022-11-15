@@ -29,11 +29,18 @@ image(matrix(simu$variable1, nrow = ngrid))
 
 RMmodel gives the Aniso information (RMangle)
 
-
-temp <- grf(25^2, grid = "reg", cov.model = "matern",
+library(geoR)
+temp <- grf(50^2, grid = "reg", cov.model = "matern",
             cov.pars = c(500, 0.25), nugget = 0, messages = FALSE,
             kappa = 0.5,
             aniso.pars = c(0, 1))
+
+library(fields)
+grid <- list(x = seq(0, 5, length = 100), y = seq(0, 5, length = 100)) 
+obj  <- circulantEmbeddingSetup(grid, Covariance = "Exponential", aRange=.5)
+look <- circulantEmbedding(obj)
+image.plot(grid[[1]], grid[[2]], look) 
+
 
 rp.firth()
 
