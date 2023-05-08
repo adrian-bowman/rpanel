@@ -196,9 +196,9 @@ mururoa.predict <- function(panel) {
 
   if (!panel$prediction.computed[ind]) {
      sz   <- panel$sz
-     z0 <- sz
-     fg <- geoR::as.geodata(z0)                            # convert to format usable by geoR
-     vg2 <- geoR::variog(fg, trend = panel$trend.setting, max.dist = 60, messages = FALSE) # quadratic trend
+     z0   <- sz
+     fg   <- geoR::as.geodata(z0)                            # convert to format usable by geoR
+     vg2  <- geoR::variog(fg, trend = panel$trend.setting, max.dist = 60, messages = FALSE) # quadratic trend
      vfit <- geoR::variofit(vg2, ini.cov.pars = c(max(vg2$v), 20), nugget = min(vg2$v),
                       cov.model = "matern", kappa = 4, messages = FALSE)
      xx <- 0:60

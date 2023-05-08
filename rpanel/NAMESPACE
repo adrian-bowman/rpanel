@@ -68,8 +68,8 @@ export(
   rp.regression, 
   rp.regression2, 
   rp.rmplot, 
-  rp.tables
-
+  rp.tables,
+  setSliderRatePolicy
 )
 
 import(tcltk)

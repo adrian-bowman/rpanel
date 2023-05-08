@@ -1,6 +1,6 @@
 rp.plot3d <- function (x, y, z, xlab = NA, ylab = NA, zlab = NA, 
     axes = TRUE, new.window = TRUE, type = "p", size = 3, col = "red", 
-    xlim = NA, ylim = NA, zlim = NA, plot = TRUE, ...) {
+    cex = 1, xlim = NA, ylim = NA, zlim = NA, plot = TRUE, ...) {
     	
     if (requireNamespace("rgl", quietly = TRUE)) {
     	
@@ -100,13 +100,13 @@ rp.plot3d <- function (x, y, z, xlab = NA, ylab = NA, zlab = NA,
                rgl::rgl.texts(c(0, -1 - 2 * delta, -1 - 2 * delta), c(-1 -
                    2 * delta, ypos, -1 - 2 * delta), c(1 + 2 * delta,
                    -1 - 2 * delta, 0), c(xlab, ylab, zlab), adj = c(0.5,
-                   0.5), col = "blue")
+                   0.5), col = "blue", cex = cex)
                rgl::rgl.texts((xscale - xadj1)/xadj2, -1 - delta, 1 +
-                   delta, as.character(xscale), col = "black")
+                   delta, as.character(xscale), col = "black", cex = cex)
                rgl::rgl.texts(-1 - delta, (yscale - yadj1)/yadj2, -1 -
-                   delta, as.character(yscale), col = "black")
+                   delta, as.character(yscale), col = "black", cex = cex)
                rgl::rgl.texts(-1 - delta, -1 - delta, (zscale - zadj1)/zadj2,
-                   as.character(zscale), col = "black")
+                   as.character(zscale), col = "black", cex = cex)
                scaling <- function(x, y, z) list(x = x, y = y, z = z)
                rgl.segments(xscale.adj, -1, 1, xscale.adj, -1 -
                    delta/4, 1 + delta/4, scaling = scaling, col = "black")
@@ -123,7 +123,7 @@ rp.plot3d <- function (x, y, z, xlab = NA, ylab = NA, zlab = NA,
               if (length(col) == length(x.orig))
                   clr <- col[ind]
               else clr <- col
-              rgl::rgl.points(x[ind], y[ind], z[ind], size = size, col = clr)
+              rgl::rgl.points(x[ind], y[ind], z[ind], size = size, col = clr, ...)
               }
            }
         scaling <- function(x, y, z) {

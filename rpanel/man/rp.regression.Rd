@@ -6,7 +6,7 @@
 \title{Graphical display of regression effects (interactive with one or two covariates)}
 
 \description{
-When there are one or two covariates, specified through the \code{x}} and \code{y} arguments, the function \code{rp.regression} creates a panel which controls the model which is fitted to the data and displayed on the plot.  In the case of two covariates, a three-dimensional display is created.  If a formula or a fitted linear model is passed through the \code{x} argument, then a graphical display of the regression effects is created, irrespective of the number of covariates.  The function \code{rp.regression2} is retained simply for compatibility with earlier releases of the package.
+When there are one or two covariates, specified through the \code{x} and \code{y} arguments, the function \code{rp.regression} creates a panel which controls the model which is fitted to the data and displayed on the plot.  In the case of two covariates, a three-dimensional display is created.  If a formula or a fitted linear model is passed through the \code{x} argument, then a graphical display of the regression effects is created, irrespective of the number of covariates.  The function \code{rp.regression2} is retained simply for compatibility with earlier releases of the package.
 }
 
 \usage{

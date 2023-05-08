@@ -27,10 +27,10 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
          y.seq <- seq(0, 1, length = panel$smgrid)
          grid  <- list(x = seq(0, 5, length = panel$smgrid),
                        y = seq(0, 5, length = panel$smgrid)) 
-         obj   <- circulantEmbeddingSetup(grid, Covariance = "Matern",
+         obj   <- fields::circulantEmbeddingSetup(grid, Covariance = "Matern",
                        aRange = panel$Range, smoothness = panel$kappa)
          panel$fieldsm      <- list()
-         panel$fieldsm$data <- circulantEmbedding(obj)
+         panel$fieldsm$data <- fields::circulantEmbedding(obj)
          # 	 mdl <- RandomFields::RMmatern(nu = panel$kappa, scale = panel$Range /sqrt(2), var = panel$pSill,
          #                     Aniso = diag(c(1, 1 / ratio)) %*%
          #                         matrix(c(cos(angle), sin(angle), -sin(angle), cos(angle)), ncol = 2))
