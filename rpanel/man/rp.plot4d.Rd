@@ -11,32 +11,33 @@ third covariate.  In particular, it is useful for plotting spatiotemporal data.
 }
 
 \usage{
-   rp.plot4d(x, z, y, model, group, subset, col.palette, col.breaks, col.labels,
-                  hscale = 1, vscale = hscale, panel = TRUE,
-                  x1lab, x2lab, zlab, ylab, cex = 1,
-                  display = "image", Display = NULL,
-                  background.plot = NULL, foreground.plot = NULL, 
-                  z.window = "normal", z.window.pars = c(min(z), sd(z)/5),
-                  coords = rep(NA, 2), radius = 0.05,  col.circle = "black",
-                  lwd.circle = 1,
-                  location.plot = TRUE, retain.location.plot = FALSE,
-                  group.level, group.name,
-						colour.key = TRUE, z.key = TRUE, new.window = TRUE,
-                  eqscplot = FALSE, location.plot.type = "histogram")
+   rp.plot4d(x, z, y, model, group, subset,
+             col.palette, col.breaks, col.labels,
+             hscale = 1, vscale = hscale, panel = TRUE,
+             x1lab, x2lab, zlab, ylab, cex = 1,
+             display = "image", Display = NULL,
+             background.plot = NULL, foreground.plot = NULL, 
+             z.window = "normal", z.window.pars = c(min(z), sd(z)/5),
+             coords = rep(NA, 2), radius = 0.05,
+             col.circle = "black", lwd.circle = 1,
+             location.plot = TRUE, retain.location.plot = FALSE,
+             group.level, group.name, colour.key = TRUE,
+             z.key = TRUE, new.window = TRUE,
+             eqscplot = FALSE, location.plot.type = "histogram")
  
-   rp.spacetime(space, time, y, model, group, subset, col.palette, col.breaks, col.labels,
-                  hscale = 1, vscale = hscale, panel = TRUE,
-                  x1lab, x2lab, zlab, ylab,
-                  display = "image", Display = NULL,
-                  background.plot = NULL, foreground.plot = NULL,
-                  time.window = "normal",
-                  time.window.pars = c(min(time), sd(time)/5),
-                  coords = rep(NA, 2), radius = 0.05,  col.circle = "black",
-                  lwd.circle = 1,
-                  location.plot = TRUE, retain.location.plot = FALSE,
-                  group.level, group.name,
-						colour.key = TRUE, z.key = TRUE, new.window = TRUE,
-                  eqscplot = TRUE, location.plot.type = "histogram")
+   rp.spacetime(space, time, y, model, group, subset, col.palette,
+                col.breaks, col.labels, hscale = 1, vscale = hscale,
+                panel = TRUE, x1lab, x2lab, zlab, ylab, cex = 1,
+                display = "image", Display = NULL,
+                background.plot = NULL, foreground.plot = NULL,
+                time.window = "normal",
+                time.window.pars = c(min(time), sd(time)/5),
+                coords = rep(NA, 2), radius = 0.05,
+                col.circle = "black", lwd.circle = 1,
+                location.plot = TRUE, retain.location.plot = FALSE,
+                group.level, group.name, colour.key = TRUE,
+                z.key = TRUE, new.window = TRUE,
+                eqscplot = TRUE, location.plot.type = "histogram")
 }
 
 \arguments{

@@ -9,7 +9,8 @@
 }
 
 \usage{
-   rp.sample(mu = 0, sigma = 1, n = 25, shiny = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale)
+   rp.sample(mu = 0, sigma = 1, n = 25, display = "shiny",
+             panel.plot = TRUE, hscale = NA, vscale = hscale)
 }
 
 \arguments{

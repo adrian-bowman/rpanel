@@ -23,7 +23,7 @@ rp.plot4d <- function(x, z, y, model, group, subset,
       if (!requireNamespace("rgl", quietly = TRUE))
          cat("The rgl package is not installed - reverting to image display.\n")
       else if (new.window)
-         open3d(windowRect = c(0, 0, 500, 500))
+         rgl::open3d(windowRect = c(0, 0, 500, 500))
    }
 
    draw.plot <- function(panel) {
@@ -725,6 +725,7 @@ rp.plot4d <- function(x, z, y, model, group, subset,
                   coords = rep(NA, 2), radius = 0.05, col.circle = "black", lwd.circle = 1,
                   location.plot = TRUE, retain.location.plot = FALSE,
                   group.level, group.name,
+						colour.key = TRUE, z.key = TRUE, new.window = TRUE,
                   eqscplot = TRUE, location.plot.type = "histogram") {
 
    xlab <- deparse(substitute(space))

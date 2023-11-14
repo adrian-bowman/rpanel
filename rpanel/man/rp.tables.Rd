@@ -9,9 +9,11 @@ This function launches a panel which allows standard normal, t, chi-squared and 
 }
 
 \usage{
-  rp.tables(panel = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale,
+  rp.tables(panel = TRUE, display = "shiny", panel.plot = TRUE,
+            hscale = NA, vscale = hscale,
             distribution = "normal", degf1 = 5, degf2 = 30,
-            observed.value = " ", observed.value.showing = !is.na(observed.value),
+            observed.value = " ",
+            observed.value.showing = !is.na(observed.value),
             probability = 0.05, tail.probability, tail.direction, heading)
 }
 

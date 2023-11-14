@@ -105,7 +105,7 @@ mururoa.points <- function(panel) {
    }
 
    panel
-   }
+}
 
 mururoa.draw <- function(panel) {
 
@@ -183,7 +183,7 @@ mururoa.draw <- function(panel) {
   })
 
   panel
-  }
+}
 
 mururoa.predict <- function(panel) {
 
@@ -233,7 +233,7 @@ mururoa.predict <- function(panel) {
   rp.do(panel, mururoa.samp.redraw)
 
   panel
-  }
+}
 
 mururoa.colour.reset <- function(panel) {
   ind <- which(panel$trend.setting == c("cte", "1st", "2nd"))
@@ -243,7 +243,7 @@ mururoa.colour.reset <- function(panel) {
   rp.do(panel, mururoa.colour.chart.redraw)
   rp.do(panel, mururoa.samp.redraw)
   panel
-  }
+}
 
 mururoa.samp <- function(panel) {
 
@@ -305,58 +305,58 @@ mururoa.samp <- function(panel) {
   if (!is.na(panel$file)) {
      mururoa.data <- data.frame(x = x1, y = y1, z = z)
      save(mururoa.data, file = panel$file)
-     }
+  }
 
   panel
-  }
+}
 
 mururoa.colour.chart <- function(panel) {
   par(mar = c(5, 1, 4, 2) + 0.1)
   rp.colour.chart(panel$col.palette, panel$zlim)
   panel
-  }
+}
 
 mururoa.samp.redraw <- function(panel) {
    rp.control.put(panel$panelname, panel)
    rp.tkrreplot(panel, plot1)
    panel
-   }
+}
 
 mururoa.colour.chart.redraw <- function(panel) {
    rp.control.put(panel$panelname, panel)
    rp.tkrreplot(panel, plot1a)
    panel
-   }
+}
 
 mururoa.help <- function(panel) {
    eval(parse(text = "help(rp.mururoa)"), envir = .GlobalEnv)
    panel
-   }
+}
 
 mururoa.blank <- function(panel) {
    panel$sampling.started <- FALSE
    panel
-   }
+}
 
 mururoa.start <- function(panel) {
    panel$sampling.started <- TRUE
    panel
-   }
+}
 
    if (!requireNamespace("tkrplot",      quietly = TRUE)) stop("The tkrplot package is not available.")
    if (!requireNamespace("geoR",         quietly = TRUE)) stop("The geoR package is not available.")
    if (!requireNamespace("RandomFields", quietly = TRUE)) stop("the RandomFields package is not available.")
 
    if (is.list(parameters)) {
-   	  nms <- names(parameters)
+   	nms <- names(parameters)
       for (i in 1:length(nms))
          mururoa.list[nms[i]] <- parameters[nms[i]]
-      }
+   }
 
    if (is.na(hscale)) {
       if (.Platform$OS.type == "unix") hscale <- 1.2
       else                             hscale <- 1.4
-      }
+   }
 
    ptsm        <- as.matrix(expand.grid(seq(0, 100, by = 0.5), seq(0, 50, by = 0.5)))
    trendmurmat <- apply(ptsm, 1, mururoa.list$trend.fn)
@@ -428,5 +428,5 @@ mururoa.start <- function(panel) {
 
    rp.text(panel, " \n \n \n \n \n ", grid = "controls2", row = 0, column = 0)
    rp.button(panel, mururoa.samp, "Take sample", grid = "controls2", row = 2, column = 0)
-   }
+}
 

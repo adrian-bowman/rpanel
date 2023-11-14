@@ -2,6 +2,22 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+Kurt Hornik 19.08.23:
+(This probably arose from the update to deal with rgl issues. It should be taken care of by a 1.1-6 release.)
+Dear maintainer,
+You have file 'rpanel/man/rpanel.package.Rd' as a package overview help
+file which in \details gives a table with the basic package DESCRIPTION
+metadata.
+At least the given version disagrees with the actual package version
+(meta: 1.1-5.2, docs: 1.1-5).
+Perhaps simply remove the whole table: the package DESCRIPTION metadata
+are provided at the start of CRAN's PDF refmans, and can conveniently
+be accessed from the dynamic help system.
+Please fix in your master sources as appropriate, and submit a fixed
+version of your package within the next few months.
+Best,
+-k
+
 rp.geosim
   - use fields package for simulation. RandomFields is no longer on CRAN.
     - what about the Matern parametrisation issue mentioned in rp.geosim help?

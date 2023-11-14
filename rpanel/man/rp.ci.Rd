@@ -12,8 +12,9 @@
   }
 
 \usage{
-   rp.ci(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), confidence = 0.95,
-         panel = TRUE, shiny = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale)
+   rp.ci(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500),
+         confidence = 0.95, panel = TRUE, display = "shiny",
+         panel.plot = TRUE, hscale = NA, vscale = hscale)
   }
 
 \arguments{
@@ -22,7 +23,7 @@
 \item{confidence}{the available confidence levels (\code{0.90}, \code{0.95}, \code{0.99}).}
 \item{panel}{a logical value determining whether an interactive panel is created or a static display is produced.}
 \item{display}{a logical parameter which can take values \code{"shiny"} or \code{"tcltk"} determines whether a \code{shiny} or \code{tcltk} app is launched when \code{panel} is set to \code{TRUE}.}
-\item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \code{tkrplot} library is required.}
+\item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \code{tkrplot} package is required.}
 \item{hscale, vscale}{scaling parameters, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 }
 

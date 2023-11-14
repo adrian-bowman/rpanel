@@ -9,7 +9,8 @@ A colour key is created using the specified colours (\code{cols}) and an axis de
 }
 
 \usage{
-rp.colour.key(cols, brks, par.mar = c(5, 0, 4, 3) + 0.1, natural = TRUE, cex = 1, margin = FALSE)
+rp.colour.key(cols, brks, par.mar = c(5, 0, 4, 3) + 0.1,
+natural = TRUE, cex = 1, margin = FALSE)
 }
 
 \arguments{

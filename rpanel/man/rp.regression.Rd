@@ -10,11 +10,12 @@ When there are one or two covariates, specified through the \code{x} and \code{y
 }
 
 \usage{
-  rp.regression(x, y,
-                ylab = NA, x1lab = NA, x2lab = NA, xlab = NA, model = "None",
-                line.showing = TRUE, residuals.showing = FALSE, size = 3,
-                panel = TRUE, panel.plot = TRUE, hscale = NA, vscale = hscale,
-                yrange, ci = TRUE, point.estimate = FALSE, subset, ngrid = 200, col)
+  rp.regression(x, y, ylab = NA, x1lab = NA, x2lab = NA, xlab = NA,
+                model = "None", line.showing = TRUE,
+                residuals.showing = FALSE, size = 3,
+                panel = TRUE, panel.plot = TRUE, hscale = NA,
+                vscale = hscale, yrange, ci = TRUE,
+                point.estimate = !ci, labels, subset, ngrid = 200, col)
   rp.regression2(y, x1, x2, ylab  = NA, x1lab = NA, x2lab = NA, 
                  panel = TRUE, model = "None", residuals.showing = FALSE,
                  size = 3, col = "red")
@@ -43,7 +44,7 @@ The following arguments refer to the case where the \pkg{tcltk} package is used:
 The following argument refers to the case where a regression model is specified through a formula or a call to the \code{lm} function:
 \item{yrange}{a vector of length 2 giving the range of values for the change in the response when regression effects are plotted in a static display.}
 \item{ci}{a logical variable which controls whether the graphical indication of uncertainty is placed around the estimate (\code{ci = TRUE}) or around 0 (\code{ci = FALSE}).}
-\item{ci}{a logical variable which controls whether the point estimates of the regression effects are superimposed as vertical lines.}
+\item{point.estimate}{a logical variable which controls whether the point estimates of the regression effects are superimposed as vertical lines.}
 \item{labels}{a character vector which gives the labels to be used for each model term (intercept excluded) The covariate range information will be added by the funcction. Labels must be provided for all terms, before the \code{subset} information is applied (see next argument).}
 \item{subset}{an integer vector which specifies which model terms are included in the display. The intercept is always excluded. The vector refers to the terms as listed in the output of the \code{summary} function on the fitted model.}
 \item{ngrid}{an integer which specifies the number of grid points used in the creation of the uncertainty strips.}

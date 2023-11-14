@@ -66,7 +66,7 @@ rp.power <- function(panel = TRUE, display = "shiny", panel.plot = TRUE, populat
    if (!interactive()) panel <- FALSE
    if (panel) {
       if (display == "shiny") {
-         if (require(shiny, quietly = TRUE)) {
+         if (requireNamespace("shiny", quietly = TRUE)) {
             runApp(shinyApp(power_ui, power_server))
             return(invisible())
          }

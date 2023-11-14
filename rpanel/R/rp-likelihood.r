@@ -13,7 +13,7 @@ rp.likelihood <- function(loglik.fn, data, theta.low, theta.high,
 rp.loglik1 <- function(loglik.text, data, theta.low, theta.high,
                             form = "log-likelihood") {
 
-   if (!requireNamespace("tkrplot")) stop("the tkrplot library is required.")
+   if (!requireNamespace("tkrplot")) stop("the tkrplot package is required.")
 
    theta.range <- c(theta.low, theta.high)
 
@@ -208,7 +208,7 @@ rp.loglik1 <- function(loglik.text, data, theta.low, theta.high,
 
 rp.loglik2 <- function(loglik.text, data, theta.low, theta.high) {
 	
-   if (!requireNamespace("rgl", quietly = TRUE)) stop("the rgl library is required.")
+   if (!requireNamespace("rgl", quietly = TRUE)) stop("the rgl package is required.")
       
    theta1.range <- c(theta.low[1], theta.high[1])
    theta2.range <- c(theta.low[2], theta.high[2])

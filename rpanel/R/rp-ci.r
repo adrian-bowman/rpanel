@@ -74,7 +74,7 @@ rp.ci <- function(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), co
    if (!interactive()) panel <- FALSE
    if (panel) {
       if (display == "shiny") {
-         if (require(shiny, quietly = TRUE)) {
+         if (requireNamespace("shiny", quietly = TRUE)) {
             sample.sizes <- as.list(sample.sizes)
             names(sample.sizes) <- as.character(sample.sizes)
             panel <- list(pars = c("mean" = mu, "s.d." = sigma), ssize = 30, confidence = confidence,

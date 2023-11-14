@@ -9,7 +9,8 @@ This function creates a panel which allows the sample size, population means and
 }
 
 \usage{
-rp.power(panel = TRUE, panel.plot = TRUE, populations.showing = FALSE,
+rp.power(panel = TRUE, display = "shiny",  panel.plot = TRUE,
+         populations.showing = FALSE,
          ngrid = seq(10, 300), mu1 = 0, mu2 = 1,
          sigma = 1, n = 20, xgrid = seq(- 4, 5, length = 100),
          popdens.lim = 0.7, hscale = 1, vscale = hscale)
