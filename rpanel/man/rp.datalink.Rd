@@ -23,6 +23,8 @@ Calling the function with no arguments, as \code{rp.datalink()}, will print the 
 When \code{action = "retrieve filename"} but the file has not been downloaded to a local directory, the file is downloaded to a temporary file and the name of this temporary file is returned.
 
 The specification of the local directory can be removed by setting the \code{name} argument to \code{NULL}.
+
+The file associated with `name` can be a zip file, in which case the `unz` function can be used to locate the specific file of interest. See the Examples.
 }
 
 \value{
@@ -34,4 +36,11 @@ The specification of the local directory can be removed by setting the \code{nam
   rp.datalink()
   rp.datalink("~/Desktop/temp", "set directory")
   rp.datalink("global_temperature")
+  
+  # Reading from a file within a zip file
+  zfile   <- rp.datalink("children_services")
+  dirname <- "Data and Code CSRR Strand 3 - August 2023 Update"
+  path <- unz(zfile, paste(dirname, "Example_Indicator_CSR.csv", sep = "/"))
+  indicator <-
+  read_csv(path, skip = 6, col_names = c("LA", 2011:2021))
   }}

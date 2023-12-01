@@ -44,7 +44,9 @@ rp.datalink <- function(name, action = "retrieve filename") {
       "reading",                 ".txt",
       "http://www.stats.gla.ac.uk/~adrian/data/reading.txt",
       "paste",                   ".txt",
-      "http://www.stats.gla.ac.uk/~adrian/data/paste.txt"
+      "http://www.stats.gla.ac.uk/~adrian/data/paste.txt",
+      "children_services",       ".zip",
+      "https://www.celcis.org/application/files/9016/9340/8261/Data_and_Code_CSRR_Strand_3_-_August_2023_Update.zip"
    ), ncol = 3, byrow = TRUE)
    datasets <- as.data.frame(datasets)
    names(datasets) <- c("name", "type", "remote_file")
