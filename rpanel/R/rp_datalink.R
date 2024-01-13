@@ -46,7 +46,13 @@ rp.datalink <- function(name, action = "retrieve filename") {
       "paste",                   ".txt",
       "http://www.stats.gla.ac.uk/~adrian/data/paste.txt",
       "children_services",       ".zip",
-      "https://www.celcis.org/application/files/9016/9340/8261/Data_and_Code_CSRR_Strand_3_-_August_2023_Update.zip"
+      "https://www.celcis.org/application/files/9016/9340/8261/Data_and_Code_CSRR_Strand_3_-_August_2023_Update.zip",
+      "mammal_speed",            ".rda",
+      "http://www.stats.gla.ac.uk/~adrian/data/mammal_speed.rda",
+      "UN_demography",           ".zip",
+      "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_Demographic_Indicators_Medium.zip",
+      "UN_demography_metadata",   ".xlsx",
+      "https://population.un.org/wpp/Download/Files/4_Metadata/WPP2022_F02_METADATA.XLSX"
    ), ncol = 3, byrow = TRUE)
    datasets <- as.data.frame(datasets)
    names(datasets) <- c("name", "type", "remote_file")

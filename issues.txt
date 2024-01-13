@@ -18,15 +18,13 @@ version of your package within the next few months.
 Best,
 -k
 
-rp.geosim
-  - use fields package for simulation. RandomFields is no longer on CRAN.
-    - what about the Matern parametrisation issue mentioned in rp.geosim help?
-    - change from exponential to Matern covariance.
-    - pSill does nothing
-    - anisotropy
-  - variogram does not diplay.  Missing call to geoR for as.geodata function?
-  - add the covariance function as an alternative to the variogram?
+Make rgl changes as advised by duncan Murdoch. Changes to rp.geosim are already made.
 
+rp.geosim
+  - The fields package is used for simulation when there is no anisotropy.
+    The geoR is used when there is anisotropy. This is very slow, but it works.
+    Code could be created to do the anisotropy cacluations.
+    
 Remove RandomFields from rp.mururoa and rp.firth.
 
 Passing values from the function arguments to the shiny app?  See the post at:

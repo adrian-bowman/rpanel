@@ -21,23 +21,30 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       warn <- options()$warn
       options(warn = -1)
       if (!panel$points.only | pars.changed) {
-      	angle <- panel$aniso.angle
-      	ratio <- panel$aniso.ratio
-         x.seq <- seq(0, 1, length = panel$smgrid) 
-         y.seq <- seq(0, 1, length = panel$smgrid)
-         grid  <- list(x = seq(0, 5, length = panel$smgrid),
-                       y = seq(0, 5, length = panel$smgrid)) 
-         obj   <- fields::circulantEmbeddingSetup(grid, Covariance = "Matern",
-                       aRange = panel$Range, smoothness = panel$kappa)
-         panel$fieldsm      <- list()
-         panel$fieldsm$data <- fields::circulantEmbedding(obj)
-         # 	 mdl <- RandomFields::RMmatern(nu = panel$kappa, scale = panel$Range /sqrt(2), var = panel$pSill,
+         method <- if (panel$aniso.ratio > 1) "geoR" else "fields"
+         if (method == "geoR") {
+      	  panel$fieldsm <- geoR::grf(panel$smgrid^2, grid = "reg", cov.model = panel$family,
+      	    cov.pars = c(panel$pSill, r), nugget = 0, messages = FALSE, kappa = panel$kappa,
+      	    aniso.pars = c(panel$aniso.angle, panel$aniso.ratio))
+      	  panel$fieldsm$data <- matrix(panel$fieldsm$data, ncol = panel$smgrid)
+         }
+         else {
+           grid  <- list(x = seq(0, 5, length = panel$smgrid),
+                         y = seq(0, 5, length = panel$smgrid))
+           obj   <- fields::circulantEmbeddingSetup(grid, Covariance = "Matern",
+                         aRange = panel$Range, smoothness = panel$kappa)
+           panel$fieldsm      <- list()
+           panel$fieldsm$data <- fields::circulantEmbedding(obj) * sqrt(panel$pSill)
+         }
+         # RandomFields package - no longer available
+      	# angle <- panel$aniso.angle
+      	# ratio <- panel$aniso.ratio
+         # x.seq <- seq(0, 1, length = panel$smgrid) 
+         # y.seq <- seq(0, 1, length = panel$smgrid)
+         # mdl <- RandomFields::RMmatern(nu = panel$kappa, scale = panel$Range /sqrt(2), var = panel$pSill,
          #                     Aniso = diag(c(1, 1 / ratio)) %*%
          #                         matrix(c(cos(angle), sin(angle), -sin(angle), cos(angle)), ncol = 2))
          # panel$fieldsm$data <- RandomFields::RFsimulate(mdl, x = x.seq, y = y.seq)$variable1
-         # panel$fieldsm <- grf(panel$smgrid^2, grid = "reg", cov.model = panel$family,
-         #   cov.pars = c(panel$pSill, r), nugget = 0, messages = FALSE, kappa = panel$kappa,
-         #   aniso.pars = c(panel$aniso.angle, panel$aniso.ratio))
       }
       panel$fieldnug <- geoR::grf(panel$ngrid^2, grid = "reg", cov.model = "pure.nugget",
          cov.pars = c(panel$Nugget, 0), messages = FALSE)
@@ -45,7 +52,6 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       # igrid <- seq(1, panel$smgrid, by = cgrid)
       igrid <- 1 + round(((1:panel$ngrid) - 1) * (panel$smgrid - 1) / (panel$ngrid - 1))
       igrid <- as.matrix(expand.grid(igrid, igrid))
-      # panel$fieldsm$data <- matrix(panel$fieldsm$data, ncol = panel$smgrid)
       panel$data <- panel$fieldsm$data[igrid] + panel$fieldnug$data
       
       panel$ngrid.old  <- panel$ngrid
@@ -81,14 +87,14 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
          x  <- panel$fieldnug$coords[, 1]
          y  <- panel$fieldnug$coords[, 2]
          if ("rgl.id" %in% names(panel))
-            try.out <- try(rgl::rgl.set(panel$rgl.id), silent = TRUE)
+            try.out <- try(rgl::set3d(panel$rgl.id), silent = TRUE)
          else
             try.out <- "try-error"
          if (is.null(try.out)) {
-      	    ind <- (rgl::rgl.ids()$type == "points")
-            if (any(ind))  rgl::pop3d(id = rgl::rgl.ids()$id[ind])
-      	    ind <- (rgl::rgl.ids()$type == "surface")
-            if (any(ind))  rgl::pop3d(id = rgl::rgl.ids()$id[ind])
+      	    ind <- (rgl::ids3d()$type == "points")
+            if (any(ind))  rgl::pop3d(id = rgl::ids3d()$id[ind])
+      	    ind <- (rgl::ids3d()$type == "surface")
+            if (any(ind))  rgl::pop3d(id = rgl::ids3d()$id[ind])
             }
          else
             panel$scaling <- rp.plot3d(y, w, x, col = "red",
@@ -107,14 +113,14 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
             x    <- seq(0, 1, length = panel$smgrid)
             y    <- seq(0, 1, length = panel$smgrid)
             a    <- panel$scaling(x, z, y)
-            panel$surface.id <- rgl::rgl.surface(a$x, a$z, a$y, col = cols)
+            panel$surface.id <- rgl::surface3d(a$x, a$z, a$y, col = cols)
          }
          rgl::bg3d("white")
-         panel$rgl.id  <- rgl::rgl.cur()
+         panel$rgl.id  <- rgl::cur3d()
       }
       else if (panel$rgl.old) {
-         try.out <- try(rgl::rgl.set(panel$rgl.id), silent = TRUE)
-         if (is.null(try.out)) rgl::rgl.close()
+         try.out <- try(rgl::set3d(panel$rgl.id), silent = TRUE)
+         if (is.null(try.out)) rgl::close3d()
       }
    
       if (("rgl plot" %in% names(panel$display.checks)) && (panel$display.checks["rgl plot"]))
@@ -169,7 +175,7 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
          vg  <- pSill * (1 - geoR::matern(xa, Range / (2 * sqrt(kappa)), kappa))
          fld <- data
          g   <- seq(0, 1, length = ngrid)
-         vga <- geoR::variog(as.geodata(cbind(fieldnug$coords, fld)), messages=FALSE,
+         vga <- geoR::variog(geoR::as.geodata(cbind(fieldnug$coords, fld)), messages=FALSE,
                     max.dist = 0.7)
          plot(vga$v ~ vga$u, xlim = c(0, 0.7), ylim = c(0, 2), type = "n",
             xlab = "Distance", ylab = "Semivariogram")
@@ -191,10 +197,10 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       panel
    }
 
-   if (!requireNamespace("fields", quietly = TRUE))
-      stop("the fields package is not available.")
    if (!requireNamespace("geoR", quietly = TRUE))
       stop("the geoR package is not available.")
+   # if (!requireNamespace("fields", quietly = TRUE))
+   #    stop("the fields package is not available.")
    # if (!requireNamespace("RandomFields", quietly = TRUE))
    #    stop("the RandomFields package is not available.")
    
@@ -263,7 +269,7 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
                grid = "controls", row = 1, column = 0, sticky = "ew")
       rp.slider(panel, Range, 0.01, max.Range,  field.new, "Range",     
                grid = "controls", row = 2, column = 0, sticky = "ew")
-      rp.slider(panel, pSill, 0, max.pSill,  field.new, "Partial sill",     
+      rp.slider(panel, pSill, 0.01, max.pSill,  field.new, "Partial sill",     
                grid = "controls", row = 3, column = 0, sticky = "ew")
       rp.slider(panel, Nugget, 0, max.Nugget, field.new, "Nugget",    
                grid = "controls", row = 4, column = 0, sticky = "ew")

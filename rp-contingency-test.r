@@ -18,12 +18,17 @@ rownames(x) <- c("cases", "controls")
 colnames(x) <- c("smoker", "non-smoker")
 margins     <- FALSE
 
-source("rp-contingency.r")
+x <- t(x)
+x <- x[2:1, ]
+
+mosaicplot(t(x), main = "")
+
+source("~/iCloud/research/rpanel/rp-contingency.r")
 pdf("figures/contingency-1.pdf")
-rp.contingency(x, structure = "row populations", panel = FALSE, margins = margins)
+rp.contingency(x, structure = "column populations", panel = FALSE, margins = margins)
 dev.off()
 pdf("figures/contingency-2.pdf")
-rp.contingency(x, structure = "row populations", scale = "proportions", panel = FALSE,
+rp.contingency(x, structure = "column populations", scale = "proportions", panel = FALSE,
    margins = margins)
 dev.off()
 rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots", margins = margins)
