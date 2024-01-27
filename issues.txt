@@ -2,29 +2,8 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
-Kurt Hornik 19.08.23:
-(This probably arose from the update to deal with rgl issues. It should be taken care of by a 1.1-6 release.)
-Dear maintainer,
-You have file 'rpanel/man/rpanel.package.Rd' as a package overview help
-file which in \details gives a table with the basic package DESCRIPTION
-metadata.
-At least the given version disagrees with the actual package version
-(meta: 1.1-5.2, docs: 1.1-5).
-Perhaps simply remove the whole table: the package DESCRIPTION metadata
-are provided at the start of CRAN's PDF refmans, and can conveniently
-be accessed from the dynamic help system.
-Please fix in your master sources as appropriate, and submit a fixed
-version of your package within the next few months.
-Best,
--k
+Make rgl changes as advised by Duncan Murdoch. Changes to rp.geosim are already made.
 
-Make rgl changes as advised by duncan Murdoch. Changes to rp.geosim are already made.
-
-rp.geosim
-  - The fields package is used for simulation when there is no anisotropy.
-    The geoR is used when there is anisotropy. This is very slow, but it works.
-    Code could be created to do the anisotropy cacluations.
-    
 Remove RandomFields from rp.mururoa and rp.firth.
 
 Passing values from the function arguments to the shiny app?  See the post at:

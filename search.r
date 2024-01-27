@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "require("
+target    <- "3d"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

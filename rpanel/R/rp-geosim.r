@@ -11,8 +11,6 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
 
    field.new <- function(panel) {
 	
-      r <- panel$Range / (2 * sqrt(panel$kappa))
-      panel$family <- "matern"
       # Old code which matched the surface and data grids - no longer required.
       # cgrid <- ceiling((panel$smgrid - 1) / (panel$ngrid - 1))
       # panel$smgrid <- 1 + cgrid * (panel$ngrid - 1)
@@ -21,38 +19,55 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       warn <- options()$warn
       options(warn = -1)
       if (!panel$points.only | pars.changed) {
-         method <- if (panel$aniso.ratio > 1) "geoR" else "fields"
-         if (method == "geoR") {
-      	  panel$fieldsm <- geoR::grf(panel$smgrid^2, grid = "reg", cov.model = panel$family,
-      	    cov.pars = c(panel$pSill, r), nugget = 0, messages = FALSE, kappa = panel$kappa,
-      	    aniso.pars = c(panel$aniso.angle, panel$aniso.ratio))
-      	  panel$fieldsm$data <- matrix(panel$fieldsm$data, ncol = panel$smgrid)
-         }
-         else {
-           grid  <- list(x = seq(0, 5, length = panel$smgrid),
-                         y = seq(0, 5, length = panel$smgrid))
-           obj   <- fields::circulantEmbeddingSetup(grid, Covariance = "Matern",
-                         aRange = panel$Range, smoothness = panel$kappa)
-           panel$fieldsm      <- list()
-           panel$fieldsm$data <- fields::circulantEmbedding(obj) * sqrt(panel$pSill)
-         }
-         # RandomFields package - no longer available
-      	# angle <- panel$aniso.angle
-      	# ratio <- panel$aniso.ratio
-         # x.seq <- seq(0, 1, length = panel$smgrid) 
-         # y.seq <- seq(0, 1, length = panel$smgrid)
-         # mdl <- RandomFields::RMmatern(nu = panel$kappa, scale = panel$Range /sqrt(2), var = panel$pSill,
-         #                     Aniso = diag(c(1, 1 / ratio)) %*%
-         #                         matrix(c(cos(angle), sin(angle), -sin(angle), cos(angle)), ncol = 2))
-         # panel$fieldsm$data <- RandomFields::RFsimulate(mdl, x = x.seq, y = y.seq)$variable1
+         panel$family <- "matern"
+         rng <- panel$Range / (2 * sqrt(panel$kappa))
+         # Reduce the grid resolution as the range parameter gets large
+         smgrid_adj <- if (panel$Range < 0.2) panel$smgrid else
+            round(min(panel$smgrid, 40 - 35 * ((panel$Range - 0.2) / 0.3)^0.1))
+         grd   <- seq(-0.3, 1.3, length = round(1.5 * smgrid_adj))
+         grid  <- list(x = grd, y = grd)
+         obj   <- fields::circulantEmbeddingSetup(grid, Covariance = "Matern",
+                   aRange = rng, smoothness = panel$kappa)
+         z     <- fields::circulantEmbedding(obj) * sqrt(panel$pSill)
+         # Reduce height and rescale to reflect anisotropy ratio
+         ratio <- panel$aniso.ratio
+         angle <- panel$aniso.angle
+         ind   <- (grd >= -0.3 / ratio) & (grd <= 1.3 / ratio)
+         z     <- z[ , ind]
+         grdy  <- grd[ind] * ratio
+         smgrd <- round(1.5 * panel$smgrid)
+         grdo  <- seq(-0.3, 1.3, length = smgrd)
+         z     <- fields::interp.surface.grid(list(x = grd, y = grdy, z = z),
+                                  list(x = grdo, y = grdo))$z
+         srot  <- matrix(c(cos(angle), -sin(angle), sin(angle), cos(angle)),
+                        ncol = 2)
+         xyrot <- as.matrix(expand.grid(grdo - 0.5, grdo - 0.5)) %*% srot
+         xyrot <- sweep(xyrot, 2, c(0.5, 0.5), "+")
+         xmat  <- matrix(xyrot[ , 1], ncol = smgrd)
+         ymat  <- matrix(xyrot[ , 2], ncol = smgrd)
+         # Find the values of the field at the points grid rotated in the other
+         # direction, later to be rotated to horizontal-vertical
+         dgrdo <- seq(0, 1, length = panel$ngrid)
+         drot  <- matrix(c(cos(-angle), -sin(-angle), sin(-angle), cos(-angle)),
+                        ncol = 2)
+         dgrd  <- as.matrix(expand.grid(dgrdo - 0.5, dgrdo - 0.5)) %*% drot
+         dgrd  <- sweep(dgrd, 2, c(0.5, 0.5), "+")
+         zmat  <- matrix(z, nrow = smgrd)
+         panel$fieldp <- fields::interp.surface(list(x = grdo, y = grdo, z = zmat),
+                                          dgrd)
+         panel$xmat         <- xmat
+         panel$ymat         <- ymat
+         panel$zmat         <- zmat
       }
-      panel$fieldnug <- geoR::grf(panel$ngrid^2, grid = "reg", cov.model = "pure.nugget",
-         cov.pars = c(panel$Nugget, 0), messages = FALSE)
+      panel$fieldnug <- geoR::grf(panel$ngrid^2, grid = "reg", messages = FALSE,
+                                  cov.model = "pure.nugget",
+                                  cov.pars = c(panel$Nugget, 0))
       options(warn = warn)
-      # igrid <- seq(1, panel$smgrid, by = cgrid)
-      igrid <- 1 + round(((1:panel$ngrid) - 1) * (panel$smgrid - 1) / (panel$ngrid - 1))
-      igrid <- as.matrix(expand.grid(igrid, igrid))
-      panel$data <- panel$fieldsm$data[igrid] + panel$fieldnug$data
+      # # igrid <- seq(1, panel$smgrid, by = cgrid)
+      # igrid <- 1 + round(((1:panel$ngrid) - 1) * (panel$smgrid - 1) / (panel$ngrid - 1))
+      # igrid <- as.matrix(expand.grid(igrid, igrid))
+      # panel$data <- panel$fieldsm$data[igrid] + panel$fieldnug$data
+      panel$data       <- panel$fieldp + panel$fieldnug$data
       
       panel$ngrid.old  <- panel$ngrid
       panel$Range.old  <- panel$Range
@@ -90,31 +105,46 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
             try.out <- try(rgl::set3d(panel$rgl.id), silent = TRUE)
          else
             try.out <- "try-error"
-         if (is.null(try.out)) {
-      	    ind <- (rgl::ids3d()$type == "points")
+         if (is.integer(try.out)) {
+            sv <- rgl::par3d(skipRedraw = TRUE)
+            ind <- (rgl::ids3d()$type == "points")
             if (any(ind))  rgl::pop3d(id = rgl::ids3d()$id[ind])
-      	    ind <- (rgl::ids3d()$type == "surface")
+      	   ind <- (rgl::ids3d()$type == "surface")
             if (any(ind))  rgl::pop3d(id = rgl::ids3d()$id[ind])
-            }
+      	   rgl::par3d(sv)
+         }
          else
-            panel$scaling <- rp.plot3d(y, w, x, col = "red",
-               ylim = panel$z.range, ylab = "z", xlab = "x", zlab = "y", type = "n")
+            panel$scaling <- rp.plot3d(c(-0.1, 1.1), rep(0, 2), c(-0.1, 1.1),
+               col = "red", ylim = panel$z.range,
+               ylab = "z", xlab = "x", zlab = "y", type = "n")
+         sv <- rgl::par3d(skipRedraw = TRUE)
          if (panel$display.checks["points"]) {
             a <- panel$scaling(y, w, x)
             panel$points.id <- rgl::points3d(a$z, a$y, a$x, col = "red", size = 3)
          }
          if (panel$display.checks["surface"]) {
-            z  <- panel$fieldsm$data
             brks <- seq(panel$z.range[1], panel$z.range[2], length = length(panel$col.palette) + 1)
-   	  	   brks[1] <- min(brks[1], min(z) - 1)
-   	  	   brks[length(brks)] <- max(brks[length(brks)], max(z) + 1)
-            clr  <- cut(z, brks, labels = FALSE)
+   	  	   brks[1] <- min(brks[1], min(panel$zmat) - 1)
+   	  	   brks[length(brks)] <- max(brks[length(brks)], max(panel$zmat) + 1)
+            clr  <- cut(c(panel$zmat), brks, labels = FALSE)
             cols <- panel$col.palette[clr]
+            # x    <- seq(0, 1, length = panel$smgrid)
+            # y    <- seq(0, 1, length = panel$smgrid)
+            # a    <- panel$scaling(x, z, y)
             x    <- seq(0, 1, length = panel$smgrid)
             y    <- seq(0, 1, length = panel$smgrid)
-            a    <- panel$scaling(x, z, y)
-            panel$surface.id <- rgl::surface3d(a$x, a$z, a$y, col = cols)
+            xmat <- panel$xmat
+            ymat <- panel$ymat
+            zmat <- panel$zmat
+            ind  <- (xmat < -0.05) | (xmat > 1.05) |
+                    (ymat < -0.05) | (ymat > 1.05)
+            xmat[ind] <- NA
+            ymat[ind] <- NA
+            zmat[ind] <- NA
+            a    <- panel$scaling(xmat, zmat, ymat)
+            panel$surface.id <- rgl::surface3d(a$x, a$y, a$z, col = cols)
          }
+         rgl::par3d(sv)
          rgl::bg3d("white")
          panel$rgl.id  <- rgl::cur3d()
       }
@@ -137,8 +167,9 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
    	   par(mar = c(5, 4, 4, 0) + 0.1)
    	   plot(g, g, type = "n", xlab = "x", ylab = "y", xaxs = "i", yaxs = "i")
    	   if (display.checks["surface"]) {
-            image(x = g, y = g, z = matrix(fieldsm$data, nrow = smgrid), add = TRUE,
-                      zlim = z.range, col = col.palette)
+   	      # z[x < 0 | x > 1 | y < 0 | y > 1] <- NA
+   	      fields::poly.image(xmat, ymat, zmat, add = TRUE, zlim = z.range,
+   	                         col = col.palette)
             box()
    	   }
    	   if (display.checks["points"]) {
@@ -199,8 +230,8 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
 
    if (!requireNamespace("geoR", quietly = TRUE))
       stop("the geoR package is not available.")
-   # if (!requireNamespace("fields", quietly = TRUE))
-   #    stop("the fields package is not available.")
+   if (!requireNamespace("fields", quietly = TRUE))
+      stop("the fields package is not available.")
    # if (!requireNamespace("RandomFields", quietly = TRUE))
    #    stop("the RandomFields package is not available.")
    

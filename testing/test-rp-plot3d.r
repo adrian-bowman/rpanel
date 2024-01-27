@@ -1,8 +1,7 @@
 #     Test code for rp.plot3d
      
-detach(package:rpanel)
-unloadNamespace("rpanel")
 library(rpanel)
+if (reinstall) devtools::install("rpanel")
 
 n <- 1400
 z <- 1:n

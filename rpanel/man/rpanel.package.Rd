@@ -12,18 +12,9 @@
 up to more sophisticated mini-applications.  In addition to functions which create controls, a number of `cartoon' functions built on these controls are also available.}
 
 \details{
-\tabular{ll}{
-Package: \tab rpanel\cr
-Type: \tab Package\cr
-Version: \tab 1.1-6\cr
-Date: \tab 2021-09-02\cr
-License: \tab GNU\cr
-}
-
-This package contains a number of functions (with help and examples) and several 
-example scripts.\cr
+This package contains a number of functions (with help and examples) and several example scripts.\cr
 \cr
-Cartoon functions\cr
+Cartoon functions:\cr
 \cr
 \code{\link{rp.gulls}}: An interactive problem-solving exercise on deciding the sex of a herring gull\cr
 \code{\link{rp.ci}}: Confidence intervals\cr
@@ -45,7 +36,7 @@ Cartoon functions\cr
 \code{\link{rp.firth}}: Sampling in a firth\cr
 \code{\link{rp.surface}}: Displaying the uncertainty in an estimate of a surface\cr
 \cr
-Functions to create individual controls\cr
+Functions to create individual controls:\cr
 \cr
 \code{\link{rp.control}}: create an rpanel\cr
 \code{\link{rp.slider}}: add a slider to a panel, to graphically control a numeric variable\cr
