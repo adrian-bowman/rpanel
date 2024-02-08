@@ -4,8 +4,6 @@
 
 Make rgl changes as advised by Duncan Murdoch. Changes to rp.geosim are already made.
 
-Remove RandomFields from rp.mururoa and rp.firth.
-
 Passing values from the function arguments to the shiny app?  See the post at:
 https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-with-arguments-passed-to-the-shiny-app
 This uses shinyOptions.

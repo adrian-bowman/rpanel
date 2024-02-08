@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "3d"
+target    <- "rp.colour.chart"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

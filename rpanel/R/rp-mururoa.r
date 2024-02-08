@@ -343,9 +343,9 @@ mururoa.start <- function(panel) {
    panel
 }
 
-   if (!requireNamespace("tkrplot",      quietly = TRUE)) stop("The tkrplot package is not available.")
-   if (!requireNamespace("geoR",         quietly = TRUE)) stop("The geoR package is not available.")
-   if (!requireNamespace("RandomFields", quietly = TRUE)) stop("the RandomFields package is not available.")
+   if (!requireNamespace("tkrplot", quietly = TRUE)) stop("The tkrplot package is not available.")
+   if (!requireNamespace("geoR",    quietly = TRUE)) stop("The geoR package is not available.")
+   if (!requireNamespace("fields",  quietly = TRUE)) stop("the fields package is not available.")
 
    if (is.list(parameters)) {
    	nms <- names(parameters)
@@ -367,10 +367,19 @@ mururoa.start <- function(panel) {
 #                  kappa = 4, nugget = 0, messages = FALSE)
 #   options(warn = warn)
 
-   ptsm  <- as.matrix(expand.grid(seq(0, 2, length = 201), seq(0, 1, length = 101)))
    covp  <- mururoa.list$cov.pars
-   field <- RandomFields::GaussRF(ptsm, grid = FALSE, model = "matern",
-                     param = c(0, covp[1], 0, covp[2] / 100, 4))
+   ptsm  <- as.matrix(expand.grid(seq(0, 2, length = 201), seq(0, 1, length = 101)))
+   # Old RandomFields version
+   # field <- RandomFields::GaussRF(ptsm, grid = FALSE, model = "matern",
+   #                                param = c(0, covp[1], 0, covp[2] / 100, 4))
+   grd   <- list(x = seq(0, 2, length = 21), y = seq(0, 1, length = 11))
+   obj   <- fields::circulantEmbeddingSetup(grd, Covariance = "Matern",
+                           aRange = covp[2] / 4, smoothness = 4)
+   field <- fields::circulantEmbedding(obj) * sqrt(covp[1])
+   grd$z <- field
+   grdo  <- list(x = seq(0, 2, length = 201), y = seq(0, 1, length = 101))
+   field <- fields::interp.surface.grid(grd, grdo)$z
+   field <- c(field)
 
    panel <- rp.control("Sampling at Mururoa",
      stype = "Random", npts = 25, gsp = 10,
