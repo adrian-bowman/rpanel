@@ -16,4 +16,5 @@ Description: A set of functions to build simple
         Some functions for specific graphical tasks, referred to as 'cartoons',
         are provided.
 License: GPL (>= 2)
+BugReports: https://github.com/adrian-bowman/rpanel/issues
 LazyData: TRUE
