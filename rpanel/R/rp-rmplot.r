@@ -18,7 +18,7 @@ rmplot <- function(y, id = NA, timept = NA, fac = NA, type = "all",
                    add = FALSE, xlab = NA, ylab = NA, xlabels = NA, 
                    lwd = 1, col = NA, lty = NA, ...) {
 
-   if (!is.na(fac) && !is.factor(fac)) stop("fac must be a factor.")
+   if (!is.factor(fac)) stop("fac must be a factor.")
 
    if (is.matrix(y) | is.data.frame(y)) 
       result <- rmplot.table(y, fac, type, timept, add = add, xlab = xlab, ylab = ylab,

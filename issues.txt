@@ -4,6 +4,8 @@
 
 Make rgl changes as advised by Duncan Murdoch. Changes to rp.geosim are already made.
 
+Allow a factor (or character variable) to be passed to rp/plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
+
 Passing values from the function arguments to the shiny app?  See the post at:
 https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-with-arguments-passed-to-the-shiny-app
 This uses shinyOptions.

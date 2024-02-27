@@ -24,7 +24,7 @@ When \code{action = "retrieve filename"} but the file has not been downloaded to
 
 The specification of the local directory can be removed by setting the \code{name} argument to \code{NULL}.
 
-The file associated with `name` can be a zip file, in which case the `unz` function can be used to locate the specific file of interest. See the Examples.
+The file associated with `name` can be a zip file, in which case the \code{unz} function can be used to locate the specific file of interest. The Examples below illustrate this. Some functions to read data require a specific path to the file of interest, rather than a connection. In this case, the \code{unzip} function can be used to unzip the files to a temporary (using \code{tempdir}) or other specfied directory first.
 }
 
 \value{
