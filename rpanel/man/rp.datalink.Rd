@@ -41,6 +41,6 @@ The file associated with `name` can be a zip file, in which case the \code{unz} 
   zfile   <- rp.datalink("children_services")
   dirname <- "Data and Code CSRR Strand 3 - August 2023 Update"
   path <- unz(zfile, paste(dirname, "Example_Indicator_CSR.csv", sep = "/"))
-  indicator <-
-  read_csv(path, skip = 6, col_names = c("LA", 2011:2021))
+  if (require(readr))
+    indicator <- read_csv(path, skip = 6, col_names = c("LA", 2011:2021))
   }}

@@ -52,7 +52,9 @@ rp.datalink <- function(name, action = "retrieve filename") {
       "UN_demography",           ".zip",
       "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_Demographic_Indicators_Medium.zip",
       "UN_demography_metadata",   ".xlsx",
-      "https://population.un.org/wpp/Download/Files/4_Metadata/WPP2022_F02_METADATA.XLSX"
+      "https://population.un.org/wpp/Download/Files/4_Metadata/WPP2022_F02_METADATA.XLSX",
+      "sea_surface_temperature", ".nc",
+      "https://www.ncei.noaa.gov/data/sea-surface-temperature-optimum-interpolation/v2.1/access/avhrr/202306/oisst-avhrr-v02r01.20230618.nc"
    ), ncol = 3, byrow = TRUE)
    datasets <- as.data.frame(datasets)
    names(datasets) <- c("name", "type", "remote_file")

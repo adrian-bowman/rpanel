@@ -10,41 +10,53 @@ colnames(x) <- c("round", "square", "oblong")
 #     Doll & Hill (1950) data on smoking and lung cancer
 #     Males and females together
 x           <- matrix(c(688, 650, 21, 59), ncol = 2)
+#     Males and females in a three-way array (for mosaicplot only)
+x           <- array(c(647, 622, 2, 27, 41, 28, 19, 32), dim = c(2, 2, 2),
+                     dimnames = list(c("cases", "controls"),
+                                     c("smoker", "non-smoker"),
+                                     c("males", "females")))
+x           <- aperm(x, c(3, 1, 2))
 #     Males only
 x           <- matrix(c(647, 622, 2, 27), ncol = 2)
 #     Females only
 x           <- matrix(c(41, 28, 19, 32), ncol = 2)
+
 rownames(x) <- c("cases", "controls")
 colnames(x) <- c("smoker", "non-smoker")
 margins     <- FALSE
 
+rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots",
+               scale = "proportions", reference.model = TRUE, superimpose = TRUE, variation = TRUE,
+               margins = margins, col.data = rainbow_hcl(2)[1], col.model = rainbow_hcl(2)[2])
+
 x <- t(x)
 x <- x[2:1, ]
 
+mosaicplot(x, main = "")
 mosaicplot(t(x), main = "")
 
-source("~/iCloud/research/rpanel/rp-contingency.r")
-pdf("figures/contingency-1.pdf")
+points(0.5, 0.5)
+
+
+source("rp-contingency.r")
+rp.contingency(x)
 rp.contingency(x, structure = "column populations", panel = FALSE, margins = margins)
-dev.off()
-pdf("figures/contingency-2.pdf")
 rp.contingency(x, structure = "column populations", scale = "proportions", panel = FALSE,
    margins = margins)
-dev.off()
 rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots", margins = margins)
 library(colorspace)
 rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots",
    scale = "proportions", col.data = rainbow_hcl(2)[1], margins = margins)
-pdf("figures/contingency-5.pdf")
 rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots",
-   scale = "proportions", reference.model = TRUE, superimpose = TRUE,
-   margins = margins, col.data = rainbow_hcl(2)[1], col.model = rainbow_hcl(2)[2])
-dev.off()
-pdf("figures/contingency-6.pdf")
-rp.contingency(x, structure = "row populations", panel = FALSE, display = "plots",
-   scale = "proportions", reference.model = TRUE, superimpose = TRUE, variation = TRUE,
-   margins = margins, col.data = rainbow_hcl(2)[1], col.model = rainbow_hcl(2)[2])
-dev.off()
+               scale = "proportions", reference.model = TRUE, superimpose = TRUE,
+               margins = margins, col.data = rainbow_hcl(2)[1], col.model = rainbow_hcl(2)[2])
+
+rp.contingency(x, structure = "column populations", panel = FALSE, display = "plots",
+               scale = "proportions", reference.model = TRUE, superimpose = TRUE,
+               margins = margins, col.data = rainbow_hcl(2)[1], col.model = rainbow_hcl(2)[2])
+rp.contingency(x, structure = "column populations", panel = FALSE, display = "plots",
+               scale = "proportions", reference.model = TRUE, superimpose = TRUE, variation = TRUE,
+               margins = margins, col.data = rainbow_hcl(2)[1], col.model = rainbow_hcl(2)[2])
 
 chisq.test(x)
 chisq.test(x, correct = FALSE)
