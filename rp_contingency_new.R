@@ -17,11 +17,23 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       stop("'values' setting not recognised.")
    if (any(is.na(x)))
       stop("missing data are not allowed.")
+   if (!any(class(x) %in% c("matrix", "table")))
+      stop("the input should be a matrix or a table.")
+   if (length(dim(x)) != 2)
+      stop("the input should be two-dimensional.")
+   is.wholenumber <-
+      function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+   if (!all(is.wholenumber(c(x))))
+      stop("the input should consist only of integer counts.")
+   if (nrow(x) < 2 | ncol(x) < 2)
+      stop("there must be at least two rows and columns.")
    
    nrw      <- nrow(x)
    ncl      <- ncol(x)
-   if (nrw == 1) uncertainty <- FALSE
-   aligned  <- (style == "aligned") | (style == "mosaic" & nrw > 3)
+   # if (nrw == 1) uncertainty <- FALSE
+   # aligned  <- (style == "aligned") | (style == "mosaic" & nrw > 3)
+   if (uncertainty) style <- "aligned"
+   aligned <- (style == "aligned") | uncertainty
    sep_x    <- 0 # 0.02
    sep_y    <- if (aligned) 0.02 else 0
    colsums  <- colSums(x)
@@ -92,7 +104,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    
    if (uncertainty) {
       # Display the common pattern of proportions
-      clr_band <- "grey"
+      clr_band <- "darkgrey"
       # plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = xmn, y = common,
       #                                                 xend = xmx, yend = common),
       #                                    col = clr_band)

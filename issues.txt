@@ -2,9 +2,15 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.contingency
+  - colour of reference bands?
+  - allow more than one of obs., exp. and props.
+  - create a help file
+  - integrate into the package rather than as a separate file.
+   
 Make rgl changes as advised by Duncan Murdoch. Changes to rp.geosim are already made.
 
-Allow a factor (or character variable) to be passed to rp/plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
+Allow a factor (or character variable) to be passed to rp.plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
 
 Passing values from the function arguments to the shiny app?  See the post at:
 https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-with-arguments-passed-to-the-shiny-app
@@ -48,9 +54,6 @@ rp.sample
     Can this be done by changing the displayed guis?
   - the vertical location of 2 se in the sample mean plot seems rather high.
 
-rp.contingency
-  - integrate into the package rather than as a separate file.
-   
 rp.anova
   - use of transparency to compare reference density and observed, as in rp.contingency.
     Other functions which need this?

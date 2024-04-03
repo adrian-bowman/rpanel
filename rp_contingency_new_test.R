@@ -1,9 +1,8 @@
 #     A new go at graphics for a contingency table
 
-x <- matrix(c(41, 28, 19, 32), ncol = 2,
-            dimnames = list(c("cases", "controls"),
-                            c("smoker", "non-smoker")))
-x <- t(x)
+x <- matrix(c(19, 41, 32, 28), ncol = 2,
+            dimnames = list(c("non-smoker", "smoker"),
+                            c("cases", "controls")))
 
 x <- t(matrix(c(87,73,64,15,25,16,109,84,92), ncol = 3))
 rownames(x) <- c("red", "yellow", "blue")
@@ -19,6 +18,14 @@ rp.contingency(x)
 rp.contingency(x, style = "aligned")
 rp.contingency(x, style = "aligned", uncertainty = TRUE)
 rp.contingency(x, uncertainty = TRUE)
+
+# Checks on x
+x <- matrix(c(19.1, 41, 32, 28), ncol = 2)
+rp.contingency(x)
+x <- array(1:8, dim = rep(2, 3))
+rp.contingency(x)
+x <- matrix(1:3)
+rp.contingency(x)
 
 mosaicplot(x)
 rp.contingency(t(x), display = "comparison")
