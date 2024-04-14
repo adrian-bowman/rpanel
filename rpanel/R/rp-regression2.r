@@ -1,5 +1,4 @@
-#       regression2: rpanel function for regression
-#                    with two covariates.
+#       regression2: regression with two covariates
 
 rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel = TRUE,
     model = "None", residuals.showing = FALSE, size = 3, col = "red") {
@@ -8,7 +7,7 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
       with(panel, {
          if (phi < -90) phi <- -90
          if (phi >  90) phi <-  90
-         rgl::rgl.viewpoint(theta = theta, phi = phi, fov = fov)
+         rgl::view3d(theta = theta, phi = phi, fov = fov)
       })
       panel
    }
@@ -16,12 +15,12 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
    rp.regression2.model <- function(panel) {
      with(panel, {
          if (current.model != "None") {
-            rgl::rgl.pop()
-            if (residuals.showing) rgl::rgl.pop()
+            rgl::pop3d()
+            if (residuals.showing) rgl::pop3d()
             }
          if (model != "None") {
             a <- scaling(xgrid, smat[,, model], zgrid)
-            rgl::rgl.surface(a$x, a$z, a$y, alpha = 0.5)
+            rgl::surface3d(x = a$x, z = a$z, y = a$y, alpha = 0.5)
             if (residuals.showing)
                rgl.segments(x, fv[, model], z, x, y, z, scaling, col = "green")
             }
@@ -35,7 +34,7 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
          if (model != "None") {
             if (residuals.showing)
                rgl.segments(x, fv[, model], z, x, y, z, scaling, col = "green")
-            else rgl::rgl.pop()
+            else rgl::pop3d()
         }
       })
       panel
@@ -65,7 +64,7 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
            x <- x[ind]
            y <- y[ind]
            z <- z[ind]
-           cat("Warning: missing data removed. \n")
+           warning("missing data removed.")
            }
         xlo <- min(x) - 0.05 * diff(range(x))
         xhi <- max(x) + 0.05 * diff(range(x))

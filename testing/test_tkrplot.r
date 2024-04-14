@@ -2,11 +2,8 @@
 #       rp.tkrplot
 #------------------------------------------------------
 
-# library(rpanel)
-
-setwd("~/hea/rpanel/rpanel_1.0-5")
-source("fake-package.r")
-library(tcltk)
+library(rpanel)
+if (reinstall) devtools::install("rpanel")
 
 plotdata <- function(panel) {
    plot(panel$x, panel$y)
@@ -22,7 +19,7 @@ plotnewdata <- function(panel, x, y) {
 	panel$y <- panel$y[-1]
    panel
    }
-plotoldddata <- function(panel, x, y) {
+plotolddata <- function(panel, x, y) {
    rp.do(panel, redraw)
    panel
    }
@@ -32,7 +29,8 @@ redraw <- function(panel) {
    
 x <- runif(50, 0, 1000)
 y <- x + rnorm(50, sd = 50)
-rpplot <- rp.control(title = "Demonstration of click and drag", x = x, y = y)
+rpplot <- rp.control(title = "Demonstration of click and drag", x = x, y = y,
+                     pos = "top")
 rp.tkrplot(rpplot, tkrp, plotdata, 
       action = plotnewdata, mousedragfun = plotnewdata, mouseupfun = plotolddata)
 

@@ -15,6 +15,11 @@ cat("Set arguments:\n")
 with(CofE, 
      rp.regression(Giving ~ Employ + Elect + Attend,
                    yrange = c(-60, 40), col = "blue", subset = 1:2))
+cat("Hypothesis testing:\n")
+rp.datalink("~/iCloud/teaching/book/data", "set local directory")
+cofe_2019 <- rp.wrangle('cofe_2019')
+with(cofe_2019, rp.regression(log(Giving_per_member) ~ Attachment + IMD,
+                              ci = FALSE) + ggplot2::coord_flip())
 
 # ------------------------------------------------------------------------
 test_label("Regression with more than two variables using a fitted model", test.prompt)

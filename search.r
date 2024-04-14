@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "rp.colour.chart"
+target    <- "handshake <-"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

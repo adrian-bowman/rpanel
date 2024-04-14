@@ -1,3 +1,5 @@
+# Density strip plots for linear regression models
+
 rp.regression3 <- function(model, yrng, ci, point.estimate, labels, subset, col, ngrid) {
 
    if (!requireNamespace("ggplot2", quietly = TRUE))
@@ -31,12 +33,12 @@ rp.regression3 <- function(model, yrng, ci, point.estimate, labels, subset, col,
 	ngp   <- length(coeff)
 	coeff <- coeff * (rng[ , 2] - rng[ , 1])
 	se    <- se * (rng[ , 2] - rng[ , 1])
-	yrng  <- if (any(is.na(yrng))) c(min(coeff - 3 * se), max(coeff + 3 * se)) else yrng
+	mn    <- if (ci) coeff else 0
+	yrng  <- if (any(is.na(yrng))) range(min(mn - 3 * se), max(mn + 3 * se), coeff) else yrng
 	coeff <- rep(coeff, each = ngrid)
 	se    <- rep(se,    each = ngrid)
 	xgrid <- seq(yrng[1], yrng[2], length = ngrid + 2)[2:(ngrid + 1)] # Avoid end-points
 	xgrid <- rep(xgrid, ngp)
-	mn    <- if (ci) coeff else 0
 	dgrid <- dnorm(xgrid, mn, se) * se
 	dfrm  <- data.frame(x = xgrid, y = rep(vnms, each = ngrid), d = dgrid)
 	plt   <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y, fill = d)) +
@@ -46,7 +48,7 @@ rp.regression3 <- function(model, yrng, ci, point.estimate, labels, subset, col,
 	         ggplot2::xlab("Effect size") + ggplot2::ylab("Model terms") +
 	         ggplot2::xlim(yrng[1], yrng[2]) +
 	         ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.position = "none")
-	if (point.estimate)
+	if (point.estimate | !ci)
 	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y - 0.4,
 	                                                  xend = x, yend = y  + 0.4,
 	                                                  fill = NULL, col = "red"),

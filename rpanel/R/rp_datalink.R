@@ -19,11 +19,11 @@ rp.datalink <- function(name, action = "retrieve filename") {
       "https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
       "income_distribution",     ".ods",
       "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1140100/Table_3.1a_2021.ods",
-      "cofe_attendance",         ".xlsx",
+      "cofe_attendance_2019",    ".xlsx",
       "https://www.churchofengland.org/sites/default/files/2021-12/2020StatisticsForMission_tables.xlsx",
-      "cofe_giving",             ".xlsx",
+      "cofe_giving_2019",        ".xlsx",
       "https://www.churchofengland.org/sites/default/files/2023-03/parish-finance-statistics-2021_diocesan-totals-.xlsx",
-      "cofe_deprivation",        ".xlsx",
+      "cofe_deprivation_2019",   ".xlsx",
       "https://www.churchofengland.org/sites/default/files/2022-01/Parish_Census_IMD2019_Summary_Jan2022.xlsx",
       "covid19_deaths_scotland", ".csv",
       "http://www.stats.gla.ac.uk/~adrian/data/covid19_deaths_scotland.csv",
@@ -89,7 +89,8 @@ rp.datalink <- function(name, action = "retrieve filename") {
             stop("a file (not directory) with this name already exists.")
          if (!dir.exists(name)) dir.create(name)
       }
-      env <- if (sys.parent() == 0) asNamespace("rpanel") else parent.frame()
+      env <- asNamespace("rpanel")
+      # env <- globalenv()
       assign(".localdatadir", name, envir = env)
       locdir <- if (is.null(.localdatadir)) "NULL" else .localdatadir
       cat("Local data directory changed to:", locdir, "\n")

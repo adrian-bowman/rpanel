@@ -8,7 +8,29 @@ rp.contingency
   - create a help file
   - integrate into the package rather than as a separate file.
    
-Make rgl changes as advised by Duncan Murdoch. Changes to rp.geosim are already made.
+rp.likelihood: 2 variable case
+   - neaten up the edges of the 3d surface
+   - is transparency ok on Windows?
+
+rp.regression:
+  - 1 covariate: setting panel = FALSE doesn't work
+  - 1 covariate: moving points doesn't work on Windows.
+    Creat a new version of the tkrplot package which uses the png file
+    strategy, as in tkRplotR package? Check whether Windows will create
+    a png file without borders.
+    This is because there is
+    an offset in the location of the cursor. Use a visible circle to
+    show the location of the cursor, as in rp.plot4d? Messy
+  - model: allow vertical or horizontal display
+    (vertical gives the same orientation as the response)
+    
+rp.plot4d:
+  - check for Windows OS and, if so, force a uniform window rather
+    than a normal one, as Windows doesn't support transparency.
+
+Use ggplot graphics and return a ggplot object?
+
+Add a data argument to functions?
 
 Allow a factor (or character variable) to be passed to rp.plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
 

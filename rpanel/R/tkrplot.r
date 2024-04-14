@@ -63,8 +63,8 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
   handshakereverse(.my.tkdev, hscale, vscale)
 
   foreground <- handshake(tkimage.create, 'photo', file = foreground)
-  w <- as.numeric(handshake(tcl, "image","width", foreground))
-  h <- as.numeric(handshake(tcl, "image","height", foreground))
+  w <- as.numeric(handshake(tcl, "image", "width", foreground))
+  h <- as.numeric(handshake(tcl, "image", "height", foreground))
   pw <- par("pin")[1]; par(pin=c(pw,(h/w)*pw))
 
   try(fun())
@@ -87,23 +87,25 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
   # convert the x,y clicked co-ordinates into values from the plot itself
   xClick <- x
   yClick <- y
-  width  <- as.numeric(handshake(tclvalue, handshake(tkwinfo, "reqwidth",plot)))
-  height <- as.numeric(handshake(tclvalue, handshake(tkwinfo, "reqheight",plot)))
-  xMin <- parplt[1] * width; xMax <- parplt[2] * width
-  yMin <- parplt[3] * height; yMax <- parplt[4] * height
+  width  <- as.numeric(handshake(tclvalue, handshake(tkwinfo, "reqwidth",  plot)))
+  height <- as.numeric(handshake(tclvalue, handshake(tkwinfo, "reqheight", plot)))
+  xMin   <- parplt[1] * width
+  xMax   <- parplt[2] * width
+  yMin   <- parplt[3] * height
+  yMax   <- parplt[4] * height
   rangeX <- parusr[2] - parusr[1]
   rangeY <- parusr[4] - parusr[3]
-  xClick <- as.numeric(xClick)+0.5
-  yClick <- as.numeric(yClick)+0.5
+  xClick <- as.numeric(xClick) + 0.5
+  yClick <- as.numeric(yClick) + 0.5
   yClick <- height - yClick
-  xPlotCoord <- parusr[1]+(xClick-xMin)*rangeX/(xMax-xMin)
-  yPlotCoord <- parusr[3]+(yClick-yMin)*rangeY/(yMax-yMin)
+  xPlotCoord <- parusr[1] + (xClick - xMin) * rangeX / (xMax - xMin)
+  yPlotCoord <- parusr[3] + (yClick - yMin) * rangeY / (yMax - yMin)
   c(xPlotCoord, yPlotCoord, width, height, xClick, yClick)
 }
 
 w.tkrplot <- function(parent, plotfun, action = NA, mousedrag = NA, mouseup = NA,
                       hscale = 1, vscale = 1, pos = NULL, foreground = NULL, background = NULL,
-                      margins=c(0, 0, 0, 0), name = paste("plot", .nc(), sep = ""), mar) {
+                      margins = c(0, 0, 0, 0), name = paste("plot", .nc(), sep = ""), mar) {
   if (requireNamespace("tkrplot", quietly = TRUE)) {
     widget <- w.createwidget(parent, pos, NULL, tkrplottype = TRUE)
     widget$.type <- "tkrplot"
@@ -127,8 +129,8 @@ w.tkrplot <- function(parent, plotfun, action = NA, mousedrag = NA, mouseup = NA
     
     fdown <- function(x, y) {
        coords <- .w.coords(widget$.widget, x, y,
-                           eval(parse(text = paste(name, ".plt", sep = "")), envir=.rpenv), 
-                           eval(parse(text = paste(name, ".usr", sep = "")), envir=.rpenv)) 
+                           eval(parse(text = paste(name, ".plt", sep = "")), envir = .rpenv), 
+                           eval(parse(text = paste(name, ".usr", sep = "")), envir = .rpenv)) 
       action(coords[1], coords[2]) 
     }
     fdrag <- function(x, y) {

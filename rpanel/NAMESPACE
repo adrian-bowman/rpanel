@@ -67,7 +67,8 @@ export(
   rp.regression, 
   rp.regression2, 
   rp.rmplot, 
-  rp.tables
+  rp.tables,
+  rp.wrangle
 # setSliderRatePolicy
 )
 

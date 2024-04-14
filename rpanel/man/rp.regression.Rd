@@ -25,7 +25,7 @@ When there are one or two covariates, specified through the \code{x} and \code{y
 \item{x}{a vector or two column matrix of covariate values, or a formula, or a fitted linear model.}
 \item{y}{a vector of response values.  This is not required if \code{x} is a formula or a fitted linear model.}
 
-The following arguments refer to the case of one or two covariates, spcified explicitly:
+The following arguments refer to the case of one or two covariates, specified explicitly:
 \item{x1, x2}{vectors of covariate values.}
 \item{ylab}{a character variable used for the response axis label.}
 \item{x1lab}{a character variable used for the first covariate axis label.}

@@ -276,7 +276,7 @@ rp.loglik2 <- function(loglik.text, data, theta.low, theta.high) {
          ay <- scaling(loglik.mat, loglik.mat, loglik.mat)$y
          az <- scaling(theta2, theta2, theta2)$z
          rgl::pop3d()
-         rgl::rgl.surface(ax, az, ay, alpha = alpha.surface, col = clr.surface)
+         rgl::surface3d(x = ax, z = az, y = ay, alpha = alpha.surface, col = clr.surface)
          rgl::material3d(alpha = 1)
          
          if (display["mle"]) {
@@ -312,14 +312,14 @@ rp.loglik2 <- function(loglik.text, data, theta.low, theta.high) {
             ind  <- findInterval(c(quad.mat), ints)
             clr  <- terrain.colors(50)[ind]
             
-      	    if (display["transparent"]) alpha.surface <- rep(0.5, ngrid^2)
+      	   if (display["transparent"]) alpha.surface <- rep(0.5, ngrid^2)
                else                     alpha.surface <- rep(  1, ngrid^2)
             ind <- (quad.mat <= threshold)
             alpha.surface[c(ind)] <- 0
             ax   <- scaling(theta1,  theta1,  theta1)$x
             ay   <- scaling(quad.mat, quad.mat, quad.mat)$y
             az   <- scaling(theta2, theta2, theta2)$z
-            rgl::rgl.surface(ax, az, ay, alpha = alpha.surface, col = clr, front = "line", back = "line")
+            rgl::surface3d(x = ax, z = az, y = ay, alpha = alpha.surface, col = clr, front = "line", back = "line")
             rgl::material3d(alpha = 1)
             }
          })

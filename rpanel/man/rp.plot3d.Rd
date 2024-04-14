@@ -60,7 +60,7 @@ A scaling function is returned to allow further objects to be added to the plot.
   scaling <- rp.plot3d(x, y, z, xlim = c(-3, 3))
   # In addition you may add a line to the plot with these two lines;
   #  a <- scaling(c(-3,3), c(0,0), c(0,0))
-  #  lines3d(a$x, a$y, a$z, col = "green", size = 2) 
+  #  rgl::lines3d(a$x, a$y, a$z, col = "green", size = 2) 
 }}
 
 \keyword{iplot}
