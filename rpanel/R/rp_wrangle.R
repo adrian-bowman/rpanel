@@ -1,7 +1,8 @@
 rp.wrangle <- function(name) {
    
    datasets <- matrix(c(
-      "cofe_2019",    "collated data on giving in the Church of England in 2019"
+      "cofe_2019",     "collated data on giving in the Church of England in 2019",
+      "UN_demography", "collated data from UN web sites"
       ), ncol = 2, byrow = TRUE)
    datasets <- as.data.frame(datasets)
    names(datasets) <- c("name", "description")
@@ -13,6 +14,8 @@ rp.wrangle <- function(name) {
 
    if (!requireNamespace("readxl", quietly = TRUE))
       stop("the readxl package is not available.")
+   if (!requireNamespace("readr", quietly = TRUE))
+      stop("the readr package is not available.")
    if (!requireNamespace("dplyr",  quietly = TRUE))
       stop("the dplyr package is not available.")
    if (length(name) != 1)
@@ -60,6 +63,29 @@ rp.wrangle <- function(name) {
          dplyr::full_join(d.giving, by = 'Diocese') |>
          dplyr::mutate(Attachment = Attend / population,
                        Giving_per_member = Giving / Elect)
+   }
+   
+   if (name == "UN_demography") {
+      path <- rp.datalink("UN_demography")
+      path <- unz(path, "WPP2022_Demographic_Indicators_Medium.csv")
+      demog <- readr::read_csv(path) |>
+         dplyr::filter(LocTypeName == "Country/Area") |>
+         dplyr::select("LocID", "Location",
+                "Year" = "Time", "Population" = "TPopulation1Jan",
+                "Fertility" = "TFR", "Life_Expectancy" = "LEx") |>
+         dplyr::mutate(Population = Population / 1000)
+      
+      path <- rp.datalink("UN_demography_metadata")
+      nms <- readxl::read_excel(path, sheet = "Overall", skip = 16) |>
+         dplyr::select("LocID", "Continent" = "GeoRegName") |>
+         dplyr::distinct() |>
+         dplyr::mutate(Continent = dplyr::case_match(Continent,
+                                       "Latin America and the Caribbean" ~ "LA and Car.",
+                                       "Northern America" ~ "N. America",
+                                       .default = Continent))
+      
+      # anti_join(demog, nms, "LocID")
+      d <- dplyr::left_join(demog, nms, "LocID")
    }
    
    invisible(d)
