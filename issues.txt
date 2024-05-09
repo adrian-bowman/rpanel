@@ -2,6 +2,9 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.gulls
+  - why is there no hscale/vscale option?
+  
 rp.contingency
   - colour of reference bands?
   - allow more than one of obs., exp. and props.
@@ -81,6 +84,7 @@ rp.anova
     Other functions which need this?
   - the model specifications are very messy.
     Use "interaction", "additive", etc. in some way?
+  -  strange things happen with the daphnae data from Abubakar (Birmingham)
 
 rp.geosim
   - this has been changed to allow panel = FALSE but more extensive changes

@@ -48,8 +48,8 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
          panel$model  <- c(panel$model11, panel$model12)
          panel$model0 <- c(panel$model01, panel$model02)
       }
-   	  panel$model.check  <- any(panel$model)
-   	  panel$model0.check <- any(panel$model0)
+   	panel$model.check  <- any(panel$model)
+   	panel$model0.check <- any(panel$model0)
       if (!panel$model[1] & any(panel$model[-1])) {
          rp.messagebox("The overall mean must be included if other terms are present.")
          panel$model.check <- FALSE
@@ -91,23 +91,25 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
       panel$fstat   <- (abs(rss0 - rss1) / abs(panel$df1 - panel$df0)) / panel$sigma^2
       panel$p.value <- 1 - pf(panel$fstat, abs(panel$df0 - panel$df1), min(panel$df0, panel$df1))
 
-      wfn <- with
-      if (!panel$interactive) wfn <- within
-      panel <- wfn(panel, {
+      # wfn <- with
+      # if (!panel$interactive) wfn <- within
+      # panel <- wfn(panel, {
       	
+      with(panel, {
          form <- if (type == "Two-way") "y ~ x | z" else "y ~ x"
          form <- as.formula(form)
          ngps <- nrow(unique(data.frame(x, z)))
          if (graphics != "boxplot") {
             clr  <- colorspace::rainbow_hcl(3)
-         	  dfrm <- data.frame(x, y, z, jitter.x)
+         	dfrm <- data.frame(x, y, z, jitter.x)
            	plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(y, x)) + ggplot2::xlab(ylab) + ggplot2::ylab(xlab) +
          	          ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
          	                panel.grid.minor = ggplot2::element_blank(),
          	                panel.background = ggplot2::element_rect(fill = "grey90")) +
          	  	      ggplot2::ggtitle(ttl)
             if (!(model0.check & model.check) | all(model == model0)) {
-               plt <- plt + ggplot2::stat_density(ggplot2::aes(fill = ..density..), geom = "tile",
+               plt <- plt + ggplot2::stat_density(ggplot2::aes(fill = ggplot2::after_stat(density)),
+                            geom = "tile",
                             height = 0.7, position = "identity", show.legend = FALSE) +
 		           ggplot2::scale_fill_gradient(low = "grey90", high = clr[3])
             }
@@ -239,12 +241,12 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
       if (panel.plot) {
          rp.grid(panel, "dataplot", row = 0, column = 0, background = "white")
          rp.tkrplot(panel, plot,  rp.anova.draw,  hscale = hscale, vscale = vscale, 
-                   grid = "dataplot", row = 0, column = 0, background = "white")
-      	 rp.text(panel, "", grid = "fplot", row = 0, column = 0, background = bgdcol)
-      	 rp.text(panel, "", grid = "fplot", row = 1, column = 0, background = bgdcol)
+                    grid = "dataplot", row = 0, column = 0, background = "white")
+      	rp.text(panel, "", grid = "fplot", row = 0, column = 0, background = bgdcol)
+      	rp.text(panel, "", grid = "fplot", row = 1, column = 0, background = bgdcol)
          rp.tkrplot(panel, fplot, rp.anova.fplot, hscale = hscale * 0.7, vscale = vscale * 0.2, 
-                   grid = "fplot", row = 2, column = 0, background = bgdcol)
-      	 rp.text(panel, "", grid = "fplot", row = 3, column = 0, background = bgdcol)
+                    grid = "fplot", row = 2, column = 0, background = bgdcol)
+      	rp.text(panel, "", grid = "fplot", row = 3, column = 0, background = bgdcol)
          action.fn <- rp.anova.redraw
       }
       else
