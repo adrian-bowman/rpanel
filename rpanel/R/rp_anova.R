@@ -60,12 +60,12 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
       }
       if (any(panel$model) & !panel$model0[1] & any(panel$model0[-1])) {
          rp.messagebox("The overall mean must be included if other terms are present",
-                       "in the new model.")
+                       "in the reference model.")
          panel$model0.check <- FALSE
       }
       if (any(panel$model) & panel$type == "Two-way" & panel$model0[4] & !all(panel$model0[2:3])) {
          rp.messagebox("The main effects must be included if the interaction term",
-                       "is present in the new model.")
+                       "is present in the reference model.")
          panel$model0.check <- FALSE
       }
       
@@ -104,8 +104,9 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
          	dfrm <- data.frame(x, y, z, jitter.x)
            	plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(y, x)) + ggplot2::xlab(ylab) + ggplot2::ylab(xlab) +
          	          ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
-         	                panel.grid.minor = ggplot2::element_blank(),
-         	                panel.background = ggplot2::element_rect(fill = "grey90")) +
+         	                         panel.grid.minor = ggplot2::element_blank(),
+         	                         panel.background = ggplot2::element_rect(fill = "grey90")) +
+           	        # ggplot2::geom_hline(yintercept = 1:nlevels(x) + 0.5, col = "white") +
          	  	      ggplot2::ggtitle(ttl)
             if (!(model0.check & model.check) | all(model == model0)) {
                plt <- plt + ggplot2::stat_density(ggplot2::aes(fill = ggplot2::after_stat(density)),
@@ -253,8 +254,8 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
          action.fn <- rp.anova.draw
 
       rp.text(panel, "        Model", grid = "models", row = 0, column = 1, background = bgdcol)
-      rp.text(panel,       "current", grid = "models", row = 1, column = 0, background = bgdcol)
-      rp.text(panel,           "new", grid = "models", row = 1, column = 2, background = bgdcol)
+      rp.text(panel,        "fitted", grid = "models", row = 1, column = 0, background = bgdcol)
+      rp.text(panel,     "reference", grid = "models", row = 1, column = 2, background = bgdcol)
       rp.checkbox(panel, model11, action.fn, labels = "", initval = init.model[1],
             grid = "models", row = 2, column = 0, background = bgdcol)
       rp.checkbox(panel, model12, action.fn, labels = "", initval = init.model[2],

@@ -58,6 +58,7 @@ export(
 # rp.multilevel,
   rp.mururoa, 
   rp.normal, 
+  rp.onesample,
   rp.plot3d, 
   rp.plot4d,
   rp.power,

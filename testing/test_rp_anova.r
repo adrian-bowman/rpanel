@@ -3,9 +3,12 @@
 library(rpanel)
 if (reinstall) devtools::install("rpanel")
 
-with(poisons, 
-  rp.anova(1/stime, treatment, poison))
+library(tidyverse)
+poisons <- mutate(poisons, poison = factor(paste("poison", poison)))
 
+with(poisons,  rp.anova(stime, treatment, poison))
+
+with(poisons,  rp.anova(1 / stime, treatment, poison))
 
 with(poisons, 
    rp.anova(1/stime, treatment, model = c(TRUE, TRUE), model0 = c(TRUE, FALSE), panel = FALSE)

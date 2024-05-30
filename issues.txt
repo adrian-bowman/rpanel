@@ -2,6 +2,9 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.onesample
+  - make notches for the sample mean, and possibly +/- 2 se's, optional.
+
 rp.gulls
   - why is there no hscale/vscale option?
   
@@ -85,6 +88,8 @@ rp.anova
   - the model specifications are very messy.
     Use "interaction", "additive", etc. in some way?
   -  strange things happen with the daphnae data from Abubakar (Birmingham)
+  - add in the rp.interaction style plot? (Abu, Bham)
+  - restrict to ggplot only?
 
 rp.geosim
   - this has been changed to allow panel = FALSE but more extensive changes
