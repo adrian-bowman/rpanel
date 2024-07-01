@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "handshake <-"
+target    <- "ggplot"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

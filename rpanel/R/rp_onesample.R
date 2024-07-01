@@ -1,4 +1,4 @@
-#     A function for aconfidence interval and hypothesis test
+#     A function for a confidence interval and hypothesis test
 #     on one sample of data
 
 rp.onesample <- function(x, xlab, data_plot = "jitter", reference) {
