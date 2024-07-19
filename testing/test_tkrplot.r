@@ -2,8 +2,30 @@
 #       rp.tkrplot
 #------------------------------------------------------
 
+#     New version
+
+fl <- tempfile("tkrplotawb", fileext = ".png")
+png(fl)
+plot(1:10)
+dev.off()
+
+draw  <- function(panel) plot(1:10)  
+click <- function(panel, x, y) print(c(x, y))
+devtools::install("rpanel")
+library(rpanel)
+panel <- rp.control()
+rp.tkrplot(panel, plot, draw, click)
+
+
+#     Old version
+
 library(rpanel)
 if (reinstall) devtools::install("rpanel")
+
+draw <- function(panel) plot(1:10)  
+click <- function(panel, x, y) print(c(x, y))
+panel <- rp.control("test")
+rp.tkrplot(panel, plot, draw, click)
 
 plotdata <- function(panel) {
    plot(panel$x, panel$y)

@@ -47,16 +47,17 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
      parent <- panel
   if (is.list(pos) && !is.null(pos$grid))
      parent <- rp.widget.get(panelname, pos$grid)
-
-  widget <- w.tkrplot(parent, plotfun = pf, action = fa, mousedrag = fd, mouseup = fu,
+  
+  widget <- w.tkrplot(parent, w.plotfun = pf, action = fa, mousedrag = fd, mouseup = fu,
                       hscale, vscale, pos, foreground, background, margins, name, mar)
   rp.widget.put(panelname, name, widget)
 
-  if (.rpenv$savepanel) rp.control.put(panelname, panel) # put the panel back into the environment
+  # if (.rpenv$savepanel)
+     rp.control.put(panelname, panel) # put the panel back into the environment
   invisible(panelname)
 }
 
-.w.tkrplot <- function (parent, fun, hscale = 1, vscale = 1, foreground = NULL, background = NULL, 
+.w.tkrplot <- function(parent, fun, hscale = 1, vscale = 1, foreground = NULL, background = NULL, 
                         margins=c(0, 0, 0, 0)) {
                         	
   image <- paste("Rplot", .make.tkindex(), sep = "")
@@ -103,7 +104,33 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
   c(xPlotCoord, yPlotCoord, width, height, xClick, yClick)
 }
 
-w.tkrplot <- function(parent, plotfun, action = NA, mousedrag = NA, mouseup = NA,
+tkrplot.awb <- function (parent, fun, name, hscale = 1, vscale = 1)  {
+   fl <- tempfile(pattern = "tkrplotawb", fileext = ".png")
+   on.exit(unlink(fl))
+   png(filename = fl,
+       # type = getVariable("tkRplotR_pngType"), 
+       width = 480 * hscale, height = 480 * vscale)
+   image <- try(fun(), silent = TRUE)
+   assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
+   assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
+   if (inherits(image, "try-error")) return(dev.off())
+   dev.off()
+   
+   image <- handshake(tkimage.create, 'photo', file = fl)
+   w.widget <- handshake(tkcanvas, parent,
+                               width  = handshake(tcl, 'image', 'width',  image),
+                               height = handshake(tcl, 'image', 'height', image))
+   imageincanvas <- handshake(tkcreate, w.widget, 'image', 0, 0, image = image, anchor = 'nw')
+   lab <- tklabel(parent, image = image)
+   tkbind(lab, "<Destroy>", function() .Tcl(paste("image delete", image)))
+   lab$image <- image
+   lab$fun <- fun
+   lab$hscale <- hscale
+   lab$vscale <- vscale
+   lab
+}
+
+w.tkrplot <- function(parent, w.plotfun, action = NA, mousedrag = NA, mouseup = NA,
                       hscale = 1, vscale = 1, pos = NULL, foreground = NULL, background = NULL,
                       margins = c(0, 0, 0, 0), name = paste("plot", .nc(), sep = ""), mar) {
   if (requireNamespace("tkrplot", quietly = TRUE)) {
@@ -111,13 +138,15 @@ w.tkrplot <- function(parent, plotfun, action = NA, mousedrag = NA, mouseup = NA
     widget$.type <- "tkrplot"
     plotter <- function() {
        par(mar = mar)
-       plotfun()
+       w.plotfun()
        assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
        assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
     }
     if (is.null(foreground)) {
-       widget$.widget <- handshake(tkrplot::tkrplot, parent$.handle, plotter,
-                                   hscale = hscale, vscale = vscale)
+       # widget$.widget <- handshake(tkrplot::tkrplot, parent$.handle, plotter,
+       #                             hscale = hscale, vscale = vscale)
+       widget$.widget <- handshake(tkrplot.awb, parent$.handle, w.plotfun,
+                                   name = name, hscale = hscale, vscale = vscale)
        w.setbackground(widget$.widget, background)
     }
     else {
@@ -131,7 +160,7 @@ w.tkrplot <- function(parent, plotfun, action = NA, mousedrag = NA, mouseup = NA
        coords <- .w.coords(widget$.widget, x, y,
                            eval(parse(text = paste(name, ".plt", sep = "")), envir = .rpenv), 
                            eval(parse(text = paste(name, ".usr", sep = "")), envir = .rpenv)) 
-      action(coords[1], coords[2]) 
+       action(coords[1], coords[2]) 
     }
     fdrag <- function(x, y) {
        coords <- .w.coords(widget$.widget, x, y,
@@ -150,7 +179,7 @@ w.tkrplot <- function(parent, plotfun, action = NA, mousedrag = NA, mouseup = NA
     if (is.function(mousedrag)) handshake(tkbind, widget$.widget, "<B1-Motion>", fdrag)
     if (is.function(mouseup))   handshake(tkbind, widget$.widget, "<ButtonRelease-1>", fup)
     handshake(tkconfigure, widget$.widget, cursor = "hand2")
-    
+
     w.appearancewidget(widget, NULL, NULL, NULL)
   } 
   else

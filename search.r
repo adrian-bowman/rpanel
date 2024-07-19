@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "ggplot"
+target    <- "pwidget"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"
