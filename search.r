@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "pwidget"
+target    <- ".type"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

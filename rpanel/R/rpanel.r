@@ -40,9 +40,9 @@ handshakereverse <- function(fun, ...) {
 }
 
 .nc <- function()
-   assign("counter", .rpenv$counter+1, envir=.rpenv)
+   assign("counter", .rpenv$counter + 1, envir = .rpenv)
 
-rp.setup <- function(getpanel=.rpenv$getpanel, setparent=.rpenv$setparent) {
+rp.setup <- function(getpanel = .rpenv$getpanel, setparent = .rpenv$setparent) {
    # rp.setup <- function(getpanel=.rpenv$getpanel, setparent=.rpenv$setparent,
    # setpanel=.rpenv$setpanel, savepanel=.rpenv$savepanel)
    assign("getpanel",  getpanel,  envir=.rpenv)

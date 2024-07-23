@@ -1,7 +1,3 @@
-# To be done:
-#    - the variogram plot no longer disappears when the checkboxes are not checked.
-# Display the values of the anisotropy parameters in the plot title.
-
 rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa = 10,
                       max.aniso.ratio = 5,
                       min.ngrid = 10, max.ngrid = 25, hscale = NA, vscale = hscale,

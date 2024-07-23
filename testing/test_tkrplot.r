@@ -4,18 +4,23 @@
 
 #     New version
 
-fl <- tempfile("tkrplotawb", fileext = ".png")
-png(fl)
-plot(1:10)
-dev.off()
-
-draw  <- function(panel) plot(1:10)  
-click <- function(panel, x, y) print(c(x, y))
+draw  <- function(panel) {
+   plot(seq(0, 1, length = 10)^panel$pow)
+   panel
+}
+click <- function(panel, x, y) {
+   print(c(x, y))
+   panel
+}
 devtools::install("rpanel")
 library(rpanel)
-panel <- rp.control()
-rp.tkrplot(panel, plot, draw, click)
-
+redraw <- function(panel) {
+   rp.tkrreplot(panel, plot1)
+   panel
+}
+panel <- rp.control(pow = 1)
+rp.tkrplot(panel, plot1, draw, click, hscale = 1.5, vscale = 1.5)
+rp.slider(panel, pow, from = 0.5, to = 2, action = redraw)
 
 #     Old version
 

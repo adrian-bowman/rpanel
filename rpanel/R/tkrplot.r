@@ -5,7 +5,7 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
       
   if (!requireNamespace("tkrplot", quietly = TRUE)) stop("the tkrplot package is not available.") 
                        	
-  panelname <- panel$panelname 
+  panelname <- panel$panelname
   name      <- deparse(substitute(name))
 
   if (is.null(pos) && length(list(...)) > 0) pos <- list(...)
@@ -104,32 +104,6 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
   c(xPlotCoord, yPlotCoord, width, height, xClick, yClick)
 }
 
-tkrplot.awb <- function (parent, fun, name, hscale = 1, vscale = 1)  {
-   fl <- tempfile(pattern = "tkrplotawb", fileext = ".png")
-   on.exit(unlink(fl))
-   png(filename = fl,
-       # type = getVariable("tkRplotR_pngType"), 
-       width = 480 * hscale, height = 480 * vscale)
-   image <- try(fun(), silent = TRUE)
-   assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
-   assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
-   if (inherits(image, "try-error")) return(dev.off())
-   dev.off()
-   
-   image <- handshake(tkimage.create, 'photo', file = fl)
-   w.widget <- handshake(tkcanvas, parent,
-                               width  = handshake(tcl, 'image', 'width',  image),
-                               height = handshake(tcl, 'image', 'height', image))
-   imageincanvas <- handshake(tkcreate, w.widget, 'image', 0, 0, image = image, anchor = 'nw')
-   lab <- tklabel(parent, image = image)
-   tkbind(lab, "<Destroy>", function() .Tcl(paste("image delete", image)))
-   lab$image <- image
-   lab$fun <- fun
-   lab$hscale <- hscale
-   lab$vscale <- vscale
-   lab
-}
-
 w.tkrplot <- function(parent, w.plotfun, action = NA, mousedrag = NA, mouseup = NA,
                       hscale = 1, vscale = 1, pos = NULL, foreground = NULL, background = NULL,
                       margins = c(0, 0, 0, 0), name = paste("plot", .nc(), sep = ""), mar) {
@@ -188,6 +162,31 @@ w.tkrplot <- function(parent, w.plotfun, action = NA, mousedrag = NA, mouseup = 
   widget
 }
 
+tkrplot.awb <- function (parent, fun, name, hscale = 1, vscale = 1)  {
+   fl <- tempfile(pattern = "tkrplotawb", fileext = ".png")
+   on.exit(unlink(fl))
+   png(filename = fl, width = 480 * hscale, height = 480 * vscale)
+       # type = getVariable("tkRplotR_pngType"), 
+   image <- try(fun(), silent = TRUE)
+   assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
+   assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
+   if (inherits(image, "try-error")) return(dev.off())
+   dev.off()
+   
+   image <- handshake(tkimage.create, 'photo', file = fl)
+   w.widget <- handshake(tkcanvas, parent,
+                         width  = handshake(tcl, 'image', 'width',  image),
+                         height = handshake(tcl, 'image', 'height', image))
+   imageincanvas <- handshake(tkcreate, w.widget, 'image', 0, 0, image = image, anchor = 'nw')
+   lab <- tklabel(parent, image = image)
+   tkbind(lab, "<Destroy>", function() .Tcl(paste("image delete", image)))
+   lab$image  <- image
+   lab$fun    <- fun
+   lab$hscale <- hscale
+   lab$vscale <- vscale
+   lab
+}
+
 rp.tkrreplot <- function(panel, name) {
   # if (is.na(charmatch("window", panel$panelname))) # if the panelname is not set then
   if (!exists(panel$panelname, .rpenv, inherits = FALSE)) # if the panelname is not set then
@@ -196,10 +195,23 @@ rp.tkrreplot <- function(panel, name) {
      panelname <- panel$panelname
   name <- deparse(substitute(name))
   img  <- rp.widget.get(panelname, name)
-  handshake(tkrplot::tkrreplot, img$.widget)
+  handshake(tkrreplot.awb, img$.widget)
   invisible(panelname)
 }
 
-w.tkrreplot <- function(img) {
-  handshake(tkrplot::tkrreplot, img$.widget)
+tkrreplot.awb <- function(lab, fun = lab$fun, hscale = lab$hscale, vscale = lab$vscale) {
+     fl <- tempfile(pattern = "tkrplotawb", fileext = ".png")
+     on.exit(unlink(fl))
+     png(fl, width = 480 * hscale, height = 480 * vscale)
+         # type = getVariable("tkRplotR_pngType"), 
+     err <- try(fun(), silent = TRUE)
+     # assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
+     # assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
+     if (inherits(err, "try-error")) return(dev.off())
+     dev.off()
+     handshake(tkimage.create, 'photo', lab$image, file = fl)
 }
+
+# w.tkrreplot <- function(img) {
+#   handshake(tkrplot::tkrreplot, img$.widget)
+# }

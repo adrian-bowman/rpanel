@@ -2,6 +2,10 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.geosim
+  - the variogram plot no longer disappears when the checkboxes are not checked.
+  - display the values of the anisotropy parameters in the plot title.
+
 rp.onesample
   - make notches for the sample mean, and possibly +/- 2 se's, optional.
 
