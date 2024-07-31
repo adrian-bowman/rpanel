@@ -6,7 +6,7 @@ Date: 2021-09-02
 Author: Bowman, Bowman, Gibson and Crawford
 Maintainer: Adrian Bowman <adrian.bowman@glasgow.ac.uk>
 Depends: R (>= 4.1), tcltk, shiny
-Suggests: tkrplot, rgl, sp, geoR, interp, MASS, denstrip,
+Suggests: rgl, sp, geoR, interp, MASS, denstrip,
         lattice, sm, maps, mgcv, colorspace, ggplot2
 Description: A set of functions to build simple 
         GUI controls for R functions.  These are built on the 'tcltk' package. 

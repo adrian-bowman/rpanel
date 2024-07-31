@@ -183,7 +183,7 @@ rp.tables <- function(panel = TRUE, display = "shiny", panel.plot = TRUE, hscale
                     missing.heading = missing.heading)
     rp.grid(tables.panel, "controls", row = 0, column = 0)
     rp.grid(tables.panel, "plot",     row = 1, column = 0, background = "white")
-    if (panel.plot && requireNamespace("tkrplot", quietly = TRUE)) {
+    if (panel.plot) {
       rp.tkrplot(tables.panel, plot, plotfun = tables.draw,
                       hscale = hscale, vscale = vscale, row = 1, column = 0, columnspan = 4,
                       grid = "plot", sticky = "ew", background = "white")

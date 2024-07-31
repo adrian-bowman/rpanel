@@ -45,10 +45,6 @@ rp.normal <- function(y, ylab = deparse(substitute(y)),
                         mean = runif(1, 0.9 * min(y) + 0.1 * max(y), 0.7 * min(y) + 0.3 * max(y)),
                         stan = runif(1, 0.8 * sd(y), 1.4 * sd(y)),
                         curve.showing = FALSE, fitted.showing = FALSE)
-   if (panel.plot & !requireNamespace("tkrplot", quietly = TRUE)) {
-      warning("the tkrplot package is not available so panel.plot has been set to FALSE.")
-      panel.plot <- FALSE
-      }
    if (panel.plot) {
       rp.tkrplot(normal.panel, plot, normal.draw, pos = "right",
                  hscale = hscale, vscale = vscale, background = "white")

@@ -190,7 +190,7 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
        	   title(paste("p-value:", round(p.value, 3)), cex.main = 0.8, font.main = 1)
          }
          else {
-       	    par(mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
+       	   par(mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
             plot(c(0, 1), c(0, 1), type = "n", xlab = "", ylab = "", axes = FALSE)
          }
       })
@@ -201,11 +201,6 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
       rp.tkrreplot(panel, plot)
       rp.tkrreplot(panel, fplot)
       panel
-   }
-
-   if (panel.plot & !requireNamespace("tkrplot", quietly = TRUE)) {
-      warning("the tkrplot package is not available so panel.plot has been set to FALSE.")
-      panel.plot <- FALSE
    }
 
    model.options <- c("overall mean")
@@ -233,7 +228,9 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
                     model11 = init.model[1],  model12 = init.model[2],  model13 = init.model[3], 
                     model14 = init.model[4],  model01 = init.model0[1], model02 = init.model0[2],
                     model03 = init.model0[3], model04 = init.model0[4],
-                    model.check = TRUE, model0.check = TRUE, bgdcol = bgdcol)
+                    model = init.model, model0 = init.model0,
+                    model.check = any(init.model), model0.check = any(init.model0),
+                    bgdcol = bgdcol)
       
       rp.grid(panel, "controls", row = 1, column = 0, background = bgdcol)
       rp.grid(panel, "models",   grid = "controls", row = 0, column = 0, background = bgdcol)

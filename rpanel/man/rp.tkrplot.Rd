@@ -3,11 +3,10 @@
 \alias{rp.tkrplot}
 \alias{rp.tkrreplot}
 
-\title{rpanel calls for tkrplot and tkrreplot}
+\title{Facilities for placing R plots inside \pkg{tcltk} windows.}
 
 \description{
-These functions call Luke Tierney's \code{tkrplot} and \code{tkrreplot} 
-functions from the \pkg{tkrplot} package to allow R graphics to be displayed in a panel.
+These functions allow R graphics to be displayed in a panel.
 }
 
 \usage{

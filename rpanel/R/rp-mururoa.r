@@ -343,7 +343,6 @@ mururoa.start <- function(panel) {
    panel
 }
 
-   if (!requireNamespace("tkrplot", quietly = TRUE)) stop("The tkrplot package is not available.")
    if (!requireNamespace("geoR",    quietly = TRUE)) stop("The geoR package is not available.")
    if (!requireNamespace("fields",  quietly = TRUE)) stop("the fields package is not available.")
 

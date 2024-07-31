@@ -145,11 +145,6 @@ rp.ci <- function(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), co
       panel
       }
 
-   if (panel.plot & !requireNamespace("tkrplot", quietly = TRUE)) {
-      warning("the tkrplot package is not available so panel.plot has been set to FALSE.")
-      panel.plot <- FALSE
-      }
-      
    if (panel) {
       panel <- rp.control("Simulated confidence intervals", panel.plot = panel.plot,
                     pars = c("mean" = mu, "s.d." = sigma), ssize = 30, confidence = confidence,

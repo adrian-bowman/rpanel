@@ -5,7 +5,7 @@
 \title{Interactive inspection of one- or two-parameter likelihood surfaces}
 
 \description{
-This function plots a likelihood surface for a model with one or two parameters.  It also creates a panel which allows the maximum likelihood estimate, a confidence region and other objects of interest to be added to the plot.  For one-parameter models, the \code{tkrplot} package is required.  For two-parameter models the \code{rgl} package is required.
+This function plots a likelihood surface for a model with one or two parameters.  It also creates a panel which allows the maximum likelihood estimate, a confidence region and other objects of interest to be added to the plot. For two-parameter models the \code{rgl} package is required.
 }
 
 \usage{

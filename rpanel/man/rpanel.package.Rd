@@ -54,8 +54,8 @@ Functions to create individual controls:\cr
 \code{\link{rp.deleteline}}: removes a line from an rp.image\cr
 \code{\link{rp.clearlines}}: removes all lines from an rp.image\cr
 \code{\link{rp.messagebox}}: displays a message in a pop-up window\cr
-\code{\link{rp.tkrplot}}: calls Luke Tierney's \code{tkrplot} function to allow R graphics to be displayed in a panel\cr
-\code{\link{rp.tkrreplot}}: calls Luke Tierney's \code{tkrreplot} functions to allow R graphics to be refreshed in a panel.\cr
+\code{\link{rp.tkrplot}}:  allows R graphics to be displayed in a panel\cr
+\code{\link{rp.tkrreplot}}: allows R graphics to be refreshed in a panel.\cr
 \code{\link{rp.timer}}: executes an action function repeatedly until a condition is satisfied\cr
 \code{\link{rp.block}}: blocks use of the R console until a panel is closed\cr
 \code{\link{rp.panel}}: returns a named panel or the most recently created panel\cr

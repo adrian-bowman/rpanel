@@ -29,7 +29,7 @@ rp.rmplot(y, id = NA, timept = NA, fac = NA, type = "all",
 \item{col}{a vector of colours associated with each of the factor levels in \code{fac}.}
 \item{lty}{a vector of linetypes associated with each of the factor levels in \code{fac}.}
 \item{panel}{a logical variable controlling whether an interactive panel is created.}
-\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \pkg{tkrplot} package is required.}
+\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
 \item{...}{further arguments which will be passed to the \code{plot} call
              in the construction of the graph.}

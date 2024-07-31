@@ -13,8 +13,6 @@ rp.likelihood <- function(loglik.fn, data, theta.low, theta.high,
 rp.loglik1 <- function(loglik.text, data, theta.low, theta.high,
                             form = "log-likelihood") {
 
-   if (!requireNamespace("tkrplot")) stop("the tkrplot package is required.")
-
    theta.range <- c(theta.low, theta.high)
 
    loglik1.plot <- function(panel) {

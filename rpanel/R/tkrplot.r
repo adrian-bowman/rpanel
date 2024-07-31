@@ -2,9 +2,8 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
                        hscale = 1, vscale = 1, pos = NULL, foreground = NULL, background = NULL, 
                        margins=c(0, 0, 0, 0), parentname = deparse(substitute(panel)),
                        mar = par()$mar, ...) {
-      
-  if (!requireNamespace("tkrplot", quietly = TRUE)) stop("the tkrplot package is not available.") 
-                       	
+   
+
   panelname <- panel$panelname
   name      <- deparse(substitute(name))
 
@@ -60,18 +59,32 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
 .w.tkrplot <- function(parent, fun, hscale = 1, vscale = 1, foreground = NULL, background = NULL, 
                         margins=c(0, 0, 0, 0)) {
                         	
-  image <- paste("Rplot", .make.tkindex(), sep = "")
-  handshakereverse(.my.tkdev, hscale, vscale)
-
-  foreground <- handshake(tkimage.create, 'photo', file = foreground)
-  w <- as.numeric(handshake(tcl, "image", "width", foreground))
-  h <- as.numeric(handshake(tcl, "image", "height", foreground))
-  pw <- par("pin")[1]; par(pin=c(pw,(h/w)*pw))
-
-  try(fun())
-
-  handshake(.Tcl, paste("image create Rplot", image))
-
+   foreground <- handshake(tkimage.create, 'photo', file = foreground)
+   w <- as.numeric(handshake(tcl, "image", "width", foreground))
+   h <- as.numeric(handshake(tcl, "image", "height", foreground))
+   pw <- par("pin")[1]
+   par(pin = c(pw, (h / w) * pw))
+   
+   fl <- tempfile(pattern = "tkrplotawb", fileext = ".png")
+   on.exit(unlink(fl))
+   png(filename = fl, width = 480 * hscale, height = 480 * vscale)
+   image <- try(fun())
+   # assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
+   # assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
+   if (inherits(image, "try-error")) {
+      txt <- if (grepl("figure margins", image)) 'hscale may be too small.'
+      else ''
+      stop(txt)
+   }
+   dev.off()
+   
+   image <- handshake(tkimage.create, 'photo', file = fl)
+   # w.widget <- handshake(tkcanvas, parent,
+   #                       width  = handshake(tcl, 'image', 'width',  image),
+   #                       height = handshake(tcl, 'image', 'height', image))
+   # imageincanvas <- handshake(tkcreate, w.widget, 'image', 0, 0, image = image, anchor = 'nw')
+   
+  margins <- as.numeric(margins)
   lab <- handshake(tkcanvas, parent, width=w+margins[1]+margins[3], height=h+margins[2]+margins[4])
   handshake(tkcreate, lab, 'image', margins[1], margins[2], image=foreground, anchor="nw")
   lab$margins <- margins
@@ -79,8 +92,13 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
   	
   handshake(tkbind, lab, "<Destroy>", function() handshake(.Tcl, paste("image delete", image)))
 
-  lab$image <- image; lab$fun <- fun; lab$hscale <- hscale; lab$vscale <- vscale
-  lab$foreground <- foreground; lab$w <- w; lab$h <- h
+  lab$image      <- image
+  lab$fun        <- fun
+  lab$hscale     <- hscale
+  lab$vscale     <- vscale
+  lab$foreground <- foreground
+  lab$w          <- w
+  lab$h          <- h
   lab
 }
 
@@ -107,7 +125,6 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
 w.tkrplot <- function(parent, w.plotfun, action = NA, mousedrag = NA, mouseup = NA,
                       hscale = 1, vscale = 1, pos = NULL, foreground = NULL, background = NULL,
                       margins = c(0, 0, 0, 0), name = paste("plot", .nc(), sep = ""), mar) {
-  if (requireNamespace("tkrplot", quietly = TRUE)) {
     widget <- w.createwidget(parent, pos, NULL, tkrplottype = TRUE)
     widget$.type <- "tkrplot"
     plotter <- function() {
@@ -155,10 +172,7 @@ w.tkrplot <- function(parent, w.plotfun, action = NA, mousedrag = NA, mouseup = 
     handshake(tkconfigure, widget$.widget, cursor = "hand2")
 
     w.appearancewidget(widget, NULL, NULL, NULL)
-  } 
-  else
-     widget <- warning("Package TkRplot is not installed.")
-  
+
   widget
 }
 
@@ -167,10 +181,14 @@ tkrplot.awb <- function (parent, fun, name, hscale = 1, vscale = 1)  {
    on.exit(unlink(fl))
    png(filename = fl, width = 480 * hscale, height = 480 * vscale)
        # type = getVariable("tkRplotR_pngType"), 
-   image <- try(fun(), silent = TRUE)
+   image <- try(fun(), silent = FALSE)
    assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
    assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
-   if (inherits(image, "try-error")) return(dev.off())
+   if (inherits(image, "try-error")) {
+      txt <- if (grepl("figure margins", image)) 'hscale may be too small.'
+             else ''
+      stop(txt)
+   }
    dev.off()
    
    image <- handshake(tkimage.create, 'photo', file = fl)
@@ -204,14 +222,10 @@ tkrreplot.awb <- function(lab, fun = lab$fun, hscale = lab$hscale, vscale = lab$
      on.exit(unlink(fl))
      png(fl, width = 480 * hscale, height = 480 * vscale)
          # type = getVariable("tkRplotR_pngType"), 
-     err <- try(fun(), silent = TRUE)
+     err <- try(fun())
      # assign(paste(name, ".plt", sep = ""), par('plt'), envir = .rpenv)
      # assign(paste(name, ".usr", sep = ""), par('usr'), envir = .rpenv)
-     if (inherits(err, "try-error")) return(dev.off())
+     if (inherits(err, "try-error")) stop()
      dev.off()
      handshake(tkimage.create, 'photo', lab$image, file = fl)
 }
-
-# w.tkrreplot <- function(img) {
-#   handshake(tkrplot::tkrreplot, img$.widget)
-# }

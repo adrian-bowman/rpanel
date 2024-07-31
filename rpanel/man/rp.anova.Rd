@@ -29,7 +29,7 @@ rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = NA, zlab = NA, titl
 \item{title}{a character variable supplying a title.  (This is used only in the case where \code{panel} is \code{FALSE}.)}
 \item{lines}{a logical variable which determines whether lines are drawn to connect the estimated means for each group.  This can be helpful in highlighting the relative positions of the means across the groups.}
 \item{panel}{a logical variable which determines whether a panel is created to allow interactive control of the fitted models.}
-\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).  If the plot is to be placed inside the panel then the \code{tkrplot} package is required.}
+\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is
 	set to \code{TRUE}.}
 }

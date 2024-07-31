@@ -1,5 +1,5 @@
 rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa = 10,
-                      max.aniso.ratio = 5,
+                      max.aniso.ratio = 3,
                       min.ngrid = 10, max.ngrid = 25, hscale = NA, vscale = hscale,
                       smgrid = 40, ngrid = 15, Range = 0.1, pSill = 0.5, Nugget = 0, kappa = 4,
                       aniso.angle = 0, aniso.ratio = 1,
@@ -71,8 +71,10 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       panel$Nugget.old <- panel$Nugget
       panel$kappa.old  <- panel$kappa
    
-   if (!panel$first)
+   if (!panel$first) {
+      rp.control.put(panel$panelname, panel)
       rp.do(panel, graphics.update)
+   }
    else
       panel$first <- FALSE
    
@@ -81,8 +83,9 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
    
    graphics.update <- function(panel) {
 	
+      rp.control.put(panel$panelname, panel)
       rp.tkrreplot(panel, plot1)
-   
+
       if (any(panel$vgm.checks)) {
          if (!panel$vgm.present) {
       	     rp.tkrplot(panel, plot2, vario.update, hscale = panel$hscale, vscale = panel$vscale, 
@@ -241,9 +244,6 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
 
    if (panel) {
    
-      if (!requireNamespace("tkrplot", quietly = TRUE))
-         stop("the tkrplot package is not available.")
-      
       if (is.na(hscale)) {
          if (.Platform$OS.type == "unix") hscale <- 1.2
          else                             hscale <- 1.4
@@ -314,7 +314,7 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
                grid = "controls", row = 10, column = 0, sticky = "ew")
       rp.slider(panel, aniso.ratio, 1, max.aniso.ratio, field.new, "Anisotropy ratio",     
                grid = "controls", row = 11, column = 0, sticky = "ew")
-      rp.do(panel, graphics.update)
+      # rp.do(panel, graphics.update)
    }
    else {
       panel <- list(first = TRUE,
