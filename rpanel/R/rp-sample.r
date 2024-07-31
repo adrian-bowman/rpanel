@@ -112,7 +112,7 @@ sample.draw <- function(panel) {
 }
 
 
-rp.sample <- function(mu = 0, sigma = 1, n = 25, display = "shiny", panel.plot = TRUE,
+rp.sample <- function(mu = 0, sigma = 1, n = 25, display = "tcltk", panel.plot = TRUE,
                       hscale = NA, vscale = hscale) {
 
    # sample.draw <- function(panel) {

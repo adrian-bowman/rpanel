@@ -138,7 +138,7 @@ tables.draw <- function(tables) {
   tables
 }
 
-rp.tables <- function(panel = TRUE, display = "shiny", panel.plot = TRUE, hscale = NA, vscale = hscale,
+rp.tables <- function(panel = TRUE, display = "tcltk", panel.plot = TRUE, hscale = NA, vscale = hscale,
                       distribution = "normal", degf1 = 5, degf2 = 30,
                       observed.value = " ", observed.value.showing = !is.na(observed.value),
                       probability = 0.05, tail.probability, tail.direction, heading) {

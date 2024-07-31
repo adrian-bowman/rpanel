@@ -9,7 +9,7 @@
 }
 
 \usage{
-   rp.sample(mu = 0, sigma = 1, n = 25, display = "shiny",
+   rp.sample(mu = 0, sigma = 1, n = 25, display = "tcltk",
              panel.plot = TRUE, hscale = NA, vscale = hscale)
 }
 

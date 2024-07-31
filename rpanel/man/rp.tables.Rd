@@ -9,7 +9,7 @@ This function launches a panel which allows standard normal, t, chi-squared and 
 }
 
 \usage{
-  rp.tables(panel = TRUE, display = "shiny", panel.plot = TRUE,
+  rp.tables(panel = TRUE, display = "tcltk", panel.plot = TRUE,
             hscale = NA, vscale = hscale,
             distribution = "normal", degf1 = 5, degf2 = 30,
             observed.value = " ",

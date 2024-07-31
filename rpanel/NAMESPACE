@@ -84,8 +84,8 @@ importFrom("stats", "as.formula", "binomial", "coef", "dnorm",
            "fitted", "glm", "lm", "na.exclude", "optim", "pnorm",
            "qqnorm", "qt", "rnorm", "runif", "sd", "pf")
 importFrom("utils", "demo", "menu")
-importFrom("shiny", "runApp", "shinyApp", "reactiveValues",
-           "observeEvent", "renderPlot", "reactive")
+# importFrom("shiny", "runApp", "shinyApp", "reactiveValues",
+#            "observeEvent", "renderPlot", "reactive")
 
 # Options for the future
 # rp.table, rp.table.value.get, rp.table.value.set, rp.table.location, rp.table.get,

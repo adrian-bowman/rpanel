@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "quietly"
+target    <- "shiny"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"
