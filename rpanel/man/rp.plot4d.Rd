@@ -50,7 +50,7 @@ third covariate.  In particular, it is useful for plotting spatiotemporal data.
 \item{col.palette, col.breaks, col.labels}{
 the colour palette used to colour the points, the break points on the scale which define the range associated with the each colour and the labels associated with the break points.  If \code{col.palette} is missing, \code{topo.colors(20)} will be used, or \code{topo.colors} with the number of colours set by the number of levels when \code{y} is a factor.  If \code{col.breaks} is missing then a regular grid over the range of the observed data is used.  If \code{col.labels} is specified then the colour key has a grid of equally spaced colour blocks labelled by \code{col.labels}; otherwise the scale is linear.  Setting \code{col.breaks} and \code{col.labels} differently can be useful if the data \code{y} are on a transformed scale but labels on the original scale are desired.}
 \item{hscale, vscale}{
-scaling parameters for the size of the plot when \code{panel} is set to \code{TRUE}. The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+scaling parameters for the size of the plot when \code{panel} is set to \code{TRUE}. The default values are 1.}
 \item{panel}{
 a logical value determining whether an interactive plot with control panel is created.}
 \item{x1lab,x2lab,zlab,ylab}{the axis labels of the variables}

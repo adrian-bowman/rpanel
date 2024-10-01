@@ -1,13 +1,9 @@
 rp.normal <- function(y, ylab = deparse(substitute(y)), 
                  panel.plot = TRUE, hscale = NA, vscale = hscale) {
 
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1
-      else                             hscale <- 1.4
-      }
-   if (is.na(vscale)) 
-      vscale <- hscale
-
+   if (is.na(hscale)) hscale <- 1
+   if (is.na(vscale)) vscale <- hscale
+   
    normal.draw <- function(panel) {
       panel$stan <- max(panel$stan, sd(panel$y) / 100)
       with(panel, {

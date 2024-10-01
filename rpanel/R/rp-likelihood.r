@@ -1,13 +1,9 @@
 rp.likelihood <- function(loglik.fn, data, theta.low, theta.high,
                             form = "log-likelihood", hscale = NA, vscale = hscale) {
 
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1
-      else                             hscale <- 1.4
-      }
-   if (is.na(vscale)) 
-      vscale <- hscale
-
+   if (is.na(hscale)) hscale <- 1
+   if (is.na(vscale)) vscale <- hscale
+   
 #   One-parameter likelihood plots
 
 rp.loglik1 <- function(loglik.text, data, theta.low, theta.high,

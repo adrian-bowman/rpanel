@@ -340,10 +340,7 @@ firth.samp <- function(panel) {
          firth.list[nms[i]] <- parameters[nms[i]]
       }
 
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1.2
-      else                             hscale <- 1.4
-      }
+   if (is.na(hscale)) hscale <- 1
 
 #   warn <- options()$warn
 #   options(warn = -1)

@@ -26,7 +26,7 @@
 \item{xlab}{a character variable used for the covariate axis label.}
 \item{ylab}{a character variable used for the response axis label.}
 \item{glab}{a character variable used for the group variable label.}
-\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
 \item{style}{a character variable used to determine whether the style of controls in earlier version of the \code{rpanel} package is to be used.  The value \code{"new"} activates the new style and any other value activates the old one.}
 }
 

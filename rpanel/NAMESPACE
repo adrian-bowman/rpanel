@@ -38,7 +38,7 @@ export(
   rp.widget.dispose,
   rp.var.get,
   rp.var.put,
-  # rp.control.get,
+# rp.control.get,
   rp.control.put,
   rp.panel, # hangover from old version, just a wrapper for rp.control.get
 

@@ -244,12 +244,8 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
 
    if (panel) {
    
-      if (is.na(hscale)) {
-         if (.Platform$OS.type == "unix") hscale <- 1.2
-         else                             hscale <- 1.4
-      }
-      if (is.na(vscale)) 
-         vscale <- hscale
+      if (is.na(hscale)) hscale <- 1
+      if (is.na(vscale)) vscale <- hscale
       
       if (min.ngrid < 8) {
          cat("min.ngrid reset to 8.\n")

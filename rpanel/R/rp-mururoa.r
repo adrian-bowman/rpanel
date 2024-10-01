@@ -352,10 +352,7 @@ mururoa.start <- function(panel) {
          mururoa.list[nms[i]] <- parameters[nms[i]]
    }
 
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1.2
-      else                             hscale <- 1.4
-   }
+   if (is.na(hscale)) hscale <- 1
 
    ptsm        <- as.matrix(expand.grid(seq(0, 100, by = 0.5), seq(0, 50, by = 0.5)))
    trendmurmat <- apply(ptsm, 1, mururoa.list$trend.fn)

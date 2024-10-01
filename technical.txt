@@ -91,5 +91,6 @@ To establish Github identity from RStudio:
 This isn't generally necessary.
 
 An alternative route to generating a new PAT is to login to Github directly:
-  Settings > Developer settings > ...
-  Copy this immediately.
+  Settings > Developer settings > Personal access tokens
+  Tick: (repo by default), workflow, gist, user
+  Copy the PAT immediately.

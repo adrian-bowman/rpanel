@@ -24,7 +24,7 @@
 \item{panel}{a logical value determining whether an interactive panel is created or a static display is produced.}
 \item{display}{a logical parameter which can take values \code{"shiny"} or \code{"tcltk"} determines whether a \code{shiny} or \code{tcltk} app is launched when \code{panel} is set to \code{TRUE}.}
 \item{panel.plot}{a logical parameter, relevant to the \code{tcltk} case only, which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
-\item{hscale, vscale}{scaling parameters, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+\item{hscale, vscale}{scaling parameters, relevant to the \code{tcltk} case only, for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
 }
 
 \details{A button is provided to sample repeatedly from the current settings.  Confidence intervals which cover the population mean are coloured blue while those which miss are coloured red.  Repeated simulations illustrate the property of confidence intervals to capture the true value with probability determined by the confidence level (which here is set to 0.95).}

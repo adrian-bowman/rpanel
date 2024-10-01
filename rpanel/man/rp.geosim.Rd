@@ -21,7 +21,7 @@ rp.geosim(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa = 10,
 \item{max.Kappa}{The maximum value of the kappa parameter in the Matern family of spatial covariance functions.}
 \item{max.aniso.ratio}{The maximum value of the anisotropy ratio parameter, which controls the degree of anisotropy in the simulated field.}
 \item{min.ngrid, max.ngrid}{the minimum and maximum values of the grid size for sampling points.}
-\item{hscale, vscale}{horizontal and vertical scaling factors for the size of the plots. It can be useful to adjust these for different screen resolutions or for projection in a lecture setting. The default values are 1.2 on Unix platforms and 1.4 on Windows platforms.}
+\item{hscale, vscale}{horizontal and vertical scaling factors for the size of the plots. It can be useful to adjust these for different screen resolutions or for projection in a lecture setting. The default values are 1.}
 \item{smgrid}{the number of grid points on each dimension of the displayed process. The default is 40.}
 \item{ngrid}{the number of grid points in each dimension of the sampled locations. The default is 15.}
 \item{Range, pSill, Nugget}{the initial values of the range, partial sill and nugget parameters. the defaults values are 0.1, 0.5 and 0 respectively.}

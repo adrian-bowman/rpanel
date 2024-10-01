@@ -28,7 +28,7 @@ rp.likelihood(loglik.fn, data, theta.low, theta.high, form = "log-likelihood",
   \item{form}{a text variable which determines whether the likelihood or log-likelihood
         function is to be plotted.  This applies only to one-parameter models.  With
         two-parameter models, only the log-likelihood is plotted.}
-\item{hscale, vscale}{scaling parameters for the size of the plot when there is one covariate.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+\item{hscale, vscale}{scaling parameters for the size of the plot when there is one covariate.  The default values are 1.}
   }
 
 \details{

@@ -3,8 +3,8 @@
 test.prompt <- FALSE
 reinstall   <- FALSE
 
-library(rpanel)
 devtools::install("rpanel")
+library(rpanel)
 
 test_label <- function(label, test.prompt) {
   cat("\n**", label, "...")

@@ -2,7 +2,6 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
                        hscale = 1, vscale = 1, pos = NULL, foreground = NULL, background = NULL, 
                        margins=c(0, 0, 0, 0), parentname = deparse(substitute(panel)),
                        mar = par()$mar, ...) {
-   
 
   panelname <- panel$panelname
   name      <- deparse(substitute(name))
@@ -50,9 +49,9 @@ rp.tkrplot <- function(panel, name, plotfun, action = NA, mousedrag = NA, mouseu
   widget <- w.tkrplot(parent, w.plotfun = pf, action = fa, mousedrag = fd, mouseup = fu,
                       hscale, vscale, pos, foreground, background, margins, name, mar)
   rp.widget.put(panelname, name, widget)
-
-  # if (.rpenv$savepanel)
-     rp.control.put(panelname, panel) # put the panel back into the environment
+  
+  panel <- rp.control.get(panelname)
+  rp.control.put(panelname, panel)
   invisible(panelname)
 }
 

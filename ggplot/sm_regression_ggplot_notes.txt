@@ -1,0 +1,15 @@
+sm regression functions for 1 covariate which plot things.
+  sm.regression.1d: plot
+  smplot.regression: regression objects
+    
+Help file changes.
+
+Check the standard case against old code.
+
+Doesn't work well with n = 100000.
+
+  
+With rpanel control
+  plott.smooth1
+
+sm.ancova 

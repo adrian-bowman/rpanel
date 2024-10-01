@@ -2,6 +2,20 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.ancova
+  - tidy up the code and make the ggplot version the default, with the
+    function from the previous package version as an option (deprecated).
+  - opening should show just models and dataplot; think about how to
+    show coefficient effects and F-tests
+  - set the axis limits to handle all possible models so that the effects
+    plot doesn't jump around?
+  - line 102: rp.tkrplot fplot - should this be row 0?
+
+Can windows be removed by command?
+rp.control.dispose?
+
+Can windows be manually adjusted as in tkRplotR?
+
 rp.geosim
   - the variogram plot no longer disappears when the checkboxes are not checked.
   - display the values of the anisotropy parameters in the plot title.
@@ -39,6 +53,7 @@ rp.plot4d:
     than a normal one, as Windows doesn't support transparency.
 
 Use ggplot graphics and return a ggplot object?
+  See ggplot folder.
 
 Add a data argument to functions?
 

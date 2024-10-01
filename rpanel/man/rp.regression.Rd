@@ -39,14 +39,14 @@ The following arguments refer to the case of one or two covariates, specified ex
 The following arguments refer to the case where the \pkg{tcltk} package is used:
 \item{panel}{a logical variable which determines whether a panel is created to allow interactive control of the fitted models (two covariates only).}
 \item{panel.plot}{a logical variable which determines whether the plot is placed inside the control panel (one covariate only).}
-\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1 on Unix platforms and 1.4 on Windows platforms.}
+\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
 
 The following argument refers to the case where a regression model is specified through a formula or a call to the \code{lm} function:
 \item{yrange}{a vector of length 2 giving the range of values for the change in the response when regression effects are plotted in a static display.}
-\item{ci}{a logical variable which controls whether the graphical indication of uncertainty is placed around the estimate (\code{ci = TRUE}) or around 0 (\code{ci = FALSE}).}
+\item{ci}{a logical variable which controls whether the graphical indication of uncertainty is placed around the estimate of each model coefficient (\code{ci = TRUE}) or around 0 (\code{ci = FALSE}).}
 \item{point.estimate}{a logical variable which controls whether the point estimates of the regression effects are superimposed as vertical lines.}
-\item{labels}{a character vector which gives the labels to be used for each model term (intercept excluded) The covariate range information will be added by the funcction. Labels must be provided for all terms, before the \code{subset} information is applied (see next argument).}
-\item{subset}{an integer vector which specifies which model terms are included in the display. The intercept is always excluded. The vector refers to the terms as listed in the output of the \code{summary} function on the fitted model.}
+\item{labels}{a character vector which gives the labels to be used for each model coefficient (in \code{subset, if this is specified}). The covariate range information will be added by the function. Labels must be provided for all terms, before the \code{subset} information is applied (see next argument). The \code{labels} vector can also be larger than the number of coefficients in \code{model} to allow a consistent set of positions when models of different size are viewed successively. (This is used by the \code{rp.ancova} function.)}
+\item{subset}{an integer vector which specifies which model coefficients are included in the display. The vector refers to the coefficients as listed in the output of the \code{summary} function on the fitted model. If this is not specified then all model coefficients are included apart from the intercept, identified by the standard name '(Intercept)'.}
 \item{ngrid}{an integer which specifies the number of grid points used in the creation of the uncertainty strips.}
 
 Additional parameter:
@@ -62,7 +62,7 @@ If \code{x} is a formula or a fitted linear model, then a static plot of the reg
 }
 
 \value{
-  When \code{x} is a formula or a fitted linear model, the plot is returned as a \code{ggplot} object.  This allows details of the plot to be modified through further \code{ggplot} functions.  In other cases, where an interactive plot is created, nothing is returned.
+When \code{x} is a formula or a fitted linear model, the plot is returned as a \code{ggplot} object.  This allows details of the plot to be modified through further \code{ggplot} functions.  In other cases, where an interactive plot is created, nothing is returned.
   }
 
 \references{

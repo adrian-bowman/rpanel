@@ -218,12 +218,8 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25, display = "tcltk", panel.plot =
       panel
    }
 
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1
-      else                             hscale <- 1.4
-   }
-   if (is.na(vscale)) 
-      vscale <- hscale
+   if (is.na(hscale)) hscale <- 1
+   if (is.na(vscale)) vscale <- hscale
    
    display.sample        <- c(TRUE, rep(FALSE, 3))
    display.mean          <- rep(FALSE, 4)

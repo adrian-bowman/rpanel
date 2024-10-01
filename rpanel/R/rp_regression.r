@@ -15,13 +15,9 @@ rp.regression <- function (x, y,
       return(rp.regression3(x, prng, ci, point.estimate, lbls, sbst, col, ngrid))
    if (is.na(col)) col <- "red"
 
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1
-      else                             hscale <- 1.4
-      }
-   if (is.na(vscale)) 
-      vscale <- hscale
-
+   if (is.na(hscale)) hscale <- 1
+   if (is.na(vscale)) vscale <- hscale
+   
 rp.regression1 <- function(x, y, ylab, xlab, panel.plot, hscale = NA, vscale = hscale) {
                          	
    scatter.draw <- function(object) {

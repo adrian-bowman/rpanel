@@ -20,6 +20,9 @@ rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 cofe_2019 <- rp.wrangle('cofe_2019')
 with(cofe_2019, rp.regression(log(Giving_per_member) ~ Attachment + IMD,
                               ci = FALSE) + ggplot2::coord_flip())
+cat('Fails with a model which has only an intercept:\n')
+mdl <- lm(response ~ 1, x = TRUE)
+rp.regression(mddl)
 
 # ------------------------------------------------------------------------
 test_label("Regression with more than two variables using a fitted model", test.prompt)

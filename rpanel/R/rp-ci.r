@@ -87,13 +87,9 @@ rp.ci <- function(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), co
       }
    }
    
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1
-      else                             hscale <- 1.4
-      }
-   if (is.na(vscale)) 
-      vscale <- hscale
-
+   if (is.na(hscale)) hscale <- 1
+   if (is.na(vscale)) vscale <- hscale
+   
    ci.sim <- function(panel) {
       n     <- as.numeric(panel$ssize)
       mu    <- as.numeric(panel$pars[1])

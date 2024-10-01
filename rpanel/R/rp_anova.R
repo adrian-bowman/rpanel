@@ -31,13 +31,9 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
    graphics <- "strip plot"
    jitter.x <- jitter(as.numeric(x), factor = 0.5, amount = NULL)
    
-   if (is.na(hscale)) {
-      if (.Platform$OS.type == "unix") hscale <- 1
-      else                             hscale <- 1.4
-      }
-   if (is.na(vscale)) 
-      vscale <- hscale
-
+   if (is.na(hscale)) hscale <- 1
+   if (is.na(vscale)) vscale <- hscale
+   
    rp.anova.draw <- function(panel) {
    	
       if (panel$type == "Two-way") {

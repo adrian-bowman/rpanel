@@ -157,13 +157,9 @@ rp.tables <- function(panel = TRUE, display = "tcltk", panel.plot = TRUE, hscale
     }
   }
   
-  if (is.na(hscale)) {
-    if (.Platform$OS.type == "unix") hscale <- 1
-    else                             hscale <- 1.4
-    }
-   if (is.na(vscale)) 
-     vscale <- hscale
-      
+  if (is.na(hscale)) hscale <- 1
+  if (is.na(vscale)) vscale <- hscale
+  
   xobs.prob <- c(observed.value, probability)
   if (missing(tail.probability)) tail.probability <- "none"
   tail.area <- tail.probability
