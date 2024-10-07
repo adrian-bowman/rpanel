@@ -77,20 +77,20 @@ The old web form is at
 Github PAT regeneration
 -----------------------
 
-In RStudio
-  usethis::create_github_token()
-This will launch a Github login to generate a new PAT.
+Login to Github:
+  Settings > Developer settings > Personal access tokens
+  Tick: (repo by default), workflow, gist, user
+  Copy the PAT immediately.
 Back in RStudio
   gitcreds::gitcreds_set()
 will give a prompt for the new PAT.
 Restart R and RStudio.
 
+Alternatively, in RStudio
+  usethis::create_github_token()
+This will launch a Github login to generate a new PAT.
+
 To establish Github identity from RStudio:
   usethis::use_git_config(user.name = "adrian-bowman",
                           user.email = "adrian.bowman@glasgow.ac.uk")
 This isn't generally necessary.
-
-An alternative route to generating a new PAT is to login to Github directly:
-  Settings > Developer settings > Personal access tokens
-  Tick: (repo by default), workflow, gist, user
-  Copy the PAT immediately.
