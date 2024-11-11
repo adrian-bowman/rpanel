@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "rp.control.put"
+target    <- "rp.do"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

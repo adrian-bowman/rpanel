@@ -1,15 +1,19 @@
-\name{rp.onesample}
+\name{rp.twosample}
 
-\alias{rp.onesample}
+\alias{rp.twosample}
 
-\title{Graphical display for inference on a single sample}
+\title{Graphical display for inference in comparing the means of two samples}
 
 \description{
-A single sample of data is plotted along with a graphical display which indicates the uncertainty in the location of the true mean. This is done by plotting a shaded representation of a normal distribution in 'violin plot' style. This can also be compared with a reference mean, representing the null hypothesis in a t-test.
+The two samples of data is plotted along with a graphical display which
+indicates the uncertainty in the location of the true means and in their
+difference. This is done by plotting a shaded representation of a normal
+distribution in 'violin plot' style. This can also be compared with a reference
+mean, representing the null hypothesis in a t-test.
 }
 
 \usage{
-rp.onesample(x, xlab, data_plot = "sina", reference)
+rp.twosample(x, xlab, data_plot = "sina", reference)
 }
 
 \arguments{
@@ -17,16 +21,19 @@ rp.onesample(x, xlab, data_plot = "sina", reference)
 \item{xlab}{an optional character name used for the data sample.}
 \item{data_plot}{a character variable which determines the form of data display. The setting \code{"jitter"|} invokes the \code{ggplot} geometry \code{geom_jitter} while the setting \code{"sina"} invokes the geometry \code{geom_sina} from the \pkg{ggforce} if this is available. The latter adds random noise to the vertical posiotion of the data points, with scale proportional to the estimated density.}
 \item{reference}{a numerical value representing a reference of interest, for
-                 example a null hypothesis in a formal test.}
+                 example a null hypothesis in a formal test. No action is taken
+                 when \code{reference} is set to \code{NA} or \code{NULL}.}
+\item{violin}{a logical value which determines whether uncertainties are added
+in symmetric fashion, as in a violin plot.}
 \item{scale}{a logical value which determines whether a standard error scale is
              added to the plot.}
 \item{height}{the height of the uncertainty representation as a proportion of
               the height of the plot.}
+\item{mnheight}{the height of the lines marking mean values, when this is present.}
 \item{col}{the col of the uncertainty representation.}
 \item{notch}{the position of notches on the uncertainty representation,
              in units of standard error.}
 \item{notchcol}{the col of the notches on the uncertainty representation.}
-\item{refheight}{the height of the reference line, when this is present.}
 \item{refcol}{the col of the reference line, when this is present.}
 \item{seed}{a seed which can be used to reproduce the jittering of y.}
 }

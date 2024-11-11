@@ -6,7 +6,7 @@ rp.firth <- function(hscale = NA, col.palette = rev(heat.colors(40)), col.se = "
                  file = NA, parameters = NA) {
 
 firth.points <- function(panel) {
-
+   
    if (panel$random.alignment) {
       panel$gx <- runif(1)
       panel$gy <- runif(1)
@@ -56,7 +56,7 @@ firth.points <- function(panel) {
      if (panel$str.type == "Equal")
         alloc <- rep(round(panel$npts / 4), 4)
      else
-       alloc <- round(panel$npts * panel$str.size / 100)
+        alloc <- round(panel$npts * panel$str.size / 100)
      sind1  <- sample(which(panel$strat == 1), alloc[1])
      sind2  <- sample(which(panel$strat == 2), alloc[2])
      sind3  <- sample(which(panel$strat == 3), alloc[3])
@@ -143,7 +143,7 @@ firth.predict <- function(panel) {
       }
 
 firth.draw <- function(panel) {
-
+   
    ind <- which(panel$trend.setting == c("cte", "1st", "2nd", "stratum"))
 
    with(panel, {
@@ -204,7 +204,7 @@ firth.draw <- function(panel) {
          y0 <- panel$tyc
          segments(x0,  0,  x0, 60, lty = 2)
          segments( 0, y0, 200, y0, lty = 2)
-         }
+      }
       points(sx, sy, pch = 19)
       mtext(paste("Number of points = ",length(sx)), line = 3)
       a <- 1 + sx + 201 * sy

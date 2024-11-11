@@ -6,8 +6,10 @@
 rp.mururoa <- function(hscale = NA, col.palette = rev(heat.colors(40)), col.se = "blue",
                  file = NA, parameters = NA) {
 
-mururoa.points <- function(panel) {
+# Locate sampling positions
 
+mururoa.points <- function(panel) {
+   
    if (panel$sample.taken) return(panel)
 
    if (panel$random.alignment) {
@@ -24,7 +26,7 @@ mururoa.points <- function(panel) {
       }
 
    else if (panel$stype == "Grid") {
-   	  gsp         <- sqrt(8522 / (4 * panel$npts))
+   	gsp         <- sqrt(8522 / (4 * panel$npts))
       txc         <- round(2 * seq(panel$gx * gsp, 100, by = gsp)) / 2
       tyc         <- round(2 * seq(panel$gy * gsp,  50, by = gsp)) / 2
       gr          <- expand.grid(txc, tyc)
@@ -37,7 +39,7 @@ mururoa.points <- function(panel) {
       }
 
    else if (panel$stype == "Transect") {
-   	  a  <- atan(panel$transect.angle)        # Work with axes rotated by angle a.
+   	a  <- atan(panel$transect.angle)        # Work with axes rotated by angle a.
       sp <- sqrt(8522 / (4 * panel$npts))     # Get (average) point spacing required.
       tt <- round(44 * cos(a) / sp)           # Set no. of transects - cos(a) correction due to rotation
       gy <- panel$gy
@@ -100,7 +102,7 @@ mururoa.points <- function(panel) {
       }
 
    if (panel$sampling.started) {
-   	  rp.control.put(panel$panelname, panel)
+   	rp.control.put(panel$panelname, panel)
       rp.tkrreplot(panel, plot1)
    }
 
@@ -108,15 +110,16 @@ mururoa.points <- function(panel) {
 }
 
 mururoa.draw <- function(panel) {
-
+   
   ind <- which(panel$trend.setting == c("cte", "1st", "2nd"))
 
   with(panel, {
 
   plot(murx, mury, type = "n", asp = 1,
           xlab = "easting", ylab = "northing", main = paste("Number of points = ", length(sampx)))
+  axis(1, at = seq(0, 100, by = 10))
   polygon(murx, mury, col = col.inside, density = -1, border = NA)
-
+  
   if (sample.taken) {
 
     if (display.options["predicted surface"])
@@ -128,7 +131,7 @@ mururoa.draw <- function(panel) {
               levels = pretty(range((kse[,,ind] * mask)[kse[,,ind] > 0], na.rm = TRUE), 10), col = col.se)
 
     if (display.options["points"]) {
-   	   brks <- seq(zlim[1], zlim[2], length = length(col.palette) + 1)
+   	 brks <- seq(zlim[1], zlim[2], length = length(col.palette) + 1)
        clr  <- cut(sz[ , 3], brks, labels = FALSE, include.lowest = TRUE, right = FALSE)
        points(sz[ , 1], sz[ , 2], col = col.palette[clr], pch = 16)
        points(sz[ , 1], sz[ , 2])
@@ -165,17 +168,19 @@ mururoa.draw <- function(panel) {
               dst <- (pt[ , 1] - sx[i])^2 + (pt[ , 2] - sy[i])^2
               ind <- min(which(dst == min(dst)))
               points(pt[ind, 1], pt[ind, 2], pch = 16, col = col.points)
-              }
            }
         }
+     }
+     
      if (!(stype == "Transect" & tsb == "Systematic" & tsw == "Systematic"))
         points(round(2 * sx) / 2, round(2 * sy) / 2, pch = 16, col = col.points)
-     axis(1, at = seq(0, 100, by = 10))
+     
      }
 
+     # Add the outside shading at the end so that the surfaces are removed outside
      usr <- par()$usr
-     polygon(c(murx, murx[1], usr[1],  usr[1], usr[2], usr[2], usr[1], usr[1]),
-             c(mury, mury[1], mury[1], usr[4], usr[4], usr[3], usr[3], mury[1]),
+     polygon(c(murx, murx[1], usr[c(1, 2, 2, 1, 1)], murx[1]),
+             c(mury, mury[1], usr[c(3, 3, 4, 4, 3)], mury[1]),
              col = col.outside, density = -1, border = NA)
      box()
      lines(c(murx, murx[1]), c(mury, mury[1]), col = col.border, lwd = 3)
@@ -184,6 +189,8 @@ mururoa.draw <- function(panel) {
 
   panel
 }
+
+#   Predict the surface from the sampled locations
 
 mururoa.predict <- function(panel) {
 
@@ -244,6 +251,8 @@ mururoa.colour.reset <- function(panel) {
   rp.do(panel, mururoa.samp.redraw)
   panel
 }
+
+# Take a sample at the current locations
 
 mururoa.samp <- function(panel) {
 
@@ -343,8 +352,10 @@ mururoa.start <- function(panel) {
    panel
 }
 
-   if (!requireNamespace("geoR",    quietly = TRUE)) stop("The geoR package is not available.")
-   if (!requireNamespace("fields",  quietly = TRUE)) stop("the fields package is not available.")
+   if (!requireNamespace("geoR",    quietly = TRUE))
+      stop("The geoR package is not available.")
+   if (!requireNamespace("fields",  quietly = TRUE))
+      stop("the fields package is not available.")
 
    if (is.list(parameters)) {
    	nms <- names(parameters)

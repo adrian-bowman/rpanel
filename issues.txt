@@ -2,6 +2,13 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.onesample
+  - how should the distributions be scaled? Equal visual area to avoid visual
+    distraction?
+  - should a confidence be optionally shown?
+  - could the p-value be shown without cluttering the plot?
+  - also add binomial proportions?
+
 rp.ancova
   - tidy up the code and make the ggplot version the default, with the
     function from the previous package version as an option (deprecated).
@@ -20,9 +27,6 @@ rp.geosim
   - the variogram plot no longer disappears when the checkboxes are not checked.
   - display the values of the anisotropy parameters in the plot title.
 
-rp.onesample
-  - make notches for the sample mean, and possibly +/- 2 se's, optional.
-
 rp.gulls
   - why is there no hscale/vscale option?
   
@@ -38,16 +42,18 @@ rp.likelihood: 2 variable case
 
 rp.regression:
   - 1 covariate: setting panel = FALSE doesn't work
-  - 1 covariate: moving points doesn't work on Windows.
-    Creat a new version of the tkrplot package which uses the png file
-    strategy, as in tkRplotR package? Check whether Windows will create
-    a png file without borders.
-    This is because there is
-    an offset in the location of the cursor. Use a visible circle to
-    show the location of the cursor, as in rp.plot4d? Messy
   - model: allow vertical or horizontal display
     (vertical gives the same orientation as the response)
-    
+  - the specification of models is very inflexible in the one and two 
+    covariate cases.  Can this be improved? See CoFE slides in the teaching
+    material for an example.
+  - display to show the significance of complete factors or covariates?
+    Multiples of error variance?
+  - glms: change the axis label to refer to 'linear predictor'.
+  - mixed models?
+  - allow different funtions to control the calculation of effect size?
+    range, iqr, user-supplied?
+
 rp.plot4d:
   - check for Windows OS and, if so, force a uniform window rather
     than a normal one, as Windows doesn't support transparency.
@@ -72,23 +78,8 @@ rp.tables
     Use a menu to select distributions.
   - create an alias rp.distributions?
 
-rp.one/twosample
-  - does this mean add a two-sample setting?
-  - also add binomial proportions?
-
-rp.regression
-  - the specification of models is very inflexible in the one and two 
-    covariate cases.  Can this be improved? See CoFE slides in the teaching
-    material for an example.
-  - display to show the significance of complete factors or covariates?
-    Multiples of error variance?
-  - glms: change the axis label to refer to 'linear predictor'.
-  - mixed models?
-  - allow different funtions to control the calculation of effect size?
-    range, iqr, user-supplied?
-
 rp.mururoa
-  - error about figure margins if hspace left to default.  (Windows?)
+  - errors in contour levels for linear and quadratic predictions
    
 rp.spacetime
   - allow regular data to be exploited, with marginal space and time input
