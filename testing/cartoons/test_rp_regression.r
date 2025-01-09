@@ -6,12 +6,55 @@ if (reinstall) devtools::install("rpanel")
 # ------------------------------------------------------------------------
 test_label("Regression with more than two variables using a formula", test.prompt)
 cat("Standard example:\n")
+
+devtools::install("rpanel")
+library(rpanel)
+cofeplus <- CofE
+cofeplus$group <- factor(sample(rep(1:3, each = 14)))
+cofeplus$x1 <- rnorm(42)
+cofeplus$x2 <- rnorm(42)
+cofeplus$x3 <- rnorm(42)
+model <- lm(Giving ~ Employ + Elect + Attend * group + x1 + x2 +x3,
+            data = cofeplus, x = TRUE)
+model <- lm(Giving ~ Employ + Elect + Attend + group,
+            data = cofeplus, x = TRUE)
+model <- lm(Giving ~ Employ + Elect + Attend,
+            data = cofeplus, x = TRUE)
+
+# Simple linear regression
+model <- lm(Giving ~ Employ, data = CofE)
+rp.lmsmall(Giving ~ Employ, data = CofE)
+model <- lm(Giving ~ Employ, data = CofE)
+rp.lmsmall(model)
+rp.lmsmall(log(Speed) ~ log(Mass), data = rodent)
+
+rp.drop1(model)
+rp.drop1(model, p.reference = NULL)
+rp.coefficients(model)
+
+# Regression with two covariates
+rp.lmsmall(Giving ~ Employ + Attend, data = CofE)
+
+# Ancova
+rp.lmsmall(weight ~ hab + month, data = gullweight)
+
+# One- and two-way anova
+rp.lmsmall(stime ~ factor(treatment), data = poisons)
+rp.lmsmall(stime ~ factor(treatment) + factor(poison), data = poisons)
+
+rp.regression(model)
+rp.regression(model) + ggplot2::coord_flip()
 with(CofE, 
      rp.regression(Giving ~ Employ + Elect + Attend))
 cat("Amend the returned ggplot:\n")
+cat('This produces an error in the y-label.\n')
 with(CofE, 
-     rp.regression(Giving ~ Employ + Elect + Attend) + ggplot2::ylab("Covariates"))
+     rp.coefficients(Giving ~ Employ + Elect + Attend) + ggplot2::xlab("Covariates"))
 cat("Set arguments:\n")
+model <- lm(Giving ~ Employ + Elect + Attend, data = CofE)
+rp.coefficients(model)
+# Problem here as the intercept is showing
+rp.coefficients(model, yrange = c(-60, 40), col = "blue", subset = 1:2)
 with(CofE, 
      rp.regression(Giving ~ Employ + Elect + Attend,
                    yrange = c(-60, 40), col = "blue", subset = 1:2))
@@ -30,7 +73,7 @@ fac   <- rep("C", nrow(CofE))
 fac   <- rep(c("A", "B", "C"), each = nrow(CofE) / 3)
 model <- lm(Giving ~ Employ + Elect + Attend + fac, data = CofE)
 cat("Failure with 'x' not set to 'TRUE' ...\n")
-try(rp.regression(model))
+try(rp.coefficients(model))
 cat("Success with 'x' set to 'TRUE' ...\n")
 model <- lm(Giving ~ Employ + Elect + Attend + fac, data = CofE, x = TRUE)
 rp.regression(model)

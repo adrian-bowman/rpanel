@@ -25,7 +25,7 @@ rp.ancova <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
          
    if (is.na(hscale)) hscale <- 1
    if (is.na(vscale)) vscale <- hscale
-      
+
    if (style != "old") rp.ancova.new(x, y, group, panel = panel, panel.plot = panel.plot,
                            model = model, model0 = model0, xlab = xlab, ylab = ylab, glab = glab,
                            ci = ci, xterm = xterm, yterm = yterm, zterm = zterm,
@@ -60,12 +60,13 @@ rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
                                          paste(xterm, zterm,
                                                paste(xterm, zterm, sep = ':'),
                                                sep = ' + '))))
-
+   
    dfrm  <- data.frame(y, x, group)
    names(dfrm) <- c("y", term.names[1:2])
    form <- model.nodes$label[5]
    model.full <- lm(as.formula(form), na.action = na.exclude, x = TRUE, data = dfrm)
    coef.names <- names(coefficients(model.full))
+
    
    if (panel) {
       pnl <- rp.control("Analysis of covariance", 

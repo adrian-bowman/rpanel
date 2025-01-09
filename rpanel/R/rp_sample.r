@@ -190,7 +190,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25, display = "tcltk", panel.plot =
    
    if (display == "shiny") {
       if (requireNamespace("shiny", quietly = TRUE)) {
-         runApp(shinyApp(sample_ui, sample_server))
+         shiny::runApp(shiny::shinyApp(sample_ui, sample_server))
          return(invisible())
       }
       else

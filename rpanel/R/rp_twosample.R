@@ -68,13 +68,13 @@ rp.twosample <- function(x, y, xlab, ylab, data_plot = "sina", uncertainty,
            ggplot2::geom_hline(yintercept = 1.5, col = 'white', linetype = 'dashed',
                                linewidth = 0.3) +
            ggplot2::scale_x_continuous(
-                      sec.axis = sec_axis(~ . - mean(x[y == levels(y)[1]]),
+                      sec.axis = ggplot2::sec_axis(~ . - mean(x[y == levels(y)[1]]),
                            name = paste("sample mean difference (",
                                         levels(y)[2], ' - ', levels(y)[1],
                                         ")", sep = ''))) +
            ggplot2::scale_y_discrete(limits = as.character(1:3),
                                      labels = c(levels(y), '')) +
-           ggplot2::geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = 2.47, ymax = 2.53),
+           ggplot2::geom_rect(ggplot2::aes(xmin = -Inf, xmax = Inf, ymin = 2.47, ymax = 2.53),
                               fill = "white")
    
    # Plot the data
@@ -84,8 +84,8 @@ rp.twosample <- function(x, y, xlab, ylab, data_plot = "sina", uncertainty,
    else
       plt <- plt + ggplot2::geom_jitter(width = 0, height = 2 * height['data'])
    plt  <- plt +
-      ylab('groups') +
-      theme(axis.title.y = element_text(hjust = 0.33))
+      ggplot2::ylab('groups') +
+      ggplot2::theme(axis.title.y = ggplot2::element_text(hjust = 0.33))
    
    # If a reference is provided, plot this or the sample mean
    
@@ -113,13 +113,13 @@ rp.twosample <- function(x, y, xlab, ylab, data_plot = "sina", uncertainty,
                          labels = c(levels(y), 'difference', 'reference'))
       dfrm <- dfrm[!is.na(dfrm$xpos), ]
       plt  <- plt +
-         ggplot2::geom_segment(aes(x = xpos, xend = xpos,
+         ggplot2::geom_segment(ggplot2::aes(x = xpos, xend = xpos,
                                    y = ypos - height['mean'],
                                    yend = ypos + height['mean'],
                                    col = colcode), linewidth = 1, data = dfrm) +
          ggplot2::scale_colour_manual(values = cols,
                                       labels = labels,
-                                      guide  = guide_legend(title = 'Sample means:',
+                                      guide  = ggplot2::guide_legend(title = 'Sample means:',
                                                             position = "bottom"))
    }
    else {
@@ -172,7 +172,7 @@ rp.twosample <- function(x, y, xlab, ylab, data_plot = "sina", uncertainty,
                               alpha = 0.7, data = dgrd) +
          ggplot2::scale_fill_manual(values = c(cols[1:2], fcol),
                                     labels = labels,
-                                    guide  = guide_legend(title = 'Uncertainty of means:',
+                                    guide  = ggplot2::guide_legend(title = 'Uncertainty of means:',
                                                           position = "bottom"))
       if (!is.null(reference) & !is.na(reference)) {
          label <- if (uncertainty == 'sample mean') 'reference' else 'difference'
@@ -182,11 +182,11 @@ rp.twosample <- function(x, y, xlab, ylab, data_plot = "sina", uncertainty,
          dfrm  <- data.frame(x = cntr, xend = cntr,
                              y = 3 - height['mean'], yend = 3 + height['mean'])
          plt   <- plt +
-            ggplot2::geom_segment(aes(x = x, xend = xend, y = y, yend = yend, 
+            ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y, yend = yend, 
                                       col = clr), linewidth = 1, data = dfrm) +
             ggplot2::scale_colour_manual(values = clr,
                                          labels = label,
-                                         guide  = guide_legend(title = 'Sample means:',
+                                         guide  = ggplot2::guide_legend(title = 'Sample means:',
                                                                position = "bottom"))
       }
       

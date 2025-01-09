@@ -79,7 +79,7 @@ rp.ci <- function(mu = 0, sigma = 1, sample.sizes = c(30, 50, 100, 200, 500), co
             names(sample.sizes) <- as.character(sample.sizes)
             panel <- list(pars = c("mean" = mu, "s.d." = sigma), ssize = 30, confidence = confidence,
                           coverage = 0, nsim = 0, first = TRUE, nopanel = !panel)
-            runApp(shinyApp(ci_ui, ci_server))
+            shiny::runApp(shiny::shinyApp(ci_ui, ci_server))
             return(invisible())
          }
          else

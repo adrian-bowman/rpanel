@@ -149,7 +149,7 @@ rp.tables <- function(panel = TRUE, display = "tcltk", panel.plot = TRUE, hscale
   if (panel) {
     if (display == "shiny") {
       if (requireNamespace("shiny", quietly = TRUE)) {
-        runApp(shinyApp(tables_ui, tables_server))
+        shiny::runApp(shiny::shinyApp(tables_ui, tables_server))
         return(invisible())
       }
       else

@@ -8,6 +8,9 @@ rp.onesample
   - should a confidence be optionally shown?
   - could the p-value be shown without cluttering the plot?
   - also add binomial proportions?
+  
+rp.twosample
+  - marks on the distributions for 1:3 ses?
 
 rp.ancova
   - tidy up the code and make the ggplot version the default, with the
@@ -17,19 +20,12 @@ rp.ancova
   - set the axis limits to handle all possible models so that the effects
     plot doesn't jump around?
   - line 102: rp.tkrplot fplot - should this be row 0?
-
-Can windows be removed by command?
-rp.control.dispose?
-
-Can windows be manually adjusted as in tkRplotR?
+  - the help file example doesn't run because of the with construction.
 
 rp.geosim
   - the variogram plot no longer disappears when the checkboxes are not checked.
   - display the values of the anisotropy parameters in the plot title.
 
-rp.gulls
-  - why is there no hscale/vscale option?
-  
 rp.contingency
   - colour of reference bands?
   - allow more than one of obs., exp. and props.
@@ -57,18 +53,20 @@ rp.regression:
 rp.plot4d:
   - check for Windows OS and, if so, force a uniform window rather
     than a normal one, as Windows doesn't support transparency.
-
-Use ggplot graphics and return a ggplot object?
-  See ggplot folder.
-
-Add a data argument to functions?
-
-Allow a factor (or character variable) to be passed to rp.plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
-
-Passing values from the function arguments to the shiny app?  See the post at:
-https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-with-arguments-passed-to-the-shiny-app
-This uses shinyOptions.
-
+    ggplot solution?
+  - example involving group in help file.
+  - allow a function to control the plotting for the data inside the probe.
+    Can/should aspects such as ylim be controllable here?  Easier not to in 
+    the first instance.  This might work perfectly well for non-response
+    data too (in which case the radiobuttons for histogram and density 
+    might be removed?).
+  - provide an argument which defines a function to be used to create the 
+    location plot, with default function(x, y) points(x, y).
+  - allow axes to be suppressed (for example for map plotting).
+    In fact, more general plotting control parameters might be passed by ....
+  - change l in hcl rather than s in hsv, to avoid grey points when a
+    normal window is used.
+    
 rp.tables
   - add a vertical line at the appropriate value when using
     a fixed probability (as with p-values)?
@@ -111,20 +109,6 @@ rp.power
     identification of n from a given power. This could give more 
     flexibility to the rp.power function.
 
-rp.plot4d:
-  - example involving group in help file.
-  - allow a function to control the plotting for the data inside the probe.
-    Can/should aspects such as ylim be controllable here?  Easier not to in 
-    the first instance.  This might work perfectly well for non-response
-    data too (in which case the radiobuttons for histogram and density 
-    might be removed?).
-  - provide an argument which defines a function to be used to create the 
-    location plot, with default function(x, y) points(x, y).
-  - allow axes to be suppressed (for example for map plotting).
-    In fact, more general plotting control parameters might be passed by ....
-  - change l in hcl rather than s in hsv, to avoid grey points when a
-    normal window is used.
-
 rp.logistic:
   - binomial example
   
@@ -133,6 +117,22 @@ rp.curve:
     request to stop, with other forms of display including density shading.
     uncertainty-sm1.r in India files - strange behaviour in trying to call
     a function repeatedly.
+
+Use ggplot graphics and return a ggplot object?
+  See ggplot folder.
+
+Can windows be removed by command?
+rp.control.dispose?
+
+Can windows be manually adjusted as in tkRplotR?
+
+Add a data argument to functions?
+
+Allow a factor (or character variable) to be passed to rp.plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
+
+Passing values from the function arguments to the shiny app?  See the post at:
+https://stackoverflow.com/questions/49470474/saving-r-shiny-app-as-a-function-with-arguments-passed-to-the-shiny-app
+This uses shinyOptions.
 
 
 --------------------------------------------------------------

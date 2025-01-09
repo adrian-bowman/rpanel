@@ -67,7 +67,7 @@ rp.power <- function(panel = TRUE, display = "tcltk", panel.plot = TRUE, populat
    if (panel) {
       if (display == "shiny") {
          if (requireNamespace("shiny", quietly = TRUE)) {
-            runApp(shinyApp(power_ui, power_server))
+            shiny::runApp(shiny::shinyApp(power_ui, power_server))
             return(invisible())
          }
          else
