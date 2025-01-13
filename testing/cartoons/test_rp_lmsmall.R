@@ -24,15 +24,18 @@ model <- lm(Giving ~ Employ + Elect + Attend,
 # Simple linear regression
 model <- lm(Giving ~ Employ, data = CofE)
 rp.lmsmall(Giving ~ Employ, data = CofE)
+rp.lmsmall(Giving ~ Employ, data = CofE, xlab = 'x', ylab = 'y', glab = 'g')
 model <- lm(Giving ~ Employ, data = CofE)
 rp.lmsmall(model)
 rp.lmsmall(log(Speed) ~ log(Mass), data = rodent)
 
 # Regression with two covariates
 rp.lmsmall(Giving ~ Employ + Attend, data = CofE)
+# This should fail because xlab is of length 1
+rp.lmsmall(Giving ~ Employ + Attend, data = CofE,
+           xlab = 'x', ylab = 'y', glab = 'g')
 
 # Ancova
-# This doesn't work
 rp.lmsmall(weight ~ hab + factor(month), data = gullweight)
 
 # One- and two-way anova

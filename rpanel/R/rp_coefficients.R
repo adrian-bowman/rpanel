@@ -88,7 +88,7 @@ rp.coefficients <- function(model, style = 'density',
 	      ggplot2::scale_fill_gradient(low = "grey92", high = col)
 	
 	# Add se scale if requested
-	if (style == 'density' & se.scale) {
+	if (se.scale) {
 	   se.marks     <- seq(-3, 3, by = 1)
 	   nmarks       <- length(se.marks)
 	   mn           <- if (ci) coeff else rep(0, ncoef)
@@ -113,7 +113,7 @@ rp.coefficients <- function(model, style = 'density',
 	}
 	
 	# Add se marks if requested
-	if (style == 'density' & !is.null(marks)) {
+	if (!is.null(marks)) {
 	   mn           <- if (ci) coeff else rep(0, ncoef)
 	   se           <- tbl[ , 2] * (rng[ , 2] - rng[ , 1])
 	   dfrm.scale   <- data.frame(x  = rep(as.numeric(lbls), each = length(marks)),
@@ -122,8 +122,9 @@ rp.coefficients <- function(model, style = 'density',
 	                              sc = rep(marks, ncoef))
 	   dfrm.scale$y <- dfrm.scale$mn + dfrm.scale$sc * dfrm.scale$se
 	   dfrm.scale$d <- dnorm(dfrm.scale$y, dfrm.scale$mn, dfrm.scale$se) * dfrm.scale$se
-	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = x - 0.5 * d,
-	                                                   xend = x + 0.5 * d,
+	   del <- if (style == 'density') 0.5 * dfrm.scale$d else 0.3
+	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = x - del,
+	                                                   xend = x + del,
 	                                                   y    = y),
 	                                      col = 'white', data = dfrm.scale)
 	}

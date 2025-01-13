@@ -10,13 +10,10 @@ rp.ancova <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
    if (style == 'ggplot' & !requireNamespace('ggplot2', quietly = TRUE))
       stop('the ggplot2 package is not available.')
    
-   xterm <- deparse(substitute(x))
-   yterm <- deparse(substitute(y))
-   zterm <- deparse(substitute(group))
-   if (missing(xlab)) xlab <- xterm
-   if (missing(ylab)) ylab <- yterm
-   if (missing(glab)) glab <- zterm
-      
+   if (missing(xlab)) xlab <- deparse(substitute(x))
+   if (missing(ylab)) ylab <- deparse(substitute(y))
+   if (missing(glab)) glab <- deparse(substitute(group))
+
    group <- factor(group)
    ind   <- !is.na(x + y + as.numeric(group))
    x     <- x[ind]
@@ -28,7 +25,7 @@ rp.ancova <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
 
    if (style != "old") rp.ancova.new(x, y, group, panel = panel, panel.plot = panel.plot,
                            model = model, model0 = model0, xlab = xlab, ylab = ylab, glab = glab,
-                           ci = ci, xterm = xterm, yterm = yterm, zterm = zterm,
+                           ci = ci, xterm = xlab, yterm = ylab, zterm = glab,
                            hscale = hscale, vscale = vscale, style = style)
    else rp.ancova.old(x, y, group, panel = panel, panel.plot = panel.plot,
                           model = "None", xlab = xlab, ylab = ylab,
@@ -39,13 +36,12 @@ rp.ancova <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
 
 rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
                           model = NA, model0 = NA,
-                          xlab = deparse(substitute(x)), ylab = deparse(substitute(y)),
-                          glab = deparse(substitute(group)), ci = ci,
-                          xterm = xterm, yterm = yterm, zterm = zterm,
+                          xlab = xlab, ylab = ylab, glab = glab, ci = ci,
+                          xterm, yterm, zterm,
                           hscale = NA, vscale = hscale, style = 'ggplot') {
 
    model.options <- c("overall mean", xterm, zterm, paste(xterm, ":", zterm))
-   term.names    <- model.options[-1]
+   term.names    <- c("x", "group", "x:group")
    init.model    <- model
    init.model0   <- model0
    if (any(is.na(init.model)))  init.model  <- NA
@@ -54,6 +50,8 @@ rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
    
    model.nodes <- data.frame(x = c(0.5, 0.25, 0.75, 0.5, 0.5),
                              y = 0.9 - c(0, 1, 1, 2, 3) * 0.25,
+                             model = c('y ~ 1', 'y ~ x', 'y ~ group',
+                                       'y ~ x + group', 'y ~ x + group + x:group'),
                              label = paste(yterm, '~',
                                        c('1', xterm, zterm,
                                          paste(xterm, zterm, sep = ' + '),
@@ -62,12 +60,11 @@ rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
                                                sep = ' + '))))
    
    dfrm  <- data.frame(y, x, group)
-   names(dfrm) <- c("y", term.names[1:2])
+   # names(dfrm) <- c("y", term.names[1:2])
    form <- model.nodes$label[5]
-   model.full <- lm(as.formula(form), na.action = na.exclude, x = TRUE, data = dfrm)
+   model.full <- lm(y ~ x * group, na.action = na.exclude, x = TRUE, data = dfrm)
    coef.names <- names(coefficients(model.full))
 
-   
    if (panel) {
       pnl <- rp.control("Analysis of covariance", 
                     x = x, y = y, z = factor(group), xlab = xlab, ylab = ylab, glab = glab,
@@ -193,17 +190,17 @@ rp.ancova.fit <- function(panel) {
    
    x     <- panel$x
    y     <- panel$y
-   z     <- panel$z
-   dfrm  <- data.frame(y, x, z)
-   names(dfrm) <- c("y", panel$term.names[1:2])
+   group <- panel$z
+   dfrm  <- data.frame(y, x, group)
+   # names(dfrm) <- c("y", panel$term.names[1:2])
    
    form <- paste('y ~ ', paste(panel$term.names, collapse = ' + '))
    mdl.max <- lm(as.formula(form), na.action = na.exclude, data = dfrm)
    panel$labels.max <- names(mdl.max$coefficients[-1])
 
    if (!is.na(panel$highlighted.node)) {
-     form        <- panel$model.nodes$label[panel$highlighted.node]
-     mdl1        <- lm(as.formula(form), na.action = na.exclude, x = TRUE, data = dfrm)
+     form        <- panel$model.nodes$model[panel$highlighted.node]
+     mdl1        <- lm(as.formula(form), na.action = na.exclude, data = dfrm)
      panel$mdl1  <- mdl1
      panel$form1 <- form
      panel$df1   <- mdl1$df.residual
@@ -228,7 +225,7 @@ rp.ancova.draw <- function(panel) {
          else
             plt <- plt + ggplot2::geom_line(ggplot2::aes(y = fvals,
                                         col = NULL, group = NULL))
-         form <- panel$form
+         form <- panel$model.nodes$label[panel$highlighted.node]
       }
       else
          form <- 'none'
@@ -300,7 +297,7 @@ rp.ancova.fplot <- function(panel) {
 rp.ancova.effectsplot <- function(panel) {
    with(panel, {
       if (!is.na(panel$highlighted.node) && panel$highlighted.node > 1)
-         print(rp.regression(mdl1, ci = ci, labels = labels.max))
+         print(rp.coefficients(mdl1, ci = ci, labels = labels.max))
       else {
          par(mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
          plot(c(0, 1), c(0, 1), type = "n", xlab = "", ylab = "", axes = FALSE)
@@ -325,7 +322,7 @@ rp.ancova.old <- function(x, y, group, panel = TRUE, panel.plot = TRUE, model = 
 
 if (any(is.na(model))) model <- "None"
 
-rp.ancova.draw <- function(panel) {
+rp.ancova.old.draw <- function(panel) {
    with(panel, {
       group    <- factor(group)
       n.groups <- length(levels(group))
@@ -370,7 +367,7 @@ rp.ancova.draw <- function(panel) {
    panel
 }
 
-rp.ancova.redraw <- function(panel) {
+rp.ancova.old.redraw <- function(panel) {
    rp.tkrreplot(panel, plot)
    panel
    }
@@ -379,12 +376,12 @@ rp.ancova.redraw <- function(panel) {
       panel <- rp.control("One-way ancova", y = y, x = x, group = group,
                                  xlab = xlab, ylab = ylab)
       if (panel.plot) {
-         rp.tkrplot(panel, plot, rp.ancova.draw, pos = "right",
+         rp.tkrplot(panel, plot, rp.ancova.old.draw, pos = "right",
                     hscale = hscale, vscale = vscale)
          action.fn <- rp.ancova.redraw
          }
       else
-         action.fn <- rp.ancova.draw
+         action.fn <- rp.ancova.old.draw
       rp.radiogroup(panel, model,
          c("None", "Single mean", "Single line", "Parallel lines", "Different lines"),
          action = action.fn)
@@ -392,7 +389,7 @@ rp.ancova.redraw <- function(panel) {
       }
    else {
       panel <- list(x = x, y = y, group = group, xlab = xlab, ylab = ylab, model = model)   
-      rp.ancova.draw(panel)
+      rp.ancova.old.draw(panel)
       invisible()
       }
    invisible()

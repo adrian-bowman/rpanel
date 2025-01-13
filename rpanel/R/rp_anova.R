@@ -14,8 +14,10 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
 
    if (is.na(ylab)) ylab <- deparse(substitute(y))
    if (is.na(xlab)) xlab <- deparse(substitute(x))
+   if (is.na(zlab)) zlab <- deparse(substitute(z))
    zlab <- if (type == "One-way") "" else deparse(substitute(z))
    xterm <- xlab
+   yterm <- ylab
    zterm <- zlab
 
    if (type == c("One-way")) z <- rep(1, length(x))
