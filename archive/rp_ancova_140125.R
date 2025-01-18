@@ -58,11 +58,15 @@ rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
                                          paste(xterm, zterm,
                                                paste(xterm, zterm, sep = ':'),
                                                sep = ' + '))))
-   dfrm   <- data.frame(y, x, group)
+   
+   dfrm  <- data.frame(y, x, group)
+   # names(dfrm) <- c("y", term.names[1:2])
    models <- list()
    for (i in 1:5)
       models[[i]] <- lm(model.nodes$model[i], na.action = na.exclude, x = TRUE, data = dfrm)
-   coef.names <- names(coefficients(models[[5]]))
+   form <- model.nodes$label[5]
+   model.full <- lm(y ~ x * group, na.action = na.exclude, x = TRUE, data = dfrm)
+   coef.names <- names(coefficients(model.full))
 
    if (panel) {
       pnl <- rp.control("Analysis of covariance", 
@@ -73,8 +77,10 @@ rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
                     bgdcol = bgdcol, highlighted.node = NA,
                     model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.do(pnl, rp.ancova.fit)
-
+      
+      rp.grid(pnl, "controls", row = 0, column = 0, background = bgdcol)
       rp.grid(pnl, "models", grid = "controls", row = 0, column = 0, background = bgdcol)
+      rp.grid(pnl, "fplot",  grid = "controls", row = 1, column = 0, background = bgdcol)
 
       if (panel.plot) {
          rp.grid(pnl, "dataplot", row = 0, column = 1, background = "white")
@@ -82,20 +88,19 @@ rp.ancova.new <- function(x, y, group, panel = TRUE, panel.plot = TRUE,
                     hscale = hscale, vscale = vscale, 
                     grid = "dataplot", row = 0, column = 0, background = "white")
          rp.tkrplot(pnl, modelnodes, rp.ancova.modelnodes, action = rp.ancova.click,
-                    hscale = 0.7 * hscale, vscale = 0.5 * vscale, 
+                    hscale = 0.7 * hscale, vscale = 0.7 * vscale, 
                     grid = "models", row = 0, column = 0, background = "white")
-print('here')
-         rp.listbox(pnl, analysis, c('none', 'coefficients', 'terms'),
-                    title = 'analysis',
-                    grid = "models", row = 1, column = 0, background = "white")
-print('here')
-         rp.tkrplot(pnl, fplot, rp.ancova.effectsplot,
-                    hscale = hscale * 0.7, vscale = vscale * 0.5, 
-                    grid = "models", row = 2, column = 0, background = bgdcol)
+         rp.text(pnl, "", grid = "fplot", row = 0, column = 0, background = bgdcol)
+      	# rp.text(pnl, "", grid = "fplot", row = 1, column = 0, background = bgdcol)
+      	# rp.tkrplot(pnl, fplot, rp.ancova.fplot, hscale = hscale * 0.7, vscale = vscale * 0.2, 
+      	#           grid = "fplot", row = 2, column = 0, background = bgdcol)
+      	rp.tkrplot(pnl, fplot, rp.ancova.effectsplot,
+      	           hscale = hscale * 0.7, vscale = vscale * 0.7, 
+      	           grid = "fplot", row = 2, column = 0, background = bgdcol)
+         # rp.text(pnl, "", grid = "fplot", row = 3, column = 0, background = bgdcol)
          action.fn <- rp.ancova.redraw
       }
       else {
-         # This needs to be amended to handle the effects plot
          action.fn <- rp.ancova.draw
          rp.text(pnl, "        Model", grid = "models", row = 0, column = 1, background = bgdcol)
          rp.text(pnl,       "current", grid = "models", row = 1, column = 0, background = bgdcol)
@@ -294,7 +299,6 @@ rp.ancova.fplot <- function(panel) {
 
 rp.ancova.effectsplot <- function(panel) {
    with(panel, {
-      print(model.nodes$label)
       if (!is.na(panel$highlighted.node) && panel$highlighted.node > 1)
          print(rp.coefficients(mdl1, ci = ci, labels = labels.max))
       else {

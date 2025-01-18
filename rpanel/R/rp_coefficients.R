@@ -18,7 +18,8 @@ rp.coefficients <- function(model, style = 'density',
       style <- 'density'
    }
    
-	col    <- if (missing(col))    "#86B875" else col # colorspace::rainbow_hcl(3)[2]
+   # Mssing arguments (col - colorspace::rainbow_hcl(3)[2])
+	col    <- if (missing(col))    '#86B875' else col
 	sbst   <- if (missing(subset)) NA else subset
 	lbls   <- if (missing(labels)) NA else labels
 	
@@ -53,11 +54,12 @@ rp.coefficients <- function(model, style = 'density',
 	# else if (length(lbls) != nrow(tbl))
 	#    stop("the 'labels' argument does not match the number of model terms.")
 	
-	coeff <- tbl[ , 1]
-	se    <- tbl[ , 2]
-	x     <- model$x[ , sbst, drop = FALSE]
-	yname <- all.vars(model$call)[1]
-	rng   <- t(apply(x, 2, range))
+	coeff  <- tbl[ , 1]
+	se     <- tbl[ , 2]
+	x      <- model$x[ , sbst, drop = FALSE]
+	yname  <- all.vars(model$call)[1]
+	rng.fn <- function(x) NULL
+	rng    <- t(apply(x, 2, range))
 	for (i in 1:length(coeff)) {
 	   if (abs(diff(rng[i, ]) - 1) > 1e-8)
 	         lbls[lbls.coef[i]] <- paste(lbls[lbls.coef[i]], "\n(", signif(rng[i, 1], 5),

@@ -12,7 +12,20 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
       panel
    }
 
-   rp.regression2.model <- function(panel) {
+   rp.regression2.model <- function(panel, x, y) {
+
+     if (missing(x))
+       panel$model = 'None'
+     else {
+       d.nodes <- (panel$model.nodes$x - x)^2 + (panel$model.nodes$y - y)^2
+       panel$highlighted.node <- which.min(d.nodes)
+       panel$model <- switch(panel$highlighted.node,
+                        'No effects', xlab, zlab, paste(xlab, 'and', zlab))
+     }
+     rp.control.put(panel$panelname, panel)
+     rp.tkrreplot(panel, modelnodes)
+     # rp.tkrreplot(panel, plot)
+         
      with(panel, {
          if (current.model != "None") {
             rgl::pop3d()
@@ -42,12 +55,9 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
    
     if (requireNamespace("rgl", quietly = TRUE)) {
 
-        if (is.na(x1lab))
-            x1lab <- deparse(substitute(x1))
-        if (is.na(x2lab))
-            x2lab <- deparse(substitute(x2))
-        if (is.na(ylab))
-            ylab <- deparse(substitute(y))
+        if (is.na(ylab))  ylab  <- deparse(substitute(y))
+        if (is.na(x1lab)) x1lab <- deparse(substitute(x1))
+        if (is.na(x2lab)) x2lab <- deparse(substitute(x2))
         x      <- x1
         z      <- x2
         xlab   <- x1lab
@@ -94,18 +104,30 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
             zlab = x2lab, ylim = ylim, col = clr)
 
         if (panel) {
+           bgdcol      <- "grey85"
+           model.nodes <- data.frame(x = c(0.5, 0.25, 0.75, 0.5),
+                                     y = 0.85 - c(0, 1, 1, 2) * 0.35,
+                                     label = paste(ylab, '~',
+                                                   c('1', xlab, zlab,
+                                                     paste(xlab, zlab, sep = ' + '))))
+           
             panel.name <- rp.panelname()
-            spin.panel <- rp.control("Spin plot", x = x, y = y,
-                z = z, xlab = xlab, ylab = ylab, zlab = zlab,
+            print(x)
+            spin.panel <- rp.control("Spin plot", x = x, y = y, z = z,
+                xlab = xlab, ylab = ylab, zlab = zlab,
                 theta = -30, phi = 30, realname = panel.name,
                 xgrid = xgrid, zgrid = zgrid, scaling = scaling,
                 fov = 1, current.model = "None", smat = smat,
-                fv = fv, model = model, residuals.showing = residuals.showing)
-            rp.doublebutton(spin.panel, theta, -1, title = "Theta", action = rp.rotate)
-            rp.doublebutton(spin.panel, phi,   -1, title = "Phi",   action = rp.rotate)
-            rp.radiogroup(spin.panel, model, 
-                c("None", "No effects", xlab, zlab, paste(xlab, "and", zlab)), 
-                title = "Model", action = rp.regression2.model)
+                fv = fv, model = model, residuals.showing = residuals.showing,
+                highlighted.node = NA, model.nodes = model.nodes)
+            rp.tkrplot(spin.panel, modelnodes, rp.lmsmall.modelnodes,
+                       action = rp.regression2.model,
+                       vscale = 0.5, background = "white")
+            # rp.doublebutton(spin.panel, theta, -1, title = "Theta", action = rp.rotate)
+            # rp.doublebutton(spin.panel, phi,   -1, title = "Phi",   action = rp.rotate)
+            # rp.radiogroup(spin.panel, model, 
+            #     c("None", "No effects", xlab, zlab, paste(xlab, "and", zlab)), 
+            #     title = "Model", action = rp.regression2.model)
             rp.checkbox(spin.panel, residuals.showing, rp.regression2.residuals, "Show residuals")
             rp.do(spin.panel, rp.regression2.model)
             invisible(list(panel.name = panel.name))
@@ -120,6 +142,6 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
         }
     }
     else {
-        stop("regression2 will not run without the rgl package.")
+        stop("regression2 requires the rgl package.")
     }
 }

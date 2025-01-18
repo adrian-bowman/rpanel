@@ -47,7 +47,8 @@ rp.drop1 <- function(model, p.reference = c(0.05, 0.01)) {
    if (!is.null(p.reference))
       plt <- plt + ggplot2::geom_text(ggplot2::aes(x = qtls,
                                                    y = 0.4 * fhtlo + 0.6 * fhthi,
-                                       label = paste('p=', 1 - qvals, sep = '')),
+                            label = c(paste('p=', 1 - qvals[1], sep = ''),
+                                      as.character(1 - qvals[-1]))),
                             col = grey(0.5), size = 3, inherit.aes = FALSE, data = p.df) +
                    ggplot2::geom_segment(ggplot2::aes(x = qtls,  xend = qtls,
                                          y = fhtlo, yend = (fhtlo + fhthi) * 0.5),

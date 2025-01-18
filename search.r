@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "regression3"
+target    <- "amesp"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"

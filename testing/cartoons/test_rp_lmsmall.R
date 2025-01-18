@@ -23,6 +23,7 @@ model <- lm(Giving ~ Employ + Elect + Attend,
 
 # Simple linear regression
 model <- lm(Giving ~ Employ, data = CofE)
+rp.lmsmall(Giving ~ 1, data = CofE)
 rp.lmsmall(Giving ~ Employ, data = CofE)
 rp.lmsmall(Giving ~ Employ, data = CofE, xlab = 'x', ylab = 'y', glab = 'g')
 model <- lm(Giving ~ Employ, data = CofE)
@@ -31,13 +32,28 @@ rp.lmsmall(log(Speed) ~ log(Mass), data = rodent)
 
 # Regression with two covariates
 rp.lmsmall(Giving ~ Employ + Attend, data = CofE)
-# This should fail because xlab is of length 1
 rp.lmsmall(Giving ~ Employ + Attend, data = CofE,
-           xlab = 'x', ylab = 'y', glab = 'g')
+           xlab = 'x', ylab = 'y', zlab = 'g')
 
 # Ancova
+gullweight <- dplyr::mutate(month = factor(month))
 rp.lmsmall(weight ~ hab + factor(month), data = gullweight)
+rp.lmsmall(weight ~ factor(month) + hab, data = gullweight)
+
+# First argument is a model
+mdl <- lm(weight ~ hab + factor(month), data = gullweight)
+rp.lmsmall(mdl)
+rp.lmsmall(mdl, data = gullweight)
+
+# Coefficients make more sense if they are mean-centred
+hab0 <- gullweight$hab - mean(gullweight$hab)
+rp.lmsmall(weight ~ hab0 + factor(month), data = gullweight)
 
 # One- and two-way anova
-rp.lmsmall(stime ~ factor(treatment), data = poisons)
-rp.lmsmall(stime ~ factor(treatment) + factor(poison), data = poisons)
+poisons <- dplyr::mutate(poisons,
+                         treatment = factor(treatment),
+                         poison    = factor(poison))
+rp.lmsmall(stime ~ treatment, data = poisons)
+rp.lmsmall(stime ~ treatment + poison, data = poisons)
+
+with(poisons, rp.anova(stime, treatment, poison))

@@ -45,10 +45,10 @@ rp.coefficients(model, style = 'density', ci = TRUE, point.estimate = !ci,
 }
 
 \details{
-If the length of \code{labels} matches the number of in the model (after the 
+If the length of \code{labels} matches the number of coefficients in the model (after the 
 application of the \code{subset} argument described below) then these labels
 are used in the display. The length of the labels vector can also be larger than
-the number of coefficients in model to allow a consistent axis when models with
+the number of coefficients in the model to allow a consistent axis when models with
 different terms are viewed successively. In this case \code{labels} must include
 the names of all the effects in the model.
          
@@ -63,5 +63,5 @@ A \code{ggplot} object is returned. This allows further annotation of the displa
 \dontrun{
    model <- lm(Giving ~ Employ + Elect + Attend + 1, data = CofE)
    rp.coefficients(model)
-   })
-}}
+   }
+}

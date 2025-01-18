@@ -53,6 +53,7 @@ export(
   rp.coefficients,
   rp.colour.key,
   rp.datalink,
+  rp.drop1,
   rp.firth,
   rp.geosim, 
   rp.gulls, 

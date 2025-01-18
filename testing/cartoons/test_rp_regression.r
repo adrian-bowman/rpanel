@@ -34,6 +34,7 @@ rp.coefficients(model)
 
 # Regression with two covariates
 rp.lmsmall(Giving ~ Employ + Attend, data = CofE)
+with(CofE, rp.regression(cbind(Employ, Attend), Giving))
 
 # Ancova
 rp.lmsmall(weight ~ hab + month, data = gullweight)
