@@ -1,11 +1,11 @@
-\name{rp.twosample}
+\name{rp.ttest}
 
-\alias{rp.twosample}
+\alias{rp.ttest}
 
-\title{Graphical display for inference in comparing the means of two samples}
+\title{Graphical display for inference in comparing the means of one or two samples}
 
 \description{
-The two samples of data is plotted along with a graphical display which
+The sample(s) of data are plotted along with a graphical display which
 indicates the uncertainty in the location of the true means and in their
 difference. This is done by plotting a shaded representation of a normal
 distribution in 'violin plot' style. This can also be compared with a reference
@@ -13,7 +13,7 @@ mean, representing the null hypothesis in a t-test.
 }
 
 \usage{
-rp.twosample(x, xlab, data_plot = "sina", reference)
+rp.ttest(x, xlab, data_plot = "sina", reference)
 }
 
 \arguments{

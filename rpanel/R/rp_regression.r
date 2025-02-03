@@ -11,8 +11,8 @@ rp.regression <- function (x, y,
    lbls <- if (missing(labels)) NA else labels
    sbst <- if (missing(subset)) NA else subset
    if (missing(col)) col <- NA
-   if (any(class(x) %in% c("formula", "lm", "glm")))
-      return(rp.coefficients(x, prng, ci, point.estimate, lbls, sbst, col, ngrid))
+   # if (any(class(x) %in% c("formula", "lm", "glm")))
+   #    return(rp.coefficients(x, prng, ci, point.estimate, lbls, sbst, col, ngrid))
    if (is.na(col)) col <- "red"
 
    if (is.na(hscale)) hscale <- 1

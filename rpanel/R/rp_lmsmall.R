@@ -1,8 +1,13 @@
 #     A general function for linear models
 
 rp.lmsmall <- function(x, ylab, xlab, zlab, ci = TRUE,
-                       panel = TRUE, panel.plot = TRUE,
-                       hscale = 1, vscale = hscale, ...) {
+                       panel = FALSE, panel.plot = TRUE,
+                       hscale = 1, vscale = hscale,
+                       display, omit, residuals.showing, ...) {
+   
+   if (missing(display)) display <- NULL
+   if (missing(omit))    omit    <- NULL
+   if (missing(residuals.showing)) residuals.showing <- FALSE
    
    # Deal with formula or model inputs
    class.x <- class(x)
@@ -41,7 +46,7 @@ rp.lmsmall <- function(x, ylab, xlab, zlab, ci = TRUE,
    zterm <- if (length(trms) > 1) trms[2] else NA
    if (missing(ylab)) ylab <- yterm
    if (missing(xlab)) xlab <- xterm
-   zlab <- if (length(trms) > 1 & missing(zlab)) zterm
+   if (missing(zlab)) zlab <- zterm
    # if (length(numeric.ind) == 2 & length(factor.ind) == 0 & length(xlab) == 1)
    #    stop('xlab is of length 1 but length 2 is needed.')
 
@@ -76,7 +81,7 @@ rp.lmsmall <- function(x, ylab, xlab, zlab, ci = TRUE,
       model.nodes <- data.frame(x = c(0.5, 0.5),
                                 y = 0.8 - c(0, 1) * 0.6,
                                 label = paste(yterm, '~', c('1', xterm)),
-                                comparison1 = 1, comparison2 = 2)
+                                comparison1 = 2, comparison2 = 1)
    
    # Find the coefficient names from the maximal model
    form <- paste(yterm, '~', trms[1])
@@ -100,8 +105,10 @@ rp.lmsmall <- function(x, ylab, xlab, zlab, ci = TRUE,
    
    # Linear regression with two covariates
    if (length(numeric.ind) == 2 & length(factor.ind) == 0)
-      return(rp.regression2(y, x, z, ylab  = ylab, x1lab = xlab, x2lab = zlab,
-                            panel = panel))
+      return(rp.regression2.lmsmall(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
+                            panel = panel, models = models, title = ttl,
+                            display = display,
+                            residuals.showing = residuals.showing))
       
    if (panel) {
       pnl <- rp.control(ttl, models = models, y = y, x = x, z = z,
@@ -113,7 +120,7 @@ rp.lmsmall <- function(x, ylab, xlab, zlab, ci = TRUE,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
               list(c('Display', 'blank', 'coefficients', 'terms')),
-              initval = 'blank', action = rp.lmsmall.redraw)
+              initval = 'terms', action = rp.lmsmall.redraw)
       rp.grid(pnl, "models", row = 0, column = 0, background = bgdcol)
       rp.tkrplot(pnl, modelnodes, rp.lmsmall.modelnodes, action = rp.lmsmall.click,
                  hscale = 0.7 * hscale, vscale = 0.5 * vscale, 
@@ -289,8 +296,8 @@ rp.lmsmall.draw <- function(panel) {
    # Anova
    if (panel$type %in% c('one.way', 'two.way')) {
       clr  <- colorspace::rainbow_hcl(3)
-      dfrm <- data.frame(x = panel$x, y = panel$y, z = panel$z,
-                         jitter.x = panel$jitter.x)
+      dfrm <- data.frame(x = panel$x, y = panel$y, jitter.x = panel$jitter.x)
+      if (panel$type == 'two.way') dfrm$z <- panel$z
       plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(y, x)) +
          ggplot2::xlab(panel$ylab) + ggplot2::ylab(panel$xlab) +
          ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
@@ -307,20 +314,29 @@ rp.lmsmall.draw <- function(panel) {
       else if (length(hlight) == 2) {
          mdl   <- panel$models[[hlight[1]]]
          mdl0  <- panel$models[[hlight[2]]]
-         mn    <- tapply(fitted(mdl0), list(panel$x, panel$z), mean)
-         se    <- tapply(fitted(mdl0), list(panel$x, panel$z), length)
+         lst   <- if (panel$type == 'two.way') list(panel$x, panel$z)
+                  else list(panel$x)
+         mn    <- tapply(fitted(mdl0), lst, mean)
+         se    <- tapply(fitted(mdl0), lst, length)
          ngps  <- nrow(unique(data.frame(panel$x, panel$z)))
          df0   <- mdl0$df.residual
          df1   <- mdl$df.residual
          se    <- summary(mdl)$sigma * sqrt(abs(df0 - df1)) / sqrt(se * ngps)
-         dfrm1 <- data.frame(y = c(mn), x = rep(rownames(mn), ncol(mn)),
-                             z = rep(colnames(mn), each = nrow(mn)))
          ngrid <- 200
          xgrid <- seq(min(panel$y), max(panel$y), length = ngrid)
-         dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
-                             x = rep(dfrm1$x, ngrid), z = rep(dfrm1$z, ngrid))
-         dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[cbind(dfrm1$x, dfrm1$z)],
-                              se[cbind(dfrm1$x, dfrm1$z)])
+         if (panel$type == 'two.way') {
+            dfrm1 <- data.frame(y = c(mn), x = rep(rownames(mn), ncol(mn)),
+                                z = rep(colnames(mn), each = nrow(mn)))
+            dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
+                                x = rep(dfrm1$x, ngrid), z = rep(dfrm1$z, ngrid))
+            dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[cbind(dfrm1$x, dfrm1$z)],
+                                se[cbind(dfrm1$x, dfrm1$z)])
+         } else {
+            dfrm1 <- data.frame(y = mn, x = names(mn))
+            dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
+                                x = rep(dfrm1$x, ngrid))
+            dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[dfrm1$x], se[dfrm1$x])
+         }
          plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x, fill = dgrid),
                                          height = 0.8, data = dfrm1,
                                          show.legend = FALSE) +
@@ -356,13 +372,17 @@ rp.lmsmall.effectsplot <- function(panel) {
    with(panel, {
       nhl    <- length(highlighted.node)
       hlight <- (!any(is.na(highlighted.node)) && 
-                    (highlighted.node[1] > 1 | nhl > 1))
+                 (highlighted.node[1] > 1 | nhl > 1))
       if (hlight) mdl <- models[[highlighted.node[1]]]
       if (hlight & (model.display == 'coefficients'))
          print(rp.coefficients(mdl, ci = ci, labels = labels.max))
-      else if (hlight & (model.display == 'terms' | nhl == 2))
-         print(rp.drop1(mdl))
-      else {
+      else if (hlight & (model.display == 'terms') & nhl == 2) {
+         mdl0 <- models[[highlighted.node[2]]]
+         r0   <- rownames(anova(mdl0))
+         r1   <- rownames(anova(mdl))
+         trm  <- r1[!(r1 %in% r0)]
+         print(rp.drop1(mdl, trm))
+      } else {
          par(mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
          plot(c(0, 1), c(0, 1), type = "n",
               xlab = "", ylab = "", axes = FALSE)

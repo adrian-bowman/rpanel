@@ -2,15 +2,26 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
-rp.onesample
-  - how should the distributions be scaled? Equal visual area to avoid visual
-    distraction?
-  - should a confidence be optionally shown?
-  - could the p-value be shown without cluttering the plot?
-  - also add binomial proportions?
+rp.lmsmall
+  - plot a line rather than a point when there is only one df and one term?
+  - set panel=FALSE by default, except for simple regression?
+  - curtail infinity in drop1 distributions
+  - position p=... proportionally to p
+  - consider how to deprecate rp.regression and rp.anova
   
-rp.twosample
-  - marks on the distributions for 1:3 ses?
+rp.coefficients
+  - adjust width of densities to have area 1?
+  - t-distributions for linear models
+  - lines idea to give visual cues? (change in mean versus change from min(x))
+
+rp.anova
+  - use of transparency to compare reference density and observed, as in rp.contingency.
+    Other functions which need this?
+  - the model specifications are very messy.
+    Use "interaction", "additive", etc. in some way?
+  - strange things happen with the daphnae data from Abubakar (Birmingham)
+  - add in the rp.interaction style plot? (Abu, Bham)
+  - restrict to ggplot only?
 
 rp.ancova
   - tidy up the code and make the ggplot version the default, with the
@@ -21,20 +32,6 @@ rp.ancova
     plot doesn't jump around?
   - line 102: rp.tkrplot fplot - should this be row 0?
   - the help file example doesn't run because of the with construction.
-
-rp.geosim
-  - the variogram plot no longer disappears when the checkboxes are not checked.
-  - display the values of the anisotropy parameters in the plot title.
-
-rp.contingency
-  - colour of reference bands?
-  - allow more than one of obs., exp. and props.
-  - create a help file
-  - integrate into the package rather than as a separate file.
-   
-rp.likelihood: 2 variable case
-   - neaten up the edges of the 3d surface
-   - is transparency ok on Windows?
 
 rp.regression:
   - 1 covariate: setting panel = FALSE doesn't work
@@ -49,6 +46,36 @@ rp.regression:
   - mixed models?
   - allow different funtions to control the calculation of effect size?
     range, iqr, user-supplied?
+
+rp.coefficients
+  - this needs some thinking
+
+rp.test
+  Combine rp.onesample and rp.twosample into this function.
+
+rp.onesample
+  - how should the distributions be scaled? Equal visual area to avoid visual
+    distraction?
+  - should a confidence be optionally shown?
+  - could the p-value be shown without cluttering the plot?
+  - also add binomial proportions?
+  
+rp.twosample
+  - marks on the distributions for 1:3 ses?
+
+rp.geosim
+  - the variogram plot no longer disappears when the checkboxes are not checked.
+  - display the values of the anisotropy parameters in the plot title.
+
+rp.contingency
+  - colour of reference bands?
+  - allow more than one of obs., exp. and props.
+  - create a help file
+  - integrate into the package rather than as a separate file.
+   
+rp.likelihood: 2 variable case
+   - neaten up the edges of the 3d surface
+   - is transparency ok on Windows?
 
 rp.plot4d:
   - check for Windows OS and, if so, force a uniform window rather
@@ -89,15 +116,6 @@ rp.sample
     The standard deviation is also irrelevant.
     Can this be done by changing the displayed guis?
   - the vertical location of 2 se in the sample mean plot seems rather high.
-
-rp.anova
-  - use of transparency to compare reference density and observed, as in rp.contingency.
-    Other functions which need this?
-  - the model specifications are very messy.
-    Use "interaction", "additive", etc. in some way?
-  -  strange things happen with the daphnae data from Abubakar (Birmingham)
-  - add in the rp.interaction style plot? (Abu, Bham)
-  - restrict to ggplot only?
 
 rp.geosim
   - this has been changed to allow panel = FALSE but more extensive changes

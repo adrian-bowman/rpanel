@@ -63,7 +63,6 @@ export(
 # rp.multilevel,
   rp.mururoa, 
   rp.normal, 
-  rp.onesample,
   rp.plot3d, 
   rp.plot4d,
   rp.power,
@@ -71,9 +70,10 @@ export(
   rp.spacetime,
   rp.surface,
   rp.regression, 
-  rp.regression2, 
+  rp.regression2,
   rp.rmplot, 
   rp.tables,
+  rp.ttest,
   rp.wrangle
 # setSliderRatePolicy
 )

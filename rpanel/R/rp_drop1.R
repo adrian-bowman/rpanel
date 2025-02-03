@@ -1,8 +1,13 @@
 #     Anova on a regression model
 
-rp.drop1 <- function(model, p.reference = c(0.05, 0.01)) {
+rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01)) {
    
    tbl     <- drop1(model, test = 'F')[-1, ]
+   if (!missing(subset.terms) | is.null(subset.terms)) {
+      if ((is.character(subset.terms)))
+         subset.terms <- match(subset.terms, rownames(tbl))
+      tbl <- tbl[subset.terms, ]
+   }
    tbl$df  <- tbl$Df
    tbl$Df  <- paste('Model terms with', tbl$Df, 'df')
    fmax    <- 1.1 * max(qf(0.99, tbl$df, model$df.residual), tbl$'F value')
@@ -34,19 +39,22 @@ rp.drop1 <- function(model, p.reference = c(0.05, 0.01)) {
           ggplot2::geom_point() +
           # ggplot2::geom_text(ggplot2::aes(label = paste('(p=',signif(p, 2),')', sep = '')),
           #                    nudge_y = -0.2, size = 3) +
-          ggplot2::ylab('Model terms') +
+          ggplot2::ylab('Model terms') + ggplot2::xlab('F ratio') +
           ggplot2::xlim(0, fmax)
    
-   # Use the ggforce package, if available, to scale the height of the rows
-   if (requireNamespace('ggforce'))
-     plt <- plt + ggforce::facet_col(Df ~ ., scales = 'free_y', space = 'free')
-   else
-     plt <- plt + ggplot2::facet_wrap(Df ~ ., scales = 'free_y') 
-      
+   # Use facets when there are multiple degrees of freedom
+   if (length(unique(tbl$Df)) > 1) {
+      # Use the ggforce package, if available, to scale the height of the rows
+      if (requireNamespace('ggforce'))
+      plt <- plt + ggforce::facet_col(Df ~ ., scales = 'free_y', space = 'free')
+      else
+      plt <- plt + ggplot2::facet_wrap(Df ~ ., scales = 'free_y') 
+   }
+   
    # Mark reference points for p-values
    if (!is.null(p.reference))
       plt <- plt + ggplot2::geom_text(ggplot2::aes(x = qtls,
-                                                   y = 0.4 * fhtlo + 0.6 * fhthi,
+                                 y = 0.4 * fhtlo + 0.6 * fhthi,
                             label = c(paste('p=', 1 - qvals[1], sep = ''),
                                       as.character(1 - qvals[-1]))),
                             col = grey(0.5), size = 3, inherit.aes = FALSE, data = p.df) +

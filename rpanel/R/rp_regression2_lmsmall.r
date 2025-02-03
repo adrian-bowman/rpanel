@@ -1,7 +1,10 @@
 #       regression2: regression with two covariates
 
-rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel = TRUE,
-    model = "None", residuals.showing = FALSE, size = 3, col = "red", ...) {
+rp.regression2.lmsmall <- function (y, x1, x2,
+                                    ylab = NA, x1lab = NA, x2lab = NA,
+                                    panel = TRUE,
+                                    model = "None", residuals.showing = FALSE,
+                                    size = 3, col = "red", ...) {
 
    hscale <- 1
    vscale <- 1
@@ -11,15 +14,6 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
    display    <- extra.args$display
    if (!is.null(display) & !('formula' %in% class(display)))
       stop('display must be a formula.')
-
-   rp.rotate <- function(panel) {
-      with(panel, {
-         if (phi < -90) phi <- -90
-         if (phi >  90) phi <-  90
-         rgl::view3d(theta = theta, phi = phi, fov = fov)
-      })
-      panel
-   }
 
    rp.regression2.model <- function(panel, x, y) {
 

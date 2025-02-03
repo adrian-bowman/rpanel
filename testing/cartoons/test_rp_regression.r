@@ -47,6 +47,9 @@ rp.regression(model)
 rp.regression(model) + ggplot2::coord_flip()
 with(CofE, 
      rp.regression(Giving ~ Employ + Elect + Attend))
+with(CofE, 
+     rp.regression(Giving ~ Employ + Elect + Attend,
+                   model = panel = FALSE))
 cat("Amend the returned ggplot:\n")
 cat('This produces an error in the y-label.\n')
 with(CofE, 
