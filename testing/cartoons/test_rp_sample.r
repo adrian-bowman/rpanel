@@ -4,9 +4,7 @@ library(rpanel)
 if (reinstall) devtools::install("rpanel")
 
 rp.sample()
-
-# This does not work without restarting R.  Why is that?
-# rp.sample(shiny = FALSE)
+rp.sample(display = 'violin')
 
 rp.sample(hscale = 1.5)
 
@@ -18,3 +16,5 @@ ind <- grep("green", colors())
 plot(1:length(ind), type = "n")
 abline(h = 1:length(ind), col = colors()[ind])
 
+# Check out the old style function
+rp.sample(style = 'old')

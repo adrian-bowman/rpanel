@@ -10,15 +10,26 @@ cat("Standard example:\n")
 devtools::install("rpanel")
 library(rpanel)
 
+library(tidyverse)
+sleep_wide <- pivot_wider(sleep, values_from = extra, names_from = group,
+                          names_prefix = 'drug_')
+sleep_diff <- with(sleep_wide, drug_2 - drug_1)
+rp.ttest(sleep_diff, seed = 1673)
+rp.ttest(sleep_diff, mu = 0, seed = 1673)
+rp.ttest(sleep_diff, uncertainty = 'reference', seed = 1673)
+rp.ttest(sleep_diff, uncertainty = 'none', seed = 1673)
+
+
+
 x <- rnorm(50)
 y <- rnorm(50) + 1
 g <- rep(1:2, each = 25)
 
-rp.ttest(x)
-rp.ttest(x, uncertainty = 'reference')
-rp.ttest(x, uncertainty = 'none', mu = 0)
-rp.ttest(x, mu = 0)
-rp.ttest(x, mu = 0, uncertainty = 'reference')
+rp.ttest(x, seed = 4276)
+rp.ttest(x, uncertainty = 'reference', seed = 4276)
+rp.ttest(x, uncertainty = 'none', mu = 0, seed = 4276)
+rp.ttest(x, mu = 0, seed = 4276)
+rp.ttest(x, mu = 0, uncertainty = 'reference', seed = 4276)
 rp.ttest(x, mu = 0, seed = 4276)
 rp.ttest(x, mu = 1, seed = 4276)
 rp.ttest(x, y, paired = TRUE)

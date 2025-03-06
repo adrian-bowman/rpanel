@@ -3,6 +3,7 @@
 
 rp.ttest <- function(x, y = NULL, mu = NULL,
                      uncertainty = 'sample mean',
+                     paired = FALSE, var.equal = FALSE,
                      scale = FALSE, col = '#86B875', refcol = '#E495A5',
                      height, refheight = 1.5 * height, seed,
                      xlab, ylab, ...) {
@@ -21,13 +22,12 @@ rp.ttest <- function(x, y = NULL, mu = NULL,
    if (!reference) mu <- 0
    
    ttest <- t.test(x, y, mu = mu, ...)
-   method <- if      (grepl("One",    ttest$method)) "One"
-             else if (grepl("Two",    ttest$method)) "Two"
-             else if (grepl("Paired", ttest$method)) "Paired"
+   method <- if      (is.null(y)) "One"
+             else if (!paired)    "Two"
+             else                 "Paired"
    
    if (missing(height)) {
-      height <- if (method == 'One') 0.2
-                else c('data' = 0.25, 'uncertainty' = 0.15, 'mean' = 0.5)
+      height <- c('data' = 0.25, 'uncertainty' = 0.15, 'mean' = 0.5)
    }
    if (missing(col)) {
       col <- if (method == 'Two')
@@ -74,8 +74,21 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    # Plot the data
    
-   plt <- plt + ggforce::geom_sina(jitter_y = FALSE, maxwidth = 1) +
-      
+   # plt <- plt + ggforce::geom_sina(jitter_y = FALSE, maxwidth = 1) +
+   #    ggplot2::geom_violin(scale = 'width', width = 0.5,
+   #                         col = NA, fill = 'grey75', alpha = 0.25)
+   
+   print(plot.args)
+   if (requireNamespace('ggforce', quietly = TRUE))
+      plt <- plt +
+      ggforce::geom_sina(jitter_y = FALSE,
+                         maxwidth = 2 * plot.args$height['data'])
+   else
+      plt <- plt + ggplot2::geom_jitter(height = 0.2, width = 0)
+   plt <- plt +
+      ggplot2::geom_violin(scale = 'width', width = 0.5,
+                           col = NA, fill = 'grey75', alpha = 0.25)
+   
 
    # If a reference is provided, plot this or the sample mean
    
@@ -99,7 +112,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
          ggplot2::scale_colour_manual(values = xcol,
                                       labels = clab,
                                       guide  = ggplot2::guide_legend(title = NULL,
-                                                                     position = "right"))
+                                                                     position = "top"))
    }
    
    # Plot the uncertainty
@@ -116,7 +129,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
       xgrid  <- seq(rng[1], rng[2], length = ngrid)
       dens   <- dt((xgrid - cntr) / se, length(x) - 1) / dt(0, length(x) - 1)
       dgrd   <- data.frame(x = xgrid, y = 1, dens)
-      height <- plot.args$height
+      height <- plot.args$height['uncertainty']
       # The geom_line calls tidy up the edges of the filled area
       plt   <- plt +
          ggplot2::geom_line(ggplot2::aes(x, y = 1 + 0.5 * dens * height),
@@ -127,7 +140,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
                             alpha = 0.7, data = dgrd) +
          ggplot2::scale_fill_manual(values = ucol, labels = clab,
                                     guide  = ggplot2::guide_legend(title = NULL,
-                                                                position = "right"))
+                                                                position = "top"))
       # Plot the uncertainty axis
       if (plot.args$scale) {
          ypos <- 1 - height
@@ -178,7 +191,7 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    # Ensure that x has values and y is a factor
    
    if (!is.numeric(x))
-      stop('x must be nume4ric.')
+      stop('x must be numeric.')
    if (is.numeric(y)) {
       fac  <- factor(c(rep(xlab, length(x)),
                        rep(ylab, length(y))))
