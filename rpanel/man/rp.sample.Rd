@@ -5,12 +5,12 @@
 \title{Interactive demonstration of sampling variation}
 
 \description{
-  Plots sample from a normal distribution to illustrate the variation which results.  The population mean and the range of mean +/- 2 standard deviations can be superimposed, in the latter case to demonstrate that nearly all the data lie within this range.  The position of the sample mean can also be indicated in a separate plot where the mean and +/- 2 standard errors can be superimposed.
+Plots sample from a normal distribution to illustrate the variation which results.  The population mean and the range of mean +/- 2 standard deviations can be superimposed, in the latter case to demonstrate that nearly all the data lie within this range.  The position of the sample mean can also be indicated in a separate plot where the mean and +/- 2 standard errors can be superimposed.
 }
 
 \usage{
-   rp.sample(mu = 0, sigma = 1, n = 25, display = "tcltk",
-             panel.plot = TRUE, hscale = NA, vscale = hscale)
+rp.sample(mu = 0, sigma = 1, n = 25, display = "tcltk",
+          panel.plot = TRUE, hscale = NA, vscale = hscale)
 }
 
 \arguments{
@@ -23,6 +23,8 @@
 }
 
 \details{
+When \code{display} is set to \code{density} or \code{violin}, density estimates are constructed using a bandwidth which is optimal for a normal distribution. For small samples this provides a stable and conservative estimate which is not unduly influenced by features which may well simply be due sampling variation. As the sample size increases, the estimate will still converge to the true density function.
+
 The visual effect of the animation is assisted by holding the axes constant.  This means that there may occasionally be observations outside the displayed horizontal range, or a histogram height which exceeds the displayed vertical range.  In both these cases, the existence of the unseen data is signalled by red lines in the appropriate positions.
 }
 
