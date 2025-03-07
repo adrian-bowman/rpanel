@@ -23,6 +23,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       col.pars <- "green3"
       
       with(panel, {
+         
          if (display == 'histogram') {
             plt  <- ggplot2::ggplot(data.frame(x = y), ggplot2::aes(x)) +
                ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1 / sigma))
@@ -54,13 +55,13 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
          }
          
          if (display == 'violin') {
-            plt <- ggplot2::ggplot(data.frame(x = y, y = 1), ggplot2::aes(x, y))
+            plt <- ggplot2::ggplot(data.frame(x = y, y = 1), ggplot2::aes(x, y)) +
+               ggplot2::ylim(1 - 2 * dmax, 1 + 2 * dmax)
             if (display.sample["data"]) {
                plt <- plt +
                   ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 1, ymin = 1 - dgrid, ymax = 1 + dgrid),
                                        data = d.dens, col = 'grey75', fill = 'grey75') +
-                  ggplot2::geom_point(ggplot2::aes(x, 1 + y * runif(length(y), -1, 1)),
-                                       data = d.densd, size = 0.2)
+                  ggplot2::geom_point(ggplot2::aes(x, y), data = d.densd, size = 0.2)
                   # plt <- plt + ggplot2::geom_violin(col = 'grey75', fill = 'grey75', trim = FALSE) +
                   #              ggforce::geom_sina()
             }
@@ -73,10 +74,11 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
                   ggplot2::geom_line(ggplot2::aes(xgrid, 1 - pgrid), data = d.pop, col = 'blue')
             }
             if (display.sample["mean"])
-               plt <- plt + ggplot2::geom_segment(x = mu, y = 2, yend = 0, col = col.pars)
+               plt <- plt + ggplot2::geom_segment(x = mu, y = 1 + 1.75 * dmax,
+                                                  yend = 1 - 1.75 * dmax, col = col.pars)
             if (display.sample["+/- 2 st.dev."])
                plt <- plt + ggplot2::geom_segment(x = mu - 2 * sigma, xend = mu + 2 * sigma,
-                                                  y = 2, col = col.pars,
+                                                  y = 1 + 1.5 * dmax, col = col.pars,
                                                   arrow = ggplot2::arrow(ends = 'both',
                                                          length = grid::unit(0.1, "inches")))
          }
@@ -101,13 +103,19 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       
       with(panel, {
          if (any(display.mean)) {
-            brks <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 20)
             plt <- ggplot2::ggplot(data.frame(x = mns, y = 1), ggplot2::aes(x, y)) +
-               ggplot2::xlim(mu - 3 * sigma, mu + 3 * sigma) +
                ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, sqrt(n) / sigma)) +
                ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                               axis.text.y  = ggplot2::element_blank(),
                               axis.ticks.y = ggplot2::element_blank())
+            if (!zoom)
+               plt <- plt + ggplot2::xlim(mu - 3 * sigma, mu + 3 * sigma)
+            else
+               plt <- plt + ggplot2::xlim(mu - 3 * sigma / sqrt(n), mu + 3 * sigma / sqrt(n))
+            
+            sb   <- if (!zoom) sigma else sigma / sqrt(n)
+            brks <- seq(mu - 3 * sb, mu + 3 * sb, length = 20)
+            
             
             # hst <- hist(mns, plot = FALSE,
             #             breaks = seq(mu - 3 * sigma, mu + 3 * sigma, length = 50))
@@ -155,8 +163,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    sample.changepars <- function(panel) {
       panel$mns <- NULL
       rp.control.put(panel$panelname, panel)
-      # rp.do(panel, sample.new)
-      rp.do(panel, sample.redraw)
+      rp.do(panel, sample.new)
       panel
    }
 
@@ -166,8 +173,9 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       panel$y       <- rnorm(panel$pars["n"], mu, sigma)
       xgrid         <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
       dens          <- density(panel$y)
+      dens.y        <- approx(dens$x, dens$y, xout = panel$y)$y
       panel$d.dens  <- data.frame(xgrid = dens$x, dgrid = dens$y)
-      panel$d.densd <- data.frame(x = panel$y, y = approx(dens$x, dens$y, xout = panel$y)$y)
+      panel$d.densd <- data.frame(x = panel$y, y = 1 + dens.y * runif(length(dens.y), -1, 1))
       if (!panel$display.mean["accumulate"]) panel$mns <- NULL
       panel$mns <- c(mean(panel$y), panel$mns)
       rp.control.put(panel$panelname, panel)
@@ -190,13 +198,15 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    pars                  <- c(mu, sigma, n)
    names(pars)           <- c("mu", "sigma", "n")
    y                     <- rnorm(n, mu, sigma)
+   dmax                  <- dnorm(mu, mu, sigma)
    xgrid                 <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
    dens                  <- density(y)
+   dens.y                <- approx(dens$x, dens$y, xout = y)$y
    d.dens                <- data.frame(xgrid = dens$x, dgrid = dens$y)
-   d.densd               <- data.frame(x = y, y = approx(dens$x, dens$y, xout = y)$y)
+   d.densd               <- data.frame(x = y, y = 1 + dens.y * runif(length(dens.y), -1, 1))
    
    panel <- rp.control(pars = pars, y = y, mns = mean(y),
-                       d.dens = d.dens, d.densd = d.densd,
+                       d.dens = d.dens, d.densd = d.densd, dmax = dmax,
                        display.sample = display.sample, display.mean = display.mean,
                        pplot = panel.plot)
    rp.grid(panel, "controls", row = 0, column = 0)
@@ -229,6 +239,8 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    rp.checkbox(panel, display.mean,   action.fn, names(display.mean),
                title = "Sample mean",
                grid = "controls", row = 4, column = 0, sticky = "ew")
+   rp.checkbox(panel, zoom, action.fn, labels = "zoom in",
+               grid = "controls", row = 5, column = 0, sticky = "ew")
 
    invisible()
 }
