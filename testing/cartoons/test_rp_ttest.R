@@ -32,6 +32,7 @@ rp.ttest(x, mu = 0, seed = 4276)
 rp.ttest(x, mu = 0, uncertainty = 'reference', seed = 4276)
 rp.ttest(x, mu = 0, seed = 4276)
 rp.ttest(x, mu = 1, seed = 4276)
+rp.ttest(x, mu = 1, scale = TRUE, seed = 4276)
 rp.ttest(x, y, paired = TRUE)
 
 rp.ttest(x, y)

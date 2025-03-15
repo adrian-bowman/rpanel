@@ -6,6 +6,18 @@ if (reinstall) devtools::install("rpanel")
 rp.sample()
 rp.sample(display = 'violin')
 
+library(ggplot2)
+x <- rnorm(25)
+dens <- density(x)
+dfrm <- data.frame(x = dens$x, y = dens$y)
+col.dens <- 'grey75'
+col.pars <- 'darkblue'
+col.pars <- 'blue'
+col.pars <- 'darkgreen'
+ggplot2::ggplot(dfrm, aes(x, y)) +
+   geom_area(, col = col.dens, fill = col.dens) +
+   geom_function(fun = dnorm, args = list(mean = 0, sd = 1), linewidth = 1.5, col = col.pars)
+
 rp.sample(hscale = 1.5)
 
 # Radioactivity in samples
