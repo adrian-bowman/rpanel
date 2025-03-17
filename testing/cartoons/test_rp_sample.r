@@ -5,6 +5,21 @@ if (reinstall) devtools::install("rpanel")
 
 rp.sample()
 rp.sample(display = 'violin')
+rp.sample(ggplot = FALSE)
+
+result <- rp.sample(panel = FALSE)
+result <- rp.sample(panel = FALSE, display.sample = c('+/- 2 st.dev.' = TRUE))
+result <- rp.sample(panel = FALSE,
+                    display.sample = c('mean' = TRUE, '+/- 2 st.dev.' = TRUE))
+result <- rp.sample(panel = FALSE, display = 'density',
+                    display.sample = c('mean' = TRUE, '+/- 2 st.dev.' = TRUE,
+                                       'population' = TRUE),
+                    display.mean = c('sample mean' = TRUE))
+print(result$data)
+print(result$mean)
+
+ggplot2::ggplot(data.frame(x = rnorm(1)), ggplot2::aes(x)) +
+   ggplot2::geom_histogram(breaks = -3:3, ggplot2::aes(y = ggplot2::after_stat(density)))
 
 library(ggplot2)
 x <- rnorm(25)

@@ -111,12 +111,13 @@ rp.spacetime
     and a matrix of spacetime values.
 
 rp.sample
-  - mark observations outside the scale, as the old style does.
+  - mark observations outside the scale, as the old style does?
   - allow binomial data to be specified.
     This needs a proportion instead of a mean, for both population and sample.
     The standard deviation is also irrelevant.
     Can this be done by changing the displayed guis?
-  - the vertical location of 2 se in the sample mean plot seems rather high.
+  - improve the plots created by standard graphics, when ggplot = FALSE,
+    to match those when ggplot = TRUE.
 
 rp.geosim
   - this has been changed to allow panel = FALSE but more extensive changes
