@@ -1,5 +1,5 @@
 rp.sample <- function(mu = 0, sigma = 1, n = 25,
-                      ggplot = TRUE, panel = TRUE,
+                      ggplot = TRUE, panel = TRUE, nbins = 30,
                       display, display.sample, display.mean, nsim = 50,
                       hscale = NA, vscale = hscale, pause = 0.01) {
 
@@ -64,7 +64,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
 
             if (length(y) >= nmin) {
                if (display == 'histogram') {
-                  brks <- seq(mu - 3 * stdev, mu + 3 * stdev, length = 20)
+                  brks <- seq(mu - 3 * stdev, mu + 3 * stdev, length = nbins)
                      plt  <- plt +
                         ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
                                                 breaks = brks, col = 'grey50', fill = col.dens)

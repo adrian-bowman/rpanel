@@ -2,6 +2,17 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.sample
+  - do better with the number of bins? Sturges rule as in the nclass.Sturges function?
+  - should the vertical axis be there? Slight awkwardness with the violin case.
+  - mark observations outside the scale, as the old style does?
+  - allow binomial data to be specified.
+    This needs a proportion instead of a mean, for both population and sample.
+    The standard deviation is also irrelevant.
+    Can this be done by changing the displayed guis?
+  - improve the plots created by standard graphics, when ggplot = FALSE,
+    to match those when ggplot = TRUE.
+
 rp.lmsmall
   - plot a line rather than a point when there is only one df and one term?
   - set panel=FALSE by default, except for simple regression?
@@ -109,15 +120,6 @@ rp.mururoa
 rp.spacetime
   - allow regular data to be exploited, with marginal space and time input
     and a matrix of spacetime values.
-
-rp.sample
-  - mark observations outside the scale, as the old style does?
-  - allow binomial data to be specified.
-    This needs a proportion instead of a mean, for both population and sample.
-    The standard deviation is also irrelevant.
-    Can this be done by changing the displayed guis?
-  - improve the plots created by standard graphics, when ggplot = FALSE,
-    to match those when ggplot = TRUE.
 
 rp.geosim
   - this has been changed to allow panel = FALSE but more extensive changes

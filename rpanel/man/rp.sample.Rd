@@ -20,6 +20,7 @@ rp.sample(mu = 0, sigma = 1, n = 25,
 \item{n}{the size of the sample.}
 \item{ggplot}{a logical value which determines whether the \code{ggplot2} package is used to create the graphical displays. When this argument is set to \code{FALSE}, or when the \code{ggplot2} package is not available, standard graphics are used. In this case the display options are simpler, along the lines of the function provided in version 1.1-5 of the package.}
 \item{panel}{a logical value which determines whether the function runs in interactive mode. See Details.}
+\item{nbins}{an integer value which sets the number of bins used in histograms.}
 \item{display}{a logical value which determines the form of graphical display used initially or in non-interactive mode. Possible values are \code{'histogram'} (the default), \code{'density'} or \code{'violin'}.}
 \item{display.sample}{a logical value which controls options for graphical display of the data, used initially or in non-interactive mode. See Details.}
 \item{display.sample}{a logical value which controls options for graphical display of the sample means, used initially or in non-interactive mode. See Details.}

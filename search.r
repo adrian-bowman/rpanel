@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "amesp"
+target    <- "rp.sample"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel"
