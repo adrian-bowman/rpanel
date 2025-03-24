@@ -80,14 +80,17 @@ export(
 
 import(tcltk)
 importFrom("grDevices", "col2rgb", "grey", "heat.colors", "rgb2hsv",
-           "terrain.colors", "topo.colors")
+           "terrain.colors", "topo.colors", "dev.off", "png")
 importFrom("graphics", "abline", "axTicks", "axis", "box", "hist",
            "image", "layout", "lines", "mtext", "par", "persp", "plot",
            "points", "polygon", "rect", "segments", "strheight",
            "text", "title")
 importFrom("stats", "as.formula", "binomial", "coef", "dnorm",
            "fitted", "glm", "lm", "na.exclude", "optim", "pnorm",
-           "qqnorm", "qt", "rnorm", "runif", "sd", "pf")
+           "qqnorm", "qt", "rnorm", "runif", "sd", "pf", "approx",
+           "coefficients", "density", "df", "drop1",
+           "dt", "model.frame", "model.matrix", "qf", "rbinom",
+           "t.test", "update")
 importFrom("utils", "demo", "menu")
 # importFrom("shiny", "runApp", "shinyApp", "reactiveValues",
 #            "observeEvent", "renderPlot", "reactive")

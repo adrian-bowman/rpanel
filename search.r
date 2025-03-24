@@ -1,9 +1,9 @@
 #     Search for text in all files
 
-target    <- "rp.sample"
+target    <- "ci_server"
 diry      <- "."
 diry      <- "testing"
-diry      <- "rpanel"
+diry      <- "rpanel/R"
 recursive <- TRUE
 
 files <- list.files(diry, full.names = TRUE, recursive = recursive)

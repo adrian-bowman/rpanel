@@ -4,12 +4,11 @@
 
 rp.sample
   - do better with the number of bins? Sturges rule as in the nclass.Sturges function?
-  - should the vertical axis be there? Slight awkwardness with the violin case.
   - mark observations outside the scale, as the old style does?
-  - allow binomial data to be specified.
-    This needs a proportion instead of a mean, for both population and sample.
+  - allow other distributions to be specified.
+  - in particular, allow binomial data to be specified.
+    This needs a 'size' and a proportion instead of a mean, for both population and sample.
     The standard deviation is also irrelevant.
-    Can this be done by changing the displayed guis?
   - improve the plots created by standard graphics, when ggplot = FALSE,
     to match those when ggplot = TRUE.
 

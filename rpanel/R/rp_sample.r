@@ -134,11 +134,15 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
             ggplot2::xlim(mu - sb, mu + sb) +
             ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, 0),
                                         limits = c(0, 2 * dmax)) +
-            ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                           axis.text.y  = ggplot2::element_blank(),
-                           axis.ticks.y = ggplot2::element_blank(),
-                           panel.grid.major.y = ggplot2::element_blank(),
-                           panel.grid.minor.y = ggplot2::element_blank())
+            ggplot2::ylab('density')
+         if (display == 'violin')
+            plt <- plt +
+               ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                              axis.text.y  = ggplot2::element_blank(),
+                              axis.ticks.y = ggplot2::element_blank(),
+                              panel.grid.major.y = ggplot2::element_blank(),
+                              panel.grid.minor.y = ggplot2::element_blank())
+         
          if (panel.interactive) print(plt) else panel$plt <- plt
       })
       

@@ -13,10 +13,9 @@ mean, representing the null hypothesis in a t-test.
 }
 
 \usage{
-rp.ttest <- function(x, y = NULL, mu = NULL,
-                     uncertainty = 'sample mean',
-                     scale = FALSE, col = '#86B875', refcol = '#E495A5',
-                     height = 0.2, refheight = 1.5 * height, seed, ...)
+rp.ttest(x, y = NULL, mu = NULL, uncertainty = 'sample mean',
+         scale = FALSE, col = '#86B875', refcol = '#E495A5',
+         height = 0.2, refheight = 1.5 * height, seed, ...)
 }
 
 \arguments{
