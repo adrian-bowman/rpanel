@@ -227,7 +227,6 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       }
    }
    
-   bw.norm <- function(x) sd(x) * (4/(3 * length(x)))^0.2
    panel.interactive <- panel
    if (is.na(hscale)) hscale <- 1
    if (is.na(vscale)) vscale <- hscale
@@ -338,3 +337,5 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    }
    
 }
+
+bw.norm <- function(x) sd(x) * (4/(3 * length(x)))^0.2

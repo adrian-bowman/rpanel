@@ -15,17 +15,17 @@ mean, representing the null hypothesis in a t-test.
 \usage{
 rp.ttest(x, y = NULL, mu = NULL, uncertainty = 'sample mean',
          scale = FALSE, col = '#86B875', refcol = '#E495A5',
-         height = 0.2, refheight = 1.5 * height, seed, ...)
+         height = 0.2, refheight = 1.5 * height, ...)
 }
 
 \arguments{
 \item{x}{a vector of data on a continuous scale.}
+\item{y}{an optional second vector of data on a continuous scale, to allow two-sample or paired-sample analyses.}
 \item{mu}{a numerical value representing a reference mean of interest, for
           example a null hypothesis in a formal test. This is the same parameter
           as \code{mu} in \code{t.test} but its default value is \code{NULL}
           so that a reference value will be display only if requested.}
-\item{violin}{a logical value which determines whether uncertainties are added
-in symmetric fashion, as in a violin plot.}
+\item{uncertainty}{a character value which controls the form of uncertainty to be displayed. Valid options are \code{'none'}, \code{'sample mean'} or \code{'reference'}.}
 \item{scale}{a logical value which determines whether a standard error scale is
              added to the plot.}
 \item{height}{the height of the uncertainty representation as a proportion of
@@ -36,11 +36,13 @@ in symmetric fashion, as in a violin plot.}
              in units of standard error.}
 \item{notchcol}{the col of the notches on the uncertainty representation.}
 \item{refcol}{the col of the reference line, when this is present.}
-\item{seed}{a seed which can be used to reproduce the jittering of y.}
+\item{...}{further named argument, which will be passed on to the \code{t.test} function. Useful arguments include \code{paired} and \code{var.equal} which both take logical values.}
 }
 
 \details{
-The graphics are created through the \pkg{ggplot2} package so this needs to be installed. If \code{data_plot} is set to \code{"sina"} then the \pkg{ggforce} packagfe is also required.
+The graphics are created through the \pkg{ggplot2} package so this needs to be installed. If \code{data_plot} is set to \code{"sina"} then the \pkg{ggforce} package is also required.
+
+The function aims to follow the pattern of the \code{t.test} function. However, not all options are available. For example, the formula style of input has not yet been implemented.]
 }
 
 \value{
