@@ -15,6 +15,8 @@ sleep_wide <- pivot_wider(sleep, values_from = extra, names_from = group,
                           names_prefix = 'drug_')
 sleep_diff <- with(sleep_wide, drug_2 - drug_1)
 
+rp.ttest(sleep_diff)
+
 for (display in c('histogram', 'density', 'violin')) {
   for (scl in c(FALSE, TRUE)) {
     rp.ttest(sleep_diff, uncertainty = 'none', display = display, scale = scl)
@@ -23,8 +25,6 @@ for (display in c('histogram', 'density', 'violin')) {
     rp.ttest(sleep_diff, uncertainty = 'reference', display = display, scale = scl)
   }
 }
-
-rp.ttest(sleep_diff)
 
 
 rp.ttest(sleep$extra[sleep$group == 2], sleep$extra[sleep$group == 1],
@@ -61,3 +61,4 @@ rp.ttest(x, y, var.equal = TRUE, seed = 6245)
 rp.ttest(x, y, seed = 6245) + ggplot2::coord_flip()
 
 # Allow a formula to be passed?
+

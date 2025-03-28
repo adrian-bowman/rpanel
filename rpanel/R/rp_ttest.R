@@ -1,7 +1,7 @@
 #     A function for a confidence interval and hypothesis test
 #     on two samples of data
 
-rp.ttest <- function(x, y = NULL, mu = NULL, display = 'histogram',
+rp.ttest <- function(x, y = NULL, mu = NULL, display = 'density',
                      uncertainty = 'sample mean',
                      scale = TRUE, col = '#86B875', refcol = '#E495A5',
                      xlab, ylab, ...) {
