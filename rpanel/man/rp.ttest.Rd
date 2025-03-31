@@ -13,8 +13,9 @@ mean, representing the null hypothesis in a t-test.
 }
 
 \usage{
-rp.ttest(x, y = NULL, mu = NULL, uncertainty = 'sample mean',
-         scale = FALSE, col = '#86B875', refcol = '#E495A5',
+rp.ttest(x, y = NULL, mu = NULL, display = 'density',
+         uncertainty = 'sample mean', scale = TRUE, zoom = FALSE,
+         col = '#86B875', refcol = '#E495A5',
          height = 0.2, refheight = 1.5 * height, ...)
 }
 
@@ -22,21 +23,29 @@ rp.ttest(x, y = NULL, mu = NULL, uncertainty = 'sample mean',
 \item{x}{a vector of data on a continuous scale.}
 \item{y}{an optional second vector of data on a continuous scale, to allow two-sample or paired-sample analyses.}
 \item{mu}{a numerical value representing a reference mean of interest, for
-          example a null hypothesis in a formal test. This is the same parameter
-          as \code{mu} in \code{t.test} but its default value is \code{NULL}
-          so that a reference value will be display only if requested.}
-\item{uncertainty}{a character value which controls the form of uncertainty to be displayed. Valid options are \code{'none'}, \code{'sample mean'} or \code{'reference'}.}
+            example a null hypothesis in a formal test. This is the same parameter
+            as \code{mu} in \code{t.test} but its default value is \code{NULL}
+            so that a reference value will be display only if requested.}
+\item{display}{a character value which controls the form of the data and
+            uncertainty displays. Valid options are \code{'histogram'},
+            \code{'density'} or \code{'violin'}.}
+\item{uncertainty}{a character value which controls the form of uncertainty to
+            be displayed. Valid options are \code{'none'}, \code{'sample mean'} or \code{'reference'}.}
 \item{scale}{a logical value which determines whether a standard error scale is
-             added to the plot.}
+            added to the plot.}
+\item{zoom}{a logical value which determines whether the plot contains only the 
+            uncertainty display.}
 \item{height}{the height of the uncertainty representation as a proportion of
-              the height of the plot.}
+            the height of the plot.}
 \item{mnheight}{the height of the lines marking mean values, when this is present.}
 \item{col}{the col of the uncertainty representation.}
 \item{notch}{the position of notches on the uncertainty representation,
-             in units of standard error.}
+            in units of standard error.}
 \item{notchcol}{the col of the notches on the uncertainty representation.}
 \item{refcol}{the col of the reference line, when this is present.}
-\item{...}{further named argument, which will be passed on to the \code{t.test} function. Useful arguments include \code{paired} and \code{var.equal} which both take logical values.}
+\item{...}{further named argument, which will be passed on to the \code{t.test}
+            function. Useful arguments include \code{paired} and
+            \code{var.equal} which both take logical values.}
 }
 
 \details{

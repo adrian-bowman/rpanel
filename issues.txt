@@ -3,16 +3,14 @@
 --------------------------------------------------------------
 
 rp.ttest
-  - fix the two sample case, putting the uncertainty beneath the two data plots.
+  - allow zoom: put sample mean and reference labels between data and uncertainty
+    in one sample case
+  - put more space between the data plots and the top of the white divider
+  - reduce the space under the uncertainty for the violin plot
+  - could the p-value or confidence level be shown without cluttering the plot?
   - one sample
-    - how should the distributions be scaled? Equal visual area to avoid visual
-      distraction?
-    - should a confidence be optionally shown?
-    - could the p-value be shown without cluttering the plot?
+    - problem with the horizontal range
     - also add binomial proportions?
-  - two samples
-    - marks on the distributions for 1:3 ses?
-
 
 rp.sample
   - do better with the number of bins? Sturges rule as in the nclass.Sturges function?

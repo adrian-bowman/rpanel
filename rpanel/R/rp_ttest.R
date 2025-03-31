@@ -2,8 +2,8 @@
 #     on two samples of data
 
 rp.ttest <- function(x, y = NULL, mu = NULL, display = 'density',
-                     uncertainty = 'sample mean',
-                     scale = TRUE, col = '#86B875', refcol = '#E495A5',
+                     uncertainty = 'sample mean', scale = TRUE, zoom = FALSE,
+                     col = '#86B875', refcol = '#E495A5',
                      xlab, ylab, ...) {
    
    if (!requireNamespace("ggplot2"))
@@ -21,18 +21,19 @@ rp.ttest <- function(x, y = NULL, mu = NULL, display = 'density',
              else if (!paired)    "Two"
              else                 "Paired"
    height <- c('data' = 0.25, 'uncertainty' = 0.15, 'mean' = 0.5)
-   if (missing(col)) {
-      col <- if (method == 'Two')
-         # col = c("#1FC8DEFF", "#F1CA3AFF", "#C1F334FF", "#BE2102FF"),
-         col = c(grey(0.5), grey(0.5), '#86B875', '#E495A5')
-         else col = '#86B875'
-   }
+   # if (missing(col)) {
+   #    col <- if (method == 'Two')
+   #       # col = c("#1FC8DEFF", "#F1CA3AFF", "#C1F334FF", "#BE2102FF"),
+   #       col = c(grey(0.5), grey(0.5), '#86B875', '#E495A5')
+   #       else col = '#86B875'
+   # }
+   if (missing(col))    col    <- '#86B875'
    if (missing(refcol)) refcol <- '#E495A5'
-   if (missing(xlab)) xlab <- deparse(substitute(x))
+   if (missing(xlab))   xlab <- deparse(substitute(x))
    ylab <- if ((method == 'Two') & missing(ylab)) deparse(substitute(y)) else NA
 
    plot.args <- list(scale = scale, col = col, refcol = refcol,
-                     height = height, display = display,
+                     height = height, display = display, zoom = zoom,
                      uncertainty = uncertainty, reference = reference,
                      xlab = xlab, ylab = ylab, nmin = 10, col.dens = 'grey75')
 
@@ -58,20 +59,21 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    # Set up the plot
    
    dens  <- density(x, bw = bw.norm(x))
-   rng   <- range(dens$x, mu - 4 * se, mu + 4 * se, mean(x) - 4 * se, mean(x) + 4 * se)
+   rng   <- range(mean(x) - 4 * se, mean(x) + 4 * se)
+   if (!plot.args$zoom) rng <- range(rng, dens$x)
+   if (plot.args$reference) rng <- range(rng, mu - 4 * se, mu + 4 * se)
    ticks <- if (display == 'violin') c(0, -1.5 * dmax) else c(0.5, -0.5) * dmax
    tind  <- if (uncertainty == 'none') 1 else 1:2
    dfrm  <- data.frame(x, gp = 1)
    plt <- ggplot2::ggplot(dfrm, ggplot2::aes(x, gp)) +
       ggplot2::theme(
-                     # axis.text.y        = ggplot2::element_blank(),
-                     axis.text.y        = element_text(angle = 90),
+                     axis.text.y        = ggplot2::element_text(angle = 90),
                      axis.ticks.y       = ggplot2::element_blank(),
                      axis.title.y       = ggplot2::element_blank(),
                      panel.grid.major.y = ggplot2::element_blank(),
                      panel.grid.minor.y = ggplot2::element_blank()) +
       ggplot2::scale_y_continuous(breaks = ticks[tind],
-                                  labels = c('data\n', 'uncertainty\nof the mean')[tind])
+                                  labels = c('data\n', 'uncertainty\nof the mean')[tind]) +
       ggplot2::xlim(rng[1], rng[2])
       
    
@@ -146,16 +148,14 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    if (plot.args$reference | (uncertainty == 'reference')) {
       plt  <- plt +
          ggplot2::annotate("segment", x = mu, xend = mu,
-                           y = linestart, yend =  1.05 * dmax, col = plot.args$refcol) +
+                           y = linestart, yend =  1.05 * dmax,
+                           col = plot.args$refcol) +
          ggplot2::annotate('text', x = mu, y = 1.15 * dmax, label = 'reference',
                            col = plot.args$refcol)
-         # ggplot2::scale_colour_manual(values = plot.args$refcol,
-         #                              labels = 'reference',
-         #                              guide  = ggplot2::guide_legend(title = NULL,
-         #                                                             position = "top"))
    }
    
    # Plot the uncertainty axis
+   
    if ((uncertainty != 'none') & plot.args$scale) {
       tpos <- cntr - (-4:4) * se
       mscl <- if (display == 'violin') dmax else 0.5 * dmax
@@ -164,8 +164,9 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
                            y = u.orig, yend = u.orig, col = 'grey25') +
          ggplot2::annotate("segment", x = tpos, xend = tpos,
                            y = u.orig, yend = u.orig - 0.05 * mscl, col = 'grey25') +
-         ggplot2::annotate("text",    x = cntr - c(-4, -2, 0, 2, 4) * se, col = 'grey25',
-                           y = u.orig - 0.15 * mscl, label = as.character(seq(-4, 4, by = 2))) +
+         ggplot2::annotate("text", x = cntr - c(-4, -2, 0, 2, 4) * se, col = 'grey25',
+                           y = u.orig - 0.15 * mscl,
+                           label = as.character(seq(-4, 4, by = 2))) +
          ggplot2::annotate("text",    x = cntr, col = 'grey25',
                            y = u.orig + 0.15 * mscl, label = 'standard error scale')
    }
@@ -190,145 +191,206 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
 
 rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
 
-   if (!requireNamespace('ggplot2', quietly = TRUE))
-      stop("the ggplot2 package is not available.")
-   
-   mns         <- ttest$estimate
-   reference   <- ttest$null.value
-   uncertainty <- plot.args$uncertainty
-   height      <- plot.args$height
-   col         <- plot.args$col
-   xlab        <- plot.args$xlab
-   ylab        <- plot.args$ylab
-
    # Ensure that x has values and y is a factor
    
+   xlab <- plot.args$xlab
+   ylab <- plot.args$ylab
+   xttl <- if (!is.numeric(y)) xlab else 'value'
    if (!is.numeric(x))
       stop('x must be numeric.')
    if (is.numeric(y)) {
       fac  <- factor(c(rep(xlab, length(x)),
-                       rep(ylab, length(y))))
+                       rep(ylab, length(y))), levels = c(xlab, ylab))
       x    <- c(x, y)
       y    <- fac
-      xlab <- 'value'
-      ylab <- 'groups'
    }
-   else if (is.character(y) | is.logical(y))
+   else if (is.character(y) | is.logical(y)) 
       y <- factor(y)
    else
-      stop('y must be character, logical or a factor.')
+      if (!is.factor(y)) stop('y must be character, logical or a factor.')
    if (length(x) != length(y))
       stop('x and y have different lengths.')
    if (nlevels(y) != 2)
       stop('y should have only two levels.')
    
    # formula case
-
-
-   # Plot the data
    
-   dfrm <- data.frame(x, y)
+   
+   # Setup
+
+   display     <- plot.args$display
+   mns         <- ttest$estimate
+   mu          <- ttest$null.value
+   uncertainty <- plot.args$uncertainty
+   height      <- plot.args$height
+   col         <- plot.args$col
+   col.dens    <- plot.args$col.dens
+   fn          <- function(x) density(x, bw = bw.norm(x))
+   dens        <- tapply(x, y, fn)
+   if (display == 'histogram') {
+      hst  <- tapply(x, y, hist, plot = FALSE)
+      fn   <- function(x) max(x$density)
+      dmax <- max(sapply(hst, fn))
+   }
+   else {
+      if (length(x) >= plot.args$nmin)
+         dmax <- max(dens[[1]]$y, dens[[2]]$y)
+      else {
+         fn   <- function(x) dnorm(0, 0, sd(x))
+         dmax <- max(tapply(x, y, fn))
+      }
+   }
+         
+   se      <- ttest$stderr
+   margin  <- if (display == 'violin') 0.7 * dmax else 0.35 * dmax
+   violadj <- if (display == 'violin') dmax else 0
+   orig    <- c(0, dmax + violadj + margin, -dmax - violadj - 3 * margin)
+   yticks  <- orig + 0.5 * (dmax - violadj)
+   ytind   <- if (uncertainty == 'none') 1:2 else 1:3
+   rng     <- range(dens[[1]]$x, dens[[2]]$x,
+                    mns[1] + mu - 4 * se, mns[1] + mu + 4 * se, mns - 4 * se, mns + 4 * se)
+   xlimits <- if (plot.args$zoom) range(mns[2] - 4 * se, mns[2] + 4 * se,
+                                        mns[1] + mu - 4 * se, mns[1] + mu + 4 * se)
+              else rng
+   ylimits <- if (plot.args$zoom) c(orig[3] - violadj - 1.5 * margin,
+                                    orig[1] - violadj - 0.75 * margin)
+              else c(orig[3] - violadj - 1.5 * margin,
+                     orig[2] + dmax    + 1.0 * margin)
+         
+   # Set up the plot
+   
+   dfrm <- data.frame(x, y = 0, gp = y)
    plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y)) +
-           ggplot2::ylab('groups')
-
-   if (requireNamespace('ggforce', quietly = TRUE))
-      plt <- plt +
-           ggforce::geom_sina(jitter_y = FALSE,
-                              maxwidth = 2 * plot.args$height['data'])
-   else
-      plt <- plt + ggplot2::geom_jitter(height = 0.2, width = 0)
-   plt <- plt +
-      ggplot2::geom_violin(scale = 'width', width = 0.5,
-                           col = NA, fill = 'grey75', alpha = 0.25)
+      ggplot2::theme(
+            axis.text.y        = ggplot2::element_text(angle = 90),
+            axis.ticks.y       = ggplot2::element_blank(),
+            axis.title.y       = ggplot2::element_blank(),
+            panel.grid.major.y = ggplot2::element_blank(),
+            panel.grid.minor.y = ggplot2::element_blank(),
+            panel.grid.major.x = ggplot2::element_blank(),
+            panel.grid.minor.x = ggplot2::element_blank()) +
+      ggplot2::scale_x_continuous(xttl, position = 'top', limits = xlimits,
+               sec.axis = ggplot2::sec_axis(transform =~ . - mns[1], name = "mean difference")) +
+      ggplot2::scale_y_continuous(breaks = yticks[ytind], expand = ggplot2::expansion(),
+                                  limits = ylimits,
+                                  labels = c(paste(xlab, '\n'), paste(ylab, '\n'),
+                                             'uncertainty\nof the mean')[ytind])
    
-   # Add the difference axis
-   drng.min <- min(ttest$estimate, ttest$estimate - 4 * ttest$stderr)
-   drng.max <- max(ttest$estimate, ttest$estimate + 4 * ttest$stderr)
-   ticks <- pretty(c(drng.min, drng.max) - mns[1])
-   plt <- plt +
-      ggplot2::annotate('segment', x    = min(ticks) + mns[1],
-                                   xend = max(ticks) + mns[1], y = 1.5) +
-      ggplot2::annotate('segment', x = ticks + mns[1], y = 1.5, yend = 1.47) +
-      ggplot2::annotate('text', x = ticks + mns[1], y = 1.46,
-                        label = as.character(ticks), vjust = 'top')
-      
+   # Plot the data
 
-   # If a reference is provided, plot this or the sample mean
+   for (i in 1:2) {
+      if (display == 'histogram') {
+         dfrm.h <- data.frame(x = mns[1], y = 0,
+                              xlo = rev(rev(hst[[i]]$breaks)[-1]), xhi = hst[[i]]$breaks[-1],
+                              ylo = orig[i], yhi = orig[i] + hst[[i]]$density)
+         plt <- plt +
+            ggplot2::geom_rect(ggplot2::aes(xmin = xlo, xmax = xhi, ymin = ylo, ymax = yhi),
+                               col = col.dens, fill = col.dens, data = dfrm.h)
+      }
+      else {
+         xi <- x[y == levels(y)[i]]
+         if (length(xi) >= plot.args$nmin) {
+            d.dens <- data.frame(xgrid = dens[[i]]$x, dgrid = orig[i] + dens[[i]]$y,
+                         lo = if (display == 'violin') orig[i] - dens[[i]]$y else orig[i])
+            dens.y <- approx(dens[[i]]$x, dens[[i]]$y, xout = xi)$y
+            plt <- plt +
+               ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0, ymin = lo, ymax = dgrid),
+                                    data = d.dens, col = NA, fill = col.dens, alpha = 0.25)
+         }
+         else
+            dens.y <- dnorm(xi, mean(xi), sd(xi))
+         sgn  <- if (display == 'violin') sign(rbinom(length(xi), 1, 0.5) - 0.5) else 1
+         d.densd <- data.frame(x = xi, y = orig[i] + sgn * runif(length(dens.y), 0, 1) * dens.y)
+         sz  <- if (length(x) >= plot.args$nmin) 0.2 else 1
+         plt <- plt +
+            ggplot2::geom_point(ggplot2::aes(x, y), data = d.densd, size = sz)
+      }
+   }
    
    # Plot the uncertainty
    
-   mns    <- tapply(x, y, mean, na.rm = TRUE)
-   dfrm <- data.frame(xpos = c(mns, mns[2], mns[1] + reference),
-                      ypos = c(1, 2, 1.5, 1.5), colcode = factor(1:4),
-                      labels = c(levels(y), 'difference', 'reference'))
-   dfrm <- dfrm[!is.na(dfrm$xpos), ]
-   plt  <- plt +
-      ggplot2::annotate('segment', x = mns, xend = mns,
-                        y = c(0.6, 1.5), yend = c(1.5, 2.4),
-                        col = col[2:3], linewidth = 1)
-   cntr  <- if (uncertainty == 'sample mean') diff(mns) else reference
-   cntr  <- c(mns, cntr + mns[1])
-   n     <- c(tapply(x, y, length), length(x))
-   sds   <- tapply(x, y, function(z) sd(z))
-   se    <- tapply(x, y, function(z) sd(z) / sqrt(length(z)))
-   sp    <- sqrt((sds[1]^2 * (n[1] - 1) + sds[2]^2 * (n[2] - 1)) / (n[1] + n[2] - 2))
-   se    <- c(se, sp * sqrt((1 / n[1] + 1 / n[2])))
-   fcol  <- if (uncertainty == 'sample mean') col[3] else col[4]
-   clab  <- if (uncertainty == 'sample mean') 'difference' else 'reference'
-   labels  <- c(levels(y), clab)
-   colcode <- factor(1:3)
-   fn <- function(cntr, se, n) {
-      rng   <- range(cntr - 4 * se, cntr + 4 * se)
-      ngrid <- 100
-      xgrid <- seq(rng[1], rng[2], length = ngrid)
-      dens  <- dt((xgrid - cntr) / se, n - 1)
-      list(xgrid, dens)
+   if (uncertainty != 'none') {
+      cntr    <- if (uncertainty == 'sample mean') mns[2] else mns[1] + mu
+      ucol    <- if (uncertainty == 'sample mean') plot.args$col else plot.args$refcol
+      clab    <- if (uncertainty == 'sample mean') 'sample mean uncertainty'
+                 else 'reference uncertainty'
+      ngrid   <- 100
+      xgrid   <- seq(cntr - 4 * se, cntr + 4 * se, length = ngrid)
+      dens    <- dt((xgrid - cntr) / se, length(x) - 1) / dt(0, length(x) - 1)
+      dgrd    <- data.frame(x = xgrid, y = 1, dens = dens)
+      plt <- plt +
+         ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0,
+                                           ymin = orig[3] - violadj * dens,
+                                           ymax = orig[3] + dmax * dens),
+                              data = dgrd, col = NA, fill = ucol)
    }
-   mat  <- mapply(fn, cntr, se, n)
-   hunc <- height['uncertainty']
-   dgrd <- data.frame(xgrid1 = mat[[1]],
-                      xgrid2 = mat[[3]],
-                      xgrid3 = mat[[5]],
-                      ymin1  = 1   - hunc * mat[[2]] / dt(0, n[3] - 1),
-                      ymin2  = 2   - hunc * mat[[4]] / dt(0, n[3] - 1),
-                      ymin3  = 1.5 - hunc * mat[[6]] / dt(0, n[3] - 1),
-                      ymax1  = 1   + hunc * mat[[2]] / dt(0, n[3] - 1),
-                      ymax2  = 2   + hunc * mat[[4]] / dt(0, n[3] - 1),
-                      ymax3  = 1.5 + hunc * mat[[6]] / dt(0, n[3] - 1))
-   plt   <- plt +
-      ggplot2::geom_ribbon(ggplot2::aes(x = xgrid3, y = 1.5,
-                                        ymin = ymin3, ymax = ymax3),
-                           fill = fcol, alpha = 0.7, data = dgrd)
-   if (!is.null(reference) & !is.na(reference)) {
-      label <- if (uncertainty == 'sample mean') 'reference' else 'difference'
-      clr   <- if (uncertainty == 'sample mean') col[4] else col[3]
-      cntr  <- if (uncertainty == 'sample mean') reference else diff(mns)
-      cntr  <- cntr + mns[1]
-   }
+   
+   # Plot the sample means
+   
+   linestart <- orig[1:2] + dmax + 0.25 * margin
+   lineend   <- orig[1] - violadj - 0.25 * margin
+   plt <- plt +
+      ggplot2::annotate("segment", x = mns, xend = mns,
+                        y = linestart, yend = lineend, col = 'grey25') +
+      ggplot2::annotate('text', x = mns, y = linestart + 0.25 * margin,
+                        label = paste('sample mean (', c(xlab, ylab), ')', sep = ''),
+                        col = 'grey25') +
+      ggplot2::annotate('rect', xmin = -Inf, xmax = Inf,
+                        ymin = lineend - 0.5 * margin, ymax = lineend,
+                        col = NA, fill = 'white') +
+      ggplot2::annotate("segment", x = mns[1], xend = mns[1],
+                        y = lineend - 0.5 * margin, yend = -Inf, col = 'white')
+      # ggplot2::annotate("segment", x = mns[2], xend = mns[1],
+      #                   y    = orig[1] - violadj + 0.25 * margin,
+      #                   yend = orig[3] - violadj - 1.5  * margin, col = 'white') +
       
-   # Plot the uncertainty axis
-   if (plot.args$scale & (uncertainty != 'none')) {
-      scale.fn <- function(plt, cntr, se, col, ypos, ht) {
-         rng  <- range(cntr - 4 * se, cntr + 4 * se)
-         tpos <- cntr - (-4:4) * se
-         plt +
-            ggplot2::annotate("segment", x = min(tpos), xend = max(tpos),
-                              y = ypos, yend = ypos, col = col) +
-            ggplot2::annotate("segment", x = tpos, xend = tpos, col = col,
-                              y = ypos, yend = ypos - 0.2 * ht) +
-            ggplot2::annotate("text",    x = cntr - c(-4, -2, 0, 2, 4) * se,
-                              y = ypos - 0.5 * ht,
-                              label = as.character(seq(-4, 4, by = 2)),
-                              col = col)
-      }
-      htu  <- height['uncertainty']
-      plt  <- scale.fn(plt, mns[1], se[1], col[1], 1 - 1.2 * htu, htu)
-      plt  <- scale.fn(plt, mns[2], se[2], col[2], 2 - 1.2 * htu, htu)
-      cntr <- if (uncertainty == 'sample mean') diff(mns) else reference
-      plt  <- scale.fn(plt, cntr + mns[1], se[3], fcol, 3 - 1.2 * htu, htu)
-      plt
-   }
+      # ggplot2::annotate('text', x = mns, y = orig[1] - violadj + 0.5 * margin,
+      #                   label = paste('sample mean (', c(xlab, ylab), ')', sep = ''),
+      #                   col = 'grey25')
+      
+   # Plot the sample mean difference
+   
+   ly <- orig[1] - violadj - 0.75 * margin
+   plt  <- plt +
+      ggplot2::annotate("segment", x = mns[2], xend = mns[2],
+                        y = ly, yend = ly - 0.4 * margin, col = plot.args$col) +
+      ggplot2::annotate("segment", x = mns[2], xend = mns[2],
+                        y = ly - 1.1 * margin, yend = -Inf, col = plot.args$col) +
+      ggplot2::annotate('text', x = mns[2], y = ly - 0.75 * margin,
+                        label = 'sample mean difference', col = plot.args$col)
 
+   # Plot the reference, if requested
+   
+   if (plot.args$reference | (uncertainty == 'reference')) {
+      plt  <- plt +
+         ggplot2::annotate("segment", x = mns[1] + mu, xend = mns[1] + mu,
+                           y = ly - 1.6 * margin, yend = -Inf,
+                           col = plot.args$refcol) +
+         ggplot2::annotate('text', x = mns[1] + mu, y = ly - 1.25 * margin,
+                           label = 'reference', col = plot.args$refcol)
+   }
+   
+   # Plot the uncertainty axis
+   
+   if ((uncertainty != 'none') & plot.args$scale) {
+      tpos <- cntr + (-4:4) * se
+      dscl <- if (display == 'violin') dmax else 0.5 * dmax
+      acol <- 'grey25'
+      plt  <- plt +
+         ggplot2::annotate("segment", x = min(tpos), xend = max(tpos),
+                           y = orig[3], yend = orig[3], col = acol) +
+         ggplot2::annotate("segment", x = tpos, xend = tpos,
+                              y = orig[3], yend = orig[3] - 0.1 * dscl,
+                           col = acol) +
+         ggplot2::annotate("text", x = cntr - c(-4, -2, 0, 2, 4) * se,
+                           y = orig[3] - 0.15 * dscl,
+                           vjust = 'top', label = as.character(seq(-4, 4, by = 2)),
+                           col = acol) +
+         ggplot2::annotate("text",  x = cntr, y = orig[3] + 0.15 * dscl,
+                           col = acol, vjust = 'bottom',
+                           label = 'standard error scale')
+   }
+   
    print(plt)
    plt
 }
