@@ -67,7 +67,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    dfrm  <- data.frame(x, gp = 1)
    plt <- ggplot2::ggplot(dfrm, ggplot2::aes(x, gp)) +
       ggplot2::theme(
-                     axis.text.y        = ggplot2::element_text(angle = 90),
+                     axis.text.y        = ggplot2::element_text(angle = 90, vjust = 0.5),
                      axis.ticks.y       = ggplot2::element_blank(),
                      axis.title.y       = ggplot2::element_blank(),
                      panel.grid.major.y = ggplot2::element_blank(),
@@ -79,35 +79,37 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    # Plot the data
    
-   if (display == 'histogram') {
-      plt <- plt +
-         ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
-                                 breaks = hst$breaks, col = col.dens, fill = col.dens)
-   }
-   else {
-      orig <- 0
-      sgn  <- if (display == 'violin') sign(rbinom(length(x), 1, 0.5) - 0.5)
-              else 1
-      if (length(x) >= plot.args$nmin) {
-         d.dens <- data.frame(xgrid = dens$x, dgrid = dens$y)
-         dmax   <- max(dens$y)
-         dens.y <- approx(dens$x, dens$y, xout = x)$y
-         dr.lo  <- if (display == 'violin') orig - d.dens$dgrid else 0
+   if (!plot.args$zoom) {
+      if (display == 'histogram') {
          plt <- plt +
-            ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0,
-                                              ymin = dr.lo,
-                                              ymax = orig + dgrid),
-                                 data = d.dens, col = NA, fill = col.dens, alpha = 0.25)
+            ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
+                                    breaks = hst$breaks, col = col.dens, fill = col.dens)
       }
       else {
-         dens.y <- dnorm(x, mean(x), sd(x))
-         dmax   <- dnorm(0, mean(x), sd(x))
+         orig <- 0
+         sgn  <- if (display == 'violin') sign(rbinom(length(x), 1, 0.5) - 0.5)
+                 else 1
+         if (length(x) >= plot.args$nmin) {
+            d.dens <- data.frame(xgrid = dens$x, dgrid = dens$y)
+            dmax   <- max(dens$y)
+            dens.y <- approx(dens$x, dens$y, xout = x)$y
+            dr.lo  <- if (display == 'violin') orig - d.dens$dgrid else 0
+            plt <- plt +
+               ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0,
+                                                 ymin = dr.lo,
+                                                 ymax = orig + dgrid),
+                                    data = d.dens, col = NA, fill = col.dens, alpha = 0.25)
+         }
+         else {
+            dens.y <- dnorm(x, mean(x), sd(x))
+            dmax   <- dnorm(0, mean(x), sd(x))
+         }
+         d.densd <- data.frame(x = x, d = dens.y, sgn = sgn, r = runif(length(dens.y), 0, 1))
+         sz  <- if (length(x) >= plot.args$nmin) 0.2 else 1
+         plt <- plt +
+            ggplot2::geom_point(ggplot2::aes(x, orig + sgn * r * d),
+                                data = d.densd, size = sz)
       }
-      d.densd <- data.frame(x = x, d = dens.y, sgn = sgn, r = runif(length(dens.y), 0, 1))
-      sz  <- if (length(x) >= plot.args$nmin) 0.2 else 1
-      plt <- plt +
-         ggplot2::geom_point(ggplot2::aes(x, orig + sgn * r * d),
-                             data = d.densd, size = sz)
    }
    
    # Plot the uncertainty
@@ -137,10 +139,11 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    # Plot the sample mean
    
    linestart <- if (display == 'violin') -3.4 * dmax else -1.4 * dmax
+   lineend   <- if (plot.args$zoom) u.orig + 1.1 * dmax else 1.25 * dmax
    plt <- plt +
       ggplot2::annotate("segment", x = ttest$estimate, xend = ttest$estimate,
-                        y = linestart, yend =  1.25 * dmax, col = plot.args$col) +
-      ggplot2::annotate('text', x = ttest$estimate, y = 1.35 * dmax,
+                        y = linestart, yend = lineend, col = plot.args$col) +
+      ggplot2::annotate('text', x = ttest$estimate, y = lineend + 0.1 * dmax,
                         label = 'sample mean', col = plot.args$col)
    
    # Plot reference if requested
@@ -247,14 +250,21 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    orig    <- c(0, dmax + violadj + margin, -dmax - violadj - 3 * margin)
    yticks  <- orig + 0.5 * (dmax - violadj)
    ytind   <- if (uncertainty == 'none') 1:2 else 1:3
-   rng     <- range(dens[[1]]$x, dens[[2]]$x,
-                    mns[1] + mu - 4 * se, mns[1] + mu + 4 * se, mns - 4 * se, mns + 4 * se)
-   xlimits <- if (plot.args$zoom) range(mns[2] - 4 * se, mns[2] + 4 * se,
-                                        mns[1] + mu - 4 * se, mns[1] + mu + 4 * se)
-              else rng
-   ylimits <- if (plot.args$zoom) c(orig[3] - violadj - 1.5 * margin,
-                                    orig[1] - violadj - 0.75 * margin)
-              else c(orig[3] - violadj - 1.5 * margin,
+   # xlimits <- range(dens[[1]]$x, dens[[2]]$x,
+   #                  mns[1] + mu - 4 * se, mns[1] + mu + 4 * se, mns - 4 * se, mns + 4 * se)
+   xlimits <- range(mns[2] - 4 * se, mns[2] + 4 * se)
+   if (!plot.args$zoom)
+      xlimits <- range(xlimits, dens[[1]]$x, dens[[2]]$x)
+   if (plot.args$reference)
+      xlimits <- range(xlimits, mns[1] + mu - 4 * se, mns[1] + mu + 4 * se)
+   if (uncertainty == 'reference')
+      xlimits <- range(xlimits, mns[1] + mu - 4 * se, mns[1] + mu + 4 * se)
+   # xlimits <- if (plot.args$zoom) range(mns[2] - 4 * se, mns[2] + 4 * se,
+   #                                      mns[1] + mu - 4 * se, mns[1] + mu + 4 * se)
+   #            else rng
+   ylimits <- if (plot.args$zoom) c(orig[3] - 0.25 * violadj - 1.5 * margin,
+                                    orig[1] - violadj - 1.15 * margin)
+              else c(orig[3] - 0.25 * violadj - 1.5 * margin,
                      orig[2] + dmax    + 1.0 * margin)
          
    # Set up the plot
@@ -262,20 +272,29 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    dfrm <- data.frame(x, y = 0, gp = y)
    plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y)) +
       ggplot2::theme(
-            axis.text.y        = ggplot2::element_text(angle = 90),
+            axis.text.y        = ggplot2::element_text(angle = 90, vjust = 0.5),
             axis.ticks.y       = ggplot2::element_blank(),
             axis.title.y       = ggplot2::element_blank(),
             panel.grid.major.y = ggplot2::element_blank(),
             panel.grid.minor.y = ggplot2::element_blank(),
             panel.grid.major.x = ggplot2::element_blank(),
             panel.grid.minor.x = ggplot2::element_blank()) +
-      ggplot2::scale_x_continuous(xttl, position = 'top', limits = xlimits,
-               sec.axis = ggplot2::sec_axis(transform =~ . - mns[1], name = "mean difference")) +
       ggplot2::scale_y_continuous(breaks = yticks[ytind], expand = ggplot2::expansion(),
                                   limits = ylimits,
                                   labels = c(paste(xlab, '\n'), paste(ylab, '\n'),
                                              'uncertainty\nof the mean')[ytind])
-   
+   if (!plot.args$zoom) plt <- plt + 
+      ggplot2::scale_x_continuous(xttl, position = 'top', limits = xlimits,
+                                  sec.axis = ggplot2::sec_axis(transform = ~ . - mns[1],
+                                                               name = "mean difference"))
+   else plt <- plt +
+      ggplot2::scale_x_continuous(position = 'top', limits = xlimits,
+                                  sec.axis = ggplot2::sec_axis(transform = ~ . - mns[1],
+                                                               name = "mean difference")) +
+      ggplot2::theme(axis.text.x.top  = ggplot2::element_blank(),
+                     axis.ticks.x.top = ggplot2::element_blank(),
+                     axis.title.x.top = ggplot2::element_blank())
+      
    # Plot the data
 
    for (i in 1:2) {

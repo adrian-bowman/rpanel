@@ -3,14 +3,9 @@
 --------------------------------------------------------------
 
 rp.ttest
-  - allow zoom: put sample mean and reference labels between data and uncertainty
-    in one sample case
-  - put more space between the data plots and the top of the white divider
-  - reduce the space under the uncertainty for the violin plot
+  - put more space between the data plots and the top of the white divider?
   - could the p-value or confidence level be shown without cluttering the plot?
-  - one sample
-    - problem with the horizontal range
-    - also add binomial proportions?
+  - add binomial proportions?
 
 rp.sample
   - do better with the number of bins? Sturges rule as in the nclass.Sturges function?
@@ -23,6 +18,7 @@ rp.sample
     to match those when ggplot = TRUE.
 
 rp.lmsmall
+  - rename as rp.lm_small
   - plot a line rather than a point when there is only one df and one term?
   - set panel=FALSE by default, except for simple regression?
   - curtail infinity in drop1 distributions

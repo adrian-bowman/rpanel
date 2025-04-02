@@ -65,8 +65,9 @@ display <- 'density'
 display <- 'violin'
 rp.ttest(x, y)
 rp.ttest(x, y, display = display, uncertainty = 'none')
-rp.ttest(x, y, display = display)
+rp.ttest(x, y, display = display, zoom = TRUE)
 rp.ttest(x, y, mu = 0, display = display)
+rp.ttest(x, y, mu = 0, display = display, zoom = TRUE)
 rp.ttest(x, y, display = display, seed = 6245)
 rp.ttest(x, y, uncertainty = 'reference', display = display, seed = 6245)
 rp.ttest(x, y, uncertainty = 'reference', mu = 1, , display = display, seed = 6245)
