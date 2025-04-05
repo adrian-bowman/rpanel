@@ -3,9 +3,6 @@
 --------------------------------------------------------------
 
 rp.ttest
-  - make the hjust adjustments into a function and apply this to se scale and
-    individual sample means in the two sample case.
-  - put more space between the data plots and the top of the white divider?
   - could the p-value or confidence level be shown without cluttering the plot?
   - add binomial proportions?
 

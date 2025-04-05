@@ -1,9 +1,9 @@
 #     A general function for linear models
 
-rp.lmsmall <- function(x, ylab, xlab, zlab, ci = TRUE,
-                       panel = FALSE, panel.plot = TRUE,
-                       hscale = 1, vscale = hscale,
-                       display, omit, residuals.showing, ...) {
+rp.lm_small <- function(x, ylab, xlab, zlab, ci = TRUE,
+                        panel = FALSE, panel.plot = TRUE,
+                        hscale = 1, vscale = hscale,
+                        display, omit, residuals.showing, ...) {
    
    if (missing(display)) display <- NULL
    if (missing(omit))    omit    <- NULL
