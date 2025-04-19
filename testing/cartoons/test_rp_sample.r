@@ -3,16 +3,16 @@
 library(rpanel)
 if (reinstall) devtools::install("rpanel")
 
-rp.sample()
+rp.sample(5, 0.4, 25)
 rp.sample(display = 'violin')
 rp.sample(ggplot = FALSE)
 
 result <- rp.sample(panel = FALSE)
-result <- rp.sample(panel = FALSE, display.sample = c('+/- 2 st.dev.' = TRUE))
+result <- rp.sample(panel = FALSE, display.sample = c('st.dev. scale' = TRUE))
 result <- rp.sample(panel = FALSE,
-                    display.sample = c('mean' = TRUE, '+/- 2 st.dev.' = TRUE))
+                    display.sample = c('mean' = TRUE, 'st.dev. scale' = TRUE))
 result <- rp.sample(panel = FALSE, display = 'density',
-                    display.sample = c('mean' = TRUE, '+/- 2 st.dev.' = TRUE,
+                    display.sample = c('mean' = TRUE, 'st.dev. scale' = TRUE,
                                        'population' = TRUE),
                     display.mean = c('sample mean' = TRUE))
 print(result$data)
@@ -36,6 +36,8 @@ ggplot2::ggplot(dfrm, aes(x, y)) +
 rp.sample(hscale = 1.5)
 
 # Radioactivity in samples
+# Background radiation is usually less than one Becquerel (counts per second)
+# this should be a Poisson distribution!
 rp.sample(4.7, 0.35, 73)
 
 
@@ -45,3 +47,21 @@ abline(h = 1:length(ind), col = colors()[ind])
 
 # Check out the old style function
 rp.sample(style = 'old')
+
+# Use with panel = FALSE
+library(ggplot2)
+thm <- theme(axis.text  = element_text(size = 20),
+             axis.title = element_text(size = 20),
+             plot.title = element_text(size = 22))
+result <- rp.sample(n = 25, nbins = 10, display.sample = c(mean = TRUE), 
+                    display.mean = c('sample mean' = TRUE), panel = FALSE)
+print(result)
+result <- rp.sample(n = 25, nbins = 10, nsim = 8, display.sample = c(mean = TRUE), 
+                    display.mean = c('sample mean' = TRUE, accumulate = TRUE), panel = FALSE)
+print(result)
+result <- rp.sample(n = 25, nbins = 10, nsim = 25, display.sample = c(mean = TRUE), 
+                    display.mean = c('sample mean' = TRUE, 'accumulate' = TRUE),
+                    panel = FALSE)
+print(result)
+result$sample + thm + ggtitle('Sample size: 25')
+result$mean

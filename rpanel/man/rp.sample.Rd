@@ -10,21 +10,25 @@ Plots sample from a normal distribution to illustrate the variation which result
 
 \usage{
 rp.sample(mu = 0, sigma = 1, n = 25,
-          ggplot = TRUE, display = 'histogram',
-          panel.plot = TRUE, hscale = NA, vscale = hscale, pause = 0.01)
+          ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
+          display, display.sample, display.mean,
+          nsim = 50, show.out.of.range = TRUE,
+          hscale = NA, vscale = hscale, pause = 0.01)
 }
 
 \arguments{
 \item{mu}{the mean of the normal distribution from which samples are taken.}
 \item{sigma}{the standard deviation of the normal distribution.}
 \item{n}{the size of the sample.}
-\item{ggplot}{a logical value which determines whether the \code{ggplot2} package is used to create the graphical displays. When this argument is set to \code{FALSE}, or when the \code{ggplot2} package is not available, standard graphics are used. In this case the display options are simpler, along the lines of the function provided in version 1.1-5 of the package.}
+\item{ggplot}{a logical value which determines whether the \code{ggplot2} package is used to create the graphical displays. When this argument is set to \code{FALSE}, or when the \code{ggplot2} package is not available, standard graphics are used with simpler display options, along the lines of the function provided in version 1.1-5 of the package.}
 \item{panel}{a logical value which determines whether the function runs in interactive mode. See Details.}
-\item{nbins}{an integer value which sets the number of bins used in histograms.}
+\item{nbins}{an integer value which sets the number of bins used in the data histograms.}
+\item{nbins.mean}{an integer value which sets the number of bins used in the histogram of the sample means.}
 \item{display}{a logical value which determines the form of graphical display used initially or in non-interactive mode. Possible values are \code{'histogram'} (the default), \code{'density'} or \code{'violin'}.}
-\item{display.sample}{a logical value which controls options for graphical display of the data, used initially or in non-interactive mode. See Details.}
-\item{display.sample}{a logical value which controls options for graphical display of the sample means, used initially or in non-interactive mode. See Details.}
+\item{display.sample}{a logical vector which controls options for graphical display of the data, used initially or in non-interactive mode. See Details.}
+\item{display.mean}{a logical vector which controls options for graphical display of the sample means, used initially or in non-interactive mode. See Details.}
 \item{nsim}{an integer value which the number of accumulated mean values which are plotted when the function runs in non-interactive mode. See Details.}
+\item{show.out.of.range}{a logical value which controls whether observations lying beyond 3 standard deviations (for samples) or 3 standard errors (for sample means) are indicated. The scales of the plots are fixed at 3 standard deviations above and below the mean so that the axes are fixed for all samples.}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
 \item{pause}{a time delay, in seconds, for the insertion of components into the control panel. The speed of some computing systems can create a panel which does not expand in time to contain all its components. The \code{pause} argument adds a short delay to each component to avoid this.}
 }
@@ -36,7 +40,7 @@ When the size of the sample is less than 10, a histogram or density estimate is 
 
 When \code{display} is set to \code{'density'} or \code{'violin'}, individual points are plotted, with a random vertical position. This is suppressed when the number of points exceeds 5000.
 
-The \code{display.data} and \code{display.mean} arguments control the details of what is displayed initially and, more usefully, when the function operates in non-interactive mode. Each argument is a logical vector with named values. \code{display.data} has the default setting \code{c(data = TRUE, population = FALSE, mean = FALSE, '+/- 2 st.dev.' = FALSE)} while the default for \code{display.mean} is \code{c('sample mean' = FALSE, 'accumulate' = FALSE, '+/- 2 se' = FALSE, 'distribution' = FALSE)}. Any elements of these arguments which are not explicitly identified are set to the default values.
+The \code{display.sample} and \code{display.mean} arguments control the details of what is displayed initially and, more usefully, when the function operates in non-interactive mode. Each argument is a logical vector with named values. \code{display.sample} has the default setting \code{c(data = TRUE, population = FALSE, mean = FALSE, 'st.dev. scale' = FALSE)} while the default for \code{display.mean} is \code{c('sample mean' = FALSE, 'accumulate' = FALSE, 'se scale' = FALSE, 'distribution' = FALSE)}. Any elements of these arguments which are not explicitly identified are set to the default values.
 
 The principal use of the function is in interactive mode, when \code{panel} is set to \code{TRUE}. If \code{panel} is set to \code{FALSE} then interactive mode is switched off. In this case, if the \code{ggplot2} package is available and the \code{ggplot} argument is set to \code{TRUE}, the function returns plots of a sample of data and of accumulated means as components \code{plotdata} and \code{plotmean} of the returned object. The number of accumulated means is set by the \code{nsim} argument.
 
@@ -44,7 +48,7 @@ The visual effect of the animation is assisted by holding the axes constant.  Th
 }
 
 \value{
-When the function operates in inteactive mode, with \code{panel} set to \code{TRUE}, nothing is returned. When \code{panel} is set to \code{FALSE}, plots of a sample of data and of accumulated means are provided as components \code{plotdata} and \code{plotmean} of the returned object.
+When the function operates in inteactive mode, with \code{panel} set to \code{TRUE}, nothing is returned. When \code{panel} is set to \code{FALSE}, plots of a sample of data and of accumulated means are provided as components \code{sample} and \code{mean} of the returned object.
 }
 
 \references{

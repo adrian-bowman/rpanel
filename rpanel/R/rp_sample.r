@@ -1,6 +1,7 @@
 rp.sample <- function(mu = 0, sigma = 1, n = 25,
-                      ggplot = TRUE, panel = TRUE, nbins = 30,
+                      ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
+                      show.out.of.range = TRUE,
                       hscale = NA, vscale = hscale, pause = 0.01) {
 
    if (ggplot & !requireNamespace('ggplot2', quietly = TRUE)) {
@@ -15,7 +16,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    sample.draw <- function(panel) {
       
       mu       <- panel$pars["mu"]
-      n        <- panel$pars["n"]
+      n        <- panel$samplesize
       col.pars <- 'darkblue'
       col.dens <- 'grey75'
       
@@ -25,14 +26,15 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
             plt <- ggplot2::ggplot() +
                    ggplot2::theme(panel.background = ggplot2::element_rect(fill = 'white',
                                                                            colour = 'white'))
-            print(plt)
+            if (panel.interactive) print(plt)
+            else panel$plt <- plt
             return(panel)
          }
 
          y        <- if (plot.mean) mns else ydata
          dmax     <- if (plot.mean) dmax.mean else dmax.data
          mu       <- pars['mu']
-         stdev    <- if (plot.mean) pars['sigma'] / sqrt(pars['n'])
+         stdev    <- if (plot.mean) pars['sigma'] / sqrt(n)
                                else pars['sigma']
          df.dens  <- if (plot.mean) d.mdens  else d.dens
          df.densd <- if (plot.mean) d.mdensd else d.densd
@@ -44,30 +46,39 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
          if ((!plot.mean && display.sample['data']) |
              (plot.mean && display.mean['sample mean'])) {
             
-            # Mark observations outside the scale of the histogram
-            # ind <- which(hst$density > usr[4])
-            # if (length(ind) > 0)
-            #    segments(hst$breaks[ind], usr[4], hst$breaks[ind + 1], usr[4], col = "red", lwd = 3)
-            # ind <- any(hst$density > 0 & hst$breaks[-1] < usr[1])
-            # if (ind) segments(usr[1], 0, usr[1], usr[4], col = "red", lwd = 3)
-            # ind <- any(hst$density > 0 & hst$breaks[-length(hst$breaks)] > usr[2])
-            # if (ind) segments(usr[2], 0, usr[2], usr[4], col = "red", lwd = 3)
-
-            # if (display.sample["population"])
-            #    plt <- plt + ggplot2::geom_function(fun = dnorm, args = list(mean = mu, sd = sigma),
-            #                                        linewidth = 1, col = col.pars)
-               # plt <- plt + ggplot2::geom_segment(x = mu - 2 * sigma, xend = mu + 2 * sigma,
-               #                                    y = 0.8 / sigma,
-               #                                    col = col.pars,
-               #                                    arrow = ggplot2::arrow(ends = 'both',
-               #                                            length = grid::unit(0.1, "inches")))
-
             if (length(y) >= nmin) {
                if (display == 'histogram') {
-                  brks <- seq(mu - 3 * stdev, mu + 3 * stdev, length = nbins)
-                     plt  <- plt +
-                        ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
-                                                breaks = brks, col = 'grey50', fill = col.dens)
+                  nb   <- if (plot.mean) nbins.mean else nbins
+                  # brks <- seq(mu - 3 * stdev, mu + 3 * stdev, length = nb + 1)
+                  # plt <- plt +
+                  #    ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
+                  #                            breaks = brks, col = 'grey50', fill = col.dens)
+                  low   <- which(y < mu - 3 * stdev)
+                  high  <- which(y > mu + 3 * stdev)
+                  nlow  <- length(low)
+                  nhigh <- length(high)
+                  wdth  <- 6 * stdev / nb
+                  nblo  <- ceiling((mu - min(y)) / wdth)
+                  nbhi  <- ceiling((max(y) - mu) / wdth)
+                  lo.b  <- min(mu - 3 * stdev, mu - nblo * wdth)
+                  hi.b  <- max(mu + 3 * stdev, mu + nbhi * wdth)
+                  brks  <- seq(lo.b, hi.b, by = wdth)
+                  brks[1] <- brks[1] - wdth / 10
+                  brks[length(brks)] <- brks[length(brks)] + wdth / 100
+                  hst   <- hist(y, breaks = brks, plot = FALSE)
+                  ind   <- (hst$breaks[-length(hst$breaks)] < mu - 3 * stdev) |
+                           (hst$breaks[-1] > mu + 3 * stdev)
+                  dfrm  <- data.frame(x = hst$breaks[-1][!ind] - wdth / 2, y = hst$density[!ind])
+                  plt <- plt + ggplot2::geom_col(ggplot2::aes(x, y),
+                                        width = wdth, col = 'black', fill = 'grey', data = dfrm)
+                  if (show.out.of.range) {
+                     if (nlow > 0) plt <- plt + ggplot2::annotate('text', angle = 90,
+                                                   x = mu - 3 * stdev, y = 0.75 * dmax,
+                                                   label = paste(nlow, 'observations lower'))
+                     if (nhigh > 0) plt <- plt + ggplot2::annotate('text', angle = 90,
+                                                   x = mu + 3 * stdev, y = 0.75 * dmax,
+                                                   label = paste(nhigh, 'observations higher'))
+                  }
                }
                if (display %in% c('density', 'violin'))
                   plt <- plt +
@@ -82,7 +93,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
             }
             if ((length(y) < nmin) | ((display != 'histogram') & (length(y) <= nmax))) {
                dsgn <- if (display == 'violin') df.densd$sgn else 1
-               sz   <- if (length(y) >= nmin) 0.2 else 1
+               sz   <- if (length(y) >= nmin) 0.2 else 2
                plt <- plt +
                   ggplot2::geom_point(ggplot2::aes(x, orig + dsgn * r * scl * d),
                                       data = df.densd, size = sz)
@@ -111,8 +122,8 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
                                  label = 'mean', col = col.pars)
          }
          
-         if ((!plot.mean && display.sample['+/- 2 st.dev.']) |
-             ( plot.mean && display.mean['+/- 2 se'])) {
+         if ((!plot.mean && display.sample['st.dev. scale']) |
+             ( plot.mean && display.mean['se scale'])) {
             ypos <- 1.75 * dmax
             tpos <- mu + (-3:3) * stdev
             txt  <- if (plot.mean) 'standard error scale' else 'standard deviation scale'
@@ -129,12 +140,14 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
          }
          
          # Set axes ranges, allowing for zoom in
-         sb  <- if (plot.mean & zoom) 3.5 * stdev else 3 * pars['sigma']
+         sb  <- if (plot.mean & display.mean['zoom']) 3.5 * stdev else 3 * pars['sigma']
          plt <- plt +
             ggplot2::xlim(mu - sb, mu + sb) +
             ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, 0),
                                         limits = c(0, 2 * dmax)) +
             ggplot2::ylab('density')
+         
+         # Remove y axis information for the violin plot
          if (display == 'violin')
             plt <- plt +
                ggplot2::theme(axis.title.y = ggplot2::element_blank(),
@@ -142,6 +155,14 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
                               axis.ticks.y = ggplot2::element_blank(),
                               panel.grid.major.y = ggplot2::element_blank(),
                               panel.grid.minor.y = ggplot2::element_blank())
+         
+         # Add title
+         ttl <- 'Sample'
+         if (plot.mean) {
+            ttl <- paste(ttl, 'mean')
+            if (length(y) > 1) ttl <- paste(ttl, 's', sep = '')
+         }
+         plt <- plt + ggplot2::ggtitle(ttl)
          
          if (panel.interactive) print(plt) else panel$plt <- plt
       })
@@ -152,14 +173,14 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    sample.draw.data <- function(panel) {
       panel$plot.mean <- FALSE
       rp.control.put(panel$panelname, panel)
-      rp.do(panel, sample.draw)
+      panel <- sample.draw(panel)
       panel
    }
    
    sample.draw.mean <- function(panel) {
       panel$plot.mean <- TRUE
       rp.control.put(panel$panelname, panel)
-      rp.do(panel, sample.draw)
+      panel <- sample.draw(panel)
       panel
    }
    
@@ -171,15 +192,16 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    
    sample.changepars <- function(panel) {
       panel$mns <- NULL
-      rp.control.put(panel$panelname, panel)
-      rp.do(panel, sample.new)
+      panel$samplesize <- as.numeric(panel$samplesize)
+      # rp.control.put(panel$panelname, panel)
+      panel <- sample.new(panel)
       panel
    }
 
    sample.new <- function(panel) {
       mu              <- panel$pars["mu"]
       sigma           <- panel$pars["sigma"]
-      n               <- panel$pars["n"]
+      n               <- panel$samplesize
       panel$dmax.data <- dnorm(mu, mu, sigma)
       panel$dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
       panel$ydata     <- rnorm(n, mu, sigma)
@@ -196,8 +218,8 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       sgn             <- sign(rbinom(length(panel$ydata), 1, 0.5) - 0.5)
       panel$d.densd   <- data.frame(x = panel$ydata, d = dens.y,
                                     r = runif(length(dens.y), 0, 1), sgn = sgn)
-      panel$mns       <- if (!panel$display.mean["accumulate"]) panel$mns <- mean(panel$ydata)
-                         else c(mean(panel$ydata), panel$mns)
+      panel$mns       <- if (panel$display.mean["accumulate"]) c(mean(panel$ydata), panel$mns)
+                         else panel$mns <- mean(panel$ydata)
       if (length(panel$mns) >= panel$nmin) {
          mdens         <- density(panel$mns, bw.norm(panel$mns))
          panel$d.mdens <- data.frame(xgrid = mdens$x, dgrid = mdens$y)
@@ -220,7 +242,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       else {
          result <- list()
          panel$plot.mean <- FALSE
-         result$data     <- sample.draw(panel)$plt
+         result$sample   <- sample.draw(panel)$plt
          panel$plot.mean <- TRUE
          result$mean     <- sample.draw(panel)$plt
          result
@@ -239,23 +261,25 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       display.sample <- c(display.sample, 'population' = FALSE)
    if (!('mean'          %in% names(display.sample)))
       display.sample <- c(display.sample, 'mean' = FALSE)
-   if (!('+/- 2 st.dev.' %in% names(display.sample)))
-      display.sample <- c(display.sample, '+/- 2 st.dev.' = FALSE)
+   if (!('st.dev. scale' %in% names(display.sample)))
+      display.sample <- c(display.sample, 'st.dev. scale' = FALSE)
    if (missing(display.mean)) display.mean <- logical(0)
    if (!('sample mean'          %in% names(display.mean)))
       display.mean <- c(display.mean, 'sample mean' = FALSE)
-   if (!('accumulate'    %in% names(display.mean)))
+   if (!('accumulate' %in% names(display.mean)))
       display.mean <- c(display.mean, 'accumulate' = FALSE)
-   if (!('+/- 2 se'          %in% names(display.mean)))
-      display.mean <- c(display.mean, '+/- 2 se' = FALSE)
+   if (!('se scale' %in% names(display.mean)))
+      display.mean <- c(display.mean, 'se scale' = FALSE)
    if (!('distribution' %in% names(display.mean)))
       display.mean <- c(display.mean, 'distribution' = FALSE)
+   if (!('zoom' %in% names(display.mean)))
+      display.mean <- c(display.mean, 'zoom' = FALSE)
    if (!(display %in% c('histogram', 'density', 'violin'))) {
       display <- 'histogram'
       message('display not recognised - using histogram.')
    }
 
-   pars        <- c(mu = mu, sigma = sigma, n = n)
+   pars        <- c(mu = mu, sigma = sigma)
    y           <- rnorm(n,  mu, sigma)
    dmax.data   <- dnorm(mu, mu, sigma)
    dmax.mean   <- dnorm(mu, mu, sigma / sqrt(n))
@@ -274,56 +298,79 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    d.mdens     <- dnorm(xgrid, mu, sigma / sqrt(n))
 
    if (panel.interactive) {
-      panel <- rp.control(pars = pars, ydata = y, mns = mns, y = y,
+      panel <- rp.control(pars = pars, samplesize = n,
+                          ydata = y, mns = mns, y = y,
                           nmin = 10, nmax = 5000, stdev = pars['sigma'],
                           d.dens = d.dens, d.densd = d.densd, 
                           d.mdens = d.mdens, d.mdensd = d.mdensd,
                           df.dens = d.dens, df.densd = d.densd,
                           dmax.mean = dmax.mean, dmax.data = dmax.data,
                           plot.mean = FALSE, zoom = FALSE,
+                          nbins = nbins, nbins.mean = nbins.mean,
                           display.sample = display.sample, display.mean = display.mean,
                           roptions = display.sample, panel.interactive = panel.interactive)
       Sys.sleep(pause)
-      rp.grid(panel, "controls", row = 0, column = 0)
+      rp.grid(panel, "sample",       row = 0, column = 1)
       Sys.sleep(pause)
-      rp.grid(panel, "plots",    row = 0, column = 1, background = "white")
+      rp.grid(panel, "datacontrols", row = 1, column = 0)
+      Sys.sleep(pause)
+      rp.grid(panel, "dataplot",     row = 1, column = 1, background = "white")
+      Sys.sleep(pause)
+      rp.grid(panel, "meancontrols", row = 2, column = 0)
+      Sys.sleep(pause)
+      rp.grid(panel, "meanplot",     row = 2, column = 1, background = "white")
       Sys.sleep(pause)
    
       rp.tkrplot(panel, plotdata, sample.draw.data,
                  hscale = hscale, vscale = vscale / 2,
-                 grid = "plots", row = 0, column = 0, background = "white")
+                 grid = "dataplot", row = 0, column = 0, background = "white")
       Sys.sleep(pause)
       rp.tkrplot(panel, plotmean, sample.draw.mean,
                  hscale = hscale, vscale = vscale / 2,
-                 grid = "plots", row = 1, column = 0, background = "white")
-      rp.textentry(panel, pars, sample.changepars, width = 10, title = 'Parameters',
-                  c("mean", "st.dev.", "sample size"), c("mu", "sigma", "n"),
-                  grid = "controls", row = 0, column = 0, sticky = "ew")
+                 grid = "meanplot", row = 0, column = 0, background = "white")
       Sys.sleep(pause)
-      rp.radiogroup(panel, display, c('histogram', 'density', 'violin'), title = 'Display',
-                  action = sample.redraw,
-                  grid = "controls", row = 1, column = 0, sticky = "ew")
+      rp.button(panel, sample.new, "New sample", repeatinterval = 1, repeatdelay = 1,
+                grid = 'sample', row = 0, column = 0, sticky = "ew")
       Sys.sleep(pause)
-      rp.button(panel, sample.new, "Sample", repeatinterval = 1, repeatdelay = 1,
-                grid = "controls", row = 2, column = 0, sticky = "ew")
+      rp.text(panel, paste('  Mean:', pars['mu'], '  '),
+              grid = 'sample', row = 0, column = 1, sticky = "ew")
+      Sys.sleep(pause)
+      rp.text(panel, paste('st.dev:', pars['sigma'], '  '),
+              grid = 'sample', row = 0, column = 2, sticky = "ew")
+      Sys.sleep(pause)
+      rp.textentry(panel, samplesize, sample.changepars, 'sample size', width = 10,
+                   grid = 'sample', row = 0, column = 3, sticky = "ew")
+      # rp.textentry(panel, pars, sample.changepars, width = 10, title = 'Parameters',
+      #              c("mean", "st.dev.", "sample size"), c("mu", "sigma", "n"),
+      #              grid = "controls", row = 0, column = 0, sticky = "ew")
+      Sys.sleep(pause)
+      rp.menu(panel, display, list(list('Display', 'histogram', 'density', 'violin')),
+                    action = sample.redraw)
       Sys.sleep(pause)
       rp.checkbox(panel, display.sample, sample.redraw, names(display.sample),
                   title = "Sample",
-                  grid = "controls", row = 3, column = 0, sticky = "ew")
+                  grid = "datacontrols", row = 0, column = 0, sticky = "ew")
+      Sys.sleep(pause)
+      rp.slider(panel, nbins, 10, 100, sample.redraw, resolution = 1,
+                grid = 'datacontrols', row = 1, column = 0, sticky = 'ew')
       Sys.sleep(pause)
       rp.checkbox(panel, display.mean, sample.redraw, names(display.mean),
                   title = "Sample mean",
-                  grid = "controls", row = 4, column = 0, sticky = "ew")
+                  grid = "meancontrols", row = 0, column = 0, sticky = "ew")
       Sys.sleep(pause)
-      rp.checkbox(panel, zoom, sample.redraw, labels = "zoom in",
-                  grid = "controls", row = 5, column = 0, sticky = "ew")
+      rp.slider(panel, nbins.mean, 10, 100, sample.redraw, resolution = 1,
+                grid = 'meancontrols', row = 1, column = 0, sticky = 'ew')
       return(invisible())
    }
    else {
-      ymat <- matrix(rnorm(n * (nsim - 1), mu,  sigma), ncol = nsim - 1)
-      mns  <- apply(ymat, 2, mean)
-      display.mean['accumulate'] <- TRUE
-      pnl <- list(pars = pars, ydata = y, mns = mns, y = y,
+      if (display.mean['accumulate']) {
+         ymat <- matrix(rnorm(n * (nsim - 1), mu,  sigma), ncol = nsim - 1)
+         mns  <- apply(ymat, 2, mean)
+      }
+      else
+         mns <- NULL
+      pnl <- list(pars = pars, samplesize = n,
+                  ydata = y, mns = mns, y = y,
                   nmin = 10, nmax = 5000, stdev = pars['sigma'],
                   d.dens = d.dens, d.densd = d.densd, 
                   d.mdens = d.mdens, d.mdensd = d.mdensd,
@@ -333,7 +380,7 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
                   display.sample = display.sample, display.mean = display.mean,
                   roptions = display.sample, panel.interactive = panel.interactive)
       result <- sample.new(pnl)
-      return(result)
+      return(invisible(result))
    }
    
 }

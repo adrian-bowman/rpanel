@@ -36,7 +36,6 @@ rp.t_test(sleep$extra[sleep$group == 2], sleep$extra[sleep$group == 1],
 rp.t_test(sleep$extra[sleep$group == 2], sleep$extra[sleep$group == 1],
          paired = TRUE, uncertainty = 'reference')
 
-
 x <- rnorm(50)
 y <- rnorm(50) + 1
 g <- rep(1:2, each = 25)
