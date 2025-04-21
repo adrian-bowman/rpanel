@@ -1,9 +1,13 @@
-rp.sample <- function(mu = 0, sigma = 1, n = 25,
+rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
                       ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
                       show.out.of.range = TRUE,
                       hscale = NA, vscale = hscale, pause = 0.01) {
 
+   shape0     <- (abs(shape) < 2 * .Machine$double.eps)
+   sn.present <- requireNamespace('sn', quietly = TRUE)
+   if (!shape0 & !sn.present)
+      message('the sn package is not available so the shape parameter has been rest to 0.')
    if (ggplot & !requireNamespace('ggplot2', quietly = TRUE)) {
       ggplot <- FALSE
       message('the ggplot package is not available - reverting to standard graphics.')
@@ -60,24 +64,29 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
                   wdth  <- 6 * stdev / nb
                   nblo  <- ceiling((mu - min(y)) / wdth)
                   nbhi  <- ceiling((max(y) - mu) / wdth)
-                  lo.b  <- min(mu - 3 * stdev, mu - nblo * wdth)
-                  hi.b  <- max(mu + 3 * stdev, mu + nbhi * wdth)
+                  lo.b  <- min(mu - 3 * stdev, mu - (nblo + 1) * wdth)
+                  hi.b  <- max(mu + 3 * stdev, mu + (nbhi + 1) * wdth)
                   brks  <- seq(lo.b, hi.b, by = wdth)
-                  brks[1] <- brks[1] - wdth / 10
-                  brks[length(brks)] <- brks[length(brks)] + wdth / 100
                   hst   <- hist(y, breaks = brks, plot = FALSE)
                   ind   <- (hst$breaks[-length(hst$breaks)] < mu - 3 * stdev) |
                            (hst$breaks[-1] > mu + 3 * stdev)
-                  dfrm  <- data.frame(x = hst$breaks[-1][!ind] - wdth / 2, y = hst$density[!ind])
+                  dfrm  <- data.frame(x = hst$breaks[-1][!ind] - wdth / 2,
+                                      y = pmin(hst$density[!ind]), 2 * dmax)
                   plt <- plt + ggplot2::geom_col(ggplot2::aes(x, y),
                                         width = wdth, col = 'black', fill = 'grey', data = dfrm)
                   if (show.out.of.range) {
-                     if (nlow > 0) plt <- plt + ggplot2::annotate('text', angle = 90,
-                                                   x = mu - 3 * stdev, y = 0.75 * dmax,
-                                                   label = paste(nlow, 'observations lower'))
-                     if (nhigh > 0) plt <- plt + ggplot2::annotate('text', angle = 90,
-                                                   x = mu + 3 * stdev, y = 0.75 * dmax,
-                                                   label = paste(nhigh, 'observations higher'))
+                     if (nlow > 0) {
+                        plural <- if (nlow > 1) 's' else ''
+                        plt <- plt + ggplot2::annotate('text', angle = 90,
+                              x = mu - 3 * stdev, y = 0.75 * dmax,
+                              label = paste(nlow, ' observation', plural, ' lower', sep = ''))
+                     }
+                     if (nhigh > 0) {
+                        plural <- if (nhigh > 1) 's' else ''
+                        plt <- plt + ggplot2::annotate('text', angle = 90,
+                              x = mu + 3 * stdev, y = 0.75 * dmax,
+                              label = paste(nhigh, ' observation', plural, ' higher', sep = ''))
+                     }
                   }
                }
                if (display %in% c('density', 'violin'))
@@ -103,7 +112,8 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
          if ((!plot.mean && display.sample['population']) |
              (plot.mean && display.mean['distribution'])) {
             xgrid <- seq(mu - 3 * stdev, mu + 3 * stdev, length = 200)
-            pgrid <- dnorm(xgrid, mu, stdev)
+            pgrid <- if (!sn.present | plot.mean) dnorm(xgrid, mu, stdev)
+                     else sn::dsn(xgrid, sn.xi, sn.omega, sn.shape)
             d.pop <- data.frame(xgrid, pgrid)
             plt <- plt +
                ggplot2::geom_line(ggplot2::aes(xgrid, orig + scl * pgrid),
@@ -202,10 +212,10 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       mu              <- panel$pars["mu"]
       sigma           <- panel$pars["sigma"]
       n               <- panel$samplesize
-      panel$dmax.data <- dnorm(mu, mu, sigma)
+      panel$ydata <- if (!sn.present) rnorm(n, mu, sigma)
+                         else sn::rsn(n, panel$sn.xi, panel$sn.omega, panel$sn.shape)
       panel$dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
-      panel$ydata     <- rnorm(n, mu, sigma)
-      xgrid           <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
+      xgrid       <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
       if (length(panel$ydata) >= panel$nmin) {
          dens            <- density(panel$ydata, bw = bw.norm(panel$ydata))
          panel$d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
@@ -213,7 +223,8 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       }
       else {
          panel$d.dens    <- data.frame(xgrid = xgrid, dgrid = 0)
-         dens.y          <- dnorm(panel$ydata, mu, sigma)
+         dens.y          <- if (!sn.present) dnorm(panel$ydata, mu, sigma)
+                            else sn::dsn(panel$ydata, panel$sn.xi, panel$sn.omega, panel$sn.shape)
       }
       sgn             <- sign(rbinom(length(panel$ydata), 1, 0.5) - 0.5)
       panel$d.densd   <- data.frame(x = panel$ydata, d = dens.y,
@@ -279,27 +290,36 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       message('display not recognised - using histogram.')
    }
 
-   pars        <- c(mu = mu, sigma = sigma)
-   y           <- rnorm(n,  mu, sigma)
-   dmax.data   <- dnorm(mu, mu, sigma)
-   dmax.mean   <- dnorm(mu, mu, sigma / sqrt(n))
-   xgrid       <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
-   dens        <- density(y)
-   dens.y      <- approx(dens$x, dens$y, xout = y)$y
-   d.dens      <- data.frame(xgrid = dens$x, dgrid = dens$y)
-   sgn         <- sign(rbinom(length(y), 1, 0.5) - 0.5)
-   d.densd     <- data.frame(x = y, d = dens.y,
-                             r = runif(length(dens.y), 0, 1), sgn = sgn)
-   mns         <- mean(y)
-   mdens.y     <- dnorm(mns, mu, sigma / sqrt(n))
-   sgn         <- sign(rbinom(length(mns), 1, 0.5) - 0.5)
-   d.mdensd    <- data.frame(x = mns, d = mdens.y,
-                             r = runif(length(mdens.y), 0, 1), sgn = sgn)
-   d.mdens     <- dnorm(xgrid, mu, sigma / sqrt(n))
-
+   pars      <- c(mu = mu, sigma = sigma)
+   sn.delta  <- shape / sqrt(1 + shape^2)
+   sn.omega  <- sigma / sqrt(1 - 2 * sn.delta^2 / pi)
+   sn.xi     <- mu - sn.omega * sn.delta * sqrt(2 / pi)
+   sn.mode   <- sn.xi + sn.omega *
+                   (sn.delta * sqrt(2 / pi) - (1 - pi / 4) * ((sqrt(2 / pi) * sn.delta)^3) /
+                   (1 - sn.delta^2 * 2 / pi) - exp(-2 * pi / abs(shape)) * sign(shape) / 2)
+   y         <- if (!sn.present) rnorm(n, mu, sigma)
+                else sn::rsn(n, sn.xi, sn.omega, shape)
+   dmax.data <- if (!sn.present) dnorm(mu, mu, sigma)
+                else sn::dsn(sn.mode, sn.xi, sn.omega, shape)
+   dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
+   xgrid     <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
+   dens      <- density(y)
+   dens.y    <- approx(dens$x, dens$y, xout = y)$y
+   d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
+   sgn       <- sign(rbinom(length(y), 1, 0.5) - 0.5)
+   d.densd   <- data.frame(x = y, d = dens.y,
+                           r = runif(length(dens.y), 0, 1), sgn = sgn)
+   mns       <- mean(y)
+   mdens.y   <- dnorm(mns, mu, sigma / sqrt(n))
+   sgn       <- sign(rbinom(length(mns), 1, 0.5) - 0.5)
+   d.mdensd  <- data.frame(x = mns, d = mdens.y,
+                           r = runif(length(mdens.y), 0, 1), sgn = sgn)
+   d.mdens   <- dnorm(xgrid, mu, sigma / sqrt(n))
+   
    if (panel.interactive) {
-      panel <- rp.control(pars = pars, samplesize = n,
-                          ydata = y, mns = mns, y = y,
+      panel <- rp.control(pars = pars, samplesize = n, sn.present = sn.present,
+                          sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
+                          sn.mode = sn.mode, ydata = y, mns = mns, y = y,
                           nmin = 10, nmax = 5000, stdev = pars['sigma'],
                           d.dens = d.dens, d.densd = d.densd, 
                           d.mdens = d.mdens, d.mdensd = d.mdensd,
@@ -332,14 +352,19 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
       rp.button(panel, sample.new, "New sample", repeatinterval = 1, repeatdelay = 1,
                 grid = 'sample', row = 0, column = 0, sticky = "ew")
       Sys.sleep(pause)
-      rp.text(panel, paste('  Mean:', pars['mu'], '  '),
-              grid = 'sample', row = 0, column = 1, sticky = "ew")
+      rp.textentry(panel, samplesize, sample.changepars, 'sample size', width = 10,
+                   grid = 'sample', row = 0, column = 1, sticky = "ew")
       Sys.sleep(pause)
-      rp.text(panel, paste('st.dev:', pars['sigma'], '  '),
+      rp.text(panel, paste('  mean:', signif(mu, 5)),
               grid = 'sample', row = 0, column = 2, sticky = "ew")
       Sys.sleep(pause)
-      rp.textentry(panel, samplesize, sample.changepars, 'sample size', width = 10,
-                   grid = 'sample', row = 0, column = 3, sticky = "ew")
+      rp.text(panel, paste('  st.dev:', signif(sigma, 5)),
+              grid = 'sample', row = 0, column = 3, sticky = "ew")
+      if (!shape0) {
+         Sys.sleep(pause)
+         rp.text(panel, paste('  shape:', signif(shape, 5)),
+                 grid = 'sample', row = 0, column = 4, sticky = "ew")
+      }
       # rp.textentry(panel, pars, sample.changepars, width = 10, title = 'Parameters',
       #              c("mean", "st.dev.", "sample size"), c("mu", "sigma", "n"),
       #              grid = "controls", row = 0, column = 0, sticky = "ew")
@@ -364,12 +389,16 @@ rp.sample <- function(mu = 0, sigma = 1, n = 25,
    }
    else {
       if (display.mean['accumulate']) {
-         ymat <- matrix(rnorm(n * (nsim - 1), mu,  sigma), ncol = nsim - 1)
+         ymat <- if (!sn.present) rnorm(n * (nsim - 1), mu, sigma)
+                 else sn::rsn(n * (nsim - 1), sn.xi, sn.omega, shape)
+         ymat <- matrix(ymat, ncol = nsim - 1)
          mns  <- apply(ymat, 2, mean)
       }
       else
          mns <- NULL
-      pnl <- list(pars = pars, samplesize = n,
+      pnl <- list(pars = pars, samplesize = n, sn.present = sn.present,
+                  sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
+                  sn.mode = sn.mode, 
                   ydata = y, mns = mns, y = y,
                   nmin = 10, nmax = 5000, stdev = pars['sigma'],
                   d.dens = d.dens, d.densd = d.densd, 

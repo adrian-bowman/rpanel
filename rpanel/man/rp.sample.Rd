@@ -9,7 +9,7 @@ Plots sample from a normal distribution to illustrate the variation which result
 }
 
 \usage{
-rp.sample(mu = 0, sigma = 1, n = 25,
+rp.sample(n = 25, mu = 0, sigma = 1, shape = 0,
           ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
           display, display.sample, display.mean,
           nsim = 50, show.out.of.range = TRUE,
@@ -17,9 +17,10 @@ rp.sample(mu = 0, sigma = 1, n = 25,
 }
 
 \arguments{
+\item{n}{the size of the sample.}
 \item{mu}{the mean of the normal distribution from which samples are taken.}
 \item{sigma}{the standard deviation of the normal distribution.}
-\item{n}{the size of the sample.}
+\item{shape}{the shape parameter of the skew-normal distribution. When this is set to the default value of 0, samples are generated from a normal distribution. Setting non-zero values for this parameter gives some skewness to the distribution from which the data are sampled.}
 \item{ggplot}{a logical value which determines whether the \code{ggplot2} package is used to create the graphical displays. When this argument is set to \code{FALSE}, or when the \code{ggplot2} package is not available, standard graphics are used with simpler display options, along the lines of the function provided in version 1.1-5 of the package.}
 \item{panel}{a logical value which determines whether the function runs in interactive mode. See Details.}
 \item{nbins}{an integer value which sets the number of bins used in the data histograms.}

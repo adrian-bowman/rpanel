@@ -4,6 +4,7 @@ library(rpanel)
 if (reinstall) devtools::install("rpanel")
 
 rp.sample(5, 0.4, 25)
+rp.sample(5, 0.4, 25, 5)
 rp.sample(display = 'violin')
 rp.sample(ggplot = FALSE)
 

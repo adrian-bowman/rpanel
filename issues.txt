@@ -7,9 +7,7 @@ rp.ttest
   - add binomial proportions?
 
 rp.sample
-  - mark observations outside the scale and suppress the warnings?
-  - allow other distributions to be specified.
-  - in particular, allow binomial data to be specified. No, make this an exercise.
+  - allow binomial data to be specified. No, make this an exercise.
   - improve the plots created by standard graphics, when ggplot = FALSE,
     to match those when ggplot = TRUE. Is it worth it?
 
