@@ -80,7 +80,7 @@ Github PAT regeneration
 Login to Github:
   Settings > Developer settings > Personal access tokens (classic)
   Click button 'Generate new token'
-  Tick: (repo by default), workflow, gist, user
+  Tick: repo, workflow, gist, user
   Copy the PAT immediately.
 Back in RStudio
   gitcreds::gitcreds_set()

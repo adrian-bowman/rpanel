@@ -3,10 +3,16 @@
 library(rpanel)
 if (reinstall) devtools::install("rpanel")
 
-rp.sample(5, 0.4, 25)
+rp.sample()
 rp.sample(5, 0.4, 25, 5)
 rp.sample(display = 'violin')
 rp.sample(ggplot = FALSE)
+
+rp.sample(n = 25, mu = 5, sigma = 0.4, panel = FALSE, nbins = 10, nsim = 5000,
+          display.sample = c(mean = TRUE), show.out.of.range = FALSE,
+          display.mean = c('sample mean' = TRUE, 'accumulate' = TRUE,
+                           'se scale' = TRUE, 't-statistic' = TRUE))
+
 
 result <- rp.sample(panel = FALSE)
 result <- rp.sample(panel = FALSE, display.sample = c('st.dev. scale' = TRUE))

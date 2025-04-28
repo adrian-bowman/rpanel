@@ -3,10 +3,13 @@
 --------------------------------------------------------------
 
 rp.ttest
-  - could the p-value or confidence level be shown without cluttering the plot?
+  - could/should the p-value or confidence level be shown without cluttering the plot?
+  - add animation which shows the plausibility of the sample mean under different
+    assumptions of population mean?
   - add binomial proportions?
 
 rp.sample
+  - still a problem with warning of geom_col observations out of range? Fixed?
   - allow binomial data to be specified. No, make this an exercise.
   - improve the plots created by standard graphics, when ggplot = FALSE,
     to match those when ggplot = TRUE. Is it worth it?

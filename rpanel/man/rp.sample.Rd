@@ -5,7 +5,7 @@
 \title{Interactive demonstration of sampling variation}
 
 \description{
-Plots sample from a normal distribution to illustrate the variation which results.  The population mean and the range of mean +/- 2 standard deviations can be superimposed, in the latter case to demonstrate that nearly all the data lie within this range.  The position of the sample mean can also be indicated in a separate plot where the mean and +/- 2 standard errors can be superimposed.
+Graphical exploration of variation in samples and sample means. The primary use of the function is in interactive mode, using a variety of controls for the display.
 }
 
 \usage{
@@ -39,13 +39,13 @@ When \code{display} is set to \code{density} or \code{violin}, density estimates
 
 When the size of the sample is less than 10, a histogram or density estimate is not a very effective display. This also causes issues of scaling the vertical axis. So in this case individual points are displayed instead.
 
+The visual effect of the animation is assisted by holding the axes constant.  This means that there may occasionally be observations outside the displayed horizontal range, or a histogram height which exceeds the displayed vertical range. This is denoted by a + symbol at the top of the relevant histogram bars. This issue can often be tackled by reducing the number of histogram bins.
+
 When \code{display} is set to \code{'density'} or \code{'violin'}, individual points are plotted, with a random vertical position. This is suppressed when the number of points exceeds 5000.
 
 The \code{display.sample} and \code{display.mean} arguments control the details of what is displayed initially and, more usefully, when the function operates in non-interactive mode. Each argument is a logical vector with named values. \code{display.sample} has the default setting \code{c(data = TRUE, population = FALSE, mean = FALSE, 'st.dev. scale' = FALSE)} while the default for \code{display.mean} is \code{c('sample mean' = FALSE, 'accumulate' = FALSE, 'se scale' = FALSE, 'distribution' = FALSE)}. Any elements of these arguments which are not explicitly identified are set to the default values.
 
 The principal use of the function is in interactive mode, when \code{panel} is set to \code{TRUE}. If \code{panel} is set to \code{FALSE} then interactive mode is switched off. In this case, if the \code{ggplot2} package is available and the \code{ggplot} argument is set to \code{TRUE}, the function returns plots of a sample of data and of accumulated means as components \code{plotdata} and \code{plotmean} of the returned object. The number of accumulated means is set by the \code{nsim} argument.
-
-The visual effect of the animation is assisted by holding the axes constant.  This means that there may occasionally be observations outside the displayed horizontal range, or a histogram height which exceeds the displayed vertical range.
 }
 
 \value{

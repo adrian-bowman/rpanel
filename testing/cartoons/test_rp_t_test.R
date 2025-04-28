@@ -16,6 +16,9 @@ sleep_wide <- pivot_wider(sleep, values_from = extra, names_from = group,
 sleep_diff <- with(sleep_wide, drug_2 - drug_1)
 
 rp.t_test(sleep_diff)
+rp.t_test(sleep_diff, mu = 0)
+rp.t_test(sleep_diff, mu = 0, uncertainty = 'reference')
+rp.t_test(sleep_diff, uncertainty = 'reference')
 
 for (display in c('histogram', 'density', 'violin')) {
   for (scl in c(FALSE, TRUE)) {

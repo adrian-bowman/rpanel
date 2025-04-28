@@ -1,4 +1,4 @@
-rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
+rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
                       ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
                       show.out.of.range = TRUE,
@@ -35,21 +35,32 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
             return(panel)
          }
 
-         y        <- if (plot.mean) mns else ydata
-         dmax     <- if (plot.mean) dmax.mean else dmax.data
+         if (plot.mean) {
+            y <- if (display.mean['t-statistic']) tstats else mns
+         } else
+            y <- ydata         
          mu       <- pars['mu']
-         stdev    <- if (plot.mean) pars['sigma'] / sqrt(n)
-                               else pars['sigma']
-         df.dens  <- if (plot.mean) d.mdens  else d.dens
-         df.densd <- if (plot.mean) d.mdensd else d.densd
-         orig     <- if (display == 'violin') 0.7 * dmax else 0
+         stdev    <- if (plot.mean) pars['sigma'] / sqrt(n) else pars['sigma']
+         m.cur    <- if (plot.mean & display.mean['t-statistic']) 0 else as.vector(mu)
+         s.cur    <- if (plot.mean & display.mean['t-statistic']) 1 else as.vector(stdev)
+         dmax     <- if (plot.mean) dmax.mean else dmax.data
+         d.cur    <- if (plot.mean & display.mean['t-statistic']) 0.4 else as.vector(dmax)
+         orig     <- if (display == 'violin') 0.7 * d.cur else 0
          scl      <- if (display == 'violin') 0.5 else 1
-         
+         if (plot.mean) {
+            df.dens  <- if (display.mean['t-statistic']) d.tdens  else d.mdens
+            df.densd <- if (display.mean['t-statistic']) d.tdensd else d.mdensd
+         }
+         else {
+            df.dens  <- d.dens
+            df.densd <- d.densd
+         }
+
          plt <- ggplot2::ggplot(data.frame(x = y), ggplot2::aes(x))
          
+         # Show the data or means or t-statistics
          if ((!plot.mean && display.sample['data']) |
-             (plot.mean && display.mean['sample mean'])) {
-            
+             (plot.mean && (display.mean['sample mean'] | display.mean['t-statistic']))) {
             if (length(y) >= nmin) {
                if (display == 'histogram') {
                   nb   <- if (plot.mean) nbins.mean else nbins
@@ -57,34 +68,37 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
                   # plt <- plt +
                   #    ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
                   #                            breaks = brks, col = 'grey50', fill = col.dens)
-                  low   <- which(y < mu - 3 * stdev)
-                  high  <- which(y > mu + 3 * stdev)
+                  low   <- which(y < m.cur - 3 * s.cur)
+                  high  <- which(y > m.cur + 3 * s.cur)
                   nlow  <- length(low)
                   nhigh <- length(high)
-                  wdth  <- 6 * stdev / nb
-                  nblo  <- ceiling((mu - min(y)) / wdth)
-                  nbhi  <- ceiling((max(y) - mu) / wdth)
-                  lo.b  <- min(mu - 3 * stdev, mu - (nblo + 1) * wdth)
-                  hi.b  <- max(mu + 3 * stdev, mu + (nbhi + 1) * wdth)
+                  wdth  <- 6 * s.cur / nb
+                  nblo  <- ceiling((m.cur - min(y)) / wdth)
+                  nbhi  <- ceiling((max(y) - m.cur) / wdth)
+                  lo.b  <- min(m.cur - 3 * s.cur, m.cur - (nblo + 1) * wdth)
+                  hi.b  <- max(m.cur + 3 * s.cur, m.cur + (nbhi + 1) * wdth)
                   brks  <- seq(lo.b, hi.b, by = wdth)
                   hst   <- hist(y, breaks = brks, plot = FALSE)
-                  ind   <- (hst$breaks[-length(hst$breaks)] < mu - 3 * stdev) |
-                           (hst$breaks[-1] > mu + 3 * stdev)
+                  ind   <- (hst$breaks[-length(hst$breaks)] < m.cur - 3 * s.cur) |
+                           (hst$breaks[-1] > m.cur + 3 * s.cur)
                   dfrm  <- data.frame(x = hst$breaks[-1][!ind] - wdth / 2,
-                                      y = pmin(hst$density[!ind]), 2 * dmax)
+                                      y = pmin(hst$density[!ind], 1.9 * d.cur))
+                  trnc  <- which(hst$density[!ind] > 1.9 * d.cur)
                   plt <- plt + ggplot2::geom_col(ggplot2::aes(x, y),
-                                        width = wdth, col = 'black', fill = 'grey', data = dfrm)
+                                        width = wdth, col = 'black', fill = 'grey', data = dfrm) +
+                               ggplot2::geom_text(ggplot2::aes(x, y + d.cur / 20, label = '+'),
+                                                  data = dfrm[trnc, ])
                   if (show.out.of.range) {
                      if (nlow > 0) {
                         plural <- if (nlow > 1) 's' else ''
                         plt <- plt + ggplot2::annotate('text', angle = 90,
-                              x = mu - 3 * stdev, y = 0.75 * dmax,
+                              x = m.cur - 3 * s.cur, y = 0.75 * d.cur,
                               label = paste(nlow, ' observation', plural, ' lower', sep = ''))
                      }
                      if (nhigh > 0) {
                         plural <- if (nhigh > 1) 's' else ''
                         plt <- plt + ggplot2::annotate('text', angle = 90,
-                              x = mu + 3 * stdev, y = 0.75 * dmax,
+                              x = m.cur + 3 * s.cur, y = 0.75 * d.cur,
                               label = paste(nhigh, ' observation', plural, ' higher', sep = ''))
                      }
                   }
@@ -92,7 +106,7 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
                if (display %in% c('density', 'violin'))
                   plt <- plt +
                      ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0, ymin = orig,
-                                                       ymax = pmin(orig + scl * dgrid, 2 * dmax)),
+                                                     ymax = pmin(orig + scl * dgrid, 2 * d.cur)),
                                           data = df.dens, col = col.dens, fill = col.dens)
                if (display == 'violin')
                   plt <- plt +
@@ -103,60 +117,98 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
             if ((length(y) < nmin) | ((display != 'histogram') & (length(y) <= nmax))) {
                dsgn <- if (display == 'violin') df.densd$sgn else 1
                sz   <- if (length(y) >= nmin) 0.2 else 2
+               dft  <- if (plot.mean & display.mean['t-statistic'])
+                          data.frame(x = tstats, d = dt(tstats, n - 1), r = df.densd$r)
+                       else df.densd
                plt <- plt +
-                  ggplot2::geom_point(ggplot2::aes(x, orig + dsgn * r * scl * d),
-                                      data = df.densd, size = sz)
+                   ggplot2::geom_point(ggplot2::aes(x, orig + dsgn * r * scl * d),
+                                       data = dft, size = sz)
             }
          }
 
+         # Show the distribution density curve
          if ((!plot.mean && display.sample['population']) |
-             (plot.mean && display.mean['distribution'])) {
+             ( plot.mean && display.mean['distribution'])) {
             xgrid <- seq(mu - 3 * stdev, mu + 3 * stdev, length = 200)
-            pgrid <- if (!sn.present | plot.mean) dnorm(xgrid, mu, stdev)
-                     else sn::dsn(xgrid, sn.xi, sn.omega, sn.shape)
+            if (!plot.mean)
+               pgrid <- if (!sn.present) dnorm(xgrid, mu, stdev)
+                        else sn::dsn(xgrid, sn.xi, sn.omega, sn.shape)
+            else {
+               if (display.mean['t-statistic']) {
+                  xgrid <- seq(-3.5, 3.5, length = 200)
+                  pgrid <- dt(xgrid, n - 1)
+               }
+               else
+                  pgrid <- dnorm(xgrid, mu, stdev)
+            }
             d.pop <- data.frame(xgrid, pgrid)
             plt <- plt +
                ggplot2::geom_line(ggplot2::aes(xgrid, orig + scl * pgrid),
                                   data = d.pop, linewidth = 1, col = col.pars)
+            # Show the standard normal density to compare with the t density
+            # if (plot.mean & display.mean['t-statistic'])
+            #    plt <- plt +
+            #       ggplot2::geom_line(ggplot2::aes(xgrid, orig + scl * dnorm(xgrid)),
+            #                          data = d.pop, linewidth = 1, linetype = 2,
+            #                          col = col.pars)
             if (display == 'violin')
                plt <- plt +
                ggplot2::geom_line(ggplot2::aes(xgrid, orig - scl * pgrid),
                                   data = d.pop, linewidth = 1, col = col.pars)
          }
             
-         if (display.sample['mean'] & (!plot.mean | any(display.mean))) {
-            bottomm <- if (display == 'density') 0 else orig -0.65 * dmax
-            plt <- plt + ggplot2::geom_segment(x = mu, y = 1.3 * dmax, yend = bottomm,
-                                               col = col.pars) +
-               ggplot2::annotate('text', x = mu, y = 1.4 * dmax,
+         # Show the mean value
+         if (!(plot.mean & display.mean['t-statistic'])) {
+            if (display.sample['mean'] & (!plot.mean | any(display.mean))) {
+               bottomm <- if (display == 'density') 0 else orig -0.65 * d.cur
+               plt <- plt + ggplot2::geom_segment(x = mu, y = 1.3 * d.cur, yend = bottomm,
+                                                col = col.pars) +
+                  ggplot2::annotate('text', x = mu, y = 1.4 * d.cur,
                                  label = 'mean', col = col.pars)
+            }
          }
          
+         # Show the sd or se scale
          if ((!plot.mean && display.sample['st.dev. scale']) |
              ( plot.mean && display.mean['se scale'])) {
-            ypos <- 1.75 * dmax
-            tpos <- mu + (-3:3) * stdev
-            txt  <- if (plot.mean) 'standard error scale' else 'standard deviation scale'
+            ypos <- 1.75 * d.cur
+            tpos <- if (plot.mean & display.mean['t-statistic']) -3:3 else mu + (-3:3) * stdev
+            if (plot.mean) {
+               txt  <- if (display.mean['t-statistic']) 't-statistic' else 'standard error'
+            } else txt <- 'standard deviation'
+            txt <- paste(txt, 'scale')
             plt  <- plt +
                ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
                                  y = ypos, col = col.pars) +
                ggplot2::annotate('segment', x = tpos, col = col.pars,
-                                 y = ypos, yend = ypos - 0.04 * dmax) +
+                                 y = ypos, yend = ypos - 0.04 * d.cur) +
                ggplot2::annotate('text',    x = tpos,
-                                 y = ypos - 0.12 * dmax, label = as.character(-3:3),
+                                 y = ypos - 0.12 * d.cur, label = as.character(-3:3),
                                  col = col.pars) +
-               ggplot2::annotate('text', x = mu, y = ypos + 0.12 * dmax,
+               ggplot2::annotate('text', x = m.cur, y = ypos + 0.12 * d.cur,
                                  label = txt, col = col.pars)
          }
          
          # Set axes ranges, allowing for zoom in
-         sb  <- if (plot.mean & display.mean['zoom']) 3.5 * stdev else 3 * pars['sigma']
+         ym <- if (plot.mean & display.mean['t-statistic']) 0.8 else 2 * d.cur
          plt <- plt +
-            ggplot2::xlim(mu - sb, mu + sb) +
-            ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, 0),
-                                        limits = c(0, 2 * dmax)) +
+            ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, 0), limits = c(0, ym)) +
             ggplot2::ylab('density')
-         
+         if (plot.mean & display.mean['t-statistic'])
+            plt <- plt + ggplot2::xlim(-3.5, 3.5)
+         else {
+            sb  <- if (plot.mean & display.mean['zoom']) 3.5 * stdev else 3 * pars['sigma']
+         # if (plot.mean & display.mean['t-statistic'])
+         #    plt <- plt +
+         #       ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+         #                      axis.text.x  = ggplot2::element_blank(),
+         #                      axis.ticks.x = ggplot2::element_blank(),
+         #                      panel.grid.major.x = ggplot2::element_blank(),
+         #                      panel.grid.minor.x = ggplot2::element_blank())
+         # else
+            plt <- plt + ggplot2::xlim(mu - sb, mu + sb)
+         }
+            
          # Remove y axis information for the violin plot
          if (display == 'violin')
             plt <- plt +
@@ -169,7 +221,7 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
          # Add title
          ttl <- 'Sample'
          if (plot.mean) {
-            ttl <- paste(ttl, 'mean')
+            ttl <- if (display.mean['t-statistic']) 't-statistic' else paste(ttl, 'mean')
             if (length(y) > 1) ttl <- paste(ttl, 's', sep = '')
          }
          plt <- plt + ggplot2::ggtitle(ttl)
@@ -212,10 +264,10 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
       mu              <- panel$pars["mu"]
       sigma           <- panel$pars["sigma"]
       n               <- panel$samplesize
-      panel$ydata <- if (!sn.present) rnorm(n, mu, sigma)
+      panel$ydata     <- if (!panel$sn.present) rnorm(n, mu, sigma)
                          else sn::rsn(n, panel$sn.xi, panel$sn.omega, panel$sn.shape)
       panel$dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
-      xgrid       <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
+      xgrid           <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
       if (length(panel$ydata) >= panel$nmin) {
          dens            <- density(panel$ydata, bw = bw.norm(panel$ydata))
          panel$d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
@@ -229,20 +281,29 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
       sgn             <- sign(rbinom(length(panel$ydata), 1, 0.5) - 0.5)
       panel$d.densd   <- data.frame(x = panel$ydata, d = dens.y,
                                     r = runif(length(dens.y), 0, 1), sgn = sgn)
-      panel$mns       <- if (panel$display.mean["accumulate"]) c(mean(panel$ydata), panel$mns)
-                         else panel$mns <- mean(panel$ydata)
+      mn              <- mean(panel$ydata)
+      tstat           <- (mn - mu) / (sd(panel$ydata) / sqrt(n))
+      panel$mns       <- if (panel$display.mean["accumulate"]) c(mn, panel$mns)
+                         else mn
+      panel$tstats    <- if (panel$display.mean["accumulate"]) c(tstat, panel$tstats)
+                         else tstat
       if (length(panel$mns) >= panel$nmin) {
          mdens         <- density(panel$mns, bw.norm(panel$mns))
          panel$d.mdens <- data.frame(xgrid = mdens$x, dgrid = mdens$y)
          mdens.y       <- approx(mdens$x, mdens$y, xout = panel$mns)$y
+         tdens         <- density(panel$tstats, bw.norm(panel$tstats))
+         panel$d.tdens <- data.frame(xgrid = tdens$x, dgrid = tdens$y)
+         tdens.y       <- approx(tdens$x, tdens$y, xout = panel$tstats)$y
       }
       else {
          panel$d.mdens <- dnorm(xgrid, mu, sigma / sqrt(n))
          mdens.y       <- dnorm(panel$mns, mu, sigma / sqrt(n))
+         tdens.y       <- dt(panel$tstats, n - 1)
       }
       sgn            <- sign(rbinom(length(panel$mns), 1, 0.5) - 0.5)
-      panel$d.mdensd <- data.frame(x = panel$mns, d = mdens.y,
-                                   r = runif(length(mdens.y), 0, 1), sgn = sgn)
+      r              <- runif(length(mdens.y), 0, 1)
+      panel$d.mdensd <- data.frame(x = panel$mns,   d = mdens.y, r = r, sgn = sgn)
+      panel$d.tdensd <- data.frame(x = panel$tstats, d = tdens.y, r = r, sgn = sgn)
       
       if (panel.interactive) {
          rp.control.put(panel$panelname, panel)
@@ -285,10 +346,15 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
       display.mean <- c(display.mean, 'distribution' = FALSE)
    if (!('zoom' %in% names(display.mean)))
       display.mean <- c(display.mean, 'zoom' = FALSE)
+   if (!('t-statistic' %in% names(display.mean)))
+      display.mean <- c(display.mean, 't-statistic' = FALSE)
    if (!(display %in% c('histogram', 'density', 'violin'))) {
       display <- 'histogram'
       message('display not recognised - using histogram.')
    }
+   display.sample <- display.sample[c('data', 'population', 'mean', 'st.dev. scale')]
+   display.mean <- display.mean[c('sample mean', 'accumulate', 'se scale',
+                                  'zoom', 't-statistic', 'distribution')]
 
    pars      <- c(mu = mu, sigma = sigma)
    sn.delta  <- shape / sqrt(1 + shape^2)
@@ -297,6 +363,7 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
    sn.mode   <- sn.xi + sn.omega *
                    (sn.delta * sqrt(2 / pi) - (1 - pi / 4) * ((sqrt(2 / pi) * sn.delta)^3) /
                    (1 - sn.delta^2 * 2 / pi) - exp(-2 * pi / abs(shape)) * sign(shape) / 2)
+
    y         <- if (!sn.present) rnorm(n, mu, sigma)
                 else sn::rsn(n, sn.xi, sn.omega, shape)
    dmax.data <- if (!sn.present) dnorm(mu, mu, sigma)
@@ -310,19 +377,24 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
    d.densd   <- data.frame(x = y, d = dens.y,
                            r = runif(length(dens.y), 0, 1), sgn = sgn)
    mns       <- mean(y)
+   tstats    <- (mns - mu) / (sd(y) / sqrt(n))
    mdens.y   <- dnorm(mns, mu, sigma / sqrt(n))
+   tdens.y   <- dt(tstats, n - 1)
    sgn       <- sign(rbinom(length(mns), 1, 0.5) - 0.5)
-   d.mdensd  <- data.frame(x = mns, d = mdens.y,
-                           r = runif(length(mdens.y), 0, 1), sgn = sgn)
+   r         <- runif(length(mdens.y), 0, 1)
+   d.mdensd  <- data.frame(x = mns,    d = mdens.y, r = r, sgn = sgn)
+   d.tdensd  <- data.frame(x = tstats, d = tdens.y, r = r, sgn = sgn)
    d.mdens   <- dnorm(xgrid, mu, sigma / sqrt(n))
+   d.tdens   <- dt(seq(-3, 3, length = 200), n - 1)
    
    if (panel.interactive) {
       panel <- rp.control(pars = pars, samplesize = n, sn.present = sn.present,
                           sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
-                          sn.mode = sn.mode, ydata = y, mns = mns, y = y,
-                          nmin = 10, nmax = 5000, stdev = pars['sigma'],
+                          sn.mode = sn.mode, ydata = y, mns = mns, tstats = tstats, 
+                          y = y, nmin = 10, nmax = 5000, stdev = pars['sigma'],
                           d.dens = d.dens, d.densd = d.densd, 
                           d.mdens = d.mdens, d.mdensd = d.mdensd,
+                          d.tdens = d.tdens, d.tdensd = d.tdensd,
                           df.dens = d.dens, df.densd = d.densd,
                           dmax.mean = dmax.mean, dmax.data = dmax.data,
                           plot.mean = FALSE, zoom = FALSE,
@@ -389,17 +461,19 @@ rp.sample <- function(n = 25, mu = 0, sigma = 1, shape = 0,
    }
    else {
       if (display.mean['accumulate']) {
-         ymat <- if (!sn.present) rnorm(n * (nsim - 1), mu, sigma)
-                 else sn::rsn(n * (nsim - 1), sn.xi, sn.omega, shape)
-         ymat <- matrix(ymat, ncol = nsim - 1)
-         mns  <- apply(ymat, 2, mean)
+         ymat   <- if (!sn.present) rnorm(n * (nsim - 1), mu, sigma)
+                   else sn::rsn(n * (nsim - 1), sn.xi, sn.omega, shape)
+         ymat   <- matrix(ymat, ncol = nsim - 1)
+         mns    <- apply(ymat, 2, mean)
+         sds    <- apply(ymat, 2, sd)
+         tstats <- (mns - mu) / (sds / sqrt(n))
       }
       else
          mns <- NULL
       pnl <- list(pars = pars, samplesize = n, sn.present = sn.present,
                   sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
                   sn.mode = sn.mode, 
-                  ydata = y, mns = mns, y = y,
+                  ydata = y, mns = mns, tstats = tstats, y = y,
                   nmin = 10, nmax = 5000, stdev = pars['sigma'],
                   d.dens = d.dens, d.densd = d.densd, 
                   d.mdens = d.mdens, d.mdensd = d.mdensd,
