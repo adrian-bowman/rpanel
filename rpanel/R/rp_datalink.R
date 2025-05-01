@@ -55,10 +55,10 @@ rp.datalink <- function(name, action = "retrieve filename") {
         "https://www.ncei.noaa.gov/data/sea-surface-temperature-optimum-interpolation/v2.1/access/avhrr/202306/oisst-avhrr-v02r01.20230618.nc",
       "trout",                   ".txt",
         "http://www.stats.gla.ac.uk/~adrian/data/trout.txt",
-      "UN_demography",           ".zip",
-        "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_Demographic_Indicators_Medium.zip",
-      "UN_demography_metadata",   ".xlsx",
-        "https://population.un.org/wpp/Download/Files/4_Metadata/WPP2022_F02_METADATA.XLSX",
+      "UN_demography",           ".xlsx",
+        "https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/EXCEL_FILES/1_General/WPP2024_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT.xlsx",
+      "UN_country_codes",   ".xlsx",
+        "https://population.un.org/wpp/assets/Excel%20Files/4_Metadata/WPP2024_F01_LOCATIONS.xlsx",
       "UK_parliamentary_boundaries_2024", ".zip",
         "https://geoportal.statistics.gov.uk/datasets/ons::westminster-parliamentary-constituencies-july-2024-boundaries-uk-buc-2.zip"
    ), ncol = 3, byrow = TRUE)

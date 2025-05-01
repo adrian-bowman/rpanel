@@ -66,26 +66,29 @@ rp.wrangle <- function(name) {
    }
    
    if (name == "UN_demography") {
-      path <- rp.datalink("UN_demography")
-      path <- unz(path, "WPP2022_Demographic_Indicators_Medium.csv")
-      demog <- readr::read_csv(path) |>
-         dplyr::filter(LocTypeName == "Country/Area") |>
-         dplyr::select("LocID", "Location",
-                "Year" = "Time", "Population" = "TPopulation1Jan",
-                "Fertility" = "TFR", "Life_Expectancy" = "LEx") |>
-         dplyr::mutate(Population = Population / 1000)
+      path <- rp.datalink('UN_demography')
+      demog <- readxl::read_excel(path, skip = 16) |>
+         dplyr::filter(Type == 'Country/Area') |>
+         dplyr::select(Country = 3, Code = 5, Year,
+                       Population = 'Total Population, as of 1 January (thousands)',
+                       Fertility = "Total Fertility Rate (live births per woman)",
+                       Life_Expectancy = "Life Expectancy at Birth, both sexes (years)") |>
+         dplyr::mutate(Population = as.numeric(Population) / 1000,
+                       Fertility = as.numeric(Fertility),
+                       Life_Expectancy = as.numeric(Life_Expectancy))
       
-      path <- rp.datalink("UN_demography_metadata")
-      nms <- readxl::read_excel(path, sheet = "Overall", skip = 16) |>
-         dplyr::select("LocID", "Continent" = "GeoRegName") |>
-         dplyr::distinct() |>
+      path <- rp.datalink('UN_country_codes')
+      codes <- readxl::read_excel(path, skip = 16) |>
+         dplyr::select(Code = 4, Type = 9, Continent = 19) |>
+         dplyr::filter(Type == 'Country/Area') |>
+         dplyr::select(1, 3) |>
          dplyr::mutate(Continent = dplyr::case_match(Continent,
-                                       "Latin America and the Caribbean" ~ "LA and Car.",
-                                       "Northern America" ~ "N. America",
-                                       .default = Continent))
+                                          "Latin America and the Caribbean" ~ "LA and Car.",
+                                          "Northern America" ~ "N. America",
+                                          .default = Continent))
       
       # anti_join(demog, nms, "LocID")
-      d <- dplyr::left_join(demog, nms, "LocID")
+      d <- dplyr::left_join(demog, codes, "Code")
    }
    
    invisible(d)
