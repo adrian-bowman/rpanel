@@ -58,7 +58,7 @@ export(
   rp.geosim, 
   rp.gulls, 
   rp.likelihood,
-  rp.lm_small,
+  rp.lm2,
   rp.logistic,
 # rp.multilevel,
   rp.mururoa, 

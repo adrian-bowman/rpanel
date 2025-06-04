@@ -1,12 +1,11 @@
 #     A general function for linear models
 
-rp.lm_small <- function(x, ylab, xlab, zlab, ci = TRUE,
+rp.lm2 <- function(x, ylab, xlab, zlab, ci = TRUE,
                         panel = FALSE, panel.plot = TRUE,
                         hscale = 1, vscale = hscale,
-                        display, omit, residuals.showing, ...) {
+                        display, residuals.showing, ...) {
    
    if (missing(display)) display <- NULL
-   if (missing(omit))    omit    <- NULL
    if (missing(residuals.showing)) residuals.showing <- FALSE
    
    # Deal with formula or model inputs
@@ -105,7 +104,7 @@ rp.lm_small <- function(x, ylab, xlab, zlab, ci = TRUE,
    
    # Linear regression with two covariates
    if (length(numeric.ind) == 2 & length(factor.ind) == 0)
-      return(rp.regression2.lmsmall(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
+      return(rp.regression2.lm2(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
                             panel = panel, models = models, title = ttl,
                             display = display,
                             residuals.showing = residuals.showing))
@@ -120,28 +119,28 @@ rp.lm_small <- function(x, ylab, xlab, zlab, ci = TRUE,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
               list(c('Display', 'blank', 'coefficients', 'terms')),
-              initval = 'terms', action = rp.lmsmall.redraw)
+              initval = 'terms', action = rp.lm2.redraw)
       rp.grid(pnl, "models", row = 0, column = 0, background = bgdcol)
-      rp.tkrplot(pnl, modelnodes, rp.lmsmall.modelnodes, action = rp.lmsmall.click,
+      rp.tkrplot(pnl, modelnodes, rp.lm2.modelnodes, action = rp.lm2.click,
                  hscale = 0.7 * hscale, vscale = 0.5 * vscale, 
                  grid = "models", row = 0, column = 0, background = "white")
 
       if (panel.plot) {
          rp.grid(pnl, "dataplot", row = 0, column = 1, background = "white")
-         rp.tkrplot(pnl, plot, rp.lmsmall.draw,
+         rp.tkrplot(pnl, plot, rp.lm2.draw,
                     hscale = hscale, vscale = vscale, 
                     grid = "dataplot", row = 0, column = 0, background = "white")
          # rp.listbox(pnl, analysis, c('none', 'coefficients', 'terms'),
                     # title = 'analysis',
                     # grid = "models", row = 1, column = 0, background = "white")
-         rp.tkrplot(pnl, fplot, rp.lmsmall.effectsplot,
+         rp.tkrplot(pnl, fplot, rp.lm2.effectsplot,
                     hscale = hscale * 0.7, vscale = vscale * 0.5, 
                     grid = "models", row = 2, column = 0, background = bgdcol)
-         action.fn <- rp.lmsmall.redraw
+         action.fn <- rp.lm2.redraw
       }
       else {
          # This needs to be amended to handle the effects plot
-         action.fn <- rp.lmsmall.draw
+         action.fn <- rp.lm2.draw
          rp.text(pnl, "        Model", grid = "models", row = 0, column = 1, background = bgdcol)
          rp.text(pnl,       "current", grid = "models", row = 1, column = 0, background = bgdcol)
          rp.text(pnl,           "new", grid = "models", row = 1, column = 2, background = bgdcol)
@@ -150,7 +149,8 @@ rp.lm_small <- function(x, ylab, xlab, zlab, ci = TRUE,
          rp.checkbox(pnl, model12, action.fn, labels = "", initval = init.model[2],
                      grid = "models", row = 3, column = 0, name = "model12", background = bgdcol)
          for (i in 1:length(model.options)) rp.text(pnl, model.options[i],
-                                                    grid = "models", row = i + 1, column = 1, background = bgdcol)
+                                                    grid = "models", row = i + 1, column = 1,
+                                                    background = bgdcol)
          rp.checkbox(pnl, model01, action.fn, labels = "", initval = init.model0[1],
                      grid = "models", row = 2, column = 2, name = "model01", background = bgdcol)
          rp.checkbox(pnl, model02, action.fn, labels = "", initval = init.model0[1],
@@ -170,17 +170,24 @@ rp.lm_small <- function(x, ylab, xlab, zlab, ci = TRUE,
       # rp.do(pnl, action.fn)
    }
    else {
-      pnl <- list(x = x, y = y, z = factor(group), xlab = xlab, ylab = ylab,
-                  xterm = xterm, zterm = zterm, term.names = term.names, 
-                  style = style, bgdcol = bgdcol)
-      rp.lmsmall.draw(pnl)
+      # pnl <- list(x = x, y = y, z = z, xlab = xlab, ylab = ylab,
+      #             xterm = xterm, zterm = zterm, term.names = term.names, 
+      #             style = style, bgdcol = bgdcol)
+      pnl <- list(ttl, models = models, y = y, x = x, z = z,
+                        jitter.x = jitter.x,
+                        type = type, style = style, labels.max = labels.max,
+                        xlab = xlab, ylab = ylab, zlab = zlab,
+                        yterm = yterm, xterm = xterm, zterm = zterm,
+                        ci = ci, bgdcol = bgdcol, highlighted.node = NA,
+                        model.nodes = model.nodes, click.coords = rep(NA, 2))
+      rp.lm2.draw(pnl)
    }
    
    invisible()
    
 }
 
-rp.lmsmall.modelnodes <- function(panel) {
+rp.lm2.modelnodes <- function(panel) {
    fillcol <- rep('white', 5)
    if (!any(is.na(panel$highlighted.node)))
       fillcol[panel$highlighted.node] <- 'lightblue'
@@ -223,7 +230,7 @@ rp.lmsmall.modelnodes <- function(panel) {
    panel
 }
 
-rp.lmsmall.click <- function(panel, x, y) {
+rp.lm2.click <- function(panel, x, y) {
    d.nodes <- (panel$model.nodes$x - x)^2 + (panel$model.nodes$y - y)^2
    comp1   <- panel$model.nodes$comparison1
    comp2   <- panel$model.nodes$comparison2
@@ -250,7 +257,7 @@ rp.lmsmall.click <- function(panel, x, y) {
    panel
 }
 
-rp.lmsmall.draw <- function(panel) {
+rp.lm2.draw <- function(panel) {
    
    hlight <- panel$highlighted.node
    
@@ -308,7 +315,8 @@ rp.lmsmall.draw <- function(panel) {
       if (length(hlight) != 2) {
          plt <- plt + ggplot2::stat_density(ggplot2::aes(fill = ggplot2::after_stat(density)),
                                             geom = "tile",
-                                            height = 0.7, position = "identity", show.legend = FALSE) +
+                                            height = 0.7, position = "identity",
+                                            show.legend = FALSE) +
             ggplot2::scale_fill_gradient(low = "grey90", high = clr[3])
       }
       else if (length(hlight) == 2) {
@@ -368,7 +376,7 @@ rp.lmsmall.draw <- function(panel) {
    panel
 }
 
-rp.lmsmall.effectsplot <- function(panel) {
+rp.lm2.effectsplot <- function(panel) {
    with(panel, {
       nhl    <- length(highlighted.node)
       hlight <- (!any(is.na(highlighted.node)) && 
@@ -391,7 +399,7 @@ rp.lmsmall.effectsplot <- function(panel) {
    panel
 }
 
-rp.lmsmall.redraw <- function(panel) {
+rp.lm2.redraw <- function(panel) {
    rp.tkrreplot(panel, plot)
    rp.tkrreplot(panel, fplot)
    rp.tkrreplot(panel, modelnodes)

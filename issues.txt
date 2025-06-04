@@ -14,7 +14,7 @@ rp.sample
   - improve the plots created by standard graphics, when ggplot = FALSE,
     to match those when ggplot = TRUE. Is it worth it?
 
-rp.lm_small
+rp.lm2
   - plot a line rather than a point when there is only one df and one term?
   - set panel=FALSE by default, except for simple regression?
   - curtail infinity in drop1 distributions

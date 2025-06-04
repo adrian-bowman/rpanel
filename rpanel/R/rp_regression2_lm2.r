@@ -1,6 +1,6 @@
 #       regression2: regression with two covariates
 
-rp.regression2.lmsmall <- function (y, x1, x2,
+rp.regression2.lm2 <- function (y, x1, x2,
                                     ylab = NA, x1lab = NA, x2lab = NA,
                                     panel = TRUE,
                                     model = "None", residuals.showing = FALSE,
