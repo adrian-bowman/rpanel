@@ -1,6 +1,6 @@
-\name{rp.lm2}
+\name{rp.lm}
 
-\alias{rp.lm2}
+\alias{rp.lm}
 
 \title{Graphical display of linear models with no more than two explanatory variables}
 
@@ -9,10 +9,10 @@ This function provides graphical representations of linear models with mo more t
 }
 
 \usage{
-rp.lm2(x, ylab, xlab, zlab, ci = TRUE,
-       panel = FALSE, panel.plot = TRUE,
-       hscale = 1, vscale = hscale,
-       display, residuals.showing, ...)
+rp.lm(x, ylab, xlab, zlab, ci = TRUE,
+      panel = TRUE, panel.plot = TRUE,
+      hscale = 1, vscale = hscale,
+      display.model, residuals.showing, ...)
 }
 
 \arguments{
@@ -22,8 +22,9 @@ rp.lm2(x, ylab, xlab, zlab, ci = TRUE,
 \item{panel}{a logical value which determines whether a panel is created to allow interactive control of the fitted models.}
 \item{panel.plot = TRUE}{a logical value which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
-\item{display}{a one sided formula which determines the specific model to be displayed.}
+\item{display}{a one sided formula which determines the specific model to be displayed. This can be a reduced model which omits some of the terms present in the model defined by \code{x}, or an expanded model which includes interaction terms.}
 \item{residuals,showing}{a logical value which determines whether residuals are displayed when there are two covariates.}
+\item{...}{other arguments passed on the \code{lm} when \code{x} is a formula rather than a fitted model.}
 }
 
 \details{

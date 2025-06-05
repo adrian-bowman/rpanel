@@ -1,11 +1,12 @@
 #     A general function for linear models
 
-rp.lm2 <- function(x, ylab, xlab, zlab, ci = TRUE,
-                        panel = FALSE, panel.plot = TRUE,
-                        hscale = 1, vscale = hscale,
-                        display, residuals.showing, ...) {
+rp.lm <- function(x, ylab, xlab, zlab,
+                  panel = TRUE, panel.plot = TRUE,
+                  hscale = 1, vscale = hscale,
+                  inference = 'coefficients', ci = TRUE,
+                  display.model, residuals.showing, ...) {
    
-   if (missing(display)) display <- NULL
+   if (missing(display.model)) display.model <- NULL
    if (missing(residuals.showing)) residuals.showing <- FALSE
    
    # Deal with formula or model inputs
@@ -29,9 +30,12 @@ rp.lm2 <- function(x, ylab, xlab, zlab, ci = TRUE,
    numeric.ind  <- numeric.ind[numeric.ind != response.ind]
    factor.ind   <- which(var.types == 'factor')
    trms         <- attr(model$terms, 'term.labels')
+
    if (length(trms) == 0) stop('at least one predictor variable is required.')
-   if (length(numeric.ind) + length(factor.ind) > 2)
-      stop('this function deals with no more than two predictor variables.')
+   if (length(numeric.ind) + length(factor.ind) > 2) {
+      if (inference == 'coefficients') return(rp.coefficients(model))
+      if (inference == 'terms') return(drop1(model))
+   }
 
    # Extract the raw data
    y <- mf[ , response.ind]
@@ -106,7 +110,7 @@ rp.lm2 <- function(x, ylab, xlab, zlab, ci = TRUE,
    if (length(numeric.ind) == 2 & length(factor.ind) == 0)
       return(rp.regression2.lm2(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
                             panel = panel, models = models, title = ttl,
-                            display = display,
+                            display = display.model,
                             residuals.showing = residuals.showing))
       
    if (panel) {
@@ -118,7 +122,7 @@ rp.lm2 <- function(x, ylab, xlab, zlab, ci = TRUE,
                         ci = ci, bgdcol = bgdcol, highlighted.node = NA,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
-              list(c('Display', 'blank', 'coefficients', 'terms')),
+              list(c('Inference', 'none', 'coefficients', 'terms')),
               initval = 'terms', action = rp.lm2.redraw)
       rp.grid(pnl, "models", row = 0, column = 0, background = bgdcol)
       rp.tkrplot(pnl, modelnodes, rp.lm2.modelnodes, action = rp.lm2.click,

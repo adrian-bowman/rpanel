@@ -3,7 +3,8 @@
 rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01)) {
    
    tbl     <- drop1(model, test = 'F')[-1, ]
-   if (!missing(subset.terms) | is.null(subset.terms)) {
+   # if (!missing(subset.terms) | is.null(subset.terms)) {
+   if (!missing(subset.terms)) {
       if ((is.character(subset.terms)))
          subset.terms <- match(subset.terms, rownames(tbl))
       tbl <- tbl[subset.terms, ]

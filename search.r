@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "png"
+target    <- "list"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel/R"
