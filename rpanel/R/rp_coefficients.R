@@ -42,7 +42,7 @@ rp.coefficients <- function(model, style = 'density',
 	keep.cfs <- lapply(keep, fn)
 	trms.cfs <- rep(keep, sapply(keep.cfs, length))
 	keep     <- unlist(keep.cfs)
-	tbl      <- tbl[keep, ]
+	tbl      <- tbl[keep, , drop = FALSE]
 
 	# Apply subset, removing the intercept if subset is not specified
 	if (any(is.na(sbst))) {
@@ -86,7 +86,7 @@ rp.coefficients <- function(model, style = 'density',
 	   ind <- which((involved[ , trm] == 1) & (var.types == 'numeric'))
 	   ind <- rownames(involved)[ind]
 	   if (length(ind) > 1)
-	       stop('this functions cannot handle interactions between numeric variables.')
+	       stop('this functions cannot handle interaction between numeric variables.')
 	   result <- if (length(ind) == 0) 0:1 else range(model$x[ , ind])
 	   result
 	}
@@ -125,7 +125,7 @@ rp.coefficients <- function(model, style = 'density',
 	   se.marks     <- seq(-3, 3, by = 1)
 	   nmarks       <- length(se.marks)
 	   mn           <- if (ci) coeff else rep(0, ncoef)
-	   se           <- tbl[ , 2] * (rng[ , 2] - rng[ , 1])
+	   se           <- tbl[ , 2] * (rng[2, ] - rng[1, ])
 	   dfrm.scale   <- data.frame(x  = rep(as.numeric(lbls), each = nmarks),
 	                              mn = rep(mn, each = nmarks),
 	                              se = rep(se, each = nmarks),
@@ -148,7 +148,7 @@ rp.coefficients <- function(model, style = 'density',
 	# Add se marks if requested
 	if (!is.null(marks)) {
 	   mn           <- if (ci) coeff else rep(0, ncoef)
-	   se           <- tbl[ , 2] * (rng[ , 2] - rng[ , 1])
+	   se           <- tbl[ , 2] * (rng[2, ] - rng[1, ])
 	   dfrm.scale   <- data.frame(x  = rep(as.numeric(lbls), each = length(marks)),
 	                              mn = rep(  mn, each = length(marks)),
 	                              se = rep(  se, each = length(marks)),

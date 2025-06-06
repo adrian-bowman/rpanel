@@ -28,6 +28,7 @@ model <- lm(Giving ~ Employ, data = CofE)
 rp.lmsmall(model)
 rp.lmsmall(log(Speed) ~ log(Mass), data = rodent)
 
+model <- lm(Giving ~ Employ + Elect + Attend, data = CofE)
 rp.drop1(model)
 rp.drop1(model, p.reference = NULL)
 rp.coefficients(model)

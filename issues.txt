@@ -2,25 +2,18 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
-rp.ttest
-  - could/should the p-value or confidence level be shown without cluttering the plot?
-  - add animation which shows the plausibility of the sample mean under different
-    assumptions of population mean?
-  - add binomial proportions?
-
-rp.sample
-  - still a problem with warning of geom_col observations out of range? Fixed?
-  - allow binomial data to be specified. No, make this an exercise.
-  - improve the plots created by standard graphics, when ggplot = FALSE,
-    to match those when ggplot = TRUE. Is it worth it?
-
-rp.lm2
+rp.lm
   - plot a line rather than a point when there is only one df and one term?
-  - set panel=FALSE by default, except for simple regression?
   - curtail infinity in drop1 distributions
-  - position p=... proportionally to p
-  - consider how to deprecate rp.regression and rp.anova
-  
+  - consider how to deprecate rp.regression, rp.ancova and rp.anova.
+  - Does it work with factor interactions?
+  - Does it work for higher-order interactions?
+  - Does it work for other contrast settings?
+  - How to handle subset and labels?
+  - should the stated model define the maximal model?
+  - Disallow terms which have interactions between numeric variables
+    (by checking the factors table)
+
 rp.coefficients
   - adjust width of densities to have area 1?
   - t-distributions for linear models
@@ -47,7 +40,8 @@ rp.ancova
   - the help file example doesn't run because of the with construction.
 
 rp.regression:
-  - 1 covariate: setting panel = FALSE doesn't work
+  - 1 covariate: add effects plot.
+  - 2 covariates: add effects plot.
   - model: allow vertical or horizontal display
     (vertical gives the same orientation as the response)
   - the specification of models is very inflexible in the one and two 
@@ -59,6 +53,18 @@ rp.regression:
   - mixed models?
   - allow different funtions to control the calculation of effect size?
     range, iqr, user-supplied?
+
+rp.ttest
+  - could/should the p-value or confidence level be shown without cluttering the plot?
+  - add animation which shows the plausibility of the sample mean under different
+    assumptions of population mean?
+  - add binomial proportions?
+
+rp.sample
+  - still a problem with warning of geom_col observations out of range? Fixed?
+  - allow binomial data to be specified. No, make this an exercise.
+  - improve the plots created by standard graphics, when ggplot = FALSE,
+    to match those when ggplot = TRUE. Is it worth it?
 
 rp.geosim
   - the variogram plot no longer disappears when the checkboxes are not checked.

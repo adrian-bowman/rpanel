@@ -6,8 +6,20 @@ Date: 2021-09-02
 Author: Bowman, Bowman, Gibson and Crawford
 Maintainer: Adrian Bowman <adrian.bowman@glasgow.ac.uk>
 Depends: R (>= 4.1), tcltk
-Suggests: rgl, sp, geoR, interp, MASS, denstrip,
-        lattice, sm, maps, mgcv, colorspace, ggplot2
+Suggests: 
+    rgl,
+    sp,
+    geoR,
+    interp,
+    MASS,
+    denstrip,
+    lattice,
+    sm,
+    maps,
+    mgcv,
+    colorspace,
+    ggplot2,
+    testthat (>= 3.0.0)
 Description: A set of functions to build simple 
         GUI controls for R functions.  These are built on the 'tcltk' package. 
         Uses could include changing a parameter on a graph by animating it 
@@ -18,3 +30,4 @@ Description: A set of functions to build simple
 License: GPL (>= 2)
 BugReports: https://github.com/adrian-bowman/rpanel/issues
 LazyData: TRUE
+Config/testthat/edition: 3

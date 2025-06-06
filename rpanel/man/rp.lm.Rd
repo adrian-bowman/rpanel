@@ -29,6 +29,8 @@ rp.lm(x, ylab, xlab, zlab, ci = TRUE,
 
 \details{
 The display of the data is adapted to the form of the explanatory variables. When \code{panel = TRUE} a lattice of potential models is displayed in graphical form. When a node of the lattice is clicked the corresponding fitted model is displayed. When a connection between adjacent models is clicked, a comparison of the two adjacent models is displayed, either as model coefficients (\code{display = 'coefficients'}) or model terms (\code{display = 'coefficients'}).
+
+The function does not deal with interactions involving more than one covariate.
 }
 
 \value{

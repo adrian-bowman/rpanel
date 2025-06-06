@@ -1,10 +1,10 @@
 #       regression2: regression with two covariates
 
-rp.regression2.lm2 <- function (y, x1, x2,
-                                    ylab = NA, x1lab = NA, x2lab = NA,
-                                    panel = TRUE,
-                                    model = "None", residuals.showing = FALSE,
-                                    size = 3, col = "red", ...) {
+rp.regression2.lm <- function (y, x1, x2,
+                                ylab = NA, x1lab = NA, x2lab = NA,
+                                panel = TRUE,
+                                model = "None", residuals.showing = FALSE,
+                                size = 3, col = "red", ...) {
 
    hscale <- 1
    vscale <- 1
@@ -151,7 +151,7 @@ rp.regression2.lm2 <- function (y, x1, x2,
                 fov = 1, current.model = "None", smat = smat,
                 fv = fv, model = model, residuals.showing = residuals.showing,
                 highlighted.node = NA, model.nodes = model.nodes)
-            rp.tkrplot(spin.panel, modelnodes, rp.lmsmall.modelnodes,
+            rp.tkrplot(spin.panel, modelnodes, rp.lm.modelnodes,
                        action = rp.regression2.model,
                        vscale = 0.5, background = "white")
             # rp.doublebutton(spin.panel, theta, -1, title = "Theta", action = rp.rotate)
@@ -160,7 +160,7 @@ rp.regression2.lm2 <- function (y, x1, x2,
             #     c("None", "No effects", xlab, zlab, paste(xlab, "and", zlab)), 
             #     title = "Model", action = rp.regression2.model)
             rp.checkbox(spin.panel, residuals.showing, rp.regression2.residuals, "Show residuals")
-            rp.tkrplot(spin.panel, fplot, rp.lmsmall.effectsplot,
+            rp.tkrplot(spin.panel, fplot, rp.lm.effectsplot,
                        vscale = vscale * 0.5, 
                        background = bgdcol)
             rp.do(spin.panel, rp.regression2.model)

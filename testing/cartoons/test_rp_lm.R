@@ -21,9 +21,10 @@ model <- lm(Giving ~ Employ + Elect + Attend + group,
             data = cofeplus, x = TRUE)
 model <- lm(Giving ~ Employ + Elect + Attend,
             data = cofeplus, x = TRUE)
-
 model <- lm(Giving ~ Employ + Elect + Attend, data = CofE)
 model <- lm(Giving ~ Employ + Attend, data = CofE)
+
+rp.lm(model)
 rp.coefficients(model)
 
 # Simple linear regression
@@ -56,33 +57,26 @@ rp.lm(weight ~ factor(month) * hab, data = gullweight)
 rp.lm(weight ~ month, data = gullweight)
 rp.lm(weight ~ hab + month, data = gullweight, panel = TRUE)
 
+model <- lm(weight ~ hab + month, data = gullweight)
+rp.drop1(model)
+
 # Disallow covariates with names that match factors + levels
-# The contrasts function shows the names (colunames)
+# The contrasts function shows the names (colnames)
 
 model <- lm(weight ~ x + hab * month, data = gullweight)
 model <- lm(weight ~ x + hab + month, data = gullweight)
 coefficients(model)
 rp.coefficients(model)
 
-# What if there are interactions among factors?
-poisons <- dplyr::mutate(poisons, poison = factor(poison), treatment = factor(treatment))
+# Anova
+poisons <- dplyr::mutate(poisons, poison = factor(poison),
+                                  treatment = factor(treatment))
 model <- lm(stime ~ poison * treatment, data = poisons)
 coefficients(model)
 rp.coefficients(model)
 rp.drop1(model)
 rp.lm(model)
-
-# Restrict to order 2 in terms of interactions?
-
-# Does the range step work for factors? Currently based on levels?
-
-# Does it work with factor interactions?
-
-# Does it work for higher-order interactions?
-
-#  How to handle subset and labels?
-
-# Disallow terms which have interactions between numeric variables (by checking the factors table)
+model <- lm(stime ~ poison, data = poisons)
 
 rp.lm(model, panel = FALSE)
 rp.drop1(model)
@@ -117,6 +111,18 @@ rp.lm(Giving ~ Employ + Attend, data = CofE, panel = FALSE,
            display = ~ Attend)
 rp.lm(Giving ~ Employ + Attend, data = CofE, panel = FALSE,
            display = ~ 1)
+
+# Valid errors
+y  <- rnorm(50)
+x1 <- rnorm(50)
+x2 <- rnorm(50)
+g  <- factor(rbinom(50, 1, 0.5))
+# This doesn't cause an error as it reverts to additive. Is that ok?
+rp.lm(y ~ x1 * x2)
+model <- lm(y ~ g + x1 * x2)
+try(rp.lm(model))
+try(rp.coefficients(model))
+try(rp.drop1(model))
 
 # Coefficients make more sense if they are mean-centred
 hab0 <- gullweight$hab - mean(gullweight$hab)

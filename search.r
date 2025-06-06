@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "list"
+target    <- "rp.drop1"
 diry      <- "."
 diry      <- "testing"
 diry      <- "rpanel/R"

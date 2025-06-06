@@ -108,7 +108,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
    
    # Linear regression with two covariates
    if (length(numeric.ind) == 2 & length(factor.ind) == 0)
-      return(rp.regression2.lm2(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
+      return(rp.regression2.lm(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
                             panel = panel, models = models, title = ttl,
                             display = display.model,
                             residuals.showing = residuals.showing))
@@ -123,28 +123,28 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
               list(c('Inference', 'none', 'coefficients', 'terms')),
-              initval = 'terms', action = rp.lm2.redraw)
+              initval = 'none', action = rp.lm.redraw)
       rp.grid(pnl, "models", row = 0, column = 0, background = bgdcol)
-      rp.tkrplot(pnl, modelnodes, rp.lm2.modelnodes, action = rp.lm2.click,
+      rp.tkrplot(pnl, modelnodes, rp.lm.modelnodes, action = rp.lm.click,
                  hscale = 0.7 * hscale, vscale = 0.5 * vscale, 
                  grid = "models", row = 0, column = 0, background = "white")
 
       if (panel.plot) {
          rp.grid(pnl, "dataplot", row = 0, column = 1, background = "white")
-         rp.tkrplot(pnl, plot, rp.lm2.draw,
+         rp.tkrplot(pnl, plot, rp.lm.draw,
                     hscale = hscale, vscale = vscale, 
                     grid = "dataplot", row = 0, column = 0, background = "white")
          # rp.listbox(pnl, analysis, c('none', 'coefficients', 'terms'),
                     # title = 'analysis',
                     # grid = "models", row = 1, column = 0, background = "white")
-         rp.tkrplot(pnl, fplot, rp.lm2.effectsplot,
+         rp.tkrplot(pnl, fplot, rp.lm.effectsplot,
                     hscale = hscale * 0.7, vscale = vscale * 0.5, 
                     grid = "models", row = 2, column = 0, background = bgdcol)
-         action.fn <- rp.lm2.redraw
+         action.fn <- rp.lm.redraw
       }
       else {
          # This needs to be amended to handle the effects plot
-         action.fn <- rp.lm2.draw
+         action.fn <- rp.lm.draw
          rp.text(pnl, "        Model", grid = "models", row = 0, column = 1, background = bgdcol)
          rp.text(pnl,       "current", grid = "models", row = 1, column = 0, background = bgdcol)
          rp.text(pnl,           "new", grid = "models", row = 1, column = 2, background = bgdcol)
@@ -184,14 +184,14 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         yterm = yterm, xterm = xterm, zterm = zterm,
                         ci = ci, bgdcol = bgdcol, highlighted.node = NA,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
-      rp.lm2.draw(pnl)
+      rp.lm.draw(pnl)
    }
    
    invisible()
    
 }
 
-rp.lm2.modelnodes <- function(panel) {
+rp.lm.modelnodes <- function(panel) {
    fillcol <- rep('white', 5)
    if (!any(is.na(panel$highlighted.node)))
       fillcol[panel$highlighted.node] <- 'lightblue'
@@ -234,7 +234,7 @@ rp.lm2.modelnodes <- function(panel) {
    panel
 }
 
-rp.lm2.click <- function(panel, x, y) {
+rp.lm.click <- function(panel, x, y) {
    d.nodes <- (panel$model.nodes$x - x)^2 + (panel$model.nodes$y - y)^2
    comp1   <- panel$model.nodes$comparison1
    comp2   <- panel$model.nodes$comparison2
@@ -261,7 +261,7 @@ rp.lm2.click <- function(panel, x, y) {
    panel
 }
 
-rp.lm2.draw <- function(panel) {
+rp.lm.draw <- function(panel) {
    
    hlight <- panel$highlighted.node
    
@@ -380,7 +380,7 @@ rp.lm2.draw <- function(panel) {
    panel
 }
 
-rp.lm2.effectsplot <- function(panel) {
+rp.lm.effectsplot <- function(panel) {
    with(panel, {
       nhl    <- length(highlighted.node)
       hlight <- (!any(is.na(highlighted.node)) && 
@@ -403,7 +403,7 @@ rp.lm2.effectsplot <- function(panel) {
    panel
 }
 
-rp.lm2.redraw <- function(panel) {
+rp.lm.redraw <- function(panel) {
    rp.tkrreplot(panel, plot)
    rp.tkrreplot(panel, fplot)
    rp.tkrreplot(panel, modelnodes)
