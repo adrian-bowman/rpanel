@@ -68,7 +68,5 @@ test_that('Standard call', {
 # Two factors
 
 test_that('Standard call', {
-   poisons <- dplyr::mutate(poisons, poison = factor(poison),
-                            treatment = factor(treatment))
    expect_warning(rp.lm(stime ~ poison + treatment, data = poisons))
 })

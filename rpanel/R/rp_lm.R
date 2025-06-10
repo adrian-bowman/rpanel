@@ -1,13 +1,15 @@
 #     A general function for linear models
 
 rp.lm <- function(x, ylab, xlab, zlab,
-                  panel = TRUE, panel.plot = TRUE,
+                  panel = TRUE, panel.plot = TRUE, uncertainty.display = 'density',
                   hscale = 1, vscale = hscale,
                   inference = 'coefficients', ci = TRUE,
                   display.model, residuals.showing, ...) {
    
    if (missing(display.model)) display.model <- NULL
    if (missing(residuals.showing)) residuals.showing <- FALSE
+   estcol <- '#86B875'
+   refcol <- '#E495A5'
    
    # Deal with formula or model inputs
    class.x <- class(x)
@@ -115,11 +117,12 @@ rp.lm <- function(x, ylab, xlab, zlab,
       
    if (panel) {
       pnl <- rp.control(ttl, models = models, y = y, x = x, z = z,
-                        jitter.x = jitter.x,
+                        jitter.x = jitter.x, uncertainty.display = uncertainty.display,
                         type = type, style = style, labels.max = labels.max,
                         xlab = xlab, ylab = ylab, zlab = zlab,
                         yterm = yterm, xterm = xterm, zterm = zterm,
-                        ci = ci, bgdcol = bgdcol, highlighted.node = NA,
+                        ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
+                        highlighted.node = NA,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
               list(c('Inference', 'none', 'coefficients', 'terms')),
@@ -182,7 +185,8 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         type = type, style = style, labels.max = labels.max,
                         xlab = xlab, ylab = ylab, zlab = zlab,
                         yterm = yterm, xterm = xterm, zterm = zterm,
-                        ci = ci, bgdcol = bgdcol, highlighted.node = NA,
+                        ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
+                        highlighted.node = NA,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.lm.draw(pnl)
    }
@@ -321,7 +325,8 @@ rp.lm.draw <- function(panel) {
                                             geom = "tile",
                                             height = 0.7, position = "identity",
                                             show.legend = FALSE) +
-            ggplot2::scale_fill_gradient(low = "grey90", high = clr[3])
+                      ggplot2::scale_fill_gradient(low = "grey90", high = clr[3])
+         # plt <- plt + ggplot2::geom_violin(col = NA, fill = 'grey80')
       }
       else if (length(hlight) == 2) {
          mdl   <- panel$models[[hlight[1]]]
@@ -342,26 +347,58 @@ rp.lm.draw <- function(panel) {
             dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
                                 x = rep(dfrm1$x, ngrid), z = rep(dfrm1$z, ngrid))
             dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[cbind(dfrm1$x, dfrm1$z)],
-                                se[cbind(dfrm1$x, dfrm1$z)])
-         } else {
+                                              se[cbind(dfrm1$x, dfrm1$z)])
+         }
+         else {
             dfrm1 <- data.frame(y = mn, x = names(mn))
             dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
                                 x = rep(dfrm1$x, ngrid))
             dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[dfrm1$x], se[dfrm1$x])
          }
-         plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x, fill = dgrid),
-                                         height = 0.8, data = dfrm1,
-                                         show.legend = FALSE) +
-            ggplot2::scale_fill_gradient(low = "grey90", high = clr[2])
+         if (panel$uncertainty.display == 'shading') {
+            plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x,
+                                            fill = dgrid, height = 0.8),
+                                            data = dfrm1, show.legend = FALSE) +
+               ggplot2::scale_fill_gradient(low = "grey90", high = panel$refcol)
+         }
+         else {
+            dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se))
+            plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x, height = dgrid),
+                                            col = NA, fill = panel$refcol,
+                                            show.legend = FALSE, data = dfrm1)
+            # print('dfrm1')
+            # print(head(dfrm1))
+            # af1x  <- as.numeric(factor(dfrm1$x))
+            # print(af1x)
+            # dfrm2 <- data.frame(y = c(af1x - 0.4 * dfrm1$dgrid,
+            #                           af1x + 0.4 * rev(dfrm1$dgrid)),
+            #                     x = c(dfrm1$xgrid, rev(dfrm1$xgrid)))
+            # print(dfrm2)
+            # plt <- plt +
+            #    ggplot2::geom_polygon(ggplot2::aes(x = x, y = y),
+            #                          data = dfrm2, col = NA, fill = panel$refcol)
+         }
       }
       if (!any(is.na(hlight))) {
          mdl <- panel$models[[hlight[1]]]
-         plt <- plt + ggplot2::stat_summary(ggplot2::aes(x = fitted(mdl)), width = 0,
-                                            fun = "mean", linewidth = 1,
-                                            fun.min = function(x) mean(x) - 0.45,
-                                            fun.max = function(x) mean(x) + 0.45,
-                                            geom = "crossbar", orientation = "x", col = clr[1])
+         afx <- as.numeric(factor(dfrm$x))
+         plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = fitted(mdl),
+                                                         y    = afx - 0.45,
+                                                         yend = afx + 0.45),
+                                            linewidth = 1, col = panel$estcol)
+         print(plt)
       }
+      # if (!any(is.na(hlight))) {
+      #    mdl <- panel$models[[hlight[1]]]
+      #    plt <- plt + ggplot2::stat_summary(ggplot2::aes(x = fitted(mdl)), width = 0,
+      #                                       fun = "mean", linewidth = 1,
+      #                                       fun.min = function(x) mean(x) - 0.45,
+      #                                       fun.max = function(x) mean(x) + 0.45,
+      #                                       geom = "crossbar", orientation = "x", col = clr[1])
+      #    print('here1')
+      #    print(plt)
+      #    print()
+      # }
       fvs  <- c(sapply(panel$models, function(x) range(fitted(x))))
       yrng <- range(panel$y, fvs)
       plt  <- plt +
