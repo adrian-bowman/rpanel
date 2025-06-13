@@ -3,22 +3,31 @@
 --------------------------------------------------------------
 
 rp.lm
-  - plot a line rather than a point when there is only one df and one term?
-  - curtail infinity in drop1 distributions
+  - fix one-way comparison
+  - colours?
+  - match the jitter to the width of the density strip
   - consider how to deprecate rp.regression, rp.ancova and rp.anova.
-  - Does it work with factor interactions?
-  - Does it work for higher-order interactions?
   - Does it work for other contrast settings?
   - How to handle subset and labels?
   - should the stated model define the maximal model?
   - Disallow terms which have interactions between numeric variables
     (by checking the factors table)
+    This doesn't cause an error as it reverts to additive. Is that ok?
+  - check that things work when one of the one.way or two.way groups is empty.
+  - rp.lm(Giving ~ Employ + Attend, data = CofE,
+      xlab = 'x', ylab = 'y', zlab = 'z',
+      display = ~ Employ, panel = FALSE)
+    This works if the axis labels are dropped.
 
 rp.coefficients
   - adjust width of densities to have area 1?
   - t-distributions for linear models
   - lines idea to give visual cues? (change in mean versus change from min(x))
   - this needs some thinking
+  
+rp.drop1
+  - curtail infinity in distributions
+  - plot a line rather than a point when there is only one df and one term?
 
 rp.anova
   - use of transparency to compare reference density and observed, as in rp.contingency.

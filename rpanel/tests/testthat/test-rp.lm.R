@@ -1,11 +1,5 @@
 #     Tests for the rp.lm function
 
-# Things which don't work
-
-# rp.lm(Giving ~ Employ + Attend, data = CofE,
-#       xlab = 'x', ylab = 'y', zlab = 'z',
-#       display = ~ Employ, panel = FALSE)
-
 # Regression with one covariate
 
 test_that('Standard call', {
@@ -38,14 +32,13 @@ test_that('Residuals showing', {
 })
 test_that('Select the model to be displayed', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
-                         display = ~ Employ, panel = FALSE))
+                         display.model = ~ Employ, panel = FALSE))
 })
 test_that('Select the null model to be displayed', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
-                         display = ~ 1, residuals.showing = TRUE,
+                         display.model = ~ 1, residuals.showing = TRUE,
                          panel = FALSE))
 })
-# This doesn't cause an error as it reverts to additive. Is that ok?
 test_that('Interaction between two covariates', {
    expect_no_error(rp.lm(Giving ~ Employ * Attend, data = CofE))
 })
@@ -62,11 +55,43 @@ test_that('Standard call', {
 test_that('Standard call', {
    poisons <- dplyr::mutate(poisons, poison = factor(poison),
                             treatment = factor(treatment))
-   expect_warning(rp.lm(stime ~ poison, data = poisons))
+   expect_no_error(rp.lm(stime ~ poison, data = poisons))
 })
 
 # Two factors
 
 test_that('Standard call', {
-   expect_warning(rp.lm(stime ~ poison + treatment, data = poisons))
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons))
+})
+test_that('Density display', {
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons,
+                        uncertainty.display = 'shading'))
+})
+test_that('Static mode: standard call', {
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE))
+})
+test_that('Static mode: standard call, density display', {
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                         uncertainty.display = 'shading'))
+})
+test_that('Static mode: valid display.model', {
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                         display.model = ~ poison * treatment))
+})
+test_that('Static mode: invalid display.model', {
+   expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                      display.model = ~ something))
+})
+test_that('Static mode: valid comparison.model', {
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                         display.model = ~ poison * treatment,
+                         comparison.model = ~ poison + treatment))
+})
+test_that('Static mode: invalid setting of comparison.model without display.model', {
+   expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                      comparison.model = ~ poison))
+})
+test_that('Static mode: display.model and comparison.model are not adjacent', {
+   expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                      display = ~ poison, comparison.model = ~ poison * treatment))
 })

@@ -4,12 +4,17 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   panel = TRUE, panel.plot = TRUE, uncertainty.display = 'density',
                   hscale = 1, vscale = hscale,
                   inference = 'coefficients', ci = TRUE,
-                  display.model, residuals.showing, ...) {
+                  display.model, comparison.model, residuals.showing, ...) {
    
+   static <- !panel
    if (missing(display.model)) display.model <- NULL
+   if (missing(comparison.model)) comparison.model <- NULL
+   if (!is.null(comparison.model) & is.null(display.model))
+      stop('if comparison.model is specified then display.model must also be specified')
    if (missing(residuals.showing)) residuals.showing <- FALSE
    estcol <- '#86B875'
    refcol <- '#E495A5'
+   style  <- if (requireNamespace('ggplot2', quietly = TRUE)) 'ggplot' else 'standard'
    
    # Deal with formula or model inputs
    class.x <- class(x)
@@ -55,7 +60,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
    # if (length(numeric.ind) == 2 & length(factor.ind) == 0 & length(xlab) == 1)
    #    stop('xlab is of length 1 but length 2 is needed.')
 
-   # Other models
+   # Identify type of model
    if (length(numeric.ind) == 1 & length(factor.ind) == 0) type <- 'regression.one'
    if (length(numeric.ind) == 2 & length(factor.ind) == 0) type <- 'regression.two'
    if (length(numeric.ind) == 1 & length(factor.ind) == 1) type <- 'ancova'
@@ -100,13 +105,57 @@ rp.lm <- function(x, ylab, xlab, zlab,
       model.max <- model
    labels.max <- names(coefficients(model.max))[-1]
    
+   # Check that the display.model and comparison.model formula are submodels of the maximal model
+   terms.max <- attr(terms(model.max), 'term.labels')
+   if (!is.null(display.model)) {
+      terms.display <- attr(terms(display.model), 'term.labels')
+      if (!all(terms.display %in% terms.max))
+         stop('display.model is not a valid model.')
+   }
+   if (!is.null(comparison.model)) {
+      terms.comparison <- attr(terms(comparison.model), 'term.labels')
+      if (!all(terms.comparison %in% terms.max))
+         stop('comparison.model is not a valid model.')
+   }
+   
+   # Create a list of valid models
+   # and, for anova, estimates and se's for comparisons.
+   # Use this to define the plotted response range.
    models  <- list()
    nmodels <- switch(type, regression.two = 4, ancova = 5,
                            one.way = 2, two.way = 5)
    for (i in 1:nmodels)
       models[[i]] <- update(model, model.nodes$label[i])
-   style <- if (requireNamespace('ggplot2', quietly = TRUE)) 'ggplot'
-            else 'standard'
+   if (type %in% c('one.way', 'two.way')) {
+      model.est <- list()
+      comp.est  <- list()
+      comp.se   <- list()
+      for (i in 1:nmodels) {
+         mdlm   <- models[[i]]
+         mdl    <- models[[model.nodes$comparison1[i]]]
+         mdl0   <- models[[model.nodes$comparison2[i]]]
+         lst    <- if (type == 'two.way') list(x, z)
+                   else list(x)
+         ngps    <- nrow(unique(data.frame(x, z)))
+         df0     <- mdl0$df.residual
+         df1     <- mdl$df.residual
+         model.est[[i]] <- tapply(fitted(mdlm), lst, mean)
+         comp.est[[i]]  <- tapply(fitted(mdl0), lst, mean)
+         comp.se[[i]]   <- tapply(fitted(mdl0), lst, length)
+         comp.se[[i]]   <- summary(mdl)$sigma * sqrt(abs(df0 - df1)) /
+                              sqrt(comp.se[[i]] * ngps)
+      }
+      response.range <- range(y, unlist(model.est),
+                              unlist(comp.est) + 3 * unlist(comp.se),
+                              unlist(comp.est) - 3 * unlist(comp.se),
+                              na.rm = TRUE)
+   }
+   else {
+      model.est <- NULL
+      comp.est  <- NULL
+      comp.se  <- NULL
+      response.range <- range(y)
+   }
    
    # Linear regression with two covariates
    if (length(numeric.ind) == 2 & length(factor.ind) == 0)
@@ -117,12 +166,14 @@ rp.lm <- function(x, ylab, xlab, zlab,
       
    if (panel) {
       pnl <- rp.control(ttl, models = models, y = y, x = x, z = z,
+                        model.est = model.est, comp.est = comp.est, comp.se = comp.se,
+                        response.range = response.range,
                         jitter.x = jitter.x, uncertainty.display = uncertainty.display,
                         type = type, style = style, labels.max = labels.max,
                         xlab = xlab, ylab = ylab, zlab = zlab,
                         yterm = yterm, xterm = xterm, zterm = zterm,
                         ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
-                        highlighted.node = NA,
+                        highlighted.node = NA, static = static,
                         model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
               list(c('Inference', 'none', 'coefficients', 'terms')),
@@ -181,13 +232,16 @@ rp.lm <- function(x, ylab, xlab, zlab,
       #             xterm = xterm, zterm = zterm, term.names = term.names, 
       #             style = style, bgdcol = bgdcol)
       pnl <- list(ttl, models = models, y = y, x = x, z = z,
-                        jitter.x = jitter.x,
-                        type = type, style = style, labels.max = labels.max,
-                        xlab = xlab, ylab = ylab, zlab = zlab,
-                        yterm = yterm, xterm = xterm, zterm = zterm,
-                        ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
-                        highlighted.node = NA,
-                        model.nodes = model.nodes, click.coords = rep(NA, 2))
+                  model.est = model.est, comp.est = comp.est, comp.se = comp.se,
+                  response.range = response.range,
+                  jitter.x = jitter.x, uncertainty.display = uncertainty.display,
+                  type = type, style = style, labels.max = labels.max,
+                  xlab = xlab, ylab = ylab, zlab = zlab,
+                  yterm = yterm, xterm = xterm, zterm = zterm,
+                  ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
+                  highlighted.node = NA, static = static,
+                  model.nodes = model.nodes, click.coords = rep(NA, 2),
+                  display.model = display.model, comparison.model = comparison.model)
       rp.lm.draw(pnl)
    }
    
@@ -267,8 +321,33 @@ rp.lm.click <- function(panel, x, y) {
 
 rp.lm.draw <- function(panel) {
    
-   hlight <- panel$highlighted.node
-   
+   if (panel$static) {
+      fn <- function(x, trms) {
+         mt <- attr(terms(as.formula(x)), 'term.labels')
+         (length(trms) == length(mt)) & all(trms %in% mt)
+      }
+      if (!is.null(panel$display.model)) {
+         terms.display <- attr(terms(panel$display.model), 'term.labels')
+         terms.model   <- sapply(panel$model.nodes$label, fn, terms.display)
+         hlight <- which(terms.model)
+      }
+      else
+         hlight <- panel$highlighted.node
+      if (!is.null(panel$comparison.model)) {
+         terms.comparison <- attr(terms(panel$comparison.model), 'term.labels')
+         terms.model      <- sapply(panel$model.nodes$label, fn, terms.comparison)
+         comp.ind         <- c(hlight, which(terms.model))
+         fn <- function(x) all(comp.ind %in% x)
+         comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
+         comp.ind <- which(apply(comps, 1, fn))
+         if (length(comp.ind) == 0) stop('only adjacent models can be compared in this function.\n  Use the anova function to perform more general comparisons.')
+         # The 1 below deals with the one.way case
+         hlight   <- comps[comp.ind[1], ]
+      }
+   }
+   else
+      hlight <- panel$highlighted.node
+
    # Ancova
    if (panel$type == 'ancova') {
       
@@ -318,42 +397,61 @@ rp.lm.draw <- function(panel) {
          ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                         panel.grid.minor = ggplot2::element_blank(),
                         panel.background = ggplot2::element_rect(fill = "grey90")) +
-         # ggplot2::geom_hline(yintercept = 1:nlevels(x) + 0.5, col = "white") +
          ggplot2::ggtitle(panel$ttl)
+      ngrid <- 512
+      xgrid <- seq(panel$response.range[1], panel$response.range[2], length = ngrid)
+      del   <- diff(panel$response.range) / ngrid
+      # Plot the data density
       if (length(hlight) != 2) {
-         plt <- plt + ggplot2::stat_density(ggplot2::aes(fill = ggplot2::after_stat(density)),
-                                            geom = "tile",
-                                            height = 0.7, position = "identity",
-                                            show.legend = FALSE) +
-                      ggplot2::scale_fill_gradient(low = "grey90", high = clr[3])
-         # plt <- plt + ggplot2::geom_violin(col = NA, fill = 'grey80')
+         lst   <- if (panel$type == 'two.way') list(panel$x, panel$z) else list(panel$x)
+         fn    <- function(x) {
+            bw   <- if (length(x) > 1) bw.norm(x) else diff(panel$response.range) / 8
+            dens <- density(x, bw = bw, n = ngrid,
+                            from = panel$response.range[1] + del,
+                            to   = panel$response.range[2] - del)
+            cbind(dens$x, dens$y)
+         }
+         dgrid <- tapply(panel$y, lst, fn)
+         xdens <- c(sapply(dgrid, function(x) x[ , 1]))
+         ydens <- c(sapply(dgrid, function(x) x[ , 2]))
+         dfrm0 <- data.frame(xdens, ydens, x = rep(levels(panel$x), each = ngrid))
+         if (panel$type == 'two.way')
+            dfrm0$z = rep(levels(panel$z), each = nlevels(panel$x) * 512)
+         plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xdens, y = x,
+                                                      fill = ydens, height = 0.8),
+                                         data = dfrm0, show.legend = FALSE) +
+         # This creates missing tiles - I don't know why
+         # plt <- plt + ggplot2::stat_density(ggplot2::aes(fill   = ggplot2::after_stat(density)),
+         #                                    geom = "tile", trim = TRUE,
+         #                                    height = 0.7, position = "identity",
+         #                                    show.legend = FALSE) +
+            ggplot2::scale_fill_gradient(low = 'grey90', high = 'grey50')
+         # geom_violin doesn't look good with small samples
+         # plt <- plt + ggplot2::geom_violin(bw = 'nrd', col = NA, fill = 'grey80')
       }
+      # plot the model comparison uncertainties
       else if (length(hlight) == 2) {
-         mdl   <- panel$models[[hlight[1]]]
-         mdl0  <- panel$models[[hlight[2]]]
-         lst   <- if (panel$type == 'two.way') list(panel$x, panel$z)
-                  else list(panel$x)
-         mn    <- tapply(fitted(mdl0), lst, mean)
-         se    <- tapply(fitted(mdl0), lst, length)
-         ngps  <- nrow(unique(data.frame(panel$x, panel$z)))
-         df0   <- mdl0$df.residual
-         df1   <- mdl$df.residual
-         se    <- summary(mdl)$sigma * sqrt(abs(df0 - df1)) / sqrt(se * ngps)
-         ngrid <- 200
-         xgrid <- seq(min(panel$y), max(panel$y), length = ngrid)
+         fn       <- function(x) all(hlight %in% x)
+         comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
+         comp.ind <- which(apply(comps, 1, fn))
+         est      <- panel$comp.est[[comp.ind]]
+         se       <- panel$comp.se[[comp.ind]]
+         ngrid    <- 500
+         xgrid    <- seq(panel$response.range[1] + del, panel$response.range[2] - del,
+                         length = ngrid)
          if (panel$type == 'two.way') {
-            dfrm1 <- data.frame(y = c(mn), x = rep(rownames(mn), ncol(mn)),
-                                z = rep(colnames(mn), each = nrow(mn)))
+            dfrm1 <- data.frame(y = c(est), x = rep(rownames(est), ncol(est)),
+                                z = rep(colnames(est), each = nrow(est)))
             dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
                                 x = rep(dfrm1$x, ngrid), z = rep(dfrm1$z, ngrid))
-            dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[cbind(dfrm1$x, dfrm1$z)],
+            dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[cbind(dfrm1$x, dfrm1$z)],
                                               se[cbind(dfrm1$x, dfrm1$z)])
          }
          else {
-            dfrm1 <- data.frame(y = mn, x = names(mn))
+            dfrm1 <- data.frame(y = est, x = names(est))
             dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
                                 x = rep(dfrm1$x, ngrid))
-            dfrm1$dgrid <- dnorm(dfrm1$xgrid, mn[dfrm1$x], se[dfrm1$x])
+            dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[dfrm1$x], se[dfrm1$x])
          }
          if (panel$uncertainty.display == 'shading') {
             plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x,
@@ -366,17 +464,6 @@ rp.lm.draw <- function(panel) {
             plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x, height = dgrid),
                                             col = NA, fill = panel$refcol,
                                             show.legend = FALSE, data = dfrm1)
-            # print('dfrm1')
-            # print(head(dfrm1))
-            # af1x  <- as.numeric(factor(dfrm1$x))
-            # print(af1x)
-            # dfrm2 <- data.frame(y = c(af1x - 0.4 * dfrm1$dgrid,
-            #                           af1x + 0.4 * rev(dfrm1$dgrid)),
-            #                     x = c(dfrm1$xgrid, rev(dfrm1$xgrid)))
-            # print(dfrm2)
-            # plt <- plt +
-            #    ggplot2::geom_polygon(ggplot2::aes(x = x, y = y),
-            #                          data = dfrm2, col = NA, fill = panel$refcol)
          }
       }
       if (!any(is.na(hlight))) {
@@ -388,29 +475,12 @@ rp.lm.draw <- function(panel) {
                                             linewidth = 1, col = panel$estcol)
          print(plt)
       }
-      # if (!any(is.na(hlight))) {
-      #    mdl <- panel$models[[hlight[1]]]
-      #    plt <- plt + ggplot2::stat_summary(ggplot2::aes(x = fitted(mdl)), width = 0,
-      #                                       fun = "mean", linewidth = 1,
-      #                                       fun.min = function(x) mean(x) - 0.45,
-      #                                       fun.max = function(x) mean(x) + 0.45,
-      #                                       geom = "crossbar", orientation = "x", col = clr[1])
-      #    print('here1')
-      #    print(plt)
-      #    print()
-      # }
-      fvs  <- c(sapply(panel$models, function(x) range(fitted(x))))
-      yrng <- range(panel$y, fvs)
       plt  <- plt +
          ggplot2::geom_point(ggplot2::aes(x = y, y = jitter.x), col = clr[3]) +
-         ggplot2::xlim(yrng[1], yrng[2])
+         ggplot2::xlim(panel$response.range[1], panel$response.range[2])
       plt  <- plt + ggplot2::coord_flip()
       if (panel$type == "two.way")
          plt <- plt + ggplot2::facet_grid(. ~ z)
-      # if (!interactive) {
-      #    plt   <- plt + ggplot2::ggtitle(paste("p-value:", round(p.value, 3)))
-      #    panel <- plt
-      # }
       print(plt)
    }
 
