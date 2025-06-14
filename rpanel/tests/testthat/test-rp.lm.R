@@ -1,36 +1,42 @@
 #     Tests for the rp.lm function
 
-cat('\n')
-
 #----------------------------------------------------------------
-cat('Regression with one covariate\n')
+cat('\nRegression with one covariate\n')
 #----------------------------------------------------------------
 
 test_that('Standard call', {
-   expect_no_error(rp.lm(Giving ~ Employ, data = CofE))
+   expect_no_error(pnl <- rp.lm(Giving ~ Employ, data = CofE))
+   rp.control.dispose(pnl)
 })
 test_that('Change axis labels', {
-   expect_no_error(rp.lm(Giving ~ Employ, data = CofE, xlab = 'x', ylab = 'y'))
+   expect_no_error(pnl <- rp.lm(Giving ~ Employ, data = CofE, xlab = 'x', ylab = 'y'))
+   rp.control.dispose(pnl)
 })
 test_that('Model as input', {
-   model <- lm(Giving ~ Employ, data = CofE)
-   expect_no_error(rp.lm(model))
+   model <- lm(pnl <- Giving ~ Employ, data = CofE)
+   expect_no_error(pnl <- rp.lm(model))
+   rp.control.dispose(pnl)
 })
 test_that('Error if no covariate is specified', {
    expect_error(rp.lm(Giving ~ 1, data = CofE))
 })
-cat('\n')
 
 #----------------------------------------------------------------
-cat('Regression with two covariates\n')
+cat('\nRegression with two covariates\n')
 #----------------------------------------------------------------
 
 test_that('Standard call', {
-   expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE))
+   expect_no_error(pnl <- rp.lm(Giving ~ Employ + Attend, data = CofE))
+   rp.control.dispose(pnl)
 })
 test_that('Change axis labels', {
-   expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
+   expect_no_error(pnl <- rp.lm(Giving ~ Employ + Attend, data = CofE,
                          xlab = 'x', ylab = 'y', zlab = 'z'))
+   rp.control.dispose(pnl)
+})
+test_that('Interaction between two covariates', {
+   expect_no_error(pnl <- rp.lm(Giving ~ Employ * Attend, data = CofE))
+   rp.control.dispose(pnl)
 })
 test_that('Static mode: change axis labels with a specified model', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
@@ -51,42 +57,43 @@ test_that('Static mode: select the null model to be displayed', {
                          display.model = ~ 1, residuals.showing = TRUE,
                          panel = FALSE))
 })
-test_that('Interaction between two covariates', {
-   expect_no_error(rp.lm(Giving ~ Employ * Attend, data = CofE))
-})
-cat('\n')
+
+# Remove rgl windows
+rgl::close3d(rgl::rgl.dev.list())
 
 #----------------------------------------------------------------
-      cat('One covariate and one factor\n')
+      cat('\nOne covariate and one factor\n')
 #----------------------------------------------------------------
 
 gullweight <- dplyr::mutate(gullweight, month = factor(month))
 test_that('Standard call', {
-   expect_no_error(rp.lm(weight ~ hab + month, data = gullweight))
+   expect_no_error(pnl <- rp.lm(weight ~ hab + month, data = gullweight))
+   rp.control.dispose(pnl)
 })
-cat('\n')
 
 #----------------------------------------------------------------
-      cat('One factor\n')
+      cat('\nOne factor\n')
 #----------------------------------------------------------------
 
 poisons <- dplyr::mutate(poisons, poison = factor(poison),
                          treatment = factor(treatment))
 test_that('Standard call', {
-   expect_no_error(rp.lm(stime ~ poison, data = poisons))
+   expect_no_error(pnl <- rp.lm(stime ~ poison, data = poisons))
+   rp.control.dispose(pnl)
 })
-cat('\n')
 
 #----------------------------------------------------------------
-      cat('Two factors\n')
+      cat('\nTwo factors\n')
 #----------------------------------------------------------------
 
 test_that('Standard call', {
-   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons))
+   expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons))
+   rp.control.dispose(pnl)
 })
 test_that('Density display', {
-   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons,
-                        uncertainty.display = 'shading'))
+   expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons,
+                                uncertainty.display = 'shading'))
+   rp.control.dispose(pnl)
 })
 test_that('Static mode: standard call', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE))
@@ -116,7 +123,3 @@ test_that('Static mode: display.model and comparison.model are not adjacent', {
    expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                       display = ~ poison, comparison.model = ~ poison * treatment))
 })
-cat('\n')
-
-# Remove windows
-rgl::close3d(rgl::rgl.dev.list())

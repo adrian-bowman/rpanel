@@ -182,8 +182,8 @@ rp.regression1 <- function(x, y, ylab, xlab, panel.plot, hscale = NA, vscale = h
                    }
       if (is.na(x1lab)) x1lab <- name.comp[1]
       if (is.na(x2lab)) x2lab <- name.comp[2]
-   	  rp.regression2(y, x[ , 1], x[ , 2], ylab, x1lab, x2lab, panel, model, 
-   	                    residuals.showing, size, col)
+   	rp.regression2(y, x[ , 1], x[ , 2], ylab, x1lab, x2lab, panel, model, 
+   	                  residuals.showing, size, col)
    }
       
 }

@@ -247,7 +247,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
       rp.lm.draw(pnl)
    }
    
-   invisible()
+   invisible(pnl)
    
 }
 
@@ -342,7 +342,8 @@ rp.lm.draw <- function(panel) {
          fn <- function(x) all(comp.ind %in% x)
          comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
          comp.ind <- which(apply(comps, 1, fn))
-         if (length(comp.ind) == 0) stop('only adjacent models can be compared in this function.\n  Use the anova function to perform more general comparisons.')
+         if (length(comp.ind) == 0) stop(paste('only adjacent models can be compared ',
+            'in this function.\n  Use the anova function to perform more general comparisons.'))
          # The 1 below deals with the one.way case
          hlight   <- comps[comp.ind[1], ]
       }

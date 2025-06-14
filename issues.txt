@@ -7,12 +7,9 @@ rp.lm
   - colours?
   - match the jitter to the width of the density strip
   - consider how to deprecate rp.regression, rp.ancova and rp.anova.
+    Allow continued access to the standard graphics versions of these functions?
   - Does it work for other contrast settings?
   - How to handle subset and labels?
-  - should the stated model define the maximal model?
-  - Disallow terms which have interactions between numeric variables
-    (by checking the factors table)
-    This doesn't cause an error as it reverts to additive. Is that ok?
   - check that things work when one of the one.way or two.way groups is empty.
 
 rp.coefficients
@@ -24,15 +21,6 @@ rp.coefficients
 rp.drop1
   - curtail infinity in distributions
   - plot a line rather than a point when there is only one df and one term?
-
-rp.anova
-  - use of transparency to compare reference density and observed, as in rp.contingency.
-    Other functions which need this?
-  - the model specifications are very messy.
-    Use "interaction", "additive", etc. in some way?
-  - strange things happen with the daphnae data from Abubakar (Birmingham)
-  - add in the rp.interaction style plot? (Abu, Bham)
-  - restrict to ggplot only?
 
 rp.ancova
   - tidy up the code and make the ggplot version the default, with the
@@ -135,15 +123,9 @@ rp.curve:
     uncertainty-sm1.r in India files - strange behaviour in trying to call
     a function repeatedly.
 
-Use ggplot graphics and return a ggplot object?
-  See ggplot folder.
-
-Can windows be removed by command?
-rp.control.dispose?
-
 Can windows be manually adjusted as in tkRplotR?
 
-Add a data argument to functions?
+Add a data argument to functions.
 
 Allow a factor (or character variable) to be passed to rp.plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
 

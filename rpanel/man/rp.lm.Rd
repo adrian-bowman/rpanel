@@ -5,7 +5,7 @@
 \title{Graphical display of linear models with no more than two explanatory variables}
 
 \description{
-This function provides graphical representations of linear models with mo more than twoexplanatory variables. These can be covariates or factors or a mixture of the two.
+This function is primarily intended to provide graphical representations of linear models with no more than two explanatory variables. These can be covariates or factors or a mixture of the two. When there are more than two explanatory variables the model is passed on to the \code{\link{rp.coefficients}} or \code{\link{rp.drop1}} functions.
 }
 
 \usage{
@@ -16,7 +16,7 @@ rp.lm(x, ylab, xlab, zlab, ci = TRUE,
 }
 
 \arguments{
-\item{x}{a formula defining the linear model.}
+\item{x}{a formula defining the linear model or a fitted linear model object.}
 \item{ylab, xlab, zlab}{character variables used for the axis labels.}
 \item{ci}{a logical value which is passed to the \code{rp.coefficients} function when this is used to display model coefficients.}
 \item{panel}{a logical value which determines whether a panel is created to allow interactive control of the fitted models.}
@@ -30,7 +30,9 @@ rp.lm(x, ylab, xlab, zlab, ci = TRUE,
 \details{
 The display of the data is adapted to the form of the explanatory variables. When \code{panel = TRUE} a lattice of potential models is displayed in graphical form. When a node of the lattice is clicked the corresponding fitted model is displayed. When a connection between adjacent models is clicked, a comparison of the two adjacent models is displayed, either as model coefficients (\code{display = 'coefficients'}) or model terms (\code{display = 'coefficients'}).
 
-The function does not deal with interactions involving more than one covariate.
+When the model defined by \code{x} contains two explanatory variables, where at least one is a factor, the models which can be fitted include the interaction term, even where this is not explicitly included in \code{x}.
+
+When there are exactly two covariates in \code{x}, the function will not consider an interaction between these, even when \code{x} includes this. 
 }
 
 \value{

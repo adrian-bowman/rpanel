@@ -166,7 +166,6 @@ rp.regression2.lm <- function (y, x1, x2,
                       background = bgdcol)
            rp.do(spin.panel, rp.regression2.model)
            # invisible(list(panel.name = panel.name))
-           invisible()
        }
        else {
            if (missing(model)) {
@@ -178,17 +177,20 @@ rp.regression2.lm <- function (y, x1, x2,
                  else model <- display
               }
            }  
-           rp.regression2.model(list(x = x, y = y, z = z,
+           spin.panel <- list(x = x, y = y, z = z,
                yterm = yterm, x1term = x1term, x2term = x2term,
                xlab = xlab, ylab = ylab, zlab = zlab, theta = -30, phi = 30,
                xgrid = xgrid, zgrid = zgrid, scaling = scaling,
                fov = 1, current.model = "None", model = model,
                interactive = FALSE,
-               smat = smat, fv = fv, residuals.showing = residuals.showing))
-           invisible()
+               smat = smat, fv = fv, residuals.showing = residuals.showing)
+           rp.regression2.model(spin.panel)
         }
     }
     else {
         stop("regression2 requires the rgl package.")
     }
+   
+   invisible(spin.panel)
+   
 }
