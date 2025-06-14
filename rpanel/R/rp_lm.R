@@ -159,10 +159,12 @@ rp.lm <- function(x, ylab, xlab, zlab,
    
    # Linear regression with two covariates
    if (length(numeric.ind) == 2 & length(factor.ind) == 0)
-      return(rp.regression2.lm(y, x, z, ylab = ylab, x1lab = xlab, x2lab = zlab,
-                            panel = panel, models = models, title = ttl,
-                            display = display.model,
-                            residuals.showing = residuals.showing))
+      return(rp.regression2.lm(y, x, z,
+                               yterm = yterm, x1term = xterm, x2term = zterm,
+                               ylab = ylab, x1lab = xlab, x2lab = zlab,
+                               panel = panel, models = models, title = ttl,
+                               display = display.model,
+                               residuals.showing = residuals.showing))
       
    if (panel) {
       pnl <- rp.control(ttl, models = models, y = y, x = x, z = z,

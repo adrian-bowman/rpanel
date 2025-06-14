@@ -14,10 +14,6 @@ rp.lm
     (by checking the factors table)
     This doesn't cause an error as it reverts to additive. Is that ok?
   - check that things work when one of the one.way or two.way groups is empty.
-  - rp.lm(Giving ~ Employ + Attend, data = CofE,
-      xlab = 'x', ylab = 'y', zlab = 'z',
-      display = ~ Employ, panel = FALSE)
-    This works if the axis labels are dropped.
 
 rp.coefficients
   - adjust width of densities to have area 1?

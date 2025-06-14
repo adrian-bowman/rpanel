@@ -1,6 +1,10 @@
 #     Tests for the rp.lm function
 
-# Regression with one covariate
+cat('\n')
+
+#----------------------------------------------------------------
+cat('Regression with one covariate\n')
+#----------------------------------------------------------------
 
 test_that('Standard call', {
    expect_no_error(rp.lm(Giving ~ Employ, data = CofE))
@@ -15,8 +19,11 @@ test_that('Model as input', {
 test_that('Error if no covariate is specified', {
    expect_error(rp.lm(Giving ~ 1, data = CofE))
 })
+cat('\n')
 
-# Regression with two covariates
+#----------------------------------------------------------------
+cat('Regression with two covariates\n')
+#----------------------------------------------------------------
 
 test_that('Standard call', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE))
@@ -25,16 +32,21 @@ test_that('Change axis labels', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
                          xlab = 'x', ylab = 'y', zlab = 'z'))
 })
-test_that('Residuals showing', {
+test_that('Static mode: change axis labels with a specified model', {
+   expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
+                         xlab = 'x', ylab = 'y', zlab = 'z',
+                         display.model = ~ Employ, panel = FALSE))
+})
+test_that('Static mode: residuals showing', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
                          xlab = 'x', ylab = 'y', zlab = 'z',
                          residuals.showing = TRUE, panel = FALSE))
 })
-test_that('Select the model to be displayed', {
+test_that('Static mode: select the model to be displayed', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
                          display.model = ~ Employ, panel = FALSE))
 })
-test_that('Select the null model to be displayed', {
+test_that('Static mode: select the null model to be displayed', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
                          display.model = ~ 1, residuals.showing = TRUE,
                          panel = FALSE))
@@ -42,23 +54,32 @@ test_that('Select the null model to be displayed', {
 test_that('Interaction between two covariates', {
    expect_no_error(rp.lm(Giving ~ Employ * Attend, data = CofE))
 })
+cat('\n')
 
-# One covariate and one factor
+#----------------------------------------------------------------
+      cat('One covariate and one factor\n')
+#----------------------------------------------------------------
 
+gullweight <- dplyr::mutate(gullweight, month = factor(month))
 test_that('Standard call', {
-   gullweight <- dplyr::mutate(gullweight, month = factor(month))
    expect_no_error(rp.lm(weight ~ hab + month, data = gullweight))
 })
+cat('\n')
 
-# One factor
+#----------------------------------------------------------------
+      cat('One factor\n')
+#----------------------------------------------------------------
 
+poisons <- dplyr::mutate(poisons, poison = factor(poison),
+                         treatment = factor(treatment))
 test_that('Standard call', {
-   poisons <- dplyr::mutate(poisons, poison = factor(poison),
-                            treatment = factor(treatment))
    expect_no_error(rp.lm(stime ~ poison, data = poisons))
 })
+cat('\n')
 
-# Two factors
+#----------------------------------------------------------------
+      cat('Two factors\n')
+#----------------------------------------------------------------
 
 test_that('Standard call', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons))
@@ -95,3 +116,7 @@ test_that('Static mode: display.model and comparison.model are not adjacent', {
    expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                       display = ~ poison, comparison.model = ~ poison * treatment))
 })
+cat('\n')
+
+# Remove windows
+rgl::close3d(rgl::rgl.dev.list())
