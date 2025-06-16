@@ -123,3 +123,6 @@ test_that('Static mode: display.model and comparison.model are not adjacent', {
    expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                       display = ~ poison, comparison.model = ~ poison * treatment))
 })
+
+load_all()
+rp.lm(Giving ~ Employ + Attend, data = CofE)

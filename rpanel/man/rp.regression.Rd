@@ -50,7 +50,7 @@ The following argument refers to the case where a regression model is specified 
 \item{ngrid}{an integer which specifies the number of grid points used in the creation of the uncertainty strips.}
 
 Additional parameter:
-\item{col}{the colour of the plotted points (two covariate case) or the point estimates of the regression effec t (general case).}
+\item{col}{the colour of the plotted points (two covariate case) or the point estimates of the regression effect (general case).}
 }
 
 \details{

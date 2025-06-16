@@ -135,7 +135,7 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
         yhi <- max(yhi, smat)
         ylim <- c(ylo, yhi)
         scaling <- rp.plot3d(x, y, z, xlab = x1lab, ylab = ylab,
-            zlab = x2lab, ylim = ylim, col = clr)
+                             zlab = x2lab, ylim = ylim, col = clr)
 
         if (panel) {
            bgdcol      <- "grey85"

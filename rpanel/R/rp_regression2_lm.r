@@ -91,6 +91,7 @@ rp.regression2.lm <- function (y, x1, x2,
        xlab   <- x1lab
        zlab   <- x2lab
        ngrid  <- 20
+       # Remove missing data
        ind <- !is.na(x + y + z)
        if (length(col) == length(x)) {
           ind <- (ind & (!is.na(col)))
@@ -152,6 +153,9 @@ rp.regression2.lm <- function (y, x1, x2,
                fov = 1, current.model = "None", smat = smat,
                fv = fv, model = model, residuals.showing = residuals.showing,
                highlighted.node = NA, model.nodes = model.nodes)
+           rp.menu(spin.panel, model.display,
+                   list(c('Inference', 'none', 'coefficients', 'terms')),
+                   initval = 'none', action = rp.regression2.model)
            rp.tkrplot(spin.panel, modelnodes, rp.lm.modelnodes,
                       action = rp.regression2.model,
                       vscale = 0.5, background = "white")
