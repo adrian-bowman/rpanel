@@ -25,9 +25,6 @@ test_that('Error if no covariate is specified', {
 cat('\nRegression with two covariates\n')
 #----------------------------------------------------------------
 
-load_all()
-rp.lm(Giving ~ Employ + Attend, data = CofE)
-
 test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(Giving ~ Employ + Attend, data = CofE))
    rp.control.dispose(pnl)

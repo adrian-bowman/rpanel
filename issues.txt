@@ -12,7 +12,7 @@ rp.lm
   - match the jitter to the width of the density strip
   - consider how to deprecate rp.regression, rp.ancova and rp.anova.
     Allow continued access to the standard graphics versions of these functions?
-  - Does anova work for other contrast settings?
+  - Do anova and ancova work for other contrast settings?
   - How to handle subset and labels?
   - check that things work when one of the one.way or two.way groups is empty.
   - add rp.coefficients and rp.drop1 to simple regression case?

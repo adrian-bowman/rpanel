@@ -15,6 +15,12 @@ rp.lm <- function(x, ylab, xlab, zlab,
    estcol <- '#86B875'
    refcol <- '#E495A5'
    style  <- if (requireNamespace('ggplot2', quietly = TRUE)) 'ggplot' else 'standard'
+   current.model <- 'None'
+   scaling       <- NULL
+   smat          <- NULL
+   fv            <- NULL
+   xgrid         <- NULL
+   zgrid         <- NULL
    
    # Deal with formula or model inputs
    class.x <- class(x)
@@ -123,7 +129,6 @@ rp.lm <- function(x, ylab, xlab, zlab,
       ylim    <- c(ylo, yhi)
       scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
                            zlab = zlab, ylim = ylim, col = 'red')
-      current.model <- 'None'
    }
    
    # Find the coefficient names from the maximal model
@@ -272,7 +277,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
       #             style = style, bgdcol = bgdcol)
       pnl <- list(ttl, models = models, y = y, x = x, z = z,
                   model.est = model.est, comp.est = comp.est, comp.se = comp.se,
-                  response.range = response.range,
+                  response.range = response.range, residuals.showing = residuals.showing,
                   jitter.x = jitter.x, uncertainty.display = uncertainty.display,
                   type = type, style = style, labels.max = labels.max,
                   xlab = xlab, ylab = ylab, zlab = zlab,
