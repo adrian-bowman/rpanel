@@ -60,7 +60,8 @@ rp.coefficients <- function(model, style = 'density',
 	# else
 	#    renamed <- (length(lbls) == nrow(tbl))
 	if (length(lbls) < nrow(tbl))
-	   stop("the length of labels is smaller that the number of model terms (after 'subset' has been applied, if used).")
+	   stop(paste('the length of labels is smaller that the number of model terms',
+	              '(after subset has been applied, if used).'))
 	# Allow labels which are a superset
 	else if (length(lbls) > nrow(tbl)) {
 	   if (!all(rownames(tbl) %in% lbls))
@@ -77,13 +78,13 @@ rp.coefficients <- function(model, style = 'density',
 	se     <- tbl[ , 2]
 	yname  <- all.vars(model$call)[1]
 	x      <- model$x[ , rownames(tbl), drop = FALSE]
-	involved  <- attr(model$terms, 'factors')[-1, ]
+	involved  <- attr(model$terms, 'factors')[-1, , drop = FALSE]
 	var.types <- attr(model$terms, 'dataClasses')[-1]
 	
 	rng.fn <- function(nm) {
 	   ind <- match(nm, rownames(tbl))
 	   trm <- trms.cfs[ind]
-	   ind <- which((involved[ , trm] == 1) & (var.types == 'numeric'))
+	   ind <- which((involved[ , trm, drop = FALSE] == 1) & (var.types == 'numeric'))
 	   ind <- rownames(involved)[ind]
 	   if (length(ind) > 1)
 	       stop('this functions cannot handle interaction between numeric variables.')

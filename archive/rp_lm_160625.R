@@ -72,11 +72,10 @@ rp.lm <- function(x, ylab, xlab, zlab,
                               one.way = 'One-way analysis of variance',
                               two.way = 'Two-way analysis of variance')
 
-   # Simple linear regression: export to a dedicated function
+   # Simple linear regression
    if (type == 'regression.one')
       return(rp.regression(x, y, panel = panel, xlab = xlab, ylab = ylab))
    
-   # Set up the model nodes
    bgdcol      <- "grey85"
    model.nodes <- data.frame(x = c(0.5, 0.25, 0.75, 0.5, 0.5),
                              y = 0.9 - c(0, 1, 1, 2, 3) * 0.25,
@@ -93,38 +92,6 @@ rp.lm <- function(x, ylab, xlab, zlab,
                                 y = 0.8 - c(0, 1) * 0.6,
                                 label = paste(yterm, '~', c('1', xterm)),
                                 comparison1 = 2, comparison2 = 1)
-   if (type == 'regression.two') {
-      model.nodes   <- model.nodes[1:4, ]
-      model.nodes$y <- 0.85 - c(0, 1, 1, 2) * 0.35
-      # Set up the 3D plot
-      ngrid  <- 20
-      xlo   <- min(x) - 0.05 * diff(range(x))
-      xhi   <- max(x) + 0.05 * diff(range(x))
-      ylo   <- min(y) - 0.05 * diff(range(y))
-      yhi   <- max(y) + 0.05 * diff(range(y))
-      zlo   <- min(z) - 0.05 * diff(range(z))
-      zhi   <- max(z) + 0.05 * diff(range(z))
-      xgrid <- seq(xlo, xhi, length = ngrid)
-      zgrid <- seq(zlo, zhi, length = ngrid)
-      smatx <- matrix(rep(xgrid, ngrid), ncol = ngrid)
-      smatz <- t(matrix(rep(zgrid, ngrid), ncol = ngrid))
-      smat  <- array(c(mean(y, na.rm = TRUE) + 0 * smatx,
-                       coef(lm(y ~ x))[1] + coef(lm(y ~ x))[2] * smatx,
-                       coef(lm(y ~ z))[1] + coef(lm(y ~ z))[2] * smatz,
-                       coef(lm(y ~ x + z))[1] + coef(lm(y ~ x + z))[2] * smatx +
-                          coef(lm(y ~ x + z))[3] * smatz),
-                     dim = c(ngrid, ngrid, 4))
-      fv <- matrix(c(fitted(lm(y ~ 1)), fitted(lm(y ~ x)),
-                     fitted(lm(y ~ z)), fitted(lm(y ~ x + z))), ncol = 4)
-      dimnames(smat) <- list(NULL, NULL, model.nodes$label)
-      dimnames(fv)   <- list(NULL, model.nodes$label)
-      ylo     <- min(ylo, smat)
-      yhi     <- max(yhi, smat)
-      ylim    <- c(ylo, yhi)
-      scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
-                           zlab = zlab, ylim = ylim, col = 'red')
-      current.model <- 'None'
-   }
    
    # Find the coefficient names from the maximal model
    form <- paste(yterm, '~', trms[1])
@@ -191,13 +158,13 @@ rp.lm <- function(x, ylab, xlab, zlab,
    }
    
    # Linear regression with two covariates
-   # if (length(numeric.ind) == 2 & length(factor.ind) == 0)
-   #    return(rp.regression2.lm(y, x, z,
-   #                             yterm = yterm, x1term = xterm, x2term = zterm,
-   #                             ylab = ylab, x1lab = xlab, x2lab = zlab,
-   #                             panel = panel, models = models, title = ttl,
-   #                             display = display.model,
-   #                             residuals.showing = residuals.showing))
+   if (length(numeric.ind) == 2 & length(factor.ind) == 0)
+      return(rp.regression2.lm(y, x, z,
+                               yterm = yterm, x1term = xterm, x2term = zterm,
+                               ylab = ylab, x1lab = xlab, x2lab = zlab,
+                               panel = panel, models = models, title = ttl,
+                               display = display.model,
+                               residuals.showing = residuals.showing))
       
    if (panel) {
       pnl <- rp.control(ttl, models = models, y = y, x = x, z = z,
@@ -209,10 +176,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         yterm = yterm, xterm = xterm, zterm = zterm,
                         ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
                         highlighted.node = NA, static = static,
-                        model.nodes = model.nodes, click.coords = rep(NA, 2),
-                        residuals.showing = residuals.showing,
-                        current.model = current.model, scaling = scaling,
-                        smat = smat, fv = fv, xgrid = xgrid, zgrid = zgrid)
+                        model.nodes = model.nodes, click.coords = rep(NA, 2))
       rp.menu(pnl, model.display,
               list(c('Inference', 'none', 'coefficients', 'terms')),
               initval = 'none', action = rp.lm.redraw)
@@ -220,16 +184,15 @@ rp.lm <- function(x, ylab, xlab, zlab,
       rp.tkrplot(pnl, modelnodes, rp.lm.modelnodes, action = rp.lm.click,
                  hscale = 0.7 * hscale, vscale = 0.5 * vscale, 
                  grid = "models", row = 0, column = 0, background = "white")
-      
+
       if (panel.plot) {
          rp.grid(pnl, "dataplot", row = 0, column = 1, background = "white")
-         if (type != 'regression.two')
-            rp.tkrplot(pnl, plot, rp.lm.draw,
-                  hscale = hscale, vscale = vscale, 
-                  grid = "dataplot", row = 0, column = 0, background = "white")
-         else
-            rp.checkbox(pnl, residuals.showing, rp.regression2.residuals, "Show residuals",
-                        grid = "models", row = 1, column = 0)
+         rp.tkrplot(pnl, plot, rp.lm.draw,
+                    hscale = hscale, vscale = vscale, 
+                    grid = "dataplot", row = 0, column = 0, background = "white")
+         # rp.listbox(pnl, analysis, c('none', 'coefficients', 'terms'),
+                    # title = 'analysis',
+                    # grid = "models", row = 1, column = 0, background = "white")
          rp.tkrplot(pnl, fplot, rp.lm.effectsplot,
                     hscale = hscale * 0.7, vscale = vscale * 0.5, 
                     grid = "models", row = 2, column = 0, background = bgdcol)
@@ -280,9 +243,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
                   highlighted.node = NA, static = static,
                   model.nodes = model.nodes, click.coords = rep(NA, 2),
-                  display.model = display.model, comparison.model = comparison.model,
-                  current.model = current.model, scaling = scaling,
-                  smat = smat, fv = fv, xgrid = xgrid, zgrid = zgrid)
+                  display.model = display.model, comparison.model = comparison.model)
       rp.lm.draw(pnl)
    }
    
@@ -355,11 +316,8 @@ rp.lm.click <- function(panel, x, y) {
       panel$highlighted.node <- hpt
    rp.control.put(panel$panelname, panel)
    rp.tkrreplot(panel, modelnodes)
+   rp.tkrreplot(panel, plot)
    rp.tkrreplot(panel, fplot)
-   if (panel$type != 'regression.two')
-      rp.tkrreplot(panel, plot)
-   else
-      panel <- rp.lm.draw(panel)
    panel
 }
 
@@ -393,26 +351,6 @@ rp.lm.draw <- function(panel) {
    else
       hlight <- panel$highlighted.node
 
-   # Two covariates
-   if (panel$type == 'regression.two') {
-      with(panel, {
-         if (current.model != "None") {
-            rgl::pop3d()
-            if (residuals.showing) rgl::pop3d()
-         }
-         if (!any(is.na(hlight))) {
-            a <- scaling(xgrid, smat[ , , hlight[1]], zgrid)
-            rgl::surface3d(x = a$x, z = a$z, y = a$y, alpha = 0.5)
-            if (residuals.showing) {
-               a <- scaling(c(t(cbind(x, x))), c(t(cbind(y, fv[ , hlight[1]]))),
-                            c(t(cbind(z, z))))
-               rgl::segments3d(a$x, a$y, a$z, col = "green")
-            }
-         }
-      })
-      if (!any(is.na(hlight))) panel$current.model <- hlight[1]
-   }
-   
    # Ancova
    if (panel$type == 'ancova') {
       
@@ -557,55 +495,26 @@ rp.lm.effectsplot <- function(panel) {
       nhl    <- length(highlighted.node)
       hlight <- (!any(is.na(highlighted.node)) && 
                  (highlighted.node[1] > 1 | nhl > 1))
-      fn.blank <- function() {
+      if (hlight) mdl <- models[[highlighted.node[1]]]
+      if (hlight & (model.display == 'coefficients'))
+         print(rp.coefficients(mdl, ci = ci, labels = labels.max))
+      else if (hlight & (model.display == 'terms') & nhl == 2) {
+         mdl0 <- models[[highlighted.node[2]]]
+         r0   <- rownames(anova(mdl0))
+         r1   <- rownames(anova(mdl))
+         trm  <- r1[!(r1 %in% r0)]
+         print(rp.drop1(mdl, trm))
+      } else {
          par(mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
-         plot(c(0, 1), c(0, 1), type = "n", xlab = "", ylab = "", axes = FALSE)
-      }
-      if (hlight) {
-         mdl <- models[[highlighted.node[1]]]
-         if (nhl == 1) {
-            if (model.display == 'coefficients')
-               print(rp.coefficients(mdl, ci = ci, labels = labels.max))
-            else if (model.display == 'terms')
-               print(rp.drop1(mdl))
-            else
-               fn.blank()
-         }
-         else if (nhl == 2) {
-            mdl0 <- models[[highlighted.node[2]]]
-            r0   <- rownames(anova(mdl0))
-            r1   <- rownames(anova(mdl))
-            trm  <- r1[!(r1 %in% r0)]
-            print(rp.drop1(mdl, trm))
-         }
-      }
-      else 
-         fn.blank()
-   })
-   panel
-}
-
-rp.regression2.residuals <- function(panel) {
-   with(panel, {
-      if (length(highlighted.node) > 0) {
-         if (residuals.showing) {
-            mdl <- model.nodes$label[highlighted.node[1]]
-            a <- scaling(c(t(cbind(x, x))), c(t(cbind(y, fv[ , mdl]))),
-                         c(t(cbind(z, z))))
-            rgl::segments3d(a$x, a$y, a$z, col = "green")
-         }
-         else
-            rgl::pop3d()
+         plot(c(0, 1), c(0, 1), type = "n",
+              xlab = "", ylab = "", axes = FALSE)
       }
    })
    panel
 }
 
 rp.lm.redraw <- function(panel) {
-   if (panel$type != 'regression.two')
-      rp.tkrreplot(panel, plot)
-   else
-      panel <- rp.lm.draw(panel)
+   rp.tkrreplot(panel, plot)
    rp.tkrreplot(panel, fplot)
    rp.tkrreplot(panel, modelnodes)
    panel
