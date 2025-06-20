@@ -3,19 +3,17 @@
 --------------------------------------------------------------
 
 rp.lm
-  - effects plots, coefficients and drop1, for two covariates:
-    mostly there - see current test code for rp.drop1.
-  - fix one-way comparison
+  - change the colours for the lines
+  - Do anova and ancova work for other contrast settings?
+  - How to handle subset and labels?
   - colours?
-  - allow export of plots when panel = FALSE
   - remove missing data?
   - match the jitter to the width of the density strip
   - consider how to deprecate rp.regression, rp.ancova and rp.anova.
     Allow continued access to the standard graphics versions of these functions?
-  - Do anova and ancova work for other contrast settings?
-  - How to handle subset and labels?
   - check that things work when one of the one.way or two.way groups is empty.
   - add rp.coefficients and rp.drop1 to simple regression case?
+  - does panel.plot = FALSE work?
 
 rp.coefficients
   - adjust width of densities to have area 1?
@@ -24,8 +22,6 @@ rp.coefficients
   - this needs some thinking
   
 rp.drop1
-  - curtail infinity in distributions
-  - plot a line rather than a point when there is only one df and one term?
 
 rp.ancova
   - tidy up the code and make the ggplot version the default, with the

@@ -10,7 +10,7 @@ This function is primarily intended to provide graphical representations of line
 
 \usage{
 rp.lm(x, ylab, xlab, zlab, ci = TRUE,
-      panel = TRUE, panel.plot = TRUE,
+      panel = TRUE, panel.plot = TRUE, plot.nodes.only = FALSE,
       hscale = 1, vscale = hscale,
       display.model, residuals.showing, ...)
 }
@@ -20,7 +20,8 @@ rp.lm(x, ylab, xlab, zlab, ci = TRUE,
 \item{ylab, xlab, zlab}{character variables used for the axis labels.}
 \item{ci}{a logical value which is passed to the \code{rp.coefficients} function when this is used to display model coefficients.}
 \item{panel}{a logical value which determines whether a panel is created to allow interactive control of the fitted models.}
-\item{panel.plot = TRUE}{a logical value which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
+\item{panel.plot}{a logical value which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
+\item{plot.nodes.only}{a logical value, relevant only when the function is called in non-interactive mode (\code{panel = FALSE}), which determines whether the lattive of model nodes is plotted or the plot of the data and fitted model is returned. In the latter case, the returned object is a \code{ggplot} object.}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
 \item{display}{a one sided formula which determines the specific model to be displayed. This can be a reduced model which omits some of the terms present in the model defined by \code{x}, or an expanded model which includes interaction terms.}
 \item{residuals,showing}{a logical value which determines whether residuals are displayed when there are two covariates.}

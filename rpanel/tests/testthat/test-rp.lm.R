@@ -35,7 +35,7 @@ test_that('Change axis labels', {
    rp.control.dispose(pnl)
 })
 test_that('Interaction between two covariates', {
-   expect_no_error(pnl <- rp.lm(Giving ~ Employ * Attend, data = CofE))
+   expect_warning(pnl <- rp.lm(Giving ~ Employ * Attend, data = CofE))
    rp.control.dispose(pnl)
 })
 test_that('Static mode: change axis labels with a specified model', {
@@ -56,6 +56,14 @@ test_that('Static mode: select the null model to be displayed', {
    expect_no_error(rp.lm(Giving ~ Employ + Attend, data = CofE,
                          display.model = ~ 1, residuals.showing = TRUE,
                          panel = FALSE))
+})
+
+path <- rp.datalink("DO_Clyde")
+load(path)
+clyde.sub  <- subset(clyde, Station == 4)
+test_that('Static mode: plot nodes only', {
+   expect_no_error(rp.lm(DO ~ Temperature + Salinity, data = clyde.sub,
+                         panel = FALSE, plot.nodes.only = TRUE))
 })
 
 # Remove rgl windows
@@ -81,6 +89,17 @@ test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison, data = poisons))
    rp.control.dispose(pnl)
 })
+test_that('Static mode: standard call', {
+   expect_no_error(rp.lm(stime ~ poison, data = poisons, panel = FALSE))
+})
+test_that('Static mode: specify display model', {
+   expect_no_error(rp.lm(stime ~ poison, data = poisons, panel = FALSE,
+                                display.model = ~ poison))
+})
+test_that('Static mode: specify display and comparison models', {
+   expect_no_error(rp.lm(stime ~ poison, data = poisons, panel = FALSE,
+                                display.model = ~ poison, comparison.model = ~ 1))
+})
 
 #----------------------------------------------------------------
       cat('\nTwo factors\n')
@@ -90,6 +109,12 @@ test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons))
    rp.control.dispose(pnl)
 })
+
+load_all()
+rp.lm(stime ~ poison + treatment, data = poisons,
+      comparison.model = ~ poison, panel = FALSE)
+rp.lm(stime ~ poison + treatment, data = poisons)
+
 test_that('Density display', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons,
                                 uncertainty.display = 'shading'))

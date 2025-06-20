@@ -1,20 +1,30 @@
 #     A general function for linear models
 
 rp.lm <- function(x, ylab, xlab, zlab,
-                  panel = TRUE, panel.plot = TRUE, uncertainty.display = 'density',
-                  hscale = 1, vscale = hscale,
-                  inference = 'coefficients', ci = TRUE,
-                  display.model, comparison.model, residuals.showing, ...) {
+                  panel = TRUE, panel.plot = TRUE, plot.nodes.only = FALSE,
+                  uncertainty.display = 'density', inference = 'coefficients',
+                  ci = TRUE, display.model, comparison.model, residuals.showing,
+                  hscale = 1, vscale = hscale, ...) {
    
    static <- !panel
-   if (missing(display.model)) display.model <- NULL
+   missing.display.model <- missing(display.model)
    if (missing(comparison.model)) comparison.model <- NULL
-   if (!is.null(comparison.model) & is.null(display.model))
+   if (!is.null(comparison.model) & missing.display.model)
       stop('if comparison.model is specified then display.model must also be specified')
    if (missing(residuals.showing)) residuals.showing <- FALSE
-   estcol <- '#86B875'
-   refcol <- '#E495A5'
    style  <- if (requireNamespace('ggplot2', quietly = TRUE)) 'ggplot' else 'standard'
+   estcol        <- '#86B875'
+   estcol        <- '#9BD5FF'
+   estline       <- '#0093FF'
+   refcol        <- '#E495A5'
+   refcol        <- '#FFB56B'
+   refline       <- '#FF7F00'
+   pointcol      <- 'black'
+   nodecol       <- grey(0.5)
+   notchcol      <- 'black' # or make it the bgdcol
+   clr           <- c(est    = '#9BD5FF', estline = '#0093FF',
+                      ref    = '#FFB56B', refline = '#FF7F00',
+                      points = 'black',   node    = grey(0.8), notch = 'black') # or bgdcol
    current.model <- 'None'
    scaling       <- NULL
    smat          <- NULL
@@ -127,8 +137,9 @@ rp.lm <- function(x, ylab, xlab, zlab,
       ylo     <- min(ylo, smat)
       yhi     <- max(yhi, smat)
       ylim    <- c(ylo, yhi)
-      scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
+      if (panel | !plot.nodes.only) scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
                            zlab = zlab, ylim = ylim, col = 'red')
+      else scaling <- NULL
    }
    
    # Find the coefficient names from the maximal model
@@ -137,15 +148,20 @@ rp.lm <- function(x, ylab, xlab, zlab,
       form <- paste(yterm, '~', trms[1], '+', trms[2])
    if (type %in% c('ancova', 'two.way')) {
       form      <- paste(form, ' + ', trms[1], ':', trms[2], sep = '')
-      model.max <- update(model, form)
    }
-   else
-      model.max <- model
+   model.max  <- update(model, form)
+   # If the specified model contains an invalid interaction in regression.two
+   # remove this
+   if (type == 'regression.two' & length(trms) > 2) {
+      model <- model.max
+      warning('an interaction between covariates is not permitted.')
+   }
    labels.max <- names(coefficients(model.max))[-1]
    
-   # Check that the display.model and comparison.model formula are submodels of the maximal model
+   # Check that the display.model and comparison.model formula, if supplied,
+   # are submodels of the maximal model
    terms.max <- attr(terms(model.max), 'term.labels')
-   if (!is.null(display.model)) {
+   if (!missing.display.model && !is.null(display.model)) {
       terms.display <- attr(terms(display.model), 'term.labels')
       if (!all(terms.display %in% terms.max))
          stop('display.model is not a valid model.')
@@ -155,7 +171,41 @@ rp.lm <- function(x, ylab, xlab, zlab,
       if (!all(terms.comparison %in% terms.max))
          stop('comparison.model is not a valid model.')
    }
+
+   # Set the default for display.model, if this has not been specified
+   fn <- function(x, trms) {
+      mt <- attr(terms(as.formula(x)), 'term.labels')
+      (length(trms) == length(mt)) & all(trms %in% mt)
+   }
+   if (!missing.display.model) {
+      if (is.null(display.model))
+         hlight <- NA
+      else {
+         terms.display <- attr(terms(display.model), 'term.labels')
+         terms.model   <- sapply(model.nodes$label, fn, terms.display)
+         hlight        <- which(terms.model)
+      }
+   }
+   else {
+      terms.model <- attr(terms(model), 'term.labels')
+      terms.model <- sapply(model.nodes$label, fn, terms.model)
+      hlight      <- which(terms.model)
+   }
    
+   if (!is.null(comparison.model)) {
+      terms.comparison <- attr(terms(comparison.model), 'term.labels')
+      terms.model      <- sapply(model.nodes$label, fn, terms.comparison)
+      comp.ind         <- c(hlight, which(terms.model))
+      fn <- function(x) all(comp.ind %in% x)
+      comps    <- as.matrix(model.nodes[ , c('comparison1', 'comparison2')])
+      comp.ind <- which(apply(comps, 1, fn))
+      if (length(comp.ind) == 0) stop(paste('only adjacent models can be compared ',
+                                            'in this function.\n  Use the anova',
+                                            'function to perform more general comparisons.'))
+      # The 1 below deals with the one.way case
+      hlight   <- comps[comp.ind[1], ]
+   }
+
    # Create a list of valid models
    # and, for anova, estimates and se's for comparisons.
    # Use this to define the plotted response range.
@@ -212,8 +262,8 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         type = type, style = style, labels.max = labels.max,
                         xlab = xlab, ylab = ylab, zlab = zlab,
                         yterm = yterm, xterm = xterm, zterm = zterm,
-                        ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
-                        highlighted.node = NA, static = static,
+                        ci = ci, bgdcol = bgdcol, clr = clr,
+                        highlighted.node = hlight, static = static,
                         model.nodes = model.nodes, click.coords = rep(NA, 2),
                         residuals.showing = residuals.showing,
                         current.model = current.model, scaling = scaling,
@@ -232,49 +282,20 @@ rp.lm <- function(x, ylab, xlab, zlab,
             rp.tkrplot(pnl, plot, rp.lm.draw,
                   hscale = hscale, vscale = vscale, 
                   grid = "dataplot", row = 0, column = 0, background = "white")
-         else
+         else {
+            rp.do(pnl, rp.lm.draw)
             rp.checkbox(pnl, residuals.showing, rp.regression2.residuals, "Show residuals",
                         grid = "models", row = 1, column = 0)
+         }
          rp.tkrplot(pnl, fplot, rp.lm.effectsplot,
                     hscale = hscale * 0.7, vscale = vscale * 0.5, 
                     grid = "models", row = 2, column = 0, background = bgdcol)
-         action.fn <- rp.lm.redraw
       }
       else {
-         # This needs to be amended to handle the effects plot
-         action.fn <- rp.lm.draw
-         rp.text(pnl, "        Model", grid = "models", row = 0, column = 1, background = bgdcol)
-         rp.text(pnl,       "current", grid = "models", row = 1, column = 0, background = bgdcol)
-         rp.text(pnl,           "new", grid = "models", row = 1, column = 2, background = bgdcol)
-         rp.checkbox(pnl, model11, action.fn, labels = "", initval = init.model[1],
-                     grid = "models", row = 2, column = 0, name = "model11", background = bgdcol)
-         rp.checkbox(pnl, model12, action.fn, labels = "", initval = init.model[2],
-                     grid = "models", row = 3, column = 0, name = "model12", background = bgdcol)
-         for (i in 1:length(model.options)) rp.text(pnl, model.options[i],
-                                                    grid = "models", row = i + 1, column = 1,
-                                                    background = bgdcol)
-         rp.checkbox(pnl, model01, action.fn, labels = "", initval = init.model0[1],
-                     grid = "models", row = 2, column = 2, name = "model01", background = bgdcol)
-         rp.checkbox(pnl, model02, action.fn, labels = "", initval = init.model0[1],
-                     grid = "models", row = 3, column = 2, name = "model02", background = bgdcol)
-         # rp.checkbox(pnl, model, action.fn, rep("", length(model.options)), title = "current",
-         #      initval = init.model, grid = "controls", row = 1, column = 0, background = bgdcol)
-         rp.checkbox(pnl, model13, action.fn, labels = "", initval = init.model[3],
-                     grid = "models", row = 4, column = 0, name = "model13", background = bgdcol)
-         rp.checkbox(pnl, model14, action.fn, labels = "", initval = init.model[4],
-                     grid = "models", row = 5, column = 0, name = "model14", background = bgdcol)
-         # rp.grid(pnl, "models", row = 1, column = 1, grid = "controls")
-         rp.checkbox(pnl, model03, action.fn, labels = "", initval = init.model0[1],
-                     grid = "models", row = 4, column = 2, name = "model03", background = bgdcol)
-         rp.checkbox(pnl, model04, action.fn, labels = "", initval = init.model0[1],
-                     grid = "models", row = 5, column = 2, name = "model04", background = bgdcol)
+         rp.do(pnl, rp.lm.draw)
       }
-      # rp.do(pnl, action.fn)
    }
    else {
-      # pnl <- list(x = x, y = y, z = z, xlab = xlab, ylab = ylab,
-      #             xterm = xterm, zterm = zterm, term.names = term.names, 
-      #             style = style, bgdcol = bgdcol)
       pnl <- list(ttl, models = models, y = y, x = x, z = z,
                   model.est = model.est, comp.est = comp.est, comp.se = comp.se,
                   response.range = response.range, residuals.showing = residuals.showing,
@@ -282,13 +303,13 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   type = type, style = style, labels.max = labels.max,
                   xlab = xlab, ylab = ylab, zlab = zlab,
                   yterm = yterm, xterm = xterm, zterm = zterm,
-                  ci = ci, bgdcol = bgdcol, estcol = estcol, refcol = refcol,
-                  highlighted.node = NA, static = static,
+                  ci = ci, clr = clr, bgdcol = bgdcol,
+                  highlighted.node = hlight, static = static,
                   model.nodes = model.nodes, click.coords = rep(NA, 2),
-                  display.model = display.model, comparison.model = comparison.model,
                   current.model = current.model, scaling = scaling,
                   smat = smat, fv = fv, xgrid = xgrid, zgrid = zgrid)
-      rp.lm.draw(pnl)
+      if (plot.nodes.only) rp.lm.modelnodes(pnl)
+      else                 pnl <- rp.lm.draw(pnl)
    }
    
    invisible(pnl)
@@ -298,8 +319,8 @@ rp.lm <- function(x, ylab, xlab, zlab,
 rp.lm.modelnodes <- function(panel) {
    fillcol <- rep('white', 5)
    if (!any(is.na(panel$highlighted.node)))
-      fillcol[panel$highlighted.node] <- 'lightblue'
-   
+      fillcol[panel$highlighted.node] <- panel$clr['node']
+
    with(panel$model.nodes, {
       par(oma = c(0, 0, 1, 0), plt = c(0, 1, 0, 1))
       plot(0:1, 0:1, type = 'n', axes = FALSE, xlab = '', ylab = '')
@@ -316,8 +337,8 @@ rp.lm.modelnodes <- function(panel) {
                 (y[comparison1] + y[comparison2]) / 2,
                 pch = 16, col = 'grey', cex = 2)
       }
-      text(0.5, 1, '(click to fit)')
-      title('Models', outer = TRUE)
+      if (!panel$static) text(0.5, 1, '(click to fit)')
+      title('Model lattice', outer = TRUE)
    })
    
    # ggplot code - but this does not allow clicked co-ordinate identification
@@ -370,33 +391,7 @@ rp.lm.click <- function(panel, x, y) {
 
 rp.lm.draw <- function(panel) {
    
-   if (panel$static) {
-      fn <- function(x, trms) {
-         mt <- attr(terms(as.formula(x)), 'term.labels')
-         (length(trms) == length(mt)) & all(trms %in% mt)
-      }
-      if (!is.null(panel$display.model)) {
-         terms.display <- attr(terms(panel$display.model), 'term.labels')
-         terms.model   <- sapply(panel$model.nodes$label, fn, terms.display)
-         hlight <- which(terms.model)
-      }
-      else
-         hlight <- panel$highlighted.node
-      if (!is.null(panel$comparison.model)) {
-         terms.comparison <- attr(terms(panel$comparison.model), 'term.labels')
-         terms.model      <- sapply(panel$model.nodes$label, fn, terms.comparison)
-         comp.ind         <- c(hlight, which(terms.model))
-         fn <- function(x) all(comp.ind %in% x)
-         comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
-         comp.ind <- which(apply(comps, 1, fn))
-         if (length(comp.ind) == 0) stop(paste('only adjacent models can be compared ',
-            'in this function.\n  Use the anova function to perform more general comparisons.'))
-         # The 1 below deals with the one.way case
-         hlight   <- comps[comp.ind[1], ]
-      }
-   }
-   else
-      hlight <- panel$highlighted.node
+   hlight <- panel$highlighted.node
 
    # Two covariates
    if (panel$type == 'regression.two') {
@@ -407,11 +402,11 @@ rp.lm.draw <- function(panel) {
          }
          if (!any(is.na(hlight))) {
             a <- scaling(xgrid, smat[ , , hlight[1]], zgrid)
-            rgl::surface3d(x = a$x, z = a$z, y = a$y, alpha = 0.5)
+            rgl::surface3d(x = a$x, z = a$z, y = a$y, col = clr['est'], alpha = 0.5)
             if (residuals.showing) {
                a <- scaling(c(t(cbind(x, x))), c(t(cbind(y, fv[ , hlight[1]]))),
                             c(t(cbind(z, z))))
-               rgl::segments3d(a$x, a$y, a$z, col = "green")
+               rgl::segments3d(a$x, a$y, a$z, col = clr['residuals'])
             }
          }
       })
@@ -459,7 +454,6 @@ rp.lm.draw <- function(panel) {
    
    # Anova
    if (panel$type %in% c('one.way', 'two.way')) {
-      clr  <- colorspace::rainbow_hcl(3)
       dfrm <- data.frame(x = panel$x, y = panel$y, jitter.x = panel$jitter.x)
       if (panel$type == 'two.way') dfrm$z <- panel$z
       plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(y, x)) +
@@ -503,7 +497,8 @@ rp.lm.draw <- function(panel) {
       else if (length(hlight) == 2) {
          fn       <- function(x) all(hlight %in% x)
          comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
-         comp.ind <- which(apply(comps, 1, fn))
+         # The [1] below is a fix for the one-way case
+         comp.ind <- which(apply(comps, 1, fn))[1]
          est      <- panel$comp.est[[comp.ind]]
          se       <- panel$comp.se[[comp.ind]]
          ngrid    <- 500
@@ -527,12 +522,12 @@ rp.lm.draw <- function(panel) {
             plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x,
                                             fill = dgrid, height = 0.8),
                                             data = dfrm1, show.legend = FALSE) +
-               ggplot2::scale_fill_gradient(low = "grey90", high = panel$refcol)
+               ggplot2::scale_fill_gradient(low = "grey90", high = panel$clr['ref'])
          }
          else {
             dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se))
             plt <- plt + ggplot2::geom_tile(ggplot2::aes(x = xgrid, y = x, height = dgrid),
-                                            col = NA, fill = panel$refcol,
+                                            col = NA, fill = panel$clr['ref'],
                                             show.legend = FALSE, data = dfrm1)
          }
       }
@@ -542,18 +537,20 @@ rp.lm.draw <- function(panel) {
          plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = fitted(mdl),
                                                          y    = afx - 0.45,
                                                          yend = afx + 0.45),
-                                            linewidth = 1, col = panel$estcol)
+                                            linewidth = 1, col = panel$clr['estline'])
          print(plt)
       }
       plt  <- plt +
-         ggplot2::geom_point(ggplot2::aes(x = y, y = jitter.x), col = clr[3]) +
+         ggplot2::geom_point(ggplot2::aes(x = y, y = jitter.x), col = panel$clr['points']) +
          ggplot2::xlim(panel$response.range[1], panel$response.range[2])
       plt  <- plt + ggplot2::coord_flip()
       if (panel$type == "two.way")
          plt <- plt + ggplot2::facet_grid(. ~ z)
       print(plt)
    }
-
+   
+   if (panel$static & (panel$type != 'regression.two')) return(plt)
+   
    panel
 }
 
@@ -597,7 +594,7 @@ rp.regression2.residuals <- function(panel) {
             mdl <- model.nodes$label[highlighted.node[1]]
             a <- scaling(c(t(cbind(x, x))), c(t(cbind(y, fv[ , mdl]))),
                          c(t(cbind(z, z))))
-            rgl::segments3d(a$x, a$y, a$z, col = "green")
+            rgl::segments3d(a$x, a$y, a$z, col = clr['residuals'])
          }
          else
             rgl::pop3d()
