@@ -3,10 +3,11 @@
 --------------------------------------------------------------
 
 rp.lm
-  - change the colours for the lines
+  - try transparency for reference uncertainties
+  - use systematic colours in rp.coefficients
+  - allow reference as well as ci style in rp.coefficients
   - Do anova and ancova work for other contrast settings?
   - How to handle subset and labels?
-  - colours?
   - remove missing data?
   - match the jitter to the width of the density strip
   - consider how to deprecate rp.regression, rp.ancova and rp.anova.

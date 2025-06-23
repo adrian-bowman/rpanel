@@ -23,7 +23,8 @@ rp.lm(x, ylab, xlab, zlab, ci = TRUE,
 \item{panel.plot}{a logical value which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE).}
 \item{plot.nodes.only}{a logical value, relevant only when the function is called in non-interactive mode (\code{panel = FALSE}), which determines whether the lattive of model nodes is plotted or the plot of the data and fitted model is returned. In the latter case, the returned object is a \code{ggplot} object.}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
-\item{display}{a one sided formula which determines the specific model to be displayed. This can be a reduced model which omits some of the terms present in the model defined by \code{x}, or an expanded model which includes interaction terms.}
+\item{display.model}{a one sided formula which determines the specific model to be displayed. This can be a reduced model which omits some of the terms present in the model defined by \code{x}, or an expanded model which includes interaction terms.}
+\item{comparison.model}{a one sided formula which determines the specific model to be compared with the displayed model. This can be a reduced model which omits some of the terms present in the model defined by \code{x} or, when at least one factore is present, an expanded model which includes an interaction term.}
 \item{residuals,showing}{a logical value which determines whether residuals are displayed when there are two covariates.}
 \item{...}{other arguments passed on the \code{lm} when \code{x} is a formula rather than a fitted model.}
 }

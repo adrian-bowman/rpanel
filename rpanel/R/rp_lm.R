@@ -7,24 +7,18 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   hscale = 1, vscale = hscale, ...) {
    
    static <- !panel
-   missing.display.model <- missing(display.model)
-   if (missing(comparison.model)) comparison.model <- NULL
-   if (!is.null(comparison.model) & missing.display.model)
-      stop('if comparison.model is specified then display.model must also be specified')
+   missing.display.model    <- missing(display.model)
+   missing.comparison.model <- missing(comparison.model)
+   if (missing.comparison.model) comparison.model <- NULL
    if (missing(residuals.showing)) residuals.showing <- FALSE
    style  <- if (requireNamespace('ggplot2', quietly = TRUE)) 'ggplot' else 'standard'
-   estcol        <- '#86B875'
-   estcol        <- '#9BD5FF'
-   estline       <- '#0093FF'
-   refcol        <- '#E495A5'
-   refcol        <- '#FFB56B'
-   refline       <- '#FF7F00'
-   pointcol      <- 'black'
-   nodecol       <- grey(0.5)
-   notchcol      <- 'black' # or make it the bgdcol
-   clr           <- c(est    = '#9BD5FF', estline = '#0093FF',
-                      ref    = '#FFB56B', refline = '#FF7F00',
-                      points = 'black',   node    = grey(0.8), notch = 'black') # or bgdcol
+   # Other possibilities
+   # refcol        <- '#E495A5'
+   # notchcol      <- 'black' # or make it the bgdcol
+   clr           <- c(est    = '#9BD5FF', estline   = '#0093FF',
+                      ref    = '#FFB56B', refline   = '#FF7F00',
+                      points = grey(0.5), node      = grey(0.8),
+                      notch  = 'black',   residuals = grey(0.5))
    current.model <- 'None'
    scaling       <- NULL
    smat          <- NULL
@@ -138,7 +132,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
       yhi     <- max(yhi, smat)
       ylim    <- c(ylo, yhi)
       if (panel | !plot.nodes.only) scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
-                           zlab = zlab, ylim = ylim, col = 'red')
+                           zlab = zlab, ylim = ylim, col = clr['points'])
       else scaling <- NULL
    }
    

@@ -109,16 +109,15 @@ test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons))
    rp.control.dispose(pnl)
 })
-
-load_all()
-rp.lm(stime ~ poison + treatment, data = poisons,
-      comparison.model = ~ poison, panel = FALSE)
-rp.lm(stime ~ poison + treatment, data = poisons)
-
 test_that('Density display', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons,
                                 uncertainty.display = 'shading'))
    rp.control.dispose(pnl)
+})
+test_that('Error: display and comparison models are not adjacent', {
+   expect_error(rp.lm(stime ~ poison + treatment, data = poisons,
+                      display.model = ~ poison * treatment,
+                      comparison.model = ~ poison, panel = FALSE))
 })
 test_that('Static mode: standard call', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE))
@@ -139,10 +138,6 @@ test_that('Static mode: valid comparison.model', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                          display.model = ~ poison * treatment,
                          comparison.model = ~ poison + treatment))
-})
-test_that('Static mode: invalid setting of comparison.model without display.model', {
-   expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
-                      comparison.model = ~ poison))
 })
 test_that('Static mode: display.model and comparison.model are not adjacent', {
    expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
