@@ -3,8 +3,6 @@
 --------------------------------------------------------------
 
 rp.lm
-  - try transparency for reference uncertainties
-  - use systematic colours in rp.coefficients
   - allow reference as well as ci style in rp.coefficients
   - Do anova and ancova work for other contrast settings?
   - How to handle subset and labels?

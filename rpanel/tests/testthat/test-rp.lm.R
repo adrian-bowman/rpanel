@@ -1,5 +1,10 @@
 #     Tests for the rp.lm function
 
+# setwd('rpanel')
+# library(devtools)
+# library(testthat)
+# load_all()
+ 
 #----------------------------------------------------------------
 cat('\nRegression with one covariate\n')
 #----------------------------------------------------------------
@@ -79,6 +84,24 @@ test_that('Standard call', {
    rp.control.dispose(pnl)
 })
 
+path <- rp.datalink('rds')
+rds  <- read.table(path, header = TRUE, stringsAsFactors = TRUE)
+test_that('Static mode: adjust linewidth', {
+   expect_no_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE, linewidth = 2))
+   rp.control.dispose(pnl)
+})
+test_that('Static mode: adjust font sizes', {
+   expect_no_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE, plot = FALSE) +
+                      ggplot2::theme(plot.title = ggplot2::element_text(size = 20)) + 
+                      ggplot2::theme(axis.text  = ggplot2::element_text(size = 20)) +
+                      ggplot2::theme(axis.title = ggplot2::element_text(size = 20)))
+})
+test_that('Error: character variable', {
+   rds$RDS <- as.character(rds$RDS)
+   expect_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE))
+   rds$RDS <- factor(rds$RDS)
+})
+
 #----------------------------------------------------------------
       cat('\nOne factor\n')
 #----------------------------------------------------------------
@@ -109,7 +132,12 @@ test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons))
    rp.control.dispose(pnl)
 })
-test_that('Density display', {
+test_that('Specify a comparison model', {
+   expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons,
+                                comparison.model = ~ poison))
+   rp.control.dispose(pnl)
+})
+test_that('Shading display', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons,
                                 uncertainty.display = 'shading'))
    rp.control.dispose(pnl)
@@ -122,9 +150,13 @@ test_that('Error: display and comparison models are not adjacent', {
 test_that('Static mode: standard call', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE))
 })
-test_that('Static mode: standard call, density display', {
+test_that('Static mode: shading display', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                          uncertainty.display = 'shading'))
+})
+test_that('Static mode: no display model', {
+   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+                         display.model = NULL))
 })
 test_that('Static mode: valid display.model', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,

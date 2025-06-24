@@ -18,8 +18,8 @@ rp.coefficients <- function(model, style = 'density',
       style <- 'density'
    }
    
-   # Mssing arguments (col - colorspace::rainbow_hcl(3)[2])
-	col    <- if (missing(col))    '#86B875' else col
+   # Missing arguments (col - colorspace::rainbow_hcl(3)[2])
+	col    <- if (missing(col))    '#9BD5FF' else col
 	sbst   <- if (missing(subset)) NA else subset
 	lbls   <- if (missing(labels)) NA else labels
 	

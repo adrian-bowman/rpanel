@@ -1,6 +1,6 @@
 #     Anova on a regression model
 
-rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01)) {
+rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01), col) {
    
    tbl     <- drop1(model, test = 'F')[-1, ]
    # if (!missing(subset.terms) | is.null(subset.terms)) {
@@ -9,6 +9,7 @@ rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01)) {
          subset.terms <- match(subset.terms, rownames(tbl))
       tbl <- tbl[subset.terms, ]
    }
+   if (missing(col)) col <- '#FFB56B'
    tbl$df  <- tbl$Df
    tbl$Df  <- paste('Model terms with', tbl$Df, 'df')
    fmax    <- 1.1 * max(qf(1 - p.reference, tbl$df, model$df.residual), tbl$'F value')
@@ -31,7 +32,7 @@ rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01)) {
       
    plt <- ggplot2::ggplot(tbl, ggplot2::aes(`F value`, rownames(tbl))) +
       ggplot2::geom_ribbon(ggplot2::aes(x = fgrid, ymin = fhtlo, ymax = fht),
-                           fill = grey(0.7), col = grey(0.7),
+                           fill = col, col = col,
                            inherit.aes = FALSE, data = curv.df) +
       ggplot2::geom_point() +
       ggplot2::ylab('Model terms') +
