@@ -1,7 +1,7 @@
 #     A general function for linear models
 
 rp.lm <- function(x, ylab, xlab, zlab,
-                  panel = TRUE, panel.plot = TRUE, add.layers = FALSE, plot.nodes.only = FALSE,
+                  panel = TRUE, panel.plot = TRUE, plot.nodes = FALSE,
                   uncertainty.display = 'density', inference = 'coefficients',
                   ci = TRUE, display.model, comparison.model,
                   residuals.showing, linewidth = 1,
@@ -16,8 +16,21 @@ rp.lm <- function(x, ylab, xlab, zlab,
    # Other possibilities
    # refcol        <- '#E495A5'
    # notchcol      <- 'black' # or make it the bgdcol
-   clr           <- c(est    = '#9BD5FF', estline   = '#0093FF',
-                      ref    = '#FFB56B', refline   = '#FF7F00',
+   # library(RColorBrewer)
+   # display.brewer.pal(3, 'Pastel1')
+   # brewer.pal(3, 'Pastel1')
+   # [1] "#FBB4AE" "#B3CDE3" "#CCEBC5"
+   # > brewer.pal(3, 'Pastel2')
+   # [1] "#B3E2CD" "#FDCDAC" "#CBD5E8"
+   # Alison's suggestions
+   # clr           <- c(est    = '#9BD5FF', estline   = '#0093FF',
+   #                    ref    = '#FFB56B', refline   = '#FF7F00')
+   # Pastel2 choices
+   # clr           <- c(est    = '#B3E2CD', estline   = '#B3E2CD',
+   #                    ref    = '#FDCDAC', refline   = '#FDCDAC',
+   # Pastel1 choices
+   clr           <- c(est    = '#B3CDE3', estline   = '#0093FF',
+                      ref    = '#FBB4AE', refline   = '#FF7F00',
                       points = grey(0.5), node      = grey(0.8),
                       notch  = 'black',   residuals = grey(0.5))
    current.model <- 'None'
@@ -135,10 +148,12 @@ rp.lm <- function(x, ylab, xlab, zlab,
       ylo     <- min(ylo, smat)
       yhi     <- max(yhi, smat)
       ylim    <- c(ylo, yhi)
-      if (panel | !plot.nodes.only) scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
+      if (panel | !plot.nodes) scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
                            zlab = zlab, ylim = ylim, col = clr['points'])
       else scaling <- NULL
    }
+   opar <- par(oma = c(0, 0, 1, 0), plt = c(0, 1, 0, 1))
+   on.exit(par(opar))
    
    # Find the coefficient names from the maximal model
    form <- paste(yterm, '~', trms[1])
@@ -156,6 +171,20 @@ rp.lm <- function(x, ylab, xlab, zlab,
    }
    labels.max <- names(coefficients(model.max))[-1]
    
+   # Deal with missing data
+   lm.args <- list(...)
+   nms     <- all.vars(model$terms)
+   if ('data' %in% names(lm.args))
+      data.dfrm <- lm.args$data[ , nms]
+   else {
+      data.dfrm <- cbind(get(nms[1]), get(nms[2]))
+      if (length(nms) > 2 ) data.dfrm <- cbind(data.dfrm, get(nms[3]))
+      data.dfrm <- as.data.frame(data.dfrm)
+      names(data.dfrm) <- nms
+   }
+   ind       <- apply(data.dfrm, 1, function(x) any(is.na(x)))
+   data.dfrm <- data.dfrm[!ind, ]
+
    # Check that the display.model and comparison.model formula, if supplied,
    # are submodels of the maximal model
    terms.max <- attr(terms(model.max), 'term.labels')
@@ -207,11 +236,12 @@ rp.lm <- function(x, ylab, xlab, zlab,
    # Create a list of valid models
    # and, for anova, estimates and se's for comparisons.
    # Use this to define the plotted response range.
+   # Missing data: use the dataframe from the specified model
    models  <- list()
    nmodels <- switch(type, regression.two = 4, ancova = 5,
                            one.way = 2, two.way = 5)
    for (i in 1:nmodels)
-      models[[i]] <- update(model, model.nodes$label[i])
+      models[[i]] <- update(model, model.nodes$label[i], data = data.dfrm)
    if (type %in% c('one.way', 'two.way')) {
       model.est <- list()
       comp.est  <- list()
@@ -255,10 +285,10 @@ rp.lm <- function(x, ylab, xlab, zlab,
    if (panel) {
       pnl <- rp.control(ttl, models = models, y = y, x = x, z = z,
                         model.est = model.est, comp.est = comp.est, comp.se = comp.se,
-                        response.range = response.range, add.layers = FALSE,
+                        response.range = response.range,
                         jitter.x = jitter.x, uncertainty.display = uncertainty.display,
                         type = type, style = style, labels.max = labels.max,
-                        xlab = xlab, ylab = ylab, zlab = zlab,
+                        xlab = xlab, ylab = ylab, zlab = zlab, seed = round(runif(1) * 10000),
                         yterm = yterm, xterm = xterm, zterm = zterm,
                         ci = ci, bgdcol = bgdcol, clr = clr,
                         highlighted.node = hlight, static = static,
@@ -297,18 +327,23 @@ rp.lm <- function(x, ylab, xlab, zlab,
       pnl <- list(ttl, models = models, y = y, x = x, z = z,
                   model.est = model.est, comp.est = comp.est, comp.se = comp.se,
                   response.range = response.range, residuals.showing = residuals.showing,
-                  linewidth = linewidth, add.layers = add.layers,
+                  linewidth = linewidth,
                   jitter.x = jitter.x, uncertainty.display = uncertainty.display,
                   type = type, style = style, labels.max = labels.max,
-                  xlab = xlab, ylab = ylab, zlab = zlab,
+                  xlab = xlab, ylab = ylab, zlab = zlab, seed = round(runif(1) * 10000),
                   yterm = yterm, xterm = xterm, zterm = zterm,
                   ci = ci, clr = clr, bgdcol = bgdcol,
-                  highlighted.node = hlight, static = static, plot = plot,
+                  highlighted.node = hlight, static = static,
                   model.nodes = model.nodes, click.coords = rep(NA, 2),
                   current.model = current.model, scaling = scaling,
                   smat = smat, fv = fv, xgrid = xgrid, zgrid = zgrid)
-      if (plot.nodes.only) rp.lm.modelnodes(pnl)
-      else                 pnl <- rp.lm.draw(pnl)
+      if (plot.nodes)
+         return(invisible(rp.lm.modelnodes(pnl)))
+      plt <- rp.lm.draw(pnl)
+      if (pnl$type != 'regression.two')
+         return(plt)
+      else
+         return(invisible(plt))
    }
    
    invisible(pnl)
@@ -392,7 +427,10 @@ rp.lm.draw <- function(panel) {
    
    hlight <- panel$highlighted.node
 
-   # Two covariates
+   # -------------------------------------------------------------
+   #                       Two covariates
+   # -------------------------------------------------------------
+   
    if (panel$type == 'regression.two') {
       with(panel, {
          if (current.model != "None") {
@@ -412,7 +450,10 @@ rp.lm.draw <- function(panel) {
       if (!any(is.na(hlight))) panel$current.model <- hlight[1]
    }
    
-   # Ancova
+   # -------------------------------------------------------------
+   #                          Ancova
+   # -------------------------------------------------------------
+   
    if (panel$type == 'ancova') {
       
       dfrm <- data.frame(y = panel$y, x = panel$x, z = panel$z)
@@ -452,20 +493,27 @@ rp.lm.draw <- function(panel) {
    
    }
    
-   # Anova
+   # -------------------------------------------------------------
+   #                          Anova
+   # -------------------------------------------------------------
+
    if (panel$type %in% c('one.way', 'two.way')) {
       dfrm <- data.frame(x = panel$x, y = panel$y, jitter.x = panel$jitter.x)
       if (panel$type == 'two.way') dfrm$z <- panel$z
+      
       # Plot setup
       plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(y, x)) +
          ggplot2::xlab(panel$ylab) + ggplot2::ylab(panel$xlab) +
          ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
                         panel.grid.minor = ggplot2::element_blank(),
                         panel.background = ggplot2::element_rect(fill = "grey90")) +
+         # ggplot2::geom_hline(yintercept = as.numeric(2:nlevels(dfrm$x)) - 0.5,
+         #                     col = 'grey80') +
          ggplot2::ggtitle(panel$ttl)
       ngrid <- 512
       xgrid <- seq(panel$response.range[1], panel$response.range[2], length = ngrid)
       del   <- diff(panel$response.range) / ngrid
+      
       # Plot the data density
       if (length(hlight) != 2) {
          lst   <- if (panel$type == 'two.way') list(panel$x, panel$z) else list(panel$x)
@@ -477,26 +525,37 @@ rp.lm.draw <- function(panel) {
             cbind(dens$x, dens$y)
          }
          dgrid <- tapply(panel$y, lst, fn)
-         xdens <- c(sapply(dgrid, function(x) x[ , 1]))
-         ydens <- c(sapply(dgrid, function(x) x[ , 2]))
-         dfrm0 <- data.frame(xdens, ydens, x = rep(as.numeric(levels(panel$x)), each = ngrid))
-         if (panel$type == 'two.way')
-            dfrm0$z = rep(levels(panel$z), each = nlevels(panel$x) * ngrid)
+         xdens <- unlist(lapply(dgrid, function(x) x[ , 1]))
+         ydens <- unlist(lapply(dgrid, function(x) x[ , 2]))
+         fn1   <- function(x) if (!is.null(x)) nrow(x) else 0
+         repl  <- unlist(lapply(dgrid, fn1))
+         fnms  <- expand.grid(dimnames(dgrid))
+         xf    <- factor(rep(fnms[ , 1], repl), levels = levels(panel$x))
+         dfrm0 <- data.frame(xdens, ydens, x = xf)
+         # dfrm0 <- data.frame(xdens, ydens, x = rep(as.numeric(levels(panel$x)), each = ngrid))
+         if (panel$type == 'two.way') 
+            dfrm0$z <- factor(rep(fnms[ , 2], repl), levels = levels(panel$z))
          plt <- plt + ggplot2::geom_tile(ggplot2::aes(xdens, x, fill = ydens, height = 0.8),
                                          data = dfrm0, show.legend = FALSE) +
+                      ggplot2::scale_fill_gradient(low = 'grey90', high = 'grey50')
          # This creates missing tiles - I don't know why
          # plt <- plt + ggplot2::stat_density(ggplot2::aes(fill   = ggplot2::after_stat(density)),
          #                                    geom = "tile", trim = TRUE,
          #                                    height = 0.7, position = "identity",
          #                                    show.legend = FALSE) +
-            ggplot2::scale_fill_gradient(low = 'grey90', high = 'grey50')
+         #    ggplot2::scale_fill_gradient(low = 'grey90', high = 'grey50')
          # geom_violin doesn't look good with small samples
          # plt <- plt + ggplot2::geom_violin(bw = 'nrd', col = NA, fill = 'grey80')
       }
+      
       # Plot the data points
+      set.seed(panel$seed)
       plt  <- plt +
-         ggplot2::geom_point(ggplot2::aes(y, jitter.x), col = panel$clr['points']) +
+         # ggplot2::geom_point(ggplot2::aes(y, jitter.x), col = panel$clr['points']) +
+         ggplot2::geom_jitter(ggplot2::aes(y, x), height = 0.1, width = 0,
+                              col = panel$clr['points']) +
          ggplot2::xlim(panel$response.range[1], panel$response.range[2])
+      
       # Plot the fitted values of the display model
       if (!any(is.na(hlight))) {
          mdl <- panel$models[[hlight[1]]]
@@ -506,7 +565,8 @@ rp.lm.draw <- function(panel) {
                                                          yend = afx + 0.45),
                                             linewidth = 1, col = panel$clr['estline'])
       }
-      # plot the model comparison uncertainties
+      
+      # Plot the model comparison uncertainties
       if (length(hlight) == 2) {
          fn       <- function(x) all(hlight %in% x)
          comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
@@ -521,14 +581,17 @@ rp.lm.draw <- function(panel) {
             dfrm1 <- data.frame(y = c(est), x = rep(rownames(est), ncol(est)),
                                 z = rep(colnames(est), each = nrow(est)))
             dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
-                                x = rep(dfrm1$x, ngrid), z = rep(dfrm1$z, ngrid))
+                                x = factor(rep(dfrm1$x, ngrid), levels = levels(panel$x)),
+                                z = factor(rep(dfrm1$z, ngrid), levels = levels(panel$z)))
             dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[cbind(dfrm1$x, dfrm1$z)],
                                               se[cbind(dfrm1$x, dfrm1$z)])
+            ind   <- apply(dfrm1, 1, function(x) any(is.na(x)))
+            dfrm1 <- dfrm1[!ind, ]
          }
          else {
             dfrm1 <- data.frame(y = est, x = names(est))
             dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
-                                x = rep(dfrm1$x, ngrid))
+                                x = factor(rep(dfrm1$x, ngrid), levels = levels(panel$x)))
             dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[dfrm1$x], se[dfrm1$x])
          }
          if (panel$uncertainty.display == 'shading') {
@@ -538,9 +601,8 @@ rp.lm.draw <- function(panel) {
                ggplot2::scale_fill_gradient(low = "grey90", high = panel$clr['ref'])
          }
          else {
-            dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se))
-            plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)),
-                                                         height = dgrid),
+            dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se, na.rm = TRUE))
+            plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, x, height = dgrid),
                                             col = NA, fill = panel$clr['ref'], alpha = 0.7,
                                             show.legend = FALSE, data = dfrm1)
          }
@@ -551,9 +613,12 @@ rp.lm.draw <- function(panel) {
          plt <- plt + ggplot2::facet_grid(. ~ z)
    }
    
+   # -------------------------------------------------------------
+   #                    Return value
+   # -------------------------------------------------------------
+   
    if (panel$type != 'regression.two') {
-      if (!panel$add.layers) print(plt)
-      if (panel$static) return(plt)
+      if (panel$static) return(plt) else print(plt)
    }
    
    panel
@@ -565,8 +630,9 @@ rp.lm.effectsplot <- function(panel) {
       hlight <- (!any(is.na(highlighted.node)) && 
                  (highlighted.node[1] > 1 | nhl > 1))
       fn.blank <- function() {
-         par(mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
-         plot(c(0, 1), c(0, 1), type = "n", xlab = "", ylab = "", axes = FALSE)
+         plot(c(0, 1), c(0, 1), type = "n", xlab = "", ylab = "", axes = FALSE,
+              mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
+         invisible()
       }
       if (hlight) {
          mdl <- models[[highlighted.node[1]]]

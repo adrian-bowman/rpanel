@@ -3,12 +3,13 @@
 
 rp.t_test <- function(x, y = NULL, mu = NULL, display = 'density',
                      uncertainty = 'sample mean', scale = TRUE, zoom = FALSE,
+                     horizontal = TRUE,
                      col = '#86B875', refcol = '#E495A5',
                      xlab, ylab, ...) {
    
    if (!requireNamespace("ggplot2"))
       stop("the ggplot2 package is not available.")
-
+   
    if (!(uncertainty %in% c('none', 'sample mean', 'reference')))
          uncertainty <- 'sample mean'
    ttest.args <- list(...)
@@ -27,15 +28,19 @@ rp.t_test <- function(x, y = NULL, mu = NULL, display = 'density',
    #       col = c(grey(0.5), grey(0.5), '#86B875', '#E495A5')
    #       else col = '#86B875'
    # }
-   if (missing(col))    col    <- '#86B875'
-   if (missing(refcol)) refcol <- '#E495A5'
+   # if (missing(col))    col    <- '#86B875'
+   # if (missing(refcol)) refcol <- '#E495A5'
+   clr <- c(estimate  = '#B3CDE3', estline = '#0093FF',
+            reference = '#FBB4AE', refline = '#FF7F00',
+            points    = 'grey50',  notch   = 'black',
+            density   = 'grey75')
    if (missing(xlab))   xlab <- deparse(substitute(x))
    ylab <- if ((method == 'Two') & missing(ylab)) deparse(substitute(y)) else NA
 
-   plot.args <- list(scale = scale, col = col, refcol = refcol,
+   plot.args <- list(scale = scale, col = clr,
                      height = height, display = display, zoom = zoom,
                      uncertainty = uncertainty, reference = reference,
-                     xlab = xlab, ylab = ylab, nmin = 10, col.dens = 'grey75')
+                     xlab = xlab, ylab = ylab, nmin = 10)
 
    if (method == 'Paired') x <- x - y
    plt <- if (method %in% c('One', 'Paired'))
@@ -50,7 +55,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    display     <- plot.args$display
    uncertainty <- plot.args$uncertainty
-   col.dens    <- plot.args$col.dens
+   col.dens    <- plot.args$clr['density']
    mu          <- ttest$null.value
    se          <- ttest$stderr
    hst         <- hist(x, plot = FALSE)
@@ -115,11 +120,11 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    if (uncertainty != 'none') {
       cntr    <- if (uncertainty == 'sample mean') ttest$estimate else mu
-      ucol    <- if (uncertainty == 'sample mean') plot.args$col
-                 else plot.args$refcol
+      ucol    <- if (uncertainty == 'sample mean') plot.args$col['estimate']
+                 else plot.args$col['reference']
       clab    <- if (uncertainty == 'sample mean') 'sample mean uncertainty'
                  else 'reference uncertainty'
-      urng  <- range(cntr - 4 * se, cntr + 4 * se)
+      urng    <- range(cntr - 4 * se, cntr + 4 * se)
       ngrid   <- 100
       xgrid   <- seq(urng[1], urng[2], length = ngrid)
       dens    <- dt((xgrid - cntr) / se, length(x) - 1) / dt(0, length(x) - 1)
@@ -139,10 +144,10 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    lineend   <- if (plot.args$zoom) u.orig + 1.1 * dmax else 1.25 * dmax
    plt <- plt +
       ggplot2::annotate("segment", x = ttest$estimate, xend = ttest$estimate,
-                        y = linestart, yend = lineend, col = plot.args$col) +
+                        y = linestart, yend = lineend, col = plot.args$col['estline']) +
       ggplot2::annotate('text', x = ttest$estimate, y = lineend + 0.1 * dmax,
                         hjust = hjst(ttest$estimate, xlimits, 0.25),
-                        label = 'sample mean', col = plot.args$col)
+                        label = 'sample mean', col = plot.args$col['estline'])
    
    # Plot reference if requested
    
@@ -150,9 +155,9 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
       plt  <- plt +
          ggplot2::annotate("segment", x = mu, xend = mu,
                            y = linestart, yend =  1.05 * dmax,
-                           col = plot.args$refcol) +
+                           col = plot.args$col['refline']) +
          ggplot2::annotate('text', x = mu, y = 1.15 * dmax, label = 'reference',
-                           hjust = hjst(mu, xlimits, 0.25), col = plot.args$refcol)
+                           hjust = hjst(mu, xlimits, 0.25), col = plot.args$col['refline'])
    
    # Plot the uncertainty axis
    
@@ -226,8 +231,8 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    mu          <- ttest$null.value
    uncertainty <- plot.args$uncertainty
    height      <- plot.args$height
-   col         <- plot.args$col
-   col.dens    <- plot.args$col.dens
+   col         <- plot.args$col['estimate']
+   col.dens    <- plot.args$col['density']
    fn          <- function(x) density(x, bw = bw.norm(x))
    dens        <- tapply(x, y, fn)
    if (display == 'histogram') {
@@ -330,7 +335,8 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    
    if (uncertainty != 'none') {
       cntr    <- if (uncertainty == 'sample mean') mns[2] else mns[1] + mu
-      ucol    <- if (uncertainty == 'sample mean') plot.args$col else plot.args$refcol
+      ucol    <- if (uncertainty == 'sample mean') plot.args$col['estimate']
+                 else plot.args$col['reference']
       clab    <- if (uncertainty == 'sample mean') 'sample mean uncertainty'
                  else 'reference uncertainty'
       ngrid   <- 100
@@ -371,13 +377,13 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    if (!plot.args$zoom)
       plt  <- plt +
          ggplot2::annotate("segment", x = mns[2], xend = mns[2],
-                        y = ly, yend = ly - 0.4 * margin, col = plot.args$col)
+                        y = ly, yend = ly - 0.4 * margin, col = plot.args$col['estimate'])
    plt <- plt +
       ggplot2::annotate("segment", x = mns[2], xend = mns[2],
-                        y = ly - 1.1 * margin, yend = -Inf, col = plot.args$col) +
+                        y = ly - 1.1 * margin, yend = -Inf, col = plot.args$col['estiamte']) +
       ggplot2::annotate('text', x = mns[2], y = ly - 0.75 * margin,
                         hjust = hjst(mns[2], xlimits, 0.25),
-                        label = 'sample mean difference', col = plot.args$col)
+                        label = 'sample mean difference', col = plot.args$col['estimate'])
 
    # Plot the reference, if requested
    
@@ -385,10 +391,10 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
       plt  <- plt +
          ggplot2::annotate("segment", x = mns[1] + mu, xend = mns[1] + mu,
                            y = ly - 1.6 * margin, yend = -Inf,
-                           col = plot.args$refcol) +
+                           col = plot.args$col['reference']) +
          ggplot2::annotate('text', x = mns[1] + mu, y = ly - 1.25 * margin,
                            hjust = hjst(mns[1] + mu, xlimits, 0.25),
-                           label = 'reference', col = plot.args$refcol)
+                           label = 'reference', col = plot.args$col['reference'])
    
    # Plot the uncertainty axis
    

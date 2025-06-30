@@ -2,7 +2,23 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.lm and rp.t_test
+  - adding layers is problematic. See add.layers argument idea. Is this necessary?
+
+rp.t_test
+  - check for a formula, in which case pass the task to rp.lm?
+  - use a suitable label for the horizontal axis (including when there is paired data)
+  - could/should the p-value or confidence level be shown without cluttering the plot?
+  - add animation which shows the plausibility of the sample mean under different
+    assumptions of population mean?
+  - add binomial proportions?
+
 rp.lm
+  - check one factor for missing data and for category without data
+  - long variable names produces a messy node diagram (cofe_2019)
+  - allow panel = FALSE in simple regression. Mimic ggplot style.
+    The function can't be moved to ggplot because of the mouse interactions in
+    moving data points.
   - allow reference as well as ci style in rp.coefficients
   - Do anova and ancova work for other contrast settings?
   - How to handle subset and labels?
@@ -12,7 +28,7 @@ rp.lm
     Allow continued access to the standard graphics versions of these functions?
   - check that things work when one of the one.way or two.way groups is empty.
   - add rp.coefficients and rp.drop1 to simple regression case?
-  - does panel.plot = FALSE work?
+  - does panel.plot = FALSE work? Not appropriate?
 
 rp.coefficients
   - adjust width of densities to have area 1?
@@ -46,12 +62,6 @@ rp.regression:
   - mixed models?
   - allow different funtions to control the calculation of effect size?
     range, iqr, user-supplied?
-
-rp.ttest
-  - could/should the p-value or confidence level be shown without cluttering the plot?
-  - add animation which shows the plausibility of the sample mean under different
-    assumptions of population mean?
-  - add binomial proportions?
 
 rp.sample
   - still a problem with warning of geom_col observations out of range? Fixed?

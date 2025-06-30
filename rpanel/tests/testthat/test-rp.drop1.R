@@ -1,6 +1,16 @@
 #     Tests for the rp.drop1 function
 
+# setwd('rpanel')
+# library(devtools)
+# library(testthat)
+# load_all()
+
+#----------------------------------------------------------------
+cat('\nRegression with two covariates\n')
+#----------------------------------------------------------------
+
 model <- lm(Giving ~ Employ, data = CofE)
+
 test_that('Standard call', {
    expect_no_error(rp.drop1(model))
 })
