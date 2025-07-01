@@ -63,15 +63,17 @@ test_that('Simulated data', {
 test_that('Two-sample data', {
    x <- rnorm(50) + 1
    y <- rnorm(50) + 2
-   
-   load_all()
-   rp.t_test(x, y, display = 'violin', uncertainty = 'none')
+   rp.t_test(x, y, uncertainty = 'none')
+   rp.t_test(x, y)
+   rp.t_test(x, y, display = 'violin', uncertainty = 'reference')
    rp.t_test(x, y, display = 'violin')
    rp.t_test(x, y, display = 'density')
    rp.t_test(x, y, display = 'histogram')
    
-   rp.t_test(x, y, display = 'density')
-   rp.t_test(x, y, display = 'histogram')
+   load_all()
+   rp.t_test(x, y, scale = FALSE)
+   rp.t_test(x, y, uncertainty = 'reference', scale = TRUE)
+   
    
    for (display in c('histogram', 'density', 'violin')) {
       display <- 'density'
