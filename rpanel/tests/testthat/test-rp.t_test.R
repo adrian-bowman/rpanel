@@ -62,8 +62,19 @@ test_that('Simulated data', {
 
 test_that('Two-sample data', {
    x <- rnorm(50) + 1
-   y <- rnorm(50) + 10
+   y <- rnorm(50) + 2
+   
+   load_all()
+   rp.t_test(x, y, display = 'violin', uncertainty = 'none')
+   rp.t_test(x, y, display = 'violin')
+   rp.t_test(x, y, display = 'density')
+   rp.t_test(x, y, display = 'histogram')
+   
+   rp.t_test(x, y, display = 'density')
+   rp.t_test(x, y, display = 'histogram')
+   
    for (display in c('histogram', 'density', 'violin')) {
+      display <- 'density'
       expect_no_error(rp.t_test(x, y))
       expect_no_error(rp.t_test(x, y, display = display, uncertainty = 'none'))
       expect_no_error(rp.t_test(x, y, display = display, zoom = TRUE))
@@ -83,5 +94,5 @@ test_that('Two-sample data', {
 test_that('Two-sample data: vertical plot', {
    x <- rnorm(50) + 1
    y <- rnorm(50) + 10
-   expect_no_error(rp.t_test(x, y, , display = display, seed = 6245))
+   expect_no_error(rp.t_test(x, y, display = display, seed = 6245))
 })

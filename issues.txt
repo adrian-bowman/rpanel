@@ -7,6 +7,8 @@ rp.lm and rp.t_test
 
 rp.t_test
   - check for a formula, in which case pass the task to rp.lm?
+  - trap group size 1 as an error
+  - base t.test expects a formula or one or two vectors. rp.t_test should do the same.
   - use a suitable label for the horizontal axis (including when there is paired data)
   - could/should the p-value or confidence level be shown without cluttering the plot?
   - add animation which shows the plausibility of the sample mean under different
