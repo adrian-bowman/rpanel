@@ -1,9 +1,10 @@
 rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
-                      ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
+                      panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
                       show.out.of.range = TRUE,
                       hscale = NA, vscale = hscale, pause = 0.01) {
 
+   ggplot     <- TRUE
    shape0     <- (abs(shape) < 2 * .Machine$double.eps)
    sn.present <- requireNamespace('sn', quietly = TRUE)
    if (!shape0 & !sn.present)
@@ -353,8 +354,8 @@ rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
       message('display not recognised - using histogram.')
    }
    display.sample <- display.sample[c('data', 'population', 'mean', 'st.dev. scale')]
-   display.mean <- display.mean[c('sample mean', 'accumulate', 'se scale',
-                                  'zoom', 't-statistic', 'distribution')]
+   display.mean   <- display.mean[c('sample mean', 'accumulate', 'se scale',
+                                    'zoom', 't-statistic', 'distribution')]
 
    pars      <- c(mu = mu, sigma = sigma)
    sn.delta  <- shape / sqrt(1 + shape^2)
@@ -457,7 +458,7 @@ rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
       Sys.sleep(pause)
       rp.slider(panel, nbins.mean, 10, 100, sample.redraw, resolution = 1,
                 grid = 'meancontrols', row = 1, column = 0, sticky = 'ew')
-      return(invisible())
+      return(invisible(panel))
    }
    else {
       if (display.mean['accumulate']) {
@@ -483,7 +484,7 @@ rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
                   display.sample = display.sample, display.mean = display.mean,
                   roptions = display.sample, panel.interactive = panel.interactive)
       result <- sample.new(pnl)
-      return(invisible(result))
+      return(result)
    }
    
 }

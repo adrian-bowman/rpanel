@@ -64,23 +64,20 @@ test_that('Static mode: select the null model to be displayed', {
                          panel = FALSE))
 })
 cofe_2019 <- rp.wrangle('cofe_2019')
-Gpm <- cofe_2019$Giving_per_member
-Att <- cofe_2019$Attachment
-Imd <- cofe_2019$IMD
 test_that('Static mode: transformations with a data argument', {
    expect_no_error(rp.lm(log(Giving_per_member) ~ Attachment + IMD, data = cofe_2019,
                          panel = FALSE, residuals.showing = TRUE)
    )
 })
+Gpm <- cofe_2019$Giving_per_member
+Att <- cofe_2019$Attachment
+Imd <- cofe_2019$IMD
 test_that('Static mode: transformations without a data argument', {
    expect_no_error(rp.lm(log(Gpm) ~ Att + Imd, panel = FALSE,
                          residuals.showing = TRUE))
    expect_no_error(rp.lm(Gpm ~ log(Att) + Imd, panel = FALSE,
                          residuals.showing = TRUE))
 })
-
-rp.lm(log(Gpm) ~ Att + Imd, panel = FALSE,
-      residuals.showing = TRUE)
 
 # Remove rgl windows
 rgl::close3d(rgl::rgl.dev.list())

@@ -2,7 +2,7 @@
 #     on two samples of data
 
 rp.t_test <- function(x, y = NULL, mu = NULL, display = 'density',
-                     uncertainty = 'none', se.scale = TRUE,
+                     uncertainty = 'sample mean', se.scale = is.null(y),
                      zoom = FALSE, col = '#86B875', refcol = '#E495A5', xlab, ylab, ...) {
    
    if (!requireNamespace('ggplot2'))
@@ -64,11 +64,8 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    uncertainty <- plot.args$uncertainty
    col.dens    <- plot.args$col['density']
    mu          <- ttest$null.value
-   mn          <- ttest$estimate
    se          <- ttest$stderr
    se.scale    <- plot.args$se.scale
-   if (uncertainty != 'none') se.scale <- TRUE
-   reference   <- plot.args$reference
    hst         <- hist(x, plot = FALSE)
    dmax        <- max(hst$density)
    
@@ -78,23 +75,18 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    xlimits <- range(mean(x) - 4 * se, mean(x) + 4 * se)
    if (!plot.args$zoom) xlimits <- range(xlimits, dens$x)
    if (plot.args$reference) xlimits <- range(xlimits, mu - 4 * se, mu + 4 * se)
-   ticks <- (if (violin) c(0, -1.5, -2) else c(0.5, -0.5, -1)) * dmax
-   ylabs <- c('data\n', 'uncertainty\nof the mean', 'se scale')
-   tind  <- 1
-   if (uncertainty != 'none') tind <- c(tind, 2)
-   if (se.scale) tind <- c(tind, 3)
-   cntr    <- if (uncertainty == 'reference') mu else ttest$estimate
+   ticks <- if (violin) c(0, -1.5 * dmax) else c(0.5, -0.5) * dmax
+   tind  <- if (uncertainty == 'none') 1 else 1:2
    dfrm  <- data.frame(x, gp = 1)
    plt <- ggplot2::ggplot(dfrm, ggplot2::aes(x, gp)) +
-      ggplot2::theme(
-         # axis.text.y        = ggplot2::element_text(angle = 90, vjust = 0.5),
-         axis.ticks.y       = ggplot2::element_blank(),
-         axis.title.y       = ggplot2::element_blank(),
-         panel.grid.major.y = ggplot2::element_blank(),
-         panel.grid.minor.y = ggplot2::element_blank()) +
+      ggplot2::theme(axis.text.y        = ggplot2::element_text(angle = 90, vjust = 0.5),
+                     axis.ticks.y       = ggplot2::element_blank(),
+                     axis.title.y       = ggplot2::element_blank(),
+                     panel.grid.major.y = ggplot2::element_blank(),
+                     panel.grid.minor.y = ggplot2::element_blank()) +
       ggplot2::scale_y_continuous(breaks = ticks[tind],
-                                  labels = ylabs[tind])
-      # ggplot2::xlim(xlimits[1], xlimits[2])
+                                  labels = c('data\n', 'uncertainty\nof the mean')[tind]) +
+      ggplot2::xlim(xlimits[1], xlimits[2])
       
    
    # Plot the data
@@ -134,15 +126,18 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    # Plot the uncertainty
    
-   u.orig  <- if (violin) -2.3 * dmax else -1.3 * dmax
-   ucol    <- if (uncertainty == 'reference') plot.args$col['reference']
-              else plot.args$col['estimate']
    if (uncertainty != 'none') {
+      cntr    <- if (uncertainty == 'sample mean') ttest$estimate else mu
+      ucol    <- if (uncertainty == 'sample mean') plot.args$col['estimate']
+                 else plot.args$col['reference']
+      clab    <- if (uncertainty == 'sample mean') 'sample mean uncertainty'
+                 else 'reference uncertainty'
       urng    <- range(cntr - 4 * se, cntr + 4 * se)
       ngrid   <- 100
       xgrid   <- seq(urng[1], urng[2], length = ngrid)
       dens    <- dt((xgrid - cntr) / se, length(x) - 1) / dt(0, length(x) - 1)
       dgrd    <- data.frame(x = xgrid, y = 1, dens)
+      u.orig  <- if (violin) -2.3 * dmax else -1.3 * dmax
       height  <- dmax
       dstn.lo <- if (violin) u.orig - height * dens else u.orig
       plt <- plt +
@@ -153,7 +148,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    # Plot the sample mean
    
-   linestart <- if (violin) -3.4 * dmax else -1.3 * dmax
+   linestart <- if (violin) -3.4 * dmax else -1.4 * dmax
    lineend   <- if (plot.args$zoom) u.orig + 1.1 * dmax else 1.25 * dmax
    plt <- plt +
       ggplot2::annotate('segment', x = ttest$estimate, xend = ttest$estimate,
@@ -174,12 +169,37 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    # Plot the uncertainty axis
    
-   if (se.scale) {
-      sedist <- if (uncertainty == 'reference') (mn - mu) / se
-                else if (reference) (mu - mn) / se
-                else NULL
-      plt <- rp.add_sescale(plt, cntr, u.orig - 0.05, u.orig, se, ucol, sedist)
+   if ((uncertainty != 'none') & se.scale) {
+      tpos  <- cntr - (-4:4) * se
+      mscl  <- if (violin) dmax else 0.5 * dmax
+      tscl  <- if (plot.args$zoom) 0.03 else 0.05
+      selab <- if (diff(range(tpos)) < 0.25 * diff(xlimits)) 'se scale' else
+                     'standard error scale'
+      plt  <- plt +
+         ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
+                           y = u.orig, yend = u.orig, col = 'grey25') +
+         ggplot2::annotate('segment', x = tpos, xend = tpos,
+                           y = u.orig, yend = u.orig - tscl * mscl, col = 'grey25') +
+         ggplot2::annotate('text', x = cntr - c(-4, -2, 0, 2, 4) * se, col = 'grey25',
+                           y = u.orig - 3 * tscl * mscl,
+                           label = as.character(seq(-4, 4, by = 2))) +
+         ggplot2::annotate('text',    x = cntr, col = 'grey25',
+                           y = u.orig + 3 * tscl * mscl, label = selab)
    }
+   
+   # Plot the sample mean and +/- 2 se's
+   # Current thinking is not to do this
+   # notchx    <- cntr - notch * se
+   # notchy0   <- 0.5 * height * dnorm(notchx, cntr, se) / dnorm(cntr, cntr, se)
+   # notchx    <- rep(notchx, 2)
+   # notchy    <- c(1 + notchy0, 1 - notchy0)
+   # notchht   <- 0.25 * height
+   # notchyend <- c(1 + notchy0 + notchht, 1 - notchy0  - notchht)
+   # dnotch    <- data.frame(notchx, notchy, notchyend)
+   # plt   <- plt +
+   #    ggplot2::geom_segment(ggplot2::aes(x = notchx, xend = notchx,
+   #                                       y = notchy, yend = notchyend),
+   #                          col = notchcol, data = dnotch)
    
    print(plt)
    plt
@@ -217,36 +237,24 @@ rp.add_data_density <- function(plt, display, x, ypos, yht, hst, dens, scl, col)
    plt
 }
 
-rp.add_sescale <- function(plt, xpos, ylo, yhi, se, col, sedist) {
-   if (!is.null(sedist))
-       sedist <- 2 * (ceiling(abs(sedist) / 2)) * sign(sedist)
-   serange <- range(-4, 4, sedist)
-   if (max(abs(serange)) <= 8) {
-      tpos    <- xpos + (serange[1]:serange[2]) * se
-      tlab    <- seq(serange[1], serange[2], by = 2)
-   }
-   else{
-      tlab <- pretty(serange)
-      tpos <- xpos + tlab * se
-   }
-   tscl    <- 0.10 * (yhi - ylo)
-   drtpos  <- diff(range(tpos))
+rp.add_sescale <- function(plt, xpos, ypos, se, col, zoom, xlimits, yht) {
+   tpos   <- xpos - (-4:4) * se
+   tscl   <- if (zoom) 0.03 * yht else 0.05 * yht
+   drtpos <- diff(range(tpos))
+   selab  <- if (drtpos < 0.25 * diff(xlimits)) 'se scale'
+             else 'standard error scale'
    plt  <- plt +
-      ggplot2::annotate('rect', xmin = min(tpos) - drtpos / 10,
-                        xmax = max(tpos) + drtpos / 10,
-                        ymin = ylo, ymax = yhi,
-                        fill = 'white', alpha = 0.7) +
+      ggplot2::annotate('rect', xmin = min(tpos) - drtpos / 10, xmax = max(tpos) + drtpos / 10,
+                         ymin = ypos - 0.12, ymax = ypos + 0.12, fill = 'white', alpha = 0.7) +
       ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
-                        y = ylo, yend = ylo, col = col) +
+                        y = ypos, yend = ypos, col = col) +
       ggplot2::annotate('segment', x = tpos, xend = tpos,
-                        y = ylo, yend = ylo + tscl, col = col) +
-      ggplot2::annotate('text', x = xpos + tlab * se,
-                        y = (ylo + yhi) / 2, col = col,
-                        label = as.character(tlab)) +
-      ggplot2::annotate('segment', x = tpos, xend = tpos,
-                        y = yhi, yend = yhi - tscl, col = col) +
-      ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
-                        y = yhi, col = col)
+                        y = ypos, yend = ypos - tscl, col = col) +
+      ggplot2::annotate('text', x = xpos - c(-4, -2, 0, 2, 4) * se,
+                        y = ypos - 3 * tscl, col = col,
+                        label = as.character(seq(-4, 4, by = 2))) +
+      ggplot2::annotate('text', x = xpos, col = col,
+                        y = ypos + 3 * tscl, label = selab)
    plt
 }
 
@@ -390,9 +398,38 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
       else {
          xpos   <- mns[2]
          sclr   <- clr['estline']
-         sedist <- if (reference) (mu + mns[1] - mns[2]) / se else NULL
+         sedist <- (mu + mns[1] - mns[2]) / se
       }
-      plt <- rp.add_sescale(plt, xpos, slo, shi, se, sclr, sedist)
+      # xpos   <- ifelse(uncertainty == 'reference', mns[1] + mu, mns[2])
+      # sclr   <- ifelse(uncertainty == 'reference', clr['refline'], clr['estline'])
+      # plt <- rp.add_sescale(plt, xpos, spos, se, sclr, plot.args$zoom, xlimits, ht['axis'])
+      # If appropriate, extend the scale to reach the other point of interest
+      sedist  <- if ((uncertainty == 'reference') | reference) 
+                      2 * (ceiling(abs(sedist) / 2)) * sign(sedist) else NULL
+      serange <- range(-4, 4, sedist)
+      tpos    <- xpos + (serange[1]:serange[2]) * se
+      tlab    <- seq(serange[1], serange[2], by = 2)
+      tscl    <- if (zoom) 0.03 * ht['axis'] else 0.05 * ht['axis']
+      drtpos  <- diff(range(tpos))
+      # selab  <- ifelse (drtpos < 0.25 * diff(xlimits), 'se scale', 'standard error scale')
+      plt  <- plt +
+         ggplot2::annotate('rect', xmin = min(tpos) - drtpos / 10,
+                                   xmax = max(tpos) + drtpos / 10,
+                                   ymin = slo, ymax = shi,
+                                   fill = 'white', alpha = 0.7) +
+         ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
+                                   y = slo, yend = slo, col = sclr) +
+         ggplot2::annotate('segment', x = tpos, xend = tpos,
+                                   y = slo, yend = slo + tscl, col = sclr) +
+         ggplot2::annotate('text', x = xpos + tlab * se,
+                           y = slo + 3 * tscl, col = sclr,
+                           label = as.character(tlab)) +
+         ggplot2::annotate('segment', x = tpos, xend = tpos,
+                           y = shi, yend = shi - tscl, col = sclr) +
+         ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
+                           y = shi, col = sclr)
+         # ggplot2::annotate('text', x = xpos, col = sclr,
+         #                   y = shi + 3 * tscl, label = selab)
    }
    
    # Add the uncertainty distribution
