@@ -164,13 +164,14 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
    
    # Plot reference if requested
    
-   if (plot.args$reference | (uncertainty == 'reference'))
+   if (plot.args$reference | (uncertainty == 'reference')) {
+      rlineend <- if (plot.args$zoom) u.orig + 1.05 * dmax else 1.20 * dmax
       plt  <- plt +
          ggplot2::annotate('segment', x = mu, xend = mu,
-                           y = linestart, yend =  1.05 * dmax,
-                           col = plot.args$col['refline']) +
-         ggplot2::annotate('text', x = mu, y = 1.15 * dmax, label = 'reference',
+                           y = linestart, yend =  rlineend, col = plot.args$col['refline']) +
+         ggplot2::annotate('text', x = mu, y = rlineend + 0.1 * dmax, label = 'reference',
                            hjust = hjst(mu, xlimits, 0.25), col = plot.args$col['refline'])
+   }
    
    # Plot the uncertainty axis
    
@@ -178,7 +179,7 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
       sedist <- if (uncertainty == 'reference') (mn - mu) / se
                 else if (reference) (mu - mn) / se
                 else NULL
-      plt <- rp.add_sescale(plt, cntr, u.orig - 0.05, u.orig, se, ucol, sedist)
+      plt <- rp.add_sescale(plt, cntr, u.orig - 0.05, u.orig, se, plot.args$col['estline'], sedist)
    }
    
    print(plt)
@@ -235,7 +236,8 @@ rp.add_sescale <- function(plt, xpos, ylo, yhi, se, col, sedist) {
       ggplot2::annotate('rect', xmin = min(tpos) - drtpos / 10,
                         xmax = max(tpos) + drtpos / 10,
                         ymin = ylo, ymax = yhi,
-                        fill = 'white', alpha = 0.7) +
+                        # alpha = 0.7,
+                        fill = 'white') +
       ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
                         y = ylo, yend = ylo, col = col) +
       ggplot2::annotate('segment', x = tpos, xend = tpos,

@@ -63,16 +63,23 @@ test_that('Single sample: simulated data', {
 test_that('Two-sample data', {
    x <- rnorm(50) + 1
    y <- rnorm(50) + 2
-   rp.t_test(x, y, uncertainty = 'none')
-   rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE)
-   rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE, mu = 0)
-   rp.t_test(x, y)
-   rp.t_test(x, y, mu = 0)
-   rp.t_test(x, y, uncertainty = 'reference')
-   rp.t_test(x, y, display = 'density')
-   rp.t_test(x, y, display = 'histogram')
-   rp.t_test(x, y, scale = FALSE)
-   rp.t_test(x, y, uncertainty = 'reference', scale = TRUE)
+   
+   load_all()
+   rp.t_test(x,y, se.scale = FALSE, zoom = TRUE)
+   rp.t_test(x,y, zoom = TRUE)
+   rp.t_test(x,y, uncertainty = 'sample mean', zoom = TRUE)
+   rp.t_test(x,y, uncertainty = 'reference', zoom = TRUE)
+   
+   expect_no_error(rp.t_test(x, y, uncertainty = 'none'))
+   expect_no_error(rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE))
+   expect_no_error(rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE, mu = 0))
+   expect_no_error(rp.t_test(x, y))
+   expect_no_error(rp.t_test(x, y, mu = 0))
+   expect_no_error(rp.t_test(x, y, uncertainty = 'reference'))
+   expect_no_error(rp.t_test(x, y, display = 'density'))
+   expect_no_error(rp.t_test(x, y, display = 'histogram'))
+   expect_no_error(rp.t_test(x, y, scale = FALSE))
+   expect_no_error(rp.t_test(x, y, uncertainty = 'reference', scale = TRUE))
    for (display in c('histogram', 'density')) {
       expect_no_error(rp.t_test(x, y))
       expect_no_error(rp.t_test(x, y, display = display, uncertainty = 'none'))

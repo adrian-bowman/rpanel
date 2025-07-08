@@ -3,7 +3,8 @@
 --------------------------------------------------------------
 
 rp.t_test
-  - what should zoom do?
+  - what should zoom do? Two samples: zoom has no effect unless uncertainty != 'none,
+    when data plaots are not shown and sample mean difference and reference are labelled.
   - Could/should the p-value or confidence level be shown without cluttering the plot?
   - size of plotted points, especially in two sample case.
   - check for a formula, which base t.test allows. Pass the task to rp.lm?
