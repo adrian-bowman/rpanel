@@ -17,6 +17,7 @@ test_that('Single sample: standard calls', {
    expect_no_error(rp.t_test(sleep_diff, mu = 1))
    expect_no_error(rp.t_test(sleep_diff, mu = 0, uncertainty = 'reference'))
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference'))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference', vlab = 'Something'))
 })
 
 test_that('Single sample: systematic calls with arguments', {
@@ -35,15 +36,14 @@ test_that('Paired data', {
    s1 <- sleep$extra[sleep$group == 1]
    s2 <- sleep$extra[sleep$group == 2]
    expect_no_error(rp.t_test(s2, s1, paired = TRUE, uncertainty = 'none'))
-   expect_no_error(rp.t_test(s2, s1, paired = TRUE))
+   expect_no_error(rp.t_test(s2, s1, paired = TRUE, vlab = 'Something'))
    expect_no_error(rp.t_test(s2, s1, paired = TRUE, mu = 0))
    expect_no_error(rp.t_test(s2, s1, paired = TRUE, uncertainty = 'reference'))
 })
 
+x  <- rnorm(25) + 1
+
 test_that('Single sample: simulated data', {
-   x <- rnorm(50)
-   y <- rnorm(50) + 1
-   g <- rep(1:2, each = 25)
    expect_no_error(rp.t_test(x))
    expect_no_error(rp.t_test(x + 10))
    expect_no_error(rp.t_test(x + 10, mu = 0))
@@ -60,20 +60,17 @@ test_that('Single sample: simulated data', {
    expect_no_error(rp.t_test(x, y, paired = TRUE))
 })
 
+y  <- rnorm(25) + 2
+xy <- c(x, y)
+g  <- paste('group', as.character(rep(1:2, each = 25)))
+
 test_that('Two-sample data', {
-   x <- rnorm(50) + 1
-   y <- rnorm(50) + 2
-   
-   load_all()
-   rp.t_test(x,y, se.scale = FALSE, zoom = TRUE)
-   rp.t_test(x,y, zoom = TRUE)
-   rp.t_test(x,y, uncertainty = 'sample mean', zoom = TRUE)
-   rp.t_test(x,y, uncertainty = 'reference', zoom = TRUE)
-   
+   expect_no_error(rp.t_test(xy, g))
    expect_no_error(rp.t_test(x, y, uncertainty = 'none'))
    expect_no_error(rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE))
    expect_no_error(rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE, mu = 0))
    expect_no_error(rp.t_test(x, y))
+   expect_no_error(rp.t_test(x, y, xlab = 'xlabel', ylab = 'ylabel', vlab = 'Something'))
    expect_no_error(rp.t_test(x, y, mu = 0))
    expect_no_error(rp.t_test(x, y, uncertainty = 'reference'))
    expect_no_error(rp.t_test(x, y, display = 'density'))
@@ -97,3 +94,24 @@ test_that('Two-sample data', {
       expect_warning(rp.t_test(y, x, display = 'something else'))
    }
 })
+
+test_that('Two-sample data: formula input', {
+   gf  <- factor(g)
+   expect_no_error(rp.t_test(xy ~ gf))
+   expect_no_error(rp.t_test(xy ~ gf, se.scale = FALSE))
+   expect_no_error(rp.t_test(xy ~ gf, uncertainty = 'sample mean'))
+   expect_no_error(rp.t_test(xy ~ gf, uncertainty = 'reference'))
+   gf3 <- factor(paste('group', as.character(c(rep(1:2, each = 20), rep(3, 10)))))
+   expect_error(rp.t_test(xy ~ gf3))
+   
+})
+
+test_that('Zoom', {
+})
+ 
+# load_all()
+# rp.t_test(x, zoom = TRUE)
+# rp.t_test(x, y, se.scale = FALSE, zoom = TRUE)
+# rp.t_test(x, y, zoom = TRUE)
+# rp.t_test(x, y, uncertainty = 'sample mean', zoom = TRUE)
+# rp.t_test(x, y, uncertainty = 'reference', zoom = TRUE)

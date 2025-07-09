@@ -20,8 +20,8 @@ rp.t_test(x, y = NULL, mu = NULL, display = 'density',
 }
 
 \arguments{
-\item{x}{a vector of data on a continuous scale.}
-\item{y}{an optional second vector of data on a continuous scale, to allow two-sample or paired-sample analyses.}
+\item{x}{a vector of data on a continuous scale or a formula with a response variable and a single prediuctor variable which is a factor with two levels.}
+\item{y}{an optional second vector of data on a continuous scale, to allow two-sample or paired-sample analyses. Alternatively, \code{y} may be a character vector or a factor with two levels, defining the groups. If \code{x} is a formula then \code{y} is ignored.}
 \item{mu}{a numerical value representing a reference mean of interest, for
             example a null hypothesis in a formal test. This is the same parameter
             as \code{mu} in \code{t.test} but its default value is \code{NULL}
@@ -51,12 +51,12 @@ rp.t_test(x, y = NULL, mu = NULL, display = 'density',
 \details{
 The graphics are created through the \pkg{ggplot2} package so this needs to be installed. If \code{data_plot} is set to \code{"sina"} then the \pkg{ggforce} package is also required.
 
-The function aims to follow the pattern of the \code{t.test} function. However, not all options are available. For example, the formula style of input has not yet been implemented.]
+The function aims to follow the general pattern of the \code{t.test} function and the arguments of \code{t.test} described in its help file can also be passed to \code{rp.t_test}.
 }
 
 \value{
 A \code{ggplot} object is returned. This allows further alterations and annotations to be made.
-  }
+}
 
 \references{
    Bowman, A.W. (2019). Graphics for uncertainty (with discussion).
@@ -67,10 +67,14 @@ A \code{ggplot} object is returned. This allows further alterations and annotati
 \examples{
 \dontrun{
 x <- rnorm(50)
-rp.onesample(x)
-rp.onesample(x, reference = 0)
-plt <- rp.onesample(x, data_plot = "sina")
-plt + ggplot2::ggtitle("One-sample inference")
+rp.t_test(x)
+rp.t_test(x, mu = 0)
+rp.t_test(x, uncertainty = 'sample mean')
+rp.t_test(x, uncertainty = 'reference')
+
+g <- factor(rep(1:2, each = 25))
+plt <- rp.t_test(x ~ g)
+plt + ggplot2::ggtitle("Two-sample inference")
 }}
 
 \keyword{iplot}

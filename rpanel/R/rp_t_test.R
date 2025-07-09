@@ -3,51 +3,78 @@
 
 rp.t_test <- function(x, y = NULL, mu = NULL, display = 'density',
                      uncertainty = 'none', se.scale = TRUE,
-                     zoom = FALSE, col = '#86B875', refcol = '#E495A5', xlab, ylab, ...) {
+                     zoom = FALSE, col = '#86B875', refcol = '#E495A5',
+                     xlab, ylab, vlab, ...) {
    
    if (!requireNamespace('ggplot2'))
       stop('the ggplot2 package is not available.')
+   
+   # Formula input for x
+   if ('formula' %in% class(x)) {
+      model <- lm(x, model = TRUE, ...)
+      trms  <- attr(model$terms, 'term.labels')
+      if (length(trms) != 1) stop('there should only be one predictor variable.')
+      var.types    <- attr(model$terms, 'dataClasses')
+      response.ind <- attr(model$terms, 'response')
+      factor.ind   <- which(var.types == 'factor')
+      if (length(factor.ind) != 1) stop('the predictor variable is not a factor.')
+      x <- model$model[ , response.ind]
+      y <- model$model[ , trms[1]]
+      if (nlevels(y) != 2) stop('the predictor variable should have two levels.')
+      if (missing(vlab)) vlab <- names(model$model)[response.ind]
+   }
+   
+   # x numeric and y character or a factor and set up labels
+   if (is.character(y)) y <- factor(y)
+   if (is.numeric(x) & is.factor(y)) {
+      if (nlevels(y) > 2) stop('y is a factor with more than two levels.')
+      if (missing(xlab)) xlab <- levels(y)[1]
+      if (missing(ylab)) ylab <- levels(y)[2]
+      if (missing(vlab)) vlab <- deparse(substitute(x))
+      v <- x
+      g <- y
+      x <- v[g == levels(y)[1]]
+      y <- v[g == levels(y)[2]]
+   }
+   else if (!is.null(y)) {
+      if (missing(xlab)) xlab <- deparse(substitute(x))
+      if (missing(ylab)) ylab <- deparse(substitute(y))
+      if (missing(vlab)) vlab <- 'Value'
+   }
+   else {
+      if (missing(vlab)) vlab <- deparse(substitute(x))
+      xlab <- NA
+      ylab <- NA
+   }
    
    if (!(display %in% c('density', 'histogram'))) {
       warning("display not recognised - reverting to 'density'.")
       display <- 'density'
    }
    if (!(uncertainty %in% c('none', 'sample mean', 'reference')))
-         uncertainty <- 'sample mean'
-   ttest.args <- list(...)
-   paired     <- if ('paired' %in% names(ttest.args)) ttest.args$paired else FALSE
+      uncertainty <- 'sample mean'
    reference  <- !is.null(mu)
    if (!reference) mu <- 0
    horizontal <- TRUE
    
+   ttest.args <- list(...)
+   paired     <- if ('paired' %in% names(ttest.args)) ttest.args$paired else FALSE
+   method     <- if      (is.null(y)) 'One'
+                 else if (!paired)    'Two'
+                 else                 'Paired'
+   
    ttest  <- t.test(x, y, mu = mu, ...)
-   method <- if      (is.null(y)) 'One'
-             else if (!paired)    'Two'
-             else                 'Paired'
    height <- c('data' = 0.25, 'uncertainty' = 0.15, 'mean' = 0.5)
-   # if (missing(col)) {
-   #    col <- if (method == 'Two')
-   #       # col = c('#1FC8DEFF', '#F1CA3AFF', '#C1F334FF', '#BE2102FF'),
-   #       col = c(grey(0.5), grey(0.5), '#86B875', '#E495A5')
-   #       else col = '#86B875'
-   # }
-   # if (missing(col))    col    <- '#86B875'
-   # if (missing(refcol)) refcol <- '#E495A5'
    clr <- c(estimate  = '#B3CDE3', estline = '#0093FF',
             reference = '#FBB4AE', refline = '#FF7F00',
             points    = 'grey50',  notch   = 'black',
             density   = 'grey75')
-   if (missing(xlab))   xlab <- deparse(substitute(x))
-   ylab <- if ((method == 'Two') & missing(ylab)) deparse(substitute(y)) else NA
 
    plot.args <- list(se.scale = se.scale, col = clr, horizontal = horizontal,
                      height = height, display = display, zoom = zoom,
                      uncertainty = uncertainty, reference = reference,
-                     xlab = xlab, ylab = ylab, nmin = 10)
+                     xlab = xlab, ylab = ylab, vlab = vlab, nmin = 10)
 
-   # Formula case to be added
-   
-   
    if (method == 'Paired') x <- x - y
    plt <- if (method %in% c('One', 'Paired'))
                rp.onesample(x, ttest, ttest.args, plot.args)
@@ -93,7 +120,8 @@ rp.onesample <- function(x, ttest, ttest.args, plot.args) {
          panel.grid.major.y = ggplot2::element_blank(),
          panel.grid.minor.y = ggplot2::element_blank()) +
       ggplot2::scale_y_continuous(breaks = ticks[tind],
-                                  labels = ylabs[tind])
+                                  labels = ylabs[tind]) +
+      ggplot2::xlab(plot.args$vlab)
       # ggplot2::xlim(xlimits[1], xlimits[2])
       
    
@@ -278,8 +306,8 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
    
    xlab       <- plot.args$xlab
    ylab       <- plot.args$ylab
+   vlab       <- plot.args$vlab
    horizontal <- plot.args$horizontal
-   xttl <- if (!is.numeric(y)) xlab else 'value'
    if (!is.numeric(x))
       stop('x must be numeric.')
    if (is.numeric(y)) {
@@ -351,10 +379,11 @@ rp.twosample <- function(x, y, ttest, ttest.args, plot.args) {
          panel.grid.minor.y = ggplot2::element_blank(),
          panel.grid.major.x = ggplot2::element_blank(),
          panel.grid.minor.x = ggplot2::element_blank()) +
-      ggplot2::scale_y_continuous(breaks = apos, labels = alab)
+      ggplot2::scale_y_continuous(breaks = apos, labels = alab) +
+      ggplot2::xlab(vlab)
    if (!horizontal) plt <- plt + ggplot2::coord_flip() +
                                 ggplot2::theme(axis.title.x = ggplot2::element_blank())
-   else            plt <- plt + ggplot2::theme(axis.title.y = ggplot2::element_blank())
+   else             plt <- plt + ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
    # Plot the data
 
