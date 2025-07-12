@@ -10,11 +10,20 @@ sleep_wide <- tidyr::pivot_wider(sleep, values_from = extra, names_from = group,
                                  names_prefix = 'drug_')
 sleep_diff <- with(sleep_wide, drug_2 - drug_1)
 
+load_all()
+rp.t_test(sleep_diff, uncertainty = 'reference')
+rp.t_test(sleep_diff, uncertainty = 'reference', alternative = 'greater')
+rp.t_test(sleep_diff, uncertainty = 'reference', alternative = 'less')
+
 test_that('Single sample: standard calls', {
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'none'))
-   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'none', se.scale = TRUE))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'none', se.scale = FALSE))
    expect_no_error(rp.t_test(sleep_diff))
+   expect_no_error(rp.t_test(sleep_diff ~ 1))
    expect_no_error(rp.t_test(sleep_diff, mu = 1))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'sample mean', ci = FALSE))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'sample mean'))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'sample mean', conf.level = 0.99))
    expect_no_error(rp.t_test(sleep_diff, mu = 0, uncertainty = 'reference'))
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference'))
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference', vlab = 'Something'))
@@ -39,6 +48,8 @@ test_that('Paired data', {
    expect_no_error(rp.t_test(s2, s1, paired = TRUE, vlab = 'Something'))
    expect_no_error(rp.t_test(s2, s1, paired = TRUE, mu = 0))
    expect_no_error(rp.t_test(s2, s1, paired = TRUE, uncertainty = 'reference'))
+   sleep2 <- reshape(sleep, direction = "wide", idvar = "ID", timevar = "group")
+   expect_no_error(rp.t_test(Pair(extra.1, extra.2) ~ 1, data = sleep2))
 })
 
 x  <- rnorm(25) + 1
@@ -57,7 +68,6 @@ test_that('Single sample: simulated data', {
    expect_no_error(rp.t_test(x, mu = 0))
    expect_no_error(rp.t_test(x, mu = 1))
    expect_no_error(rp.t_test(x, mu = 1, scale = TRUE))
-   expect_no_error(rp.t_test(x, y, paired = TRUE))
 })
 
 y  <- rnorm(25) + 2
@@ -65,6 +75,7 @@ xy <- c(x, y)
 g  <- paste('group', as.character(rep(1:2, each = 25)))
 
 test_that('Two-sample data', {
+   expect_no_error(rp.t_test(x, y, paired = TRUE))
    expect_no_error(rp.t_test(xy, g))
    expect_no_error(rp.t_test(x, y, uncertainty = 'none'))
    expect_no_error(rp.t_test(x, y, uncertainty = 'none', se.scale = TRUE))
@@ -77,6 +88,7 @@ test_that('Two-sample data', {
    expect_no_error(rp.t_test(x, y, display = 'histogram'))
    expect_no_error(rp.t_test(x, y, scale = FALSE))
    expect_no_error(rp.t_test(x, y, uncertainty = 'reference', scale = TRUE))
+   expect_no_error(rp.t_test(extra ~ group, data = sleep))
    for (display in c('histogram', 'density')) {
       expect_no_error(rp.t_test(x, y))
       expect_no_error(rp.t_test(x, y, display = display, uncertainty = 'none'))
