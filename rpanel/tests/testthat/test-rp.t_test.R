@@ -11,9 +11,7 @@ sleep_wide <- tidyr::pivot_wider(sleep, values_from = extra, names_from = group,
 sleep_diff <- with(sleep_wide, drug_2 - drug_1)
 
 load_all()
-rp.t_test(sleep_diff, uncertainty = 'reference')
-rp.t_test(sleep_diff, uncertainty = 'reference', alternative = 'greater')
-rp.t_test(sleep_diff, uncertainty = 'reference', alternative = 'less')
+rp.t_test(sleep_diff)
 
 test_that('Single sample: standard calls', {
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'none'))
@@ -27,6 +25,10 @@ test_that('Single sample: standard calls', {
    expect_no_error(rp.t_test(sleep_diff, mu = 0, uncertainty = 'reference'))
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference'))
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference', vlab = 'Something'))
+   expect_no_error(rp.t_test(sleep_diff, mu = 10, uncertainty = 'reference'))
+   expect_no_error(rp.t_test(sleep_diff, mu = -5, uncertainty = 'reference'))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference', alternative = 'greater'))
+   expect_no_error(rp.t_test(sleep_diff, uncertainty = 'reference', alternative = 'less')
 })
 
 test_that('Single sample: systematic calls with arguments', {
