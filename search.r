@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "bw.norm"
+target    <- "change"
 diry      <- "."
 diry      <- "testing"
 diry      <- "R"

@@ -10,6 +10,9 @@ rp.t_test
   - trap group size 1 as an error. Remove the nmin code?
   - add slider animation which shows the plausibility of the sample mean under different
     assumptions of population mean?
+    
+rp.radiogroup
+  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
 
 rp.lm
   - check one factor for missing data and for category without data
