@@ -6,6 +6,9 @@
 # load_all()
 # rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
+load_all()
+rp.sample()
+
 test_that('Standard calls', {
    expect_no_error(pnl <- rp.sample())
    rp.control.dispose(pnl)

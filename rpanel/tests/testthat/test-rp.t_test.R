@@ -11,7 +11,11 @@ sleep_wide <- tidyr::pivot_wider(sleep, values_from = extra, names_from = group,
 sleep_diff <- with(sleep_wide, drug_2 - drug_1)
 
 load_all()
-rp.t_test(sleep_diff)
+
+test_that('Single sample: interacrtive use', {
+   expect_no_error(pnl <- rp.t_test(sleep_diff))
+   rp.control.dispose(pnl)
+})
 
 test_that('Single sample: standard calls', {
    expect_no_error(rp.t_test(sleep_diff, uncertainty = 'none'))

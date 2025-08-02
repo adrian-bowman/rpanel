@@ -111,7 +111,7 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
          rp.slider(pnl, candidate, ttest$estimate -6 * ttest$stderr,
                    ttest$estimate + 6 * ttest$stderr, action = rp.onesample.redraw,
                    grid = "controls", row = 1, column = 0)
-rp.checkbox(pnl, display, rp.onesample.redraw,
+         rp.checkbox(pnl, display, rp.onesample.redraw,
                      c('se.scale', 'distribution', 'ci', 'pvalue'),
                      title = 'display',
                      grid = "controls", row = 2, column = 0)
@@ -130,6 +130,8 @@ rp.checkbox(pnl, display, rp.onesample.redraw,
              else rp.twosample(pnl)
       invisible(plt)
    }
+   
+   invisible(pnl)
 }
 
 

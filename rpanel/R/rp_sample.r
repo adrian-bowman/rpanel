@@ -1,4 +1,5 @@
-rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
+rp.sample <- function(n = 25, mu = 5, sigma = 0.4, p = 0.7,
+                      distribution  = 'normal', shape = 0,
                       panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
                       show.out.of.range = TRUE,
@@ -8,7 +9,7 @@ rp.sample <- function(n = 25, mu = 5, sigma = 0.4, shape = 0,
    shape0     <- (abs(shape) < 2 * .Machine$double.eps)
    sn.present <- requireNamespace('sn', quietly = TRUE)
    if (!shape0 & !sn.present)
-      message('the sn package is not available so the shape parameter has been rest to 0.')
+      message('the sn package is not available so the shape parameter has been reset to 0.')
    if (ggplot & !requireNamespace('ggplot2', quietly = TRUE)) {
       ggplot <- FALSE
       message('the ggplot package is not available - reverting to standard graphics.')
