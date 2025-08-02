@@ -7,6 +7,8 @@
 # rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
 load_all()
+rp.sample(distribution = 'binomial')
+
 rp.sample()
 
 test_that('Standard calls', {

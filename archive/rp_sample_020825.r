@@ -1,4 +1,4 @@
-rp.sample <- function(n, mu, sigma,
+rp.sample <- function(n = 25, mu = 5, sigma = 0.4, p = 0.7,
                       distribution  = 'normal', shape = 0,
                       panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
@@ -14,24 +14,12 @@ rp.sample <- function(n, mu, sigma,
       ggplot <- FALSE
       message('the ggplot package is not available - reverting to standard graphics.')
    }
-   if (!(distribution %in% c('normal', 'binomial')))
-      stop('the distribution must be normal or binomial.')
-   normal <- (distribution == 'normal')
-   if (missing(n)) n <- 25
-   if (missing(mu)) {
-      mu <- if (normal) 5 else 0.5
-   }
-   if (missing(sigma)) sigma <- 0.4
    
    if (!ggplot)
       return(rp.sample.old(mu = 0, sigma = 1, n = 25,
                     panel.plot = TRUE, hscale = NA, vscale = hscale))
    
    sample.draw <- function(panel) {
-      
-      # Creates the plots.
-      # A single function is used because, in the normal case, the method is the
-      # same for data and means.
       
       mu       <- panel$pars["mu"]
       n        <- panel$samplesize
@@ -52,7 +40,7 @@ rp.sample <- function(n, mu, sigma,
          if (plot.mean) {
             y <- if (display.mean['t-statistic']) tstats else mns
          } else
-            y <- ydata
+            y <- ydata         
          mu       <- pars['mu']
          stdev    <- if (plot.mean) pars['sigma'] / sqrt(n) else pars['sigma']
          m.cur    <- if (plot.mean & display.mean['t-statistic']) 0 else as.vector(mu)
@@ -72,16 +60,8 @@ rp.sample <- function(n, mu, sigma,
 
          plt <- ggplot2::ggplot(data.frame(x = y), ggplot2::aes(x))
          
-         # Deal with binomial data display as a special case
-         if (!plot.mean && (display.sample['data'] & !normal)) {
-            tbl  <- table(y)
-            xpos <- c(rep(0, tbl[1]), rep(1, tbl[2]))
-            ypos <- c(1:tbl[1], 1:tbl[2]) / length(y)
-            plt <- plt + ggplot2::geom_point(ggplot2::aes(xpos, ypos))
-         }
-             
          # Show the data or means or t-statistics
-         if ((!plot.mean && (display.sample['data'] & normal)) |
+         if ((!plot.mean && display.sample['data']) |
              (plot.mean && (display.mean['sample mean'] | display.mean['t-statistic']))) {
             if (length(y) >= nmin) {
                if (display == 'histogram') {
@@ -281,45 +261,35 @@ rp.sample <- function(n, mu, sigma,
       panel <- sample.new(panel)
       panel
    }
-   
-   sample.generate <- function(panel) {
-      
-      # Generate data and associated objects needed for plotting
-      
+
+   sample.new <- function(panel) {
       mu              <- panel$pars["mu"]
       sigma           <- panel$pars["sigma"]
       n               <- panel$samplesize
-      
-      if (panel$normal) {
-         panel$ydata     <- if (!panel$sn.present) rnorm(n, mu, sigma)
-                            else sn::rsn(n, panel$sn.xi, panel$sn.omega, panel$sn.shape)
-         stdev           <- sd(panel$ydata)
-         xgrid           <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
-         if (length(panel$ydata) >= panel$nmin) {
-            dens            <- density(panel$ydata, bw = bw.norm(panel$ydata))
-            panel$d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
-            dens.y          <- approx(dens$x, dens$y,xout = panel$ydata)$y
-         }
-         else {
-            panel$d.dens    <- data.frame(xgrid = xgrid, dgrid = 0)
-            dens.y          <- if (!sn.present) dnorm(panel$ydata, mu, sigma)
-                               else sn::dsn(panel$ydata, panel$sn.xi, panel$sn.omega, panel$sn.shape)
-         }
+      panel$ydata     <- if (!panel$sn.present) rnorm(n, mu, sigma)
+                         else sn::rsn(n, panel$sn.xi, panel$sn.omega, panel$sn.shape)
+      panel$dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
+      xgrid           <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
+      if (length(panel$ydata) >= panel$nmin) {
+         dens            <- density(panel$ydata, bw = bw.norm(panel$ydata))
+         panel$d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
+         dens.y          <- approx(dens$x, dens$y,xout = panel$ydata)$y
+      }
+      else {
+         panel$d.dens    <- data.frame(xgrid = xgrid, dgrid = 0)
+         dens.y          <- if (!sn.present) dnorm(panel$ydata, mu, sigma)
+                            else sn::dsn(panel$ydata, panel$sn.xi, panel$sn.omega, panel$sn.shape)
+      }
       sgn             <- sign(rbinom(length(panel$ydata), 1, 0.5) - 0.5)
       panel$d.densd   <- data.frame(x = panel$ydata, d = dens.y,
                                     r = runif(length(dens.y), 0, 1), sgn = sgn)
-      }
-      else {
-         panel$ydata   <- rbinom(n, 1, mu)
-         stdev         <- sqrt(mean(panel$ydata) * (1 - mean(panel$ydata)))
-         panel$d.dens  <- NA
-         panel$d.densd <- NA
-      }
       
       mn              <- mean(panel$ydata)
-      tstat           <- (mn - mu) / (stdev / sqrt(n))
-      panel$mns       <- if (panel$display.mean["accumulate"]) c(mn, panel$mns) else mn
-      panel$tstats    <- if (panel$display.mean["accumulate"]) c(tstat, panel$tstats) else tstat
+      tstat           <- (mn - mu) / (sd(panel$ydata) / sqrt(n))
+      panel$mns       <- if (panel$display.mean["accumulate"]) c(mn, panel$mns)
+                         else mn
+      panel$tstats    <- if (panel$display.mean["accumulate"]) c(tstat, panel$tstats)
+                         else tstat
       if (length(panel$mns) >= panel$nmin) {
          mdens         <- density(panel$mns, bw.norm(panel$mns))
          panel$d.mdens <- data.frame(xgrid = mdens$x, dgrid = mdens$y)
@@ -329,22 +299,15 @@ rp.sample <- function(n, mu, sigma,
          tdens.y       <- approx(tdens$x, tdens$y, xout = panel$tstats)$y
       }
       else {
-         xgrid         <- seq(mu - 3 * sigma / sqrt(n), mu + 3 * sigma / sqrt(n))
          panel$d.mdens <- dnorm(xgrid, mu, sigma / sqrt(n))
          mdens.y       <- dnorm(panel$mns, mu, sigma / sqrt(n))
          tdens.y       <- dt(panel$tstats, n - 1)
-         xgrid         <- seq(-3, 3, length = 200)
-         panel$d.tdens <- if (normal) dt(xgrid, n - 1) else dnorm(xgrid)
       }
       sgn            <- sign(rbinom(length(panel$mns), 1, 0.5) - 0.5)
       r              <- runif(length(mdens.y), 0, 1)
-      panel$d.mdensd <- data.frame(x = panel$mns,    d = mdens.y, r = r, sgn = sgn)
+      panel$d.mdensd <- data.frame(x = panel$mns,   d = mdens.y, r = r, sgn = sgn)
       panel$d.tdensd <- data.frame(x = panel$tstats, d = tdens.y, r = r, sgn = sgn)
-      panel
-   }
-
-   sample.new <- function(panel) {
-      panel <- sample.generate(panel)
+      
       if (panel.interactive) {
          rp.control.put(panel$panelname, panel)
          rp.tkrreplot(panel, plotdata)
@@ -395,6 +358,7 @@ rp.sample <- function(n, mu, sigma,
    display.sample <- display.sample[c('data', 'population', 'mean', 'st.dev. scale')]
    display.mean   <- display.mean[c('sample mean', 'accumulate', 'se scale',
                                     'zoom', 't-statistic', 'distribution')]
+   normal <- (distribution == 'normal')
    if (!normal & ((mu < 0) | (mu > 1)))
       stop('when the distribution is bonimial, the mean value must lie between 0 and 1.')
 
@@ -406,65 +370,57 @@ rp.sample <- function(n, mu, sigma,
                    (sn.delta * sqrt(2 / pi) - (1 - pi / 4) * ((sqrt(2 / pi) * sn.delta)^3) /
                    (1 - sn.delta^2 * 2 / pi) - exp(-2 * pi / abs(shape)) * sign(shape) / 2)
    
+   # Generate an initial set of data
    if (normal) {
-      dmax.data <-  if (!sn.present) dnorm(mu, mu, sigma)
-                    else sn::dsn(sn.mode, sn.xi, sn.omega, shape)
-      dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
+      y         <- if (!sn.present) rnorm(n, mu, sigma)
+                   else sn::rsn(n, sn.xi, sn.omega, shape)
+      stdev     <- sigma
+      dmax.data <- if (!sn.present) dnorm(mu, mu, sigma)
+                   else sn::dsn(sn.mode, sn.xi, sn.omega, shape)
+      xgrid     <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
+      dens      <- density(y)
+      dens.y    <- approx(dens$x, dens$y, xout = y)$y
+      d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
+      sgn       <- sign(rbinom(length(y), 1, 0.5) - 0.5)
+      d.densd   <- data.frame(x = y, d = dens.y,
+                              r = runif(length(dens.y), 0, 1), sgn = sgn)
    }
    else {
+      y         <- rbinom(n, 1, mu)
+      stdev     <- sqrty(mu * (1 - mu))
+      d.dens    <- NA
+      d.densd   <- NA
       dmax.data <- max(mu, 1 - mu)
-      dmax.mean <- dnorm(mu, mu, sqrt(mu * (1 - mu) / n))
    }
+   dmax.mean <- dnorm(mu, mu, stdev / sqrt(n))
    
-   # Generate an initial set of data
-   # if (normal) {
-   #    y         <- if (!sn.present) rnorm(n, mu, sigma)
-   #                 else sn::rsn(n, sn.xi, sn.omega, shape)
-   #    stdev     <- sigma
-   #    dmax.data <- if (!sn.present) dnorm(mu, mu, sigma)
-   #                 else sn::dsn(sn.mode, sn.xi, sn.omega, shape)
-   #    xgrid     <- seq(mu - 3 * sigma, mu + 3 * sigma, length = 200)
-   #    dens      <- density(y)
-   #    dens.y    <- approx(dens$x, dens$y, xout = y)$y
-   #    d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
-   #    sgn       <- sign(rbinom(length(y), 1, 0.5) - 0.5)
-   #    d.densd   <- data.frame(x = y, d = dens.y,
-   #                            r = runif(length(dens.y), 0, 1), sgn = sgn)
-   # }
-   # else {
-   #    y         <- rbinom(n, 1, mu)
-   #    stdev     <- sqrt(mu * (1 - mu))
-   #    d.dens    <- NA
-   #    d.densd   <- NA
-   #    dmax.data <- max(mu, 1 - mu)
-   # }
-   # dmax.mean <- dnorm(mu, mu, stdev / sqrt(n))
-   # 
-   # # Compute the distributional information on the means
-   # mns       <- mean(y)
-   # tstats    <- (mns - mu) / (sd(y) / sqrt(n))
-   # mdens.y   <- dnorm(mns, mu, stdev / sqrt(n))
-   # tdens.y   <- if (normal) dt(tstats, n - 1) else dnorm(tstats)
-   # sgn       <- sign(rbinom(length(mns), 1, 0.5) - 0.5)
-   # r         <- runif(length(mdens.y), 0, 1)
-   # d.mdensd  <- data.frame(x = mns,    d = mdens.y, r = r, sgn = sgn)
-   # d.tdensd  <- data.frame(x = tstats, d = tdens.y, r = r, sgn = sgn)
-   # d.mdens   <- dnorm(xgrid, mu, stdev / sqrt(n))
-   # xgrid     <- seq(-3, 3, length = 200)
-   # d.tdens   <- if (normal) dt(xgrid, n - 1) else dnorm(xgrid)
+   # Compute the distributional information on the means
+   mns       <- mean(y)
+   tstats    <- (mns - mu) / (sd(y) / sqrt(n))
+   mdens.y   <- dnorm(mns, mu, stdev / sqrt(n))
+   tdens.y   <- if (normal) dt(tstats, n - 1) else dnorm(tstats)
+   sgn       <- sign(rbinom(length(mns), 1, 0.5) - 0.5)
+   r         <- runif(length(mdens.y), 0, 1)
+   d.mdensd  <- data.frame(x = mns,    d = mdens.y, r = r, sgn = sgn)
+   d.tdensd  <- data.frame(x = tstats, d = tdens.y, r = r, sgn = sgn)
+   d.mdens   <- dnorm(xgrid, mu, stdev / sqrt(n))
+   xgrid     <- seq(-3, 3, length = 200)
+   d.tdens   <- if (normal) dt(xgrid, n - 1) else dnorm(xgrid)
    
-   pnl <- list(pars = pars, samplesize = n, sn.present = sn.present,
-               sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
-               sn.mode = sn.mode, normal = normal,
-               nmin = 10, nmax = 5000,
-               display.sample = display.sample, display.mean = display.mean,
-               nbins = nbins, nbins.mean = nbins.mean)
-
    if (panel.interactive) {
-      panel <- rp.control()
-      panel <- c(panel, pnl, panel.interactive = panel.interactive)
-      panel <- sample.generate(panel)
-      rp.control.put(panel$panelname, panel)
+      panel <- rp.control(pars = pars, samplesize = n, sn.present = sn.present,
+                          sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
+                          sn.mode = sn.mode, ydata = y, mns = mns, tstats = tstats, 
+                          y = y, nmin = 10, nmax = 5000, stdev = stdev,
+                          d.dens  = d.dens,  d.densd  = d.densd, 
+                          d.mdens = d.mdens, d.mdensd = d.mdensd,
+                          d.tdens = d.tdens, d.tdensd = d.tdensd,
+                          df.dens = d.dens,  df.densd = d.densd,
+                          dmax.mean = dmax.mean, dmax.data = dmax.data,
+                          plot.mean = FALSE, zoom = FALSE,
+                          nbins = nbins, nbins.mean = nbins.mean,
+                          display.sample = display.sample, display.mean = display.mean,
+                          roptions = display.sample, panel.interactive = panel.interactive)
       Sys.sleep(pause)
       rp.grid(panel, "sample",       row = 0, column = 1)
       Sys.sleep(pause)
@@ -494,9 +450,8 @@ rp.sample <- function(n, mu, sigma,
       rp.text(panel, paste('  mean:', signif(mu, 5)),
               grid = 'sample', row = 0, column = 2, sticky = "ew")
       Sys.sleep(pause)
-      if (normal)
-         rp.text(panel, paste('  st.dev:', signif(sigma, 5)),
-                 grid = 'sample', row = 0, column = 3, sticky = "ew")
+      rp.text(panel, paste('  st.dev:', signif(sigma, 5)),
+              grid = 'sample', row = 0, column = 3, sticky = "ew")
       if (!shape0) {
          Sys.sleep(pause)
          rp.text(panel, paste('  shape:', signif(shape, 5)),
@@ -530,15 +485,24 @@ rp.sample <- function(n, mu, sigma,
                    else sn::rsn(n * (nsim - 1), sn.xi, sn.omega, shape)
          ymat   <- matrix(ymat, ncol = nsim - 1)
          mns    <- apply(ymat, 2, mean)
-         sd.fun <- if (normal) sd else function(x) sqrt(mean(x) * (1 - mean(x)) / n)
-         sds    <- apply(ymat, 2, sd.fun)
+         sds    <- apply(ymat, 2, sd)
          tstats <- (mns - mu) / (sds / sqrt(n))
       }
-      else {
+      else
          mns <- NULL
-         tstata <- NULL
-      }
-      result <- sample.new(c(pnl, mns = mns, tstas = tstats))
+      pnl <- list(pars = pars, samplesize = n, sn.present = sn.present,
+                  sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
+                  sn.mode = sn.mode, 
+                  ydata = y, mns = mns, tstats = tstats, y = y,
+                  nmin = 10, nmax = 5000, stdev = pars['sigma'],
+                  d.dens = d.dens, d.densd = d.densd, 
+                  d.mdens = d.mdens, d.mdensd = d.mdensd,
+                  df.dens = d.dens, df.densd = d.densd,
+                  dmax.mean = dmax.mean, dmax.data = dmax.data,
+                  plot.mean = FALSE, zoom = FALSE,
+                  display.sample = display.sample, display.mean = display.mean,
+                  roptions = display.sample, panel.interactive = panel.interactive)
+      result <- sample.new(pnl)
       return(result)
    }
    
