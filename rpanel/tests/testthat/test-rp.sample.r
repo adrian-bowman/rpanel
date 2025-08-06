@@ -7,9 +7,14 @@
 # rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
 load_all()
+rp.sample(distribution = 'binomial', panel = FALSE,
+          display.sample = c('st.dev. scale' = TRUE))$sample
+
+load_all()
 rp.sample(distribution = 'binomial')
 
-rp.sample()
+load_all()
+rp.sample(display = 'density')
 
 test_that('Standard calls', {
    expect_no_error(pnl <- rp.sample())

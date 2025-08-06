@@ -2,14 +2,6 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
-rp.sample
-  - binomial: lower axis doesn't match teh higher one - also fit closer to [0, 1].)
-  - when the t-statistic scale is activated points can appear outside the density estimate
-  - still a problem with warning of geom_col observations out of range? Fixed?
-  - improve the plots created by standard graphics, when ggplot = FALSE,
-    to match those when ggplot = TRUE. Is it worth it?
-    (ggplot = FALSE not currenty activated)
-
 rp.t_test
   - xlimits no longer needed?
   - what should zoom do? Two samples: zoom has no effect unless uncertainty != 'none,
@@ -19,9 +11,6 @@ rp.t_test
   - add slider animation which shows the plausibility of the sample mean under different
     assumptions of population mean?
     
-rp.radiogroup
-  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
-
 rp.lm
   - check one factor for missing data and for category without data
   - long variable names produces a messy node diagram (cofe_2019)
@@ -45,6 +34,14 @@ rp.coefficients
   - this needs some thinking
   
 rp.drop1
+
+rp.sample
+  - improve the plots created by standard graphics, when ggplot = FALSE,
+    to match those when ggplot = TRUE. Is it worth it?
+    (ggplot = FALSE not currenty activated)
+
+rp.radiogroup
+  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
 
 rp.control.dispose
   - deal with the case where the panel object does not exist.

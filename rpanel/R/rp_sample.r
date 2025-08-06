@@ -27,6 +27,10 @@ rp.sample <- function(n, mu, sigma,
       return(rp.sample.old(mu = 0, sigma = 1, n = 25,
                     panel.plot = TRUE, hscale = NA, vscale = hscale))
    
+   # -----------------------------------------------------------------
+   #       Main plotting function
+   # -----------------------------------------------------------------
+
    sample.draw <- function(panel) {
       
       # Creates the plots.
@@ -37,6 +41,7 @@ rp.sample <- function(n, mu, sigma,
       n        <- panel$samplesize
       col.pars <- 'darkblue'
       col.dens <- 'grey75'
+      hwidth   <- 0.05
       
       panel <- within(panel, {
          
@@ -54,7 +59,8 @@ rp.sample <- function(n, mu, sigma,
          } else
             y <- ydata
          mu       <- pars['mu']
-         stdev    <- if (plot.mean) pars['sigma'] / sqrt(n) else pars['sigma']
+         stdev    <- if (normal) pars['sigma'] else sqrt(mu * (1 - mu))
+         stdev    <- if (plot.mean) stdev / sqrt(n) else stdev
          m.cur    <- if (plot.mean & display.mean['t-statistic']) 0 else as.vector(mu)
          s.cur    <- if (plot.mean & display.mean['t-statistic']) 1 else as.vector(stdev)
          dmax     <- if (plot.mean) dmax.mean else dmax.data
@@ -76,8 +82,10 @@ rp.sample <- function(n, mu, sigma,
          if (!plot.mean && (display.sample['data'] & !normal)) {
             tbl  <- table(y)
             xpos <- c(rep(0, tbl[1]), rep(1, tbl[2]))
-            ypos <- c(1:tbl[1], 1:tbl[2]) / length(y)
-            plt <- plt + ggplot2::geom_point(ggplot2::aes(xpos, ypos))
+            if (n > 25) xpos <- xpos + runif(n, -hwidth / 2, hwidth / 2)
+            ypos <- (c(1:tbl[1], 1:tbl[2]) - 0.5) / length(y)
+            plt <- plt + ggplot2::geom_point(ggplot2::aes(xpos, ypos),
+                                             size = 0.1 + 37 / max(n, 25))
          }
              
          # Show the data or means or t-statistics
@@ -136,20 +144,26 @@ rp.sample <- function(n, mu, sigma,
                                                        ymin = pmax(orig - scl * dgrid, 0)),
                                           data = df.dens, col = col.dens, fill = col.dens)
             }
+            # Show individual points
             if ((length(y) < nmin) | ((display != 'histogram') & (length(y) <= nmax))) {
                dsgn <- if (display == 'violin') df.densd$sgn else 1
-               sz   <- if (length(y) >= nmin) 0.2 else 2
-               dft  <- if (plot.mean & display.mean['t-statistic'])
-                          data.frame(x = tstats, d = dt(tstats, n - 1), r = df.densd$r)
-                       else df.densd
+               dft  <- if (plot.mean & display.mean['t-statistic']) d.tdensd else df.densd
                plt <- plt +
                    ggplot2::geom_point(ggplot2::aes(x, orig + dsgn * r * scl * d),
-                                       data = dft, size = sz)
+                                       data = dft, size = 0.1 + 37 / max(nrow(dft), 25))
             }
          }
 
          # Show the distribution density curve
-         if ((!plot.mean && display.sample['population']) |
+         # Binomial data case
+         if (!plot.mean & !normal & display.sample['population']) {
+            plt <- plt + ggplot2::annotate('rect',
+                                           xmin = c(0, 1) - hwidth, xmax = c(0, 1) + hwidth,
+                                           ymin = 0, ymax = c(1 - mu, mu),
+                                           col = col.pars, fill = NA)
+         }
+         # Other cases
+         if ((!plot.mean && display.sample['population'] && normal) |
              ( plot.mean && display.mean['distribution'])) {
             xgrid <- seq(mu - 3 * stdev, mu + 3 * stdev, length = 200)
             if (!plot.mean)
@@ -191,8 +205,9 @@ rp.sample <- function(n, mu, sigma,
          }
          
          # Show the sd or se scale
-         if ((!plot.mean && display.sample['st.dev. scale']) |
-             ( plot.mean && display.mean['se scale'])) {
+         if ((!plot.mean && ('st.dev. scale' %in% names(display.sample)) &&
+              display.sample['st.dev. scale']) |
+             (plot.mean && display.mean['se scale'])) {
             ypos <- 1.75 * d.cur
             tpos <- if (plot.mean & display.mean['t-statistic']) -3:3 else mu + (-3:3) * stdev
             if (plot.mean) {
@@ -216,23 +231,22 @@ rp.sample <- function(n, mu, sigma,
          plt <- plt +
             ggplot2::scale_y_continuous(expand = ggplot2::expansion(0, 0), limits = c(0, ym)) +
             ggplot2::ylab('density')
+         sb <- if (plot.mean & display.mean['zoom']) 3.5 * stdev else 3 * pars['sigma']
          if (plot.mean & display.mean['t-statistic'])
             plt <- plt + ggplot2::xlim(-3.5, 3.5)
-         else {
-            sb  <- if (plot.mean & display.mean['zoom']) 3.5 * stdev else 3 * pars['sigma']
-         # if (plot.mean & display.mean['t-statistic'])
-         #    plt <- plt +
-         #       ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-         #                      axis.text.x  = ggplot2::element_blank(),
-         #                      axis.ticks.x = ggplot2::element_blank(),
-         #                      panel.grid.major.x = ggplot2::element_blank(),
-         #                      panel.grid.minor.x = ggplot2::element_blank())
-         # else
+         else if (normal)
             plt <- plt + ggplot2::xlim(mu - sb, mu + sb)
-         }
-            
+         else if (!plot.mean | !display.mean['zoom'])
+            plt <- plt +
+               ggplot2::scale_x_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
+                                           labels = as.character(c(0, 0.25, 0.5, 0.75, 1)),
+                                           minor_breaks = NULL,
+                                           limits = c(-0.1, 1.1))
+         else
+            plt <- plt + ggplot2::xlim(max(-0.1, mu - sb), min(1.1, mu + sb))
+
          # Remove y axis information for the violin plot
-         if (display == 'violin')
+         # if (display == 'violin')
             plt <- plt +
                ggplot2::theme(axis.title.y = ggplot2::element_blank(),
                               axis.text.y  = ggplot2::element_blank(),
@@ -282,6 +296,10 @@ rp.sample <- function(n, mu, sigma,
       panel
    }
    
+   # -----------------------------------------------------------------
+   #       Generate new data
+   # -----------------------------------------------------------------
+   
    sample.generate <- function(panel) {
       
       # Generate data and associated objects needed for plotting
@@ -305,9 +323,9 @@ rp.sample <- function(n, mu, sigma,
             dens.y          <- if (!sn.present) dnorm(panel$ydata, mu, sigma)
                                else sn::dsn(panel$ydata, panel$sn.xi, panel$sn.omega, panel$sn.shape)
          }
-      sgn             <- sign(rbinom(length(panel$ydata), 1, 0.5) - 0.5)
-      panel$d.densd   <- data.frame(x = panel$ydata, d = dens.y,
-                                    r = runif(length(dens.y), 0, 1), sgn = sgn)
+      panel$d.densd   <- data.frame(x   = panel$ydata, d = dens.y,
+                                    r   = runif(length(panel$ydata), 0, 1),
+                                    sgn = sign(rbinom(length(panel$ydata), 1, 0.5) - 0.5))
       }
       else {
          panel$ydata   <- rbinom(n, 1, mu)
@@ -316,10 +334,12 @@ rp.sample <- function(n, mu, sigma,
          panel$d.densd <- NA
       }
       
+      sdtrue          <- if (normal) sigma else sqrt(mu * (1 - mu))
+      panel$dmax.mean <- dnorm(mu, mu, sdtrue / sqrt(n))
       mn              <- mean(panel$ydata)
       tstat           <- (mn - mu) / (stdev / sqrt(n))
-      panel$mns       <- if (panel$display.mean["accumulate"]) c(mn, panel$mns) else mn
-      panel$tstats    <- if (panel$display.mean["accumulate"]) c(tstat, panel$tstats) else tstat
+      panel$mns       <- if (panel$display.mean["accumulate"]) c(panel$mns, mn) else mn
+      panel$tstats    <- if (panel$display.mean["accumulate"]) c(panel$tstats, tstat) else tstat
       if (length(panel$mns) >= panel$nmin) {
          mdens         <- density(panel$mns, bw.norm(panel$mns))
          panel$d.mdens <- data.frame(xgrid = mdens$x, dgrid = mdens$y)
@@ -329,17 +349,20 @@ rp.sample <- function(n, mu, sigma,
          tdens.y       <- approx(tdens$x, tdens$y, xout = panel$tstats)$y
       }
       else {
-         xgrid         <- seq(mu - 3 * sigma / sqrt(n), mu + 3 * sigma / sqrt(n))
-         panel$d.mdens <- dnorm(xgrid, mu, sigma / sqrt(n))
-         mdens.y       <- dnorm(panel$mns, mu, sigma / sqrt(n))
+         xgrid         <- seq(mu - 3 * sdtrue / sqrt(n), mu + 3 * sdtrue / sqrt(n))
+         panel$d.mdens <- dnorm(xgrid, mu, sdtrue / sqrt(n))
+         mdens.y       <- dnorm(panel$mns, mu, sdtrue / sqrt(n))
          tdens.y       <- dt(panel$tstats, n - 1)
          xgrid         <- seq(-3, 3, length = 200)
          panel$d.tdens <- if (normal) dt(xgrid, n - 1) else dnorm(xgrid)
       }
       sgn            <- sign(rbinom(length(panel$mns), 1, 0.5) - 0.5)
-      r              <- runif(length(mdens.y), 0, 1)
-      panel$d.mdensd <- data.frame(x = panel$mns,    d = mdens.y, r = r, sgn = sgn)
-      panel$d.tdensd <- data.frame(x = panel$tstats, d = tdens.y, r = r, sgn = sgn)
+      r              <- runif(1, 0, 1)
+      panel$r.mns    <- if (panel$display.mean["accumulate"]) c(panel$r.mns, r) else r
+      # r              <- runif(length(mdens.y), 0, 1)
+      panel$d.mdensd <- data.frame(x = panel$mns,    d = mdens.y, r = panel$r.mns, sgn = sgn)
+      panel$d.tdensd <- data.frame(x = panel$tstats, d = tdens.y, r = panel$r.mns, sgn = sgn)
+      
       panel
    }
 
@@ -392,7 +415,9 @@ rp.sample <- function(n, mu, sigma,
       display <- 'histogram'
       message('display not recognised - using histogram.')
    }
-   display.sample <- display.sample[c('data', 'population', 'mean', 'st.dev. scale')]
+   sample.options <- c('data', 'population', 'mean', 'st.dev. scale')
+   if (!normal) sample.options <- sample.options[1:3]
+   display.sample <- display.sample[sample.options]
    display.mean   <- display.mean[c('sample mean', 'accumulate', 'se scale',
                                     'zoom', 't-statistic', 'distribution')]
    if (!normal & ((mu < 0) | (mu > 1)))
@@ -405,17 +430,14 @@ rp.sample <- function(n, mu, sigma,
    sn.mode   <- sn.xi + sn.omega *
                    (sn.delta * sqrt(2 / pi) - (1 - pi / 4) * ((sqrt(2 / pi) * sn.delta)^3) /
                    (1 - sn.delta^2 * 2 / pi) - exp(-2 * pi / abs(shape)) * sign(shape) / 2)
-   
+
    if (normal) {
       dmax.data <-  if (!sn.present) dnorm(mu, mu, sigma)
                     else sn::dsn(sn.mode, sn.xi, sn.omega, shape)
-      dmax.mean <- dnorm(mu, mu, sigma / sqrt(n))
    }
-   else {
+   else
       dmax.data <- max(mu, 1 - mu)
-      dmax.mean <- dnorm(mu, mu, sqrt(mu * (1 - mu) / n))
-   }
-   
+
    # Generate an initial set of data
    # if (normal) {
    #    y         <- if (!sn.present) rnorm(n, mu, sigma)
@@ -455,8 +477,7 @@ rp.sample <- function(n, mu, sigma,
    
    pnl <- list(pars = pars, samplesize = n, sn.present = sn.present,
                sn.xi = sn.xi, sn.omega = sn.omega, sn.shape = shape,
-               sn.mode = sn.mode, normal = normal,
-               nmin = 10, nmax = 5000,
+               sn.mode = sn.mode, normal = normal, nmin = 10, nmax = Inf,
                display.sample = display.sample, display.mean = display.mean,
                nbins = nbins, nbins.mean = nbins.mean)
 
@@ -536,9 +557,9 @@ rp.sample <- function(n, mu, sigma,
       }
       else {
          mns <- NULL
-         tstata <- NULL
+         tstats <- NULL
       }
-      result <- sample.new(c(pnl, mns = mns, tstas = tstats))
+      result <- sample.new(c(pnl, mns = mns, tstats = tstats))
       return(result)
    }
    
