@@ -2,10 +2,9 @@
 #     on two samples of data
 
 rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'density',
-                     display = c(se.scale = FALSE, distribution = FALSE, ci = FALSE,
-                                 pvalue = FALSE),
-                     position = 'none',  candidate, zoom = FALSE,
-                     clr, xlab, ylab, vlab, hscale = 1, vscale = hscale, ...) {
+                      display = c(distribution = FALSE, detail = FALSE),
+                      ruler.position = 'none', candidate,
+                      clr, xlab, ylab, vlab, hscale = 1, vscale = hscale, ...) {
    
    if (!requireNamespace('ggplot2'))
       stop('the ggplot2 package is not available.')
@@ -32,8 +31,9 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
    }
    
    # x numeric and y character or a factor and set up labels
+   if (!is.numeric(x)) stop('x is neither a formula nor numeric.')
    if (is.character(y)) y <- factor(y)
-   if (is.numeric(x) & is.factor(y)) {
+   if (is.factor(y)) {
       if (nlevels(y) > 2) stop('y is a factor with more than two levels.')
       if (missing(xlab)) xlab <- levels(y)[1]
       if (missing(ylab)) ylab <- levels(y)[2]
@@ -44,26 +44,57 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
       y <- v[g == levels(y)[2]]
    }
    else if (!is.null(y)) {
+      # y is numeric
       if (missing(xlab)) xlab <- deparse(substitute(x))
       if (missing(ylab)) ylab <- deparse(substitute(y))
       if (missing(vlab)) vlab <- 'Value'
    }
    else {
+      # y is null (absent)
       if (missing(vlab)) vlab <- deparse(substitute(x))
       xlab <- NA
       ylab <- NA
    }
    
-   if (!(data.display %in% c('density', 'histogram'))) {
+   # Check the input arguments for display options
+   
+   if (length(data.display) > 1) stop('data.display should be of length 1.')
+   data.display.options <- c('none', 'density', 'histogram')
+   if (!(data.display %in% data.display.options)) {
       warning("display not recognised - reverting to 'density'.")
       data.display <- 'density'
    }
-   if (!(position %in% c('none', 'candidate', 'sample mean', 'reference')))
-      position <- 'none'
+   if (length(ruler.position) > 1) stop('ruler.position should be of length 1.')
+   ruler.options <- c('none', 'candidate', 'sample mean')
    reference  <- !is.null(mu)
-   if (!reference) mu <- 0
+   if (reference) ruler.options <- c(ruler.options, 'reference')
+   if (!(ruler.position %in% ruler.options)) {
+      msg <- 'ruler.position is invalid.'
+      if (ruler.position == 'reference' & !reference)
+         msg <- paste(msg, 'Setting is reference but mu has not been specified.')
+      msg <- paste(msg, 'Reverting to none.')
+      message(msg)
+   }
+   if (!is.logical(display)) stop('display is not logical.')
+   if (!('distribution' %in% names(display)))
+      display <- c(display, 'distribution' = FALSE)
+   if (!('detail'       %in% names(display)))
+      display <- c(display, 'detail' = FALSE)
+   display.names <- c('distribution', 'detail')
+   invalid <- !(names(display) %in% display.names)
+   if (any(invalid)) {
+      message(paste(c('invalid display options identified and ignored:',
+                      names(display)[invalid]), collapse = ' '))
+      display <- display[!invalid]
+   }
+   
    horizontal <- TRUE
    height <- c('data' = 0.25, 'uncertainty' = 0.15, 'mean' = 0.5)
+   
+   if (!reference) mu <- 0
+   ttest  <- t.test(x, y, mu = mu, ...)
+   if (!reference) mu <- NULL
+   print(ttest)
    
    ttest.args <- list(...)
    paired     <- if ('paired' %in% names(ttest.args)) ttest.args$paired else FALSE
@@ -82,21 +113,17 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
    bgdcol <- "grey85"
    seed   <- round(runif(1) * 100000)
 
-   ttest  <- t.test(x, y, mu = mu, ...)
-   print(ttest)
-
    if (missing(candidate)) {
       candidate <- ifelse(method == 'Two', ttest$estimate[2], ttest$estimate[1])
       candidate <- candidate + 4 * ttest$stderr * runif(1, -1, 1)
    }
    
    if (panel) {
-      pnl <- rp.control(x = x, y = y, col = clr,
-                  height = height, display = display, zoom = zoom,
-                  data.display = data.display, seed = seed,
-                  candidate = candidate,
+      pnl <- rp.control(x = x, y = y, col = clr, height = height, method = method,
+                  data.display = data.display, seed = seed, mu = mu,
+                  candidate = candidate, display = display,
                   conf = attr(ttest$conf.int, 'conf.level'), static = !panel,
-                  position = position, reference = reference,
+                  ruler.position = ruler.position, reference = reference,
                   xlab = xlab, ylab = ylab, vlab = vlab, nmin = 10, bgdcol = bgdcol,
                   distribution = 't', horizontal = horizontal, ttest = ttest)
       rp.grid(pnl, "controls", row = 0, column = 0, background = bgdcol)
@@ -105,97 +132,330 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
          rp.tkrplot(pnl, plot, rp.onesample,
                     hscale = hscale, vscale = vscale, 
                     grid = "picture", row = 0, column = 0, background = "white")
-         rp.radiogroup(pnl, position, c('none', 'candidate', 'sample mean', 'reference'),
-                       initval = position, action = rp.onesample.redraw,
+         rp.radiogroup(pnl, ruler.position, ruler.options,
+                       title = 'se scale position',
+                       initval = ruler.position, action = rp.onesample.redraw,
                        grid = "controls", row = 0, column = 0)
-         rp.slider(pnl, candidate, ttest$estimate -6 * ttest$stderr,
-                   ttest$estimate + 6 * ttest$stderr, action = rp.onesample.redraw,
-                   grid = "controls", row = 1, column = 0)
-         rp.checkbox(pnl, display, rp.onesample.redraw,
-                     c('se.scale', 'distribution', 'ci', 'pvalue'),
-                     title = 'display',
+         rp.slider(pnl, candidate,
+                   min(mu, ttest$estimate - 4 * ttest$stderr),
+                   max(mu, ttest$estimate + 4 * ttest$stderr),
+                   action = rp.onesample.redraw,
+                   showvalue = TRUE, grid = "controls", row = 1, column = 0)
+         rp.checkbox(pnl, display, rp.onesample.redraw, title = 'display',
+                     labels = display.names,
                      grid = "controls", row = 2, column = 0)
+         rp.menu(pnl, data.display, list(list('Data display', 'none', 'density', 'histogram')),
+                 action = rp.onesample.redraw)
+      }
+      else {
+         rp.tkrplot(pnl, plot, rp.twosample,
+                    hscale = hscale, vscale = vscale, 
+                    grid = "picture", row = 0, column = 0, background = "white")
+         rp.radiogroup(pnl, ruler.position, ruler.options,
+                       title = 'se scale position',
+                       initval = ruler.position, action = rp.ttest.redraw,
+                       grid = "controls", row = 0, column = 0)
+         rp.slider(pnl, candidate,
+                   min(mu, ttest$estimate[1] - 4 * ttest$stderr),
+                   max(mu, ttest$estimate[1] + 4 * ttest$stderr),
+                   action = rp.ttest.redraw,
+                   showvalue = TRUE, grid = "controls", row = 1, column = 0)
+         rp.checkbox(pnl, display, rp.ttest.redraw, title = 'display',
+                     labels = c('distribution', 'detail'),
+                     grid = "controls", row = 2, column = 0)
+         rp.menu(pnl, data.display, list(list('Data display', 'none', 'density', 'histogram')),
+                 action = rp.ttest.redraw)
       }
    }
    else{
       pnl <- list(x = x, y = y, col = clr, horizontal = horizontal,
-                  height = height, display = display, zoom = zoom,
+                  method = method, height = height, mu = mu,
                   data.display = data.display, seed = seed,
-                  candidate = candidate,
+                  candidate = candidate, display = display,
                   conf = attr(ttest$conf.int, 'conf.level'), static = !panel,
-                  position = position, reference = reference,
+                  ruler.position = ruler.position, reference = reference,
                   xlab = xlab, ylab = ylab, vlab = vlab, nmin = 10, bgdcol = bgdcol,
                   distribution = 't', ttest = ttest)
       plt <- if (method %in% c('One', 'Paired')) rp.onesample(pnl)
              else rp.twosample(pnl)
-      invisible(plt)
+      return(plt)
    }
    
    invisible(pnl)
 }
 
+rp.twosample <- function(lst) {
+   
+   x              <- lst$x
+   y              <- lst$y
+   xlab           <- lst$xlab
+   ylab           <- lst$ylab
+   vlab           <- lst$vlab
+   horizontal     <- lst$horizontal
+   data.display   <- lst$data.display
+   violin         <- (data.display == 'violin')
+   mns            <- lst$ttest$estimate
+   se             <- lst$ttest$stderr
+   mu             <- lst$ttest$null.value
+   ruler.position <- lst$ruler.position
+   reference      <- lst$reference
+   se.scale       <- (ruler.position != 'none')
+   height         <- lst$height
+   clr            <- lst$col
+   lst            <- rp.sescale_ticks(lst)
+   
+   set.seed(lst$seed)
+   
+   # Ensure that x has values and y is a factor
+
+   if (!is.numeric(x))
+      stop('x must be numeric.')
+   if (is.numeric(y)) {
+      # Match the order with the way t.test calculates differences
+      fac  <- factor(c(rep(ylab, length(y)),
+                       rep(xlab, length(x))), levels = c(ylab, xlab))
+      x    <- c(y, x)
+      y    <- fac
+      temp <- xlab
+      xlab <- ylab
+      ylab <- temp
+      mns  <- rev(mns)
+   }
+   else if (is.character(y) | is.logical(y))
+      y <- factor(y)
+   else
+      if (!is.factor(y)) stop('y must be character, logical or a factor.')
+   if (length(x) != length(y))
+      stop('x and y have different lengths.')
+   if (nlevels(y) != 2)
+      stop('y should have only two levels.')
+
+   # Compute data densities
+   
+   fn             <- function(x) density(x, bw = bw.norm(x))
+   dens           <- tapply(x, y, fn)
+   if (data.display == 'histogram') {
+      hst  <- tapply(x, y, hist, plot = FALSE)
+      fn   <- function(x) max(x$density)
+      dmax <- max(sapply(hst, fn))
+   }
+   else {
+      if (length(x) >= lst$nmin)
+         dmax <- max(dens[[1]]$y, dens[[2]]$y)
+      else {
+         fn   <- function(x) dnorm(0, 0, sd(x))
+         dmax <- max(tapply(x, y, fn))
+      }
+   }
+   lst$dmax <- dmax
+   
+   # Set up the y-axis labels and scaling
+   
+   ht   <- c(main = 0.6, axis = 0.7, margin = 0.2)
+   lst$ht <- ht
+   dscl <- ht['main'] / dmax
+   # if (violin) dscl <- 0.5 * scl
+   dpos <- 2 * ht['margin'] + ht['main']
+   slo  <- 2.5 * ht['margin'] + ht['main'] + 0.05 * ht['axis']
+   shi  <- slo + 0.2 * ht['axis']
+   lst$shi <- shi
+   apos <- dpos - 0.5 * ht['margin']
+   alab <- '  difference\nscale'
+   if (lst$data.display != 'none') {
+      apos <- c(ht['margin'] + 0.5 * ht['main'],
+                ht['margin'] * 3 + ht['main'] * 1.5 + ht['axis'],
+                apos)
+      alab <- c(xlab, ylab, alab)
+   }
+   if (se.scale) {
+      apos <- c(apos, shi + 0.5 * ht['margin'])
+      alab <- c(alab, 'se scale')
+   }
+   if (((lst$ruler.position != 'none') & lst$display['distribution']) |    
+       ((lst$ruler.position %in% c('sample mean', 'reference')) &
+         lst$display['detail'])) {
+      apos <- c(apos, shi + ht['margin'])
+      alab <- c(alab, 't-distribution')
+   }
+   if (lst$display['detail']) {
+      if (lst$ruler.position == 'sample mean') {
+         apos <- c(apos, slo + 0.25 * ht['margin'])
+         alab <- c(alab, paste(round(attr(lst$ttest$conf.int, 'conf.level') * 100),
+                               '%\nconfidence\ninterval', sep = ''))
+      }
+      else if (lst$ruler.position == 'reference') {
+         apos <- c(apos, dpos + slo + 0.5 * ht['margin'])
+         alab <- c(alab, paste('p-value\n', signif(lst$ttest$p.value, 2), sep = ''))
+      }
+   }
+
+   # Find suitable x-axis limits
+   # ylimits <- c(0, 4 * ht['margin'] + 2 * ht['main'] + ht['axis'])
+   xlimits <- range(mns)
+   if (lst$data.display != 'none') xlimits <- range(xlimits, dens[[1]]$x, dens[[2]]$x)
+   xlimits <- range(xlimits, mns - 4.1 * se, mns + 4.1 * se,
+                    mns[1] + mu - 4.1 * se, mns[1] + mu + 4.1 * se)
+   # Ensure there is space to place arrows beyond
+   estlocs <- mns[2]
+   if (lst$ttest$alternative == 'two.sided') {
+      xlimits <- range(xlimits, mns[1] + mu - (mns[2] - mns[1] - mu))
+      estlocs <- c(estlocs,     mns[1] + mu - (mns[2] - mns[1] - mu))
+   }
+   if (any(abs(estlocs - xlimits[1]) < 0.1 * diff(xlimits)))
+      xlimits[1] <- xlimits[1] - 0.1 * diff(xlimits)
+   if (any(abs(estlocs - xlimits[2]) < 0.1 * diff(xlimits)))
+      xlimits[2] <- xlimits[2] + 0.1 * diff(xlimits)
+   lst$xlimits <- xlimits
+   
+   # Plot setup
+   
+   dfrm <- data.frame(x, as.numeric(y))
+   plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y)) +
+      ggplot2::theme(
+         panel.grid.major.y = ggplot2::element_blank(),
+         panel.grid.minor.y = ggplot2::element_blank(),
+         panel.grid.major.x = ggplot2::element_blank(),
+         panel.grid.minor.x = ggplot2::element_blank()) +
+      ggplot2::scale_y_continuous(breaks = apos, labels = alab) +
+      ggplot2::xlab(vlab)
+   if (!horizontal) plt <- plt + ggplot2::coord_flip() +
+      ggplot2::theme(axis.title.x = ggplot2::element_blank())
+   else             plt <- plt + ggplot2::theme(axis.title.y = ggplot2::element_blank())
+   
+   # Plot the data
+   
+   if (data.display != 'none') {
+      for (i in 1:2) {
+         plt <- rp.add_data_density(plt, data.display, x[y == levels(y)[i]], apos[i],
+                                    ht['main'], hst[[i]], dens[[i]], dscl, 'grey85')
+      }
+   }
+   
+   # Add the difference scale
+   
+   xinp <- if (data.display == 'none') xlimits else x
+   tpos <- pretty(xinp - mns[1])
+   tlab <- as.character(tpos)
+   tpos <- tpos + mns[1]
+   tscl <- if (data.display == 'none') 0.03 * ht['axis'] else 0.05 * ht['axis']
+   if (violin) yp <- yp + 0.5 * ht['axis']
+   plt <- plt +
+      ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
+                        y = dpos, col = 'grey25') +
+      ggplot2::annotate('segment', x = tpos, xend = tpos,
+                        y = dpos, yend = dpos - tscl, col = 'grey25') +
+      ggplot2::annotate('text', x = tpos, y = dpos - 2.5 * tscl,
+                        label = tlab, col = 'grey25')
+   
+   # Add the uncertainty distribution
+   
+   if (ruler.position != 'none') {
+      ucol <- switch(ruler.position, 'candidate' = 'grey75',
+                  'sample mean' = clr['estimate'], 'reference' = clr['reference'])
+      xpos <- switch(ruler.position, 'candidate' = lst$candidate,
+                  'sample mean' = mns[2], 'reference' = mns[1] + mu)
+      ulo  <- shi + 0.5 * ht['margin']
+      uht  <- 2 * ht['margin'] + ht['main'] + ht['axis'] - ulo
+      plt  <- rp.add_uncertainty(plt, xpos, ulo, uht,
+                                 (dpos + slo + 0.5 * ht['margin']) / 2, lst)
+   }
+   
+   # Plot the sample means, difference and reference, as required
+   
+   value     <- mns[2]
+   linestart <- if (se.scale) shi else dpos
+   lineend   <- 2.25 * ht['margin'] + ht['main'] + ht['axis']
+   gclr      <- clr['estline']
+   group     <- 'sample mean difference'
+   if (data.display != 'none') {
+      value <- c(mns, value)
+      linestart <- c(0.5 * ht['margin'],
+                     2.75 * ht['margin'] + ht['main'] + ht['axis'],
+                     linestart)
+      lineend   <- c(1.25 * ht['margin'] +     ht['main'],
+                     3.5  * ht['margin'] + 2 * ht['main'] + ht['axis'],
+                     lineend)
+      gclr      <- c(rep('black', 2), gclr)
+      group     <- c(rep('sample mean', 2), group)
+   }
+   if (lst$reference | (ruler.position == 'reference')) {
+      value     <- c(value,     mns[1] + mu)
+      linestart <- c(linestart, linestart[3])
+      lineend   <- c(lineend,   lineend[3])
+      gclr      <- c(gclr,      clr['refline'])
+      group     <- c(group,     'reference')
+   }
+   if (ruler.position == 'candidate') {
+      value     <- c(value, lst$candidate)
+      linestart <- c(linestart, slo + 0.5 * ht['margin'])
+      lineend   <- c(lineend,   slo)
+      gclr      <- c(gclr,      'grey50')
+      group     <- c(group,     'candidate')
+   }
+   names(gclr) <- group
+   dfrm.lines <- data.frame(value, linestart, lineend, gclr, group)
+   n.lines <- nrow(dfrm.lines)
+   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = value, y = linestart, yend = lineend,
+                                                   col = group), data = dfrm.lines) +
+      ggplot2::scale_color_manual(name = '', breaks = group, values = gclr) +
+      ggplot2::theme(legend.position = 'top')
+   
+   # Plot the se axis
+   
+   if (se.scale) {
+      # if (violin) spos <- spos + 0.5 * ht['axis']
+      xpos <- switch(ruler.position, 'candidate' = lst$candidate,
+                     'sample mean' = mns[2], 'reference' = mns[1] + mu)
+      sclr <- switch(ruler.position, 'candidate' = 'grey75',
+                     'sample mean' = clr['estline'], 'reference' =clr['refline'])
+      plt <- rp.add_sescale(plt, diff(mns), xpos, slo + 0.5 * ht['margin'],
+                            shi + 0.5 * ht['margin'], lst)
+   }
+   
+   # Print and return
+   if (lst$static) return(plt)
+   print(plt)
+   lst
+}
 
 rp.onesample <- function(lst) {
    
    x           <- lst$x
-   display     <- lst$display
-   position    <- lst$position
    col.dens    <- lst$col['density']
-   mu          <- lst$ttest$null.value
+   mu          <- lst$mu
    estimate    <- lst$ttest$estimate
    se          <- lst$ttest$stderr
-   se.scale    <- lst$display['se.scale']
-   ci          <- ifelse(position == 'sample mean', lst$display['ci'], FALSE)
-   pvalue      <- ifelse(position == 'reference',   lst$display['pvalue'], FALSE)
+   se.scale    <- (lst$ruler.position != 'none')
    reference   <- lst$reference
    hst         <- hist(x, plot = FALSE)
    dmax        <- max(hst$density)
+   if (lst$display['detail']) lst$display['distribution'] <- TRUE
    set.seed(lst$seed)
+   lst            <- rp.sescale_ticks(lst)
    
    # Set up the plot
    
    dens    <- density(x, bw = bw.norm(x))
    xlimits <- range(estimate)
-   if (!lst$zoom) xlimits <- range(xlimits, dens$x)
-   if (position == 'sample mean') xlimits <- range(estimate - 4 * se, estimate + 4 * se)
-   if (position == 'reference')   xlimits <- range(xlimits, mu - 4 * se, mu + 4 * se)
+   if (lst$data.display != 'none') xlimits <- range(xlimits, dens$x)
+   xlimits <- range(xlimits, estimate - 4.1 * se, estimate + 4.1 * se,
+                    mu - 4.1 * se, mu + 4.1 * se)
    # Ensure there is space to place arrows beyond
-   if (pvalue) {
-      estlocs <- estimate
-      if (lst$ttest$alternative == 'two.sided') {
-         xlimits <- range(xlimits, mu - (estimate - mu))
-         estlocs <- c(estlocs, mu - (estimate - mu))
-      }
-      if (any(abs(estlocs - xlimits[1]) < 0.1 * diff(xlimits)))
-         xlimits[1] <- xlimits[1] - 0.1 * diff(xlimits)
-      if (any(abs(estlocs - xlimits[2]) < 0.1 * diff(xlimits)))
-         xlimits[2] <- xlimits[2] + 0.1 * diff(xlimits)
+   estlocs <- estimate
+   if (lst$ttest$alternative == 'two.sided') {
+      xlimits <- range(xlimits, mu - (estimate - mu))
+      estlocs <- c(estlocs, mu - (estimate - mu))
    }
+   if (any(abs(estlocs - xlimits[1]) < 0.1 * diff(xlimits)))
+      xlimits[1] <- xlimits[1] - 0.1 * diff(xlimits)
+   if (any(abs(estlocs - xlimits[2]) < 0.1 * diff(xlimits)))
+      xlimits[2] <- xlimits[2] + 0.1 * diff(xlimits)
    lst$xlimits <- xlimits
    
-   # Find the tick points and labels for the se scale
-   sedist <- if (lst$position == 'reference') (estimate - mu) / se
-             else if (lst$reference) (mu - estimate) / se
-             else NULL
-   if (!is.null(sedist))
-      sedist <- 2 * (ceiling(abs(sedist) / 2)) * sign(sedist)
-   serange <- range(-4, 4, sedist)
-   if (!is.null(sedist) & lst$display['pvalue'] & lst$ttest$alternative == 'two.sided')
-      serange <- range(serange, -sedist)
-   if (max(abs(serange)) <= 8) {
-      tpos    <- (serange[1]:serange[2]) * se
-      tlab    <- seq(serange[1], serange[2], by = 2)
-   }
-   else{
-      tlab <- pretty(serange)
-      tpos <- tlab * se
-   }
-   lst$tpos <- tpos
-   lst$tlab <- tlab
-   
    dfrm <- data.frame(x)
-   plt <- ggplot2::ggplot(dfrm, ggplot2::aes(x)) +
-          ggplot2::theme(
+   plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(x)) +
+         ggplot2::scale_x_continuous(limits = xlimits, expand = ggplot2::expansion()) +
+         ggplot2::theme(
             axis.ticks.y       = ggplot2::element_blank(),
             axis.title.y       = ggplot2::element_blank(),
             panel.grid.major.x = ggplot2::element_blank(),
@@ -206,7 +466,7 @@ rp.onesample <- function(lst) {
 
    # Plot the data
    
-   if (!lst$zoom) {
+   if (lst$data.display != 'none') {
       if (lst$data.display == 'histogram') {
          plt <- plt +
             ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
@@ -227,33 +487,25 @@ rp.onesample <- function(lst) {
             dmax   <- dnorm(0, mean(x), sd(x))
          }
          d.densd <- data.frame(x = x, d = dens.y, r = runif(length(dens.y), 0, 1))
-         sz  <- if (length(x) >= lst$nmin) 0.2 else 1
          plt <- plt +
-            ggplot2::geom_point(ggplot2::aes(x, r * d), data = d.densd, size = sz)
+            ggplot2::geom_point(ggplot2::aes(x, r * d), data = d.densd,
+                                size = 0.1 + 37 / max(length(x), 25))
       }
    }
    else
       dmax <- 1
    lst$dmax <- dmax
 
-   # Locate the centre of the uncertainty scale
-   cntr <- switch(position, 'none' = NA, 'candidate' = lst$candidate,
-                  'sample mean' = estimate, 'reference' = mu)
-   
    # Plot the uncertainty
-   if (position != 'none')
+   cntr <- switch(lst$ruler.position, 'none' = NA, 'candidate' = lst$candidate,
+                  'sample mean' = estimate, 'reference' = mu)
+   if (lst$ruler.position != 'none')
       plt <- rp.add_uncertainty(plt, cntr, -dmax, 0.8 * dmax, -1.25 * dmax, lst)
-                                    # xlimits, ttest$estimate, se, ttest$parameter, dmax,
-                                    # ucol, ulcol, plot.args$col, ci, ttest$conf.int,
-                                    # pvalue, conf = attr(ttest$conf.int, 'conf.level'),
-                                    # p.value = lst$ttest$p.value,
-                                    # distribution = 't', alternative = ttest$alternative,
-                                    # ngrid = 100, plot.args$zoom)
-   
+
    # Plot the sample mean
    
    linestart <- -dmax
-   lineend   <- if (lst$zoom) 0.1 * dmax else 1.2 * dmax
+   lineend   <- if (lst$data.display == 'none') -0.1 * dmax else 1.2 * dmax
    plt <- plt +
       ggplot2::annotate('segment', x = estimate, xend = estimate,
                         y = linestart, yend = lineend, col = lst$col['estline']) +
@@ -263,8 +515,8 @@ rp.onesample <- function(lst) {
    
    # Plot reference if requested
    
-   if (lst$reference | (lst$position == 'reference')) {
-      rlineend <- if (lst$zoom) 0.05 * dmax else 1.05 * dmax
+   if (lst$reference | (lst$ruler.position == 'reference')) {
+      rlineend <- if (lst$data.display == 'none') -0.15 * dmax else 1.05 * dmax
       plt  <- plt +
          ggplot2::annotate('segment', x = mu, xend = mu,
                            y = linestart, yend =  rlineend, col = lst$col['refline']) +
@@ -272,29 +524,46 @@ rp.onesample <- function(lst) {
                            hjust = hjst(mu, xlimits, 0.25), col = lst$col['refline'])
    }
    
-   # Plot the uncertainty axis
+   # Plot the se axis
    
    if (se.scale) {
-      plt  <- rp.add_sescale(plt, cntr, -1.1 * dmax, -dmax, lst)
+      plt  <- rp.add_sescale(plt, estimate, cntr, -1.1 * dmax, -dmax, lst)
+      if (lst$ruler.position == 'candidate') {
+         sclr   <- 'grey75'
+         tscl   <- -0.105 * dmax
+         plt <- plt +
+            ggplot2::annotate('text', x = cntr, y = -1.1 * dmax - 8 * tscl,
+                              col = sclr, label = 'candidate mean',
+                              hjust = hjst(cntr, lst$xlimits, 0.25)) +
+            ggplot2::annotate('segment', x = cntr, xend = cntr,
+                              y = -1.1 * dmax - 14 * tscl, yend = -Inf, col = sclr)
+      }
    }
    
    # Add the y-axis labels
    
    ticks <- c(0.5, -0.5, -1, -1.25) * dmax
-   ylabs <- c('data\n', 't-distribution', 'se scale',
+   ylabs <- c('             data', 't-distribution', 'se scale',
               paste(round(attr(lst$ttest$conf.int, 'conf.level') * 100),
                     '%\nconfidence\ninterval', sep = ''))
-   if (position == 'reference')
+   if (lst$ruler.position == 'reference')
       ylabs[4] <- paste('p-value\n', signif(lst$ttest$p.value, 2), sep = '')
+   if (lst$data.display == 'none') {
+      ylabs[1] <- paste0(rep(' ', 20), collapse = '')
+      ticks[1] <- -0.1 * dmax  
+   }
    tind  <- 1
-   if (lst$display['distribution']) tind <- c(tind, 2)
-   if (se.scale) tind <- c(tind, 3)
-   if (ci | pvalue) tind <- c(tind, 4)
+   if (lst$display['distribution'])  tind <- c(tind, 2)
+   if (lst$ruler.position != 'none') tind <- c(tind, 3)
+   if (lst$display['detail'] & (lst$ruler.position %in% c('sample mean', 'reference')))
+      tind <- c(tind, 4)
+   yhi <- ifelse(lst$data.display == 'none', 0, 1.3 * dmax)
    plt <- plt +
       ggplot2::scale_y_continuous(breaks = ticks[tind], labels = ylabs[tind],
-                                  limits = c(-1.3 * dmax, 1.3 * dmax))
+                                  limits = c(-1.3 * dmax, yhi))
 
-   if (lst$static) return(plt) else print(plt)
+   if (lst$static) return(plt)
+   print(plt)
    lst
 }
 
@@ -303,11 +572,16 @@ rp.onesample.redraw <- function(panel) {
    panel
 }
 
-rp.add_data_density <- function(plt, display, x, ypos, yht, hst, dens, scl, col) {
+rp.ttest.redraw <- function(panel) {
+   rp.tkrreplot(panel, plot)
+   panel
+}
+
+rp.add_data_density <- function(plt, data.display, x, ypos, yht, hst, dens, scl, col) {
    
-   violin <- (display == 'violin')
+   violin <- (data.display == 'violin')
    if (!violin) ypos <- ypos - 0.5 * yht
-   if (display == 'histogram') {
+   if (data.display == 'histogram') {
       # plt <- plt +
       #    ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
       #                            breaks = hst$breaks, col = col.dens, fill = col)
@@ -329,70 +603,101 @@ rp.add_data_density <- function(plt, display, x, ypos, yht, hst, dens, scl, col)
          ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0,
                                            ymin = dr.lo, ymax = ypos + dgrid * scl),
                               data = d.dens, col = NA, fill = col) +
-         ggplot2::geom_point(ggplot2::aes(x, ypos + sgn * r * d * scl), data = d.densd)
+         ggplot2::geom_point(ggplot2::aes(x, ypos + sgn * r * d * scl),
+                             size = 0.1 + 37 / max(length(x), 25), data = d.densd)
    }
 
    plt
 }
 
-rp.add_sescale <- function(plt, xpos, ylo, yhi, lst) {
+rp.sescale_ticks <- function(lst) {
+   
+   # Find the tick points and labels for the se scale
+   
+   se       <- lst$ttest$stderr
+   estimate <- if (lst$method == 'Two') diff(lst$ttest$estimate)
+               else lst$ttest$estimate
+   sedist   <- if (lst$ruler.position == 'reference') (estimate - lst$mu) / se
+               else if (lst$reference) (lst$mu - estimate) / se
+               else NULL
+   if (!is.null(sedist))
+      sedist <- 2 * (ceiling(abs(sedist) / 2)) * sign(sedist)
+   serange <- range(-4, 4, sedist)
+   if (!is.null(sedist) & (lst$display['distribution'] | lst$display['detail']) & 
+       (lst$ruler.position == 'reference') & lst$ttest$alternative == 'two.sided')
+      serange <- range(serange, -sedist)
+   if (max(abs(serange)) <= 8) {
+      tpos    <- (serange[1]:serange[2]) * se
+      tlab    <- seq(serange[1], serange[2], by = 2)
+   }
+   else{
+      tlab <- pretty(serange)
+      tpos <- tlab * se
+   }
+   lst$tpos <- tpos
+   lst$tlab <- tlab
+   lst
+}
+
+rp.add_sescale <- function(plt, estimate, xpos, ylo, yhi, lst) {
+   
    tpos   <- xpos + lst$tpos
    tlab   <- lst$tlab
-   se     <- lst$ttest$stderr
-   sclr   <- ifelse(lst$position == 'reference', lst$col['refline'],
-                    lst$col['estline'])
+   sclr   <- switch(lst$ruler.position, 'candidate' = 'grey50',
+                        'reference' = lst$col['refline'],
+                        'sample mean' = lst$col['estline'])
    tscl   <- 0.10 * (yhi - ylo)
-   drtpos <- diff(range(tpos))
+   drtpos <- tpos[2] - tpos[1]
    plt  <- plt +
-      ggplot2::annotate('rect', xmin = min(tpos) - drtpos / 10,
-                        xmax = max(tpos) + drtpos / 10,
+      ggplot2::annotate('rect',
+                        xmin = max(min(tpos) - 0.2 * drtpos, lst$xlimits[1]),
+                        xmax = min(max(tpos) + 0.2 * drtpos, lst$xlimits[2]),
                         ymin = ylo, ymax = yhi,
                         fill = 'white') +
-      ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
+      ggplot2::annotate('segment',
+                        x    = max(min(tpos), lst$xlimits[1]),
+                        xend = min(max(tpos), lst$xlimits[2]),
                         y = ylo, yend = ylo, col = sclr) +
       ggplot2::annotate('segment', x = tpos, xend = tpos,
                         y = ylo, yend = ylo + tscl, col = sclr) +
-      ggplot2::annotate('text', x = xpos + tlab * se,
+      ggplot2::annotate('text', x = xpos + tlab * lst$ttest$stderr,
                         y = (ylo + yhi) / 2, col = sclr,
                         label = as.character(tlab)) +
       ggplot2::annotate('segment', x = tpos, xend = tpos,
                         y = yhi, yend = yhi - tscl, col = sclr) +
-      ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
+      ggplot2::annotate('segment',
+                        x    = max(min(tpos), lst$xlimits[1]),
+                        xend = min(max(tpos), lst$xlimits[2]),
                         y = yhi, col = sclr)
    plt
 }
 
 rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
-                               # xlimits,
-                               # estimate, se, degf, dmax,
-                               # ucol, ulcol, clr, ci, conf.int,
-                               # pvalue, conf = 0.95, p.value,
-                               # distribution = 't', alternative = 'two.sided',
-                               # ngrid = 100, zoom) {
    estimate <- lst$ttest$estimate
    se       <- lst$ttest$stderr
    dmax     <- lst$dmax
    xlimits  <- lst$xlimits
-   ucol     <- switch(lst$position, 'none' = NA, 'candidate' = 'grey50',
+   ucol     <- switch(lst$ruler.position, 'none' = NA, 'candidate' = 'grey80',
                       'reference'   = lst$col['reference'],
                       'sample mean' = lst$col['estimate'])
-   ulcol    <- switch(lst$position, 'none' = NA, 'candidate' = 'grey50',
+   ulcol    <- switch(lst$ruler.position, 'none' = NA, 'candidate' = 'grey80',
                       'reference'   = lst$col['refline'],
                       'sample mean' = lst$col['estline'])
-   if (lst$display['distribution']) {
+   d.fn     <- ifelse (lst$distribution == 't',
+                    function(x) dt((x - xpos) /se, df = lst$ttest$parameter),
+                    function(x) dnorm(x, xpos, se))
+   scl      <- yht / dt(0, lst$ttest$parameter)
+   if (lst$display['distribution'] | lst$display['detail']) {
       ngrid <- 100
       xgrid <- seq(xpos - 4 * se, xpos + 4 * se, length = ngrid)
-      d.fn  <- ifelse (lst$distribution == 't',
-                       function(x) dt((x - xpos) /se, df = lst$ttest$parameter),
-                       function(x) dnorm(x, xpos, se))
-      dgrid <- data.frame(xgrid, ymin = ypos, dens = d.fn(xgrid))
-      scl   <- yht / dmax
+      dgrid <- data.frame(xgrid, ymin = as.numeric(ypos), dens = d.fn(xgrid))
       plt <- plt +
-         ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, ymin = ymin, ymax = ypos + dens * scl),
+         ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = ymin,
+                                           ymin = ymin, ymax = ypos + dens * scl),
                               data = dgrid, col = NA, fill = ucol)
    }
    # Add notches to the uncertainty distribution
-   if (lst$display['ci'] | lst$display['pvalue']) {
+   if (lst$display['detail']) {
       q.fn       <- ifelse (lst$distribution == 't',
                             function(x) xpos + se * qt(x, df = lst$ttest$parameter),
                             function(x) qnorm(x, xpos, se))
@@ -403,20 +708,39 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
                                                col = 'white', data = notch.dfrm)
    }
    # Add the confidence interval
-   if (lst$display['ci'] & !lst$position == 'reference')
-      plt <- plt + ggplot2::annotate('segment',
-                                     x = lst$ttest$conf.int[1], xend = lst$ttest$conf.int[2],
-                                     y = cipos, col = ulcol)
+   if (lst$display['detail'] & lst$ruler.position == 'sample mean') {
+      ci.ends   <- lst$ttest$conf.int
+      i         <- 1
+      satisfied <- FALSE
+      while (!satisfied) {
+         i   <- i + 1
+         sci <- signif(ci.ends, i)
+         satisfied <- (abs(diff(ci.ends) - diff(sci)) / diff(ci.ends) < 0.01)
+      }
+      lbl <- paste(' ', as.character(signif(lst$ttest$conf.int, i)), ' ', sep = '')
+      plt <- plt +
+         ggplot2::annotate('segment',
+                           x    = lst$ttest$conf.int[1] + estimate[2],
+                           xend = lst$ttest$conf.int[2] + estimate[2],
+                           y = cipos, col = ulcol) +
+         ggplot2::annotate('text',
+                           x = lst$ttest$conf.int + estimate[2], y = rep(cipos, 2),
+                           label = lbl, col = ulcol, hjust = c('right', 'left'))
+   }
    # Add the p-value calculation
-   if (lst$display['pvalue']) {
-      xstart  <- estimate
-      xlimits <- xpos + range(lst$tpos)
-      xstop   <- switch(lst$ttest$alternative, greater = xlimits[2], less = xlimits[1],
-                            two.sided = ifelse(estimate > xpos, xlimits[2], xlimits[1]))
+   if (lst$display['detail'] & lst$ruler.position == 'reference') {
+      xstart  <- estimate[1]
+      plimits <- xpos + range(lst$tpos)
+      print(lst$tpos)
+      xstop   <- switch(lst$ttest$alternative, greater = plimits[2], less = plimits[1],
+                        two.sided = ifelse(estimate > xpos, plimits[2], plimits[1]))
+      xstop   <- max(xlimits[1], min(xstop, xlimits[2]))
       p       <- ifelse(lst$ttest$alternative == 'two.sided',
                         lst$ttest$p.value / 2, lst$ttest$p.value)
       p       <- as.character(signif(p, 2))
       hjust   <- ifelse (xstop > xstart, 'left', 'right')
+      print(xstart)
+      print(xstop)
       plt <- plt +
          ggplot2::annotate('segment', y = cipos,
                            x = xstart, xend = xstop, col = ulcol,
@@ -426,11 +750,18 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
          ggplot2::annotate('text', x = xpos, y = cipos - 0.05 * dmax,
                            label = 'probability', col = ulcol)
       if (lst$ttest$alternative == 'two.sided') {
-         xstart    <- xpos - (estimate - xpos)
-         xstop     <- ifelse(xstop > mean(xlimits), xlimits[1], xlimits[2])
+         xstart    <- xpos - (estimate[1] - xpos)
+         xstop     <- ifelse(xstop > mean(plimits), plimits[1], plimits[2])
+         xstop     <- max(xlimits[1], min(xstop, xlimits[2]))
          hjust     <- ifelse(hjust == 'left', 'right', 'left')
-         linestart <- -dmax
-         lineend   <- if (lst$zoom) 0.1 * dmax else 1.2 * dmax
+         if (lst$method == 'One') {
+            linestart <- -dmax
+            lineend   <- if (lst$data.display == 'none') 0.1 * dmax else 1.2 * dmax
+         }
+         else if (lst$method == 'Two') {
+            linestart <- lst$shi
+            lineend   <- 2.25 * lst$ht['margin'] + lst$ht['main'] + lst$ht['axis']
+         }
          plt <- plt +
             ggplot2::annotate('segment', y = cipos,
                               x = xstart, xend = xstop, col = ulcol,
@@ -442,195 +773,6 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
       }
    }
    plt
-}
-
-rp.twosample <- function(lst) {
-
-   # Ensure that x has values and y is a factor
-   
-   xlab       <- plot.args$xlab
-   ylab       <- plot.args$ylab
-   vlab       <- plot.args$vlab
-   horizontal <- plot.args$horizontal
-   if (!is.numeric(x))
-      stop('x must be numeric.')
-   if (is.numeric(y)) {
-      fac  <- factor(c(rep(xlab, length(x)),
-                       rep(ylab, length(y))), levels = c(xlab, ylab))
-      x    <- c(x, y)
-      y    <- fac
-   }
-   else if (is.character(y) | is.logical(y)) 
-      y <- factor(y)
-   else
-      if (!is.factor(y)) stop('y must be character, logical or a factor.')
-   if (length(x) != length(y))
-      stop('x and y have different lengths.')
-   if (nlevels(y) != 2)
-      stop('y should have only two levels.')
-   
-   # Setup
-
-   display     <- lst$display
-   violin      <- (display == 'violin')
-   zoom        <- lst$zoom
-   mns         <- lst$ttest$estimate
-   se          <- lst$ttest$stderr
-   mu          <- lst$ttest$null.value
-   position    <- lst$position
-   reference   <- lst$reference
-   se.scale    <- ifelse (position != 'none', TRUE, plot.args$se.scale)
-   height      <- plot.args$height
-   clr         <- plot.args$col
-   ht          <- c(main = 0.7, axis = 0.5, margin = 0.2)
-   dpos        <- 2 * ht['margin'] + ht['main']
-   fn          <- function(x) density(x, bw = bw.norm(x))
-   dens        <- tapply(x, y, fn)
-   if (display == 'histogram') {
-      hst  <- tapply(x, y, hist, plot = FALSE)
-      fn   <- function(x) max(x$density)
-      dmax <- max(sapply(hst, fn))
-   }
-   else {
-      if (length(x) >= plot.args$nmin)
-         dmax <- max(dens[[1]]$y, dens[[2]]$y)
-      else {
-         fn   <- function(x) dnorm(0, 0, sd(x))
-         dmax <- max(tapply(x, y, fn))
-      }
-   }
-   dscl <- ht['main'] / dmax
-   if (violin) dscl <- 0.5 * scl
-   slo     <- 2 * ht['margin'] + ht['main'] + 0.05 * ht['axis']
-   shi     <- slo + 0.3 * ht['axis']
-   apos    <- c(ht['margin'] + 0.5 * ht['main'],
-                ht['margin'] * 3 + ht['main'] * 1.5 + ht['axis'], dpos)
-   alab    <- c(xlab, ylab, 'difference\nscale')
-   if (se.scale) {
-      apos <- c(apos, shi)
-      alab <- c(alab, 'se scale')
-   }
-   # ylimits <- c(0, 4 * ht['margin'] + 2 * ht['main'] + ht['axis'])
-   xlimits <- range(dens[[1]]$x, dens[[2]]$x,
-                    mns[1] + mu - 4 * se, mns[1] + mu + 4 * se, mns - 4 * se, mns + 4 * se)
-
-   # Plot setup
-   
-   dfrm <- data.frame(x, as.numeric(y))
-   plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y)) +
-      ggplot2::theme(
-         panel.grid.major.y = ggplot2::element_blank(),
-         panel.grid.minor.y = ggplot2::element_blank(),
-         panel.grid.major.x = ggplot2::element_blank(),
-         panel.grid.minor.x = ggplot2::element_blank()) +
-      ggplot2::scale_y_continuous(breaks = apos, labels = alab) +
-      ggplot2::xlab(vlab)
-   if (!horizontal) plt <- plt + ggplot2::coord_flip() +
-                                ggplot2::theme(axis.title.x = ggplot2::element_blank())
-   else             plt <- plt + ggplot2::theme(axis.title.y = ggplot2::element_blank())
-
-   # Plot the data
-
-   if (!plot.args$zoom) {
-      for (i in 1:2) {
-         plt <- rp.add_data_density(plt, display, x[y == levels(y)[i]], apos[i],
-                                    ht['main'], hst[[i]], dens[[i]], dscl, 'grey85')
-      }
-   }
-   
-   # Add the difference scale
-   
-   tpos <- pretty(x - mns[1])
-   tlab <- as.character(tpos)
-   tpos <- tpos + mns[1]
-   tscl <- if (plot.args$zoom) 0.03 * ht['axis'] else 0.05 * ht['axis']
-   if (violin) yp <- yp + 0.5 * ht['axis']
-   plt <- plt +
-      ggplot2::annotate('segment', x = min(tpos), xend = max(tpos),
-                        y = dpos, col = 'grey25') +
-      ggplot2::annotate('segment', x = tpos, xend = tpos,
-                        y = dpos, yend = dpos - tscl, col = 'grey25') +
-      ggplot2::annotate('text', x = tpos, y = dpos - 2.5 * tscl,
-                        label = tlab, col = 'grey25')
-   
-   # Plot the uncertainty axis
-   
-   if (se.scale) {
-      # if (violin) spos <- spos + 0.5 * ht['axis']
-      if (position == 'reference') {
-         xpos   <- mns[1] + mu
-         sclr   <- clr['refline']
-         sedist <- (mns[2] - mns[1] - mu) / se
-      }
-      else {
-         xpos   <- mns[2]
-         sclr   <- clr['estline']
-         sedist <- if (reference) (mu + mns[1] - mns[2]) / se else NULL
-      }
-      plt <- rp.add_sescale(plt, xpos, slo, shi, se, sclr, sedist)
-   }
-   
-   # Add the uncertainty distribution
-   
-   if (position != 'none') {
-      ucol <- if (position == 'sample mean') clr['estimate']
-      else clr['reference']
-      # plt  <- rp.add_uncertainty(plt, display, cntr, 2 * ht['margin'] + ht['main'], ht['axis'],
-      #                            se, lst$ttest$parameter, col = ucol)
-      
-      xpos  <- if (position == 'sample mean') mns[2] else mns[1] + mu
-      ulo   <- shi
-      uhi   <- 2 * ht['margin'] + ht['main'] + ht['axis']
-      degf  <- ttest$parameter
-      distribution <- 't'
-      ngrid <- 100
-      xgrid <- seq(xpos - 4 * se, xpos + 4 * se, length = ngrid)
-      dgrid <- data.frame(xgrid, ymin = rep(ulo, length(xgrid)),
-                          dens = if (distribution == 't') dt((xgrid - xpos) / se, degf)
-                          else dnorm(xgrid, xpos, se))
-      uscl  <- (uhi - ulo) / max(dgrid$dens)
-      ucntr <- ulo
-      if (violin) {
-         ucntr <- (ulo + uhi) / 2
-         uscl  <- uscl / 2
-         dgrid$ymin <- ucntr - dgrid$dens * uscl
-      }
-      plt <- plt +
-         ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0,
-                                           ymin = ymin, ymax = ucntr + dens * uscl),
-                              data = dgrid, col = NA, fill = ucol)
-   }
-   
-   # Plot the sample means, difference and reference, as required
-   
-   value     <- c(mns, mns[2])
-   linestart <- c(0.5 * ht['margin'], 2.75 * ht['margin'] + ht['main'] + ht['axis'],
-                  if (se.scale) shi else dpos)
-   lineend   <- c(1.25 * ht['margin'] +     ht['main'],
-                  3.5  * ht['margin'] + 2 * ht['main'] + ht['axis'],
-                  linestart[2] - 0.5 * ht['margin'])
-   gclr      <- c(rep('black', 2), clr['estline'])
-   group     <- c(rep('sample mean', 2), 'sample mean difference')
-   if (plot.args$reference | (position == 'reference')) {
-      value     <- c(value,     mns[1] + mu)
-      linestart <- c(linestart, linestart[3])
-      lineend   <- c(lineend,   lineend[3])
-      # linestart <- c(linestart, lineend[1] + 0.25 * ht['margin'])
-      # lineend   <- c(lineend,   linestart[2] - 0.5 * ht['margin'])
-      gclr      <- c(gclr,      clr['refline'])
-      group     <- c(group,     'reference')
-   }
-   names(gclr) <- group
-   dfrm.lines <- data.frame(value, linestart, lineend, gclr, group)
-   n.lines <- nrow(dfrm.lines)
-   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = value, y = linestart, yend = lineend,
-                                                 col = group), data = dfrm.lines) +
-                ggplot2::scale_color_manual(name = '', breaks = group, values = gclr) +
-                ggplot2::theme(legend.position = 'top')
-
-   # Print and return
-   if (lst$static) return(plt) else print(plt)
-   lst
 }
 
 hjst <- function(x, xlimits, edge) {

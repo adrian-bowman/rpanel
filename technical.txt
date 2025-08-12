@@ -4,7 +4,7 @@ Installation
 ------------
 
 To install using devtools to unload the current version:
-      devtools::install("rpanel")
+      devtools::install("../rpanel")
 
 To install the old-fashioned way:
       install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
