@@ -559,6 +559,8 @@ rp.sample <- function(n, mu, sigma,
          mns <- NULL
          tstats <- NULL
       }
+      pnl$mns    <- mns
+      pnl$tstats <- tstats
       result <- sample.new(c(pnl, mns = mns, tstats = tstats))
       return(result)
    }

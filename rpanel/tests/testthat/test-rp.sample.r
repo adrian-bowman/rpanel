@@ -6,26 +6,29 @@
 # load_all()
 # rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
-load_all()
-rp.sample(distribution = 'binomial', panel = FALSE,
-          display.sample = c('st.dev. scale' = TRUE))$sample
-
-load_all()
-rp.sample(distribution = 'binomial')
-
-load_all()
-rp.sample(display = 'density')
 
 test_that('Standard calls', {
    expect_no_error(pnl <- rp.sample())
    rp.control.dispose(pnl)
-   expect_no_error(pnl <- rp.sample(5, 0.4, 25, 5))
+   expect_no_error(pnl <- rp.sample(5, 0.4, 25))
    rp.control.dispose(pnl)
    expect_no_error(pnl <- rp.sample(display = 'violin'))
    rp.control.dispose(pnl)
+   expect_no_error(pnl <- rp.sample(display = 'density'))
+   rp.control.dispose(pnl)
    expect_no_error(pnl <- rp.sample(hscale = 1.5))
    rp.control.dispose(pnl)
+   expect_no_error(pnl <- rp.sample(distribution = 'binomial'))
+   rp.control.dispose(pnl)
+   expect_no_error(rp.sample(distribution = 'binomial', panel = FALSE,
+                             display.sample = c('st.dev. scale' = TRUE))$sample)
 })
+
+load_all()
+rp.sample(n = 25, mu = 5, sigma = 0.4, panel = FALSE, nbins = 10, nsim = 5000,
+          display.sample = c(mean = TRUE), show.out.of.range = FALSE,
+          display.mean = c('sample mean' = TRUE, 'accumulate' = TRUE,
+                           'se scale' = TRUE, 't-statistic' = TRUE))
 
 test_that('Static mode', {
    expect_no_error(rp.sample(n = 25, mu = 5, sigma = 0.4, panel = FALSE, nbins = 10, nsim = 5000,

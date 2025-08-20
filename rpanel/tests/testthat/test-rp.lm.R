@@ -4,7 +4,7 @@
 # library(devtools)
 # library(testthat)
 # load_all()
-# rp.datalink("~/iCloud/teaching/book/data", "set local directory")
+rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
 #----------------------------------------------------------------
 cat('\nRegression with one covariate\n')
@@ -271,3 +271,6 @@ test_that('Static mode: no plot if there is an assignment', {
    print(plt)
    print(plt + ggplot2::ggtitle("Something"))
 })
+
+# Remove rgl windows
+rgl::close3d(rgl::rgl.dev.list())

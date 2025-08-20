@@ -274,7 +274,7 @@ rp.twosample <- function(lst) {
    if (((lst$ruler.position != 'none') & lst$display['distribution']) |    
        ((lst$ruler.position %in% c('sample mean', 'reference')) &
          lst$display['detail'])) {
-      apos <- c(apos, shi + ht['margin'])
+      apos <- c(apos, shi + 1.5 * ht['margin'])
       alab <- c(alab, 't-distribution')
    }
    if (lst$display['detail']) {
@@ -284,7 +284,7 @@ rp.twosample <- function(lst) {
                                '%\nconfidence\ninterval', sep = ''))
       }
       else if (lst$ruler.position == 'reference') {
-         apos <- c(apos, dpos + slo + 0.5 * ht['margin'])
+         apos <- c(apos, (dpos + slo + 0.5 * ht['margin']) / 2)
          alab <- c(alab, paste('p-value\n', signif(lst$ttest$p.value, 2), sep = ''))
       }
    }
@@ -530,13 +530,13 @@ rp.onesample <- function(lst) {
       plt  <- rp.add_sescale(plt, estimate, cntr, -1.1 * dmax, -dmax, lst)
       if (lst$ruler.position == 'candidate') {
          sclr   <- 'grey75'
-         tscl   <- -0.105 * dmax
+         tscl   <- 0.105 * dmax
          plt <- plt +
-            ggplot2::annotate('text', x = cntr, y = -1.1 * dmax - 8 * tscl,
+            ggplot2::annotate('text', x = cntr, y = -1.1 * dmax + 9.5 * tscl,
                               col = sclr, label = 'candidate mean',
                               hjust = hjst(cntr, lst$xlimits, 0.25)) +
             ggplot2::annotate('segment', x = cntr, xend = cntr,
-                              y = -1.1 * dmax - 14 * tscl, yend = -Inf, col = sclr)
+                              y = -1.1 * dmax + 9 * tscl, yend = -1.1 * dmax, col = sclr)
       }
    }
    
@@ -718,20 +718,19 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
          satisfied <- (abs(diff(ci.ends) - diff(sci)) / diff(ci.ends) < 0.01)
       }
       lbl <- paste(' ', as.character(signif(lst$ttest$conf.int, i)), ' ', sep = '')
+      if (lst$method == 'Two') ci.ends <- ci.ends + estimate[2]
       plt <- plt +
          ggplot2::annotate('segment',
-                           x    = lst$ttest$conf.int[1] + estimate[2],
-                           xend = lst$ttest$conf.int[2] + estimate[2],
+                           x = ci.ends[1], xend = ci.ends[2],
                            y = cipos, col = ulcol) +
          ggplot2::annotate('text',
-                           x = lst$ttest$conf.int + estimate[2], y = rep(cipos, 2),
+                           x = ci.ends, y = rep(cipos, 2),
                            label = lbl, col = ulcol, hjust = c('right', 'left'))
    }
    # Add the p-value calculation
    if (lst$display['detail'] & lst$ruler.position == 'reference') {
       xstart  <- estimate[1]
       plimits <- xpos + range(lst$tpos)
-      print(lst$tpos)
       xstop   <- switch(lst$ttest$alternative, greater = plimits[2], less = plimits[1],
                         two.sided = ifelse(estimate > xpos, plimits[2], plimits[1]))
       xstop   <- max(xlimits[1], min(xstop, xlimits[2]))
@@ -739,8 +738,6 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
                         lst$ttest$p.value / 2, lst$ttest$p.value)
       p       <- as.character(signif(p, 2))
       hjust   <- ifelse (xstop > xstart, 'left', 'right')
-      print(xstart)
-      print(xstop)
       plt <- plt +
          ggplot2::annotate('segment', y = cipos,
                            x = xstart, xend = xstop, col = ulcol,
