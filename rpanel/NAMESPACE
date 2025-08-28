@@ -52,6 +52,7 @@ export(
   rp.ci, 
   rp.coefficients,
   rp.colour.key,
+  rp.contingency,
   rp.datalink,
   rp.drop1,
   rp.firth,

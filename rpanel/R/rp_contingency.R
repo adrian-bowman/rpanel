@@ -3,7 +3,7 @@
 # Allow only the case of two rows in mosaic style?
 
 rp.contingency <- function(x, style = "mosaic", values = "observed",
-                           uncertainty = FALSE) {
+                           uncertainty = FALSE, uncertainty.style = 'shading') {
    
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
@@ -13,6 +13,8 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       stop("'values' should be of length 1.")
    if (!(style %in% c("mosaic", "aligned")))
       stop("'style' setting not recognised.")
+   if (!(uncertainty.style %in% c("shading", "violin")))
+      stop("'uncertainty.style' setting not recognised.")
    if (!all(values %in% c("observed", "proportions", "expected")))
       stop("'values' setting not recognised.")
    if (any(is.na(x)))
@@ -32,8 +34,8 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    ncl      <- ncol(x)
    # if (nrw == 1) uncertainty <- FALSE
    # aligned  <- (style == "aligned") | (style == "mosaic" & nrw > 3)
-   if (uncertainty) style <- "aligned"
-   aligned <- (style == "aligned") | uncertainty
+   if (uncertainty & (nrw > 2)) style <- "aligned"
+   aligned <- (style == "aligned")
    sep_x    <- 0 # 0.02
    sep_y    <- if (aligned) 0.02 else 0
    colsums  <- colSums(x)
@@ -53,8 +55,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
                               "expected"    = c(expected))
    p_vec    <- if (style == "mosaic") c(p) else rep(pmx, ncl)
    colt     <- sum(p_vec[1:nrw])
-   ymn      <- rep((1:ncl) * (colt + nrw * sep_y), each = nrw) -
-                  cumsum(p_vec + sep_y)
+   ymn      <- rep((1:ncl) * (colt + nrw * sep_y), each = nrw) - cumsum(p_vec + sep_y)
    ymx      <- ymn + c(p)
    lblht    <- if (aligned) pmx else p[ , 1]
    ybrks    <- ymn[1:nrw] + lblht / 2
@@ -104,7 +105,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    
    if (uncertainty) {
       # Display the common pattern of proportions
-      clr_band <- "darkgrey"
+      clr <- "darkgrey"
       # plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = xmn, y = common,
       #                                                 xend = xmx, yend = common),
       #                                    col = clr_band)
@@ -131,36 +132,44 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       #                     pmx  = rep(d$pmx, each = ngrid - 1),
       #                     dens = rep(dnorm((ygrd[-length(ygrd)] + ygrd[-1]) / 2, nrw * ncl)))
       # For geom_tile
-      common    <- ymn + rep(rowSums(x) / sum(x), ncl)
+      common <- ymn + rep(rowSums(x) / sum(x), ncl)
       if (!aligned) {
-         common <- 1 - cumsum(rowSums(x) / sum(x))
+         common      <- 1 - cumsum(rowSums(x) / sum(x))
          common[nrw] <- sum(x[nrw, ]) / sum(x)
-         common <- rep(common, ncl)
+         common      <- rep(common, ncl)
       }
       # Is this formula correct?
-      se        <- sqrt(common / (colsums * nrw * ncl))
-      ngrid     <- 51
-      ygrid     <- seq(-2, 2, length = ngrid)
-      fn        <- function(x) common[x] + ygrid * se[x]
+      se    <- sqrt(common / (colsums * nrw * ncl))
       ind   <- if (aligned) 1:nrow(d)
                else if (nrw == 2) which(rnms %in% levels(rnms)[1])
                else which(rnms %in% levels(rnms)[c(1, nrw)])
+      ngrid <- 51
+      ygrid <- seq(-3, 3, length = ngrid)
+      dens  <- rep(dnorm(ygrid), (nrw - as.numeric(!aligned)) * ncl)
       xc    <- rep(xc[ind],   each = ngrid)
+      fn    <- function(x) common[x] + ygrid * se[x]
       y     <- c(sapply(ind, fn))
-
       wdth  <- rep(wdth[ind], each = ngrid)
       hght  <- rep((ygrid[2] - ygrid[1]) * se[ind], each = ngrid)
-      dens  <- rep(dnorm(ygrid), (nrw - as.numeric(!aligned)) * ncl)
-      dgrd  <- data.frame(x = xc, y, dens, wdth)
+      alpha <- dens
+      if (uncertainty.style == 'violin') {
+         # Add horizontal lines to show the common proportions
+         dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind])
+         plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y),
+                                          col = clr, linewidth = 1, alpha = 0.7,
+                                          data = dfrm)
+         # This line needs to be fixed
+         dens  <- 0.1 *dens / max(dens)
+         wdth  <- dens
+         alpha <- rep(0.7, length(y))
+      }
+      dgrd <- data.frame(x = xc, y, wdth, hght, alpha)
       plt  <- plt +
-         ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght, alpha = dens),
-                            fill = clr_band, data = dgrd) +
-         ggplot2::scale_alpha(range = c(0, 0.8))
-      # plt  <- plt + ggplot2::geom_rect(ggplot2::aes(xmin = xmin, xmax = xmax,
-      #                                               ymin = ymin, ymax = ymax, alpha = dens),
-      #                                  fill = clr, data = dgrd) +
-         # scale_fill_continuous(low="white", high="black")
-   }
+         ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght, alpha = alpha),
+                            fill = clr, data = dgrd)
+      if (uncertainty.style == 'shading')
+         plt <- plt + ggplot2::scale_alpha(range = c(0, 0.8))
+    }
    
    # scales <- FALSE
    # if (!scales)

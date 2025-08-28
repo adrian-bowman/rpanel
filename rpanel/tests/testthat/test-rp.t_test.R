@@ -1,10 +1,10 @@
 #     Tests for the rp.t_test function
 
 # setwd('rpanel')
-library(devtools)
-library(testthat)
-load_all()
-rp.datalink("~/iCloud/teaching/book/data", "set local directory")
+# library(devtools)
+# library(testthat)
+# load_all()
+# rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
 sleep_wide <- tidyr::pivot_wider(sleep, values_from = extra, names_from = group,
                                  names_prefix = 'drug_')
