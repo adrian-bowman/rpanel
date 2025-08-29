@@ -105,17 +105,6 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    
    if (uncertainty) {
       # Display the common pattern of proportions
-      clr <- "darkgrey"
-      # plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = xmn, y = common,
-      #                                                 xend = xmx, yend = common),
-      #                                    col = clr_band)
-      # plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y,
-      #                                                 xend = xend, yend = yend),
-      #                                    data = dc,
-      #                                    col = clr, fill = clr)
-      # plt <- plt + ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-      #                                              ymin = ymn, ymax = common),
-      #                                 col = clr, fill = clr, alpha = 0.7)
       xc        <- (d$xmn + d$xmx) / 2
       wdth      <- (d$xmx - d$xmn) + sep_x
       ind       <- (cnms == colnames(p)[1])
@@ -124,14 +113,6 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       ind       <- (cnms == colnames(p)[ncl])
       xc[ind]   <- xc[ind] - sep_x / 4
       wdth[ind] <- wdth[ind] - sep_x / 2
-      # For geom_rect
-      # dgrd  <- data.frame(xmin = rep(d$xmn - sep_x / 2, each = ngrid - 1),
-      #                     xmax = rep(d$xmx + sep_x / 2, each = ngrid - 1),
-      #                     ymin = ygrd[-length(ygrd)],
-      #                     ymax = ygrd[-1],
-      #                     pmx  = rep(d$pmx, each = ngrid - 1),
-      #                     dens = rep(dnorm((ygrd[-length(ygrd)] + ygrd[-1]) / 2, nrw * ncl)))
-      # For geom_tile
       common <- ymn + rep(rowSums(x) / sum(x), ncl)
       if (!aligned) {
          common      <- 1 - cumsum(rowSums(x) / sum(x))
@@ -143,32 +124,44 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       ind   <- if (aligned) 1:nrow(d)
                else if (nrw == 2) which(rnms %in% levels(rnms)[1])
                else which(rnms %in% levels(rnms)[c(1, nrw)])
-      ngrid <- 51
+      ngrid <- 101
       ygrid <- seq(-3, 3, length = ngrid)
       dens  <- rep(dnorm(ygrid), (nrw - as.numeric(!aligned)) * ncl)
-      xc    <- rep(xc[ind],   each = ngrid)
       fn    <- function(x) common[x] + ygrid * se[x]
       y     <- c(sapply(ind, fn))
       wdth  <- rep(wdth[ind], each = ngrid)
       hght  <- rep((ygrid[2] - ygrid[1]) * se[ind], each = ngrid)
-      alpha <- dens
+      alpha <- dens * 0.8 / max(dens)
       if (uncertainty.style == 'violin') {
          # Add horizontal lines to show the common proportions
+         alpha <- 0.7
          dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind])
          plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y),
-                                          col = clr, linewidth = 1, alpha = 0.7,
-                                          data = dfrm)
-         # This line needs to be fixed
-         dens  <- 0.1 *dens / max(dens)
-         wdth  <- dens
-         alpha <- rep(0.7, length(y))
+                                              col = rp.colours['reference'], linewidth = 1,
+                                              alpha = alpha, data = dfrm)
+         # This line needs to be fixed to scale the densities
+         dscl  <- 0.1 / max(dens)
+         wdth  <- dens * dscl
+         alpha <- rep(alpha, length(y))
       }
-      dgrd <- data.frame(x = xc, y, wdth, hght, alpha)
+      dgrd <- data.frame(x = rep(xc[ind],   each = ngrid), y, wdth, hght, alpha)
       plt  <- plt +
-         ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght, alpha = alpha),
-                            fill = clr, data = dgrd)
+         ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
+                            alpha = alpha,
+                            fill = 'white', # rp.colours['reference'],
+                            data = dgrd)
       if (uncertainty.style == 'shading')
-         plt <- plt + ggplot2::scale_alpha(range = c(0, 0.8))
+         plt <- plt + ggplot2::scale_alpha(range = c(0.3, 0.8))
+      xstart <- if (uncertainty.style == 'shading') rep(xmn, 2)
+                else rep(xc[ind] - dnorm(2) * dscl / 2, 2)
+      xstop  <- if (uncertainty.style == 'shading') rep(xmx, 2)
+                else rep(xc[ind] + dnorm(2) * dscl / 2, 2)
+      dfrm <- data.frame(x = xstart, xend = xstop,
+                         y = c(common[ind] + 2 * se[ind],
+                               common[ind] - 2 * se[ind]))
+      plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y, xend = xend),
+                                            col = rp.colours['notch'], data = dfrm)
+
     }
    
    # scales <- FALSE

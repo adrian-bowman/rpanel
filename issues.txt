@@ -2,7 +2,11 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.colours
+  - allow user-specified colours by creating a new variable?
+
 rp.contingency
+  - graphics and colours not yet ideal.
   - fix the span of the violins horizontally.
   - check that the uncertainty formula is correct
   - allow observed and expected values to be displayed together.
@@ -10,6 +14,8 @@ rp.contingency
   - allow a single line of uncertainty on the mosaicplot when there are only two rows.
   - allow contributions to chi-squared statistic to be displayed? See mosaicplot shading.
   - place column labels at the bottom?
+  - change the cell fill colours with an added scale_discrete_manual layer?
+  - allow a scale argument which places a proportion axis on the RHS.
 
 rp.t_test
   - two-sample case: zoom

@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "change"
+target    <- "rp.colours"
 diry      <- "."
 diry      <- "testing"
 diry      <- "R"

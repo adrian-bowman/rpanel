@@ -10,25 +10,13 @@ x <- matrix(c(19, 41, 32, 28), ncol = 2,
             dimnames = list(c("non-smoker", "smoker"),
                             c("cases", "controls")))
 
-# Allow a table of (non-integer) expected values to be plotted in mosaic style
-# for comparison?
-# xo <- matrix(c(34.5, 25.5, 34.5, 25.5), ncol = 2,
-#              dimnames = list(c("smoker", "non-smoker"),
-#                              c("cases", "controls")))
-# rp.contingency(xo)
-
 x <- t(matrix(c(87,73,64,15,25,16,109,84,92), ncol = 3))
 rownames(x) <- c("red", "yellow", "blue")
 colnames(x) <- c("round", "square", "oblong")
 
-# Look at the range of things mosaicplot can do - residuals etc.
-mosaicplot(t(x))
-mosaicplot(t(x), shade = TRUE, type = "p")
-mosaicplot(t(x), shade = TRUE, type = "d")
-mosaicplot(t(x), shade = TRUE, type = "F")
-
 rp.contingency(x)
 
+load_all()
 rp.contingency(x, uncertainty = TRUE)
 
 load_all()

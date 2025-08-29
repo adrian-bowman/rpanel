@@ -106,11 +106,8 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
       y <- NULL
    }
    
-   clr    <- c(estimate  = '#B3CDE3', estline = '#0093FF',
-               reference = '#FBB4AE', refline = '#FF7F00',
-               points    = 'grey50',  notch   = 'black',
-               density   = 'grey75')
-   bgdcol <- "grey85"
+   clr    <- rp.colours
+   bgdcol <- clr['bgdcol']
    seed   <- round(runif(1) * 100000)
 
    if (missing(candidate)) {
@@ -705,7 +702,7 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
       notch.x    <- q.fn(notch.p)
       notch.dfrm <- data.frame(x = notch.x, y = ypos + d.fn(notch.x) * scl)
       plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y, yend = ypos),
-                                               col = 'white', data = notch.dfrm)
+                                         col = rp.colours['notch'], data = notch.dfrm)
    }
    # Add the confidence interval
    if (lst$display['detail'] & lst$ruler.position == 'sample mean') {

@@ -52,6 +52,7 @@ export(
   rp.ci, 
   rp.coefficients,
   rp.colour.key,
+  rp.colours,
   rp.contingency,
   rp.datalink,
   rp.drop1,
@@ -75,8 +76,12 @@ export(
   rp.rmplot, 
   rp.tables,
   rp.t_test,
-  rp.wrangle
-# setSliderRatePolicy
+  rp.wrangle,
+
+# Constants
+  rp.colours
+
+  # setSliderRatePolicy
 )
 
 import(tcltk)

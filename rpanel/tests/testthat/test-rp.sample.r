@@ -24,12 +24,6 @@ test_that('Standard calls', {
                              display.sample = c('st.dev. scale' = TRUE))$sample)
 })
 
-load_all()
-rp.sample(n = 25, mu = 5, sigma = 0.4, panel = FALSE, nbins = 10, nsim = 5000,
-          display.sample = c(mean = TRUE), show.out.of.range = FALSE,
-          display.mean = c('sample mean' = TRUE, 'accumulate' = TRUE,
-                           'se scale' = TRUE, 't-statistic' = TRUE))
-
 test_that('Static mode', {
    expect_no_error(rp.sample(n = 25, mu = 5, sigma = 0.4, panel = FALSE, nbins = 10, nsim = 5000,
                              display.sample = c(mean = TRUE), show.out.of.range = FALSE,
