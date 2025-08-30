@@ -24,6 +24,8 @@ rp.t_test
       - the range needs to be fixed
       - the reference value disappears although it is still in the legend
   - two-sample case: the p-value details are rather cramped.
+  - two-sample case: the names of the two groups are reduced to x and y?
+    rp.t_test(caged, electrified, uncertainty = 'sample mean', panel = FALSE)
   - trap group size 1 as an error. Remove the nmin code?
   - rp.t_test(sleep_diff, panel = FALSE, ruler.position = 'reference')
     this gives feedback but also gives an error and prints the t-test results.

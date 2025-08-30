@@ -10,9 +10,9 @@ x <- matrix(c(19, 41, 32, 28), ncol = 2,
             dimnames = list(c("non-smoker", "smoker"),
                             c("cases", "controls")))
 
-x <- t(matrix(c(87,73,64,15,25,16,109,84,92), ncol = 3))
-rownames(x) <- c("red", "yellow", "blue")
-colnames(x) <- c("round", "square", "oblong")
+x <- t(matrix(c(887, 73, 64, 815, 25, 16, 909, 84, 92), ncol = 3,
+               dimnames = list(c("red", "yellow", "blue"),
+                                c("round", "square", "oblong"))))
 
 rp.contingency(x)
 

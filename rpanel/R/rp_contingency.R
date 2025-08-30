@@ -67,27 +67,18 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    #                  xend = c(xmx, xmx, xmn, xmn),
    #                  y    = c(ymn + common, ymn + common, ymn, ymn),
    #                  yend = c(ymn + common, ymn, ymn, ymn + common))
+   shading  <- (uncertainty.style == 'shading')
 
-   plt <- ggplot2::ggplot(d)
-   
-   # Create a light grey background for aligned display
-   # if (display == "aligned")
-   #    plt <- plt + ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-   #                                                 ymin = ymn, ymax = pmx),
-   #                                    fill = grey(0.9), col = grey(0.9))
-   # ggplot2::geom_rect(data = db,
-      #                    ggplot2::aes(xmin = xmn_mar, xmax = xmx_mar,
-      #                                 ymin = ymn_mar, ymax = ymx_mar),
-      #                    fill = grey(0.9), col = grey(0.9)) +
-
-   plt <- plt +
+   clr <- if (aligned) 'white' else 'grey25'
+   plt <- ggplot2::ggplot(d) +
       ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
                                       ymin = ymn, ymax = ymx,
-                                      fill = rnms), col = "black") +
+                                      fill = rnms), col = clr) +
       ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2,
                                       y = (ymn + ymx) / 2, label = lbl)) +
       ggplot2::theme_minimal() +
-      ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white", colour = "white"),
+      ggplot2::theme(panel.background = ggplot2::element_rect(fill   = 'white',
+                                                              colour = 'white'),
                      # panel.spacing = unit(1, "lines"),
                      panel.grid.major = ggplot2::element_blank(),
                      panel.grid.minor = ggplot2::element_blank(),
@@ -125,14 +116,15 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
                else if (nrw == 2) which(rnms %in% levels(rnms)[1])
                else which(rnms %in% levels(rnms)[c(1, nrw)])
       ngrid <- 101
-      ygrid <- seq(-3, 3, length = ngrid)
+      dlim  <- 3
+      ygrid <- seq(-dlim, dlim, length = ngrid)
       dens  <- rep(dnorm(ygrid), (nrw - as.numeric(!aligned)) * ncl)
       fn    <- function(x) common[x] + ygrid * se[x]
       y     <- c(sapply(ind, fn))
       wdth  <- rep(wdth[ind], each = ngrid)
       hght  <- rep((ygrid[2] - ygrid[1]) * se[ind], each = ngrid)
-      alpha <- dens * 0.8 / max(dens)
-      if (uncertainty.style == 'violin') {
+      alpha <- dens * 0.7 / max(dens)
+      if (!shading) {
          # Add horizontal lines to show the common proportions
          alpha <- 0.7
          dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind])
@@ -145,23 +137,31 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
          alpha <- rep(alpha, length(y))
       }
       dgrd <- data.frame(x = rep(xc[ind],   each = ngrid), y, wdth, hght, alpha)
+      clr  <- if (aligned) 'grey25' else 'white'
       plt  <- plt +
          ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
                             alpha = alpha,
-                            fill = 'white', # rp.colours['reference'],
+                            fill = clr,
+                            # fill = rp.colours['reference'],
+                            # fill = 'grey25',
+                            # fill = 'white',
+                            # fill = 'black',
                             data = dgrd)
-      if (uncertainty.style == 'shading')
-         plt <- plt + ggplot2::scale_alpha(range = c(0.3, 0.8))
-      xstart <- if (uncertainty.style == 'shading') rep(xmn, 2)
+      # if (shading)
+      #    plt <- plt + ggplot2::scale_alpha(range = c(0.5, 0.8))
+      # Add notches
+      xstart <- if (shading) rep(xmn[ind], 2)
                 else rep(xc[ind] - dnorm(2) * dscl / 2, 2)
-      xstop  <- if (uncertainty.style == 'shading') rep(xmx, 2)
+      xstop  <- if (shading) rep(xmx[ind], 2)
                 else rep(xc[ind] + dnorm(2) * dscl / 2, 2)
-      dfrm <- data.frame(x = xstart, xend = xstop,
-                         y = c(common[ind] + 2 * se[ind],
-                               common[ind] - 2 * se[ind]))
+      ltype  <- if (shading)  'dashed' else 'solid'
+      dfrm   <- data.frame(x = xstart, xend = xstop,
+                           y = c(common[ind] + 2 * se[ind],
+                                 common[ind] - 2 * se[ind]))
+      print(dfrm)
       plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y, xend = xend),
-                                            col = rp.colours['notch'], data = dfrm)
-
+                              col = clr, linetype = 'dashed',
+                              data = dfrm)
     }
    
    # scales <- FALSE
