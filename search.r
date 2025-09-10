@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "rp.colours"
+target    <- "ggforce"
 diry      <- "."
 diry      <- "testing"
 diry      <- "R"

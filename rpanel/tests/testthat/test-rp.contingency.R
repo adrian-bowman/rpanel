@@ -14,7 +14,21 @@ x <- t(matrix(c(887, 73, 64, 815, 25, 16, 909, 84, 92), ncol = 3,
                dimnames = list(c("red", "yellow", "blue"),
                                 c("round", "square", "oblong"))))
 
+load_all()
 rp.contingency(x)
+rp.contingency(x, style = 'aligned')
+rp.contingency(x, uncertainty = TRUE)
+rp.contingency(x, style = 'proportions', uncertainty = TRUE)
+rp.contingency(x, style = 'proportions', uncertainty = TRUE, proportion.scale = 'free')
+
+rp.contingency(x, style = 'proportions', uncertainty = TRUE, proportion.scale = 'free')
+
+rp.contingency(x, style = 'aligned', uncertainty = TRUE)
+
+rp.contingency(x, style = 'aligned', uncertainty = TRUE, proportion.scale = 'free')
+
+load_all()
+rp.contingency(x, uncertainty = TRUE)
 
 load_all()
 rp.contingency(x, uncertainty = TRUE)

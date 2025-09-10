@@ -3,8 +3,7 @@
 # Allow only the case of two rows in mosaic style?
 
 rp.contingency <- function(x, style = "mosaic", values = "observed",
-                           uncertainty = FALSE, uncertainty.style = 'violin',
-                           proportion.scale = 'fixed') {
+                           uncertainty = FALSE, uncertainty.style = 'shading') {
    
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
@@ -12,16 +11,12 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       stop("'style' should be of length 1.")
    if (length(values) != 1)
       stop("'values' should be of length 1.")
-   if (length(proportion.scale) != 1)
-      stop("'proportion.scale' should be of length 1.")
-   if (!(style %in% c('mosaic', 'aligned', 'proportions')))
+   if (!(style %in% c("mosaic", "aligned")))
       stop("'style' setting not recognised.")
-   if (!(uncertainty.style %in% c('shading', 'violin')))
+   if (!(uncertainty.style %in% c("shading", "violin")))
       stop("'uncertainty.style' setting not recognised.")
-   if (!all(values %in% c('observed', 'proportions', 'expected')))
+   if (!all(values %in% c("observed", "proportions", "expected")))
       stop("'values' setting not recognised.")
-   if (!all(proportion.scale %in% c('fixed', 'free')))
-      stop("'proportion.scale' setting not recognised.")
    if (any(is.na(x)))
       stop("missing data are not allowed.")
    if (!any(class(x) %in% c("matrix", "table")))
@@ -34,21 +29,19 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       stop("the input should consist only of integer counts.")
    if (nrow(x) < 2 | ncol(x) < 2)
       stop("there must be at least two rows and columns.")
-   if (proportion.scale == 'free') proportion.scale <- 'free_y'
    
    nrw      <- nrow(x)
    ncl      <- ncol(x)
    # if (nrw == 1) uncertainty <- FALSE
    # aligned  <- (style == "aligned") | (style == "mosaic" & nrw > 3)
-   aligned  <- (style == "aligned")
-   if (uncertainty & (nrw > 2)) aligned <- TRUE
+   if (uncertainty & (nrw > 2)) style <- "aligned"
+   aligned <- (style == "aligned")
    sep_x    <- 0 # 0.02
    sep_y    <- if (aligned) 0.02 else 0
    colsums  <- colSums(x)
    p        <- sweep(x, 2, colsums, "/")
    pmx      <- apply(p, 1, max)
-   x_wdth   <- if (style == 'proportions') rep(1, ncl) else colsums
-   x_wdth   <- x_wdth / sum(x_wdth)
+   x_wdth   <- colsums / sum(colsums)
    xmn_mar  <- c(0, cumsum(x_wdth + sep_x)[-ncl])
    xmx_mar  <- xmn_mar + x_wdth
    xbrks    <- (xmn_mar + xmx_mar) / 2
@@ -67,7 +60,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    lblht    <- if (aligned) pmx else p[ , 1]
    ybrks    <- ymn[1:nrw] + lblht / 2
    d        <- data.frame(p = c(p), x = c(x), xmn, xmx, ymn, ymx, rnms, cnms,
-                          pmx = ymn + rep(pmx, ncl), lbl = lbl, row.names = NULL)
+                          pmx = ymn + rep(pmx, ncl), row.names = NULL)
    # db <- data.frame(xmn_mar, xmx_mar,
    #                  ymn_mar = rep(0, ncl), ymx_mar = rep(max(ymx), ncl))
    # dc <- data.frame(x    = c(xmn, xmx, xmx, xmn),
@@ -76,52 +69,30 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    #                  yend = c(ymn + common, ymn, ymn, ymn + common))
    shading  <- (uncertainty.style == 'shading')
 
-   clr  <- if (aligned) 'white' else 'grey25'
-   plt <- ggplot2::ggplot(d)
-   if (aligned) {
-      if (style == 'proportions')
-         plt <- plt +
-            ggplot2::geom_segment(ggplot2::aes(x = xmn, xend = xmx, y = p),
-                                  col = rp.colours['estline'])
-      else
-         plt <- plt +
-            ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-                                            ymin = 0, ymax = p), fill = 'grey75', col = clr) +
-            ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2, y = p / 2, label = lbl))
-      plt <- plt +
-         ggplot2::ylab('proportion within column') +
-         ggplot2::facet_wrap(~rnms, ncol = 1, strip.position = 'left',
-                             scales = proportion.scale) +
-         ggplot2::scale_x_continuous(breaks = xbrks, labels = colnames(x),
-                                     expand = rep(0.01, 2), position = "top") +
-         ggplot2::scale_y_continuous(position = "right") +
-         ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
-                        panel.grid.minor.x = ggplot2::element_blank(),
-                        axis.title.x = ggplot2::element_blank(),
-                        panel.spacing.y = unit(1, "lines"))
-   }
-   else
-      plt <- plt +
-         ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-                                       ymin = ymn, ymax = ymx,
-                                       fill = rnms), col = clr) +
-         ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2,
+   clr <- if (aligned) 'white' else 'grey25'
+   plt <- ggplot2::ggplot(d) +
+      ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
+                                      ymin = ymn, ymax = ymx,
+                                      fill = rnms), col = clr) +
+      ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2,
                                       y = (ymn + ymx) / 2, label = lbl)) +
-         ggplot2::theme_minimal() +
-         ggplot2::theme(panel.background = ggplot2::element_rect(fill   = 'white',
-                                                                 colour = 'white'),
+      ggplot2::theme_minimal() +
+      ggplot2::theme(panel.background = ggplot2::element_rect(fill   = 'white',
+                                                              colour = 'white'),
+                     # panel.spacing = unit(1, "lines"),
                      panel.grid.major = ggplot2::element_blank(),
                      panel.grid.minor = ggplot2::element_blank(),
+                     # axis.text.x =  ggplot2::element_blank(),
                      axis.ticks.x = ggplot2::element_blank(),
                      axis.title.x = ggplot2::element_blank(),
-                     axis.title.y = ggplot2::element_blank(),
-                     axis.text.y  = ggplot2::element_text(angle = 90,
-                                                          vjust = 0.5, hjust = 1)) +
-         ggplot2::scale_x_continuous(breaks = xbrks, labels = colnames(x),
-                                     expand = rep(0, 2), position = "top") +
-         ggplot2::scale_y_continuous(breaks = ybrks, labels = rownames(x),
-                                     expand = rep(0, 2)) +
-         ggplot2::theme(legend.position = "none")
+                     axis.title.y = ggplot2::element_blank()) +
+                     # axis.text.y  = ggplot2::element_text(angle = 90,
+                                             # vjust = 0.5, hjust = 1)) +
+      ggplot2::scale_x_continuous(breaks = xbrks, labels = colnames(x),
+                                  expand = rep(0, 2), position = "top") +
+      ggplot2::scale_y_continuous(breaks = ybrks, labels = rownames(x),
+                                  expand = rep(0, 2)) +
+      ggplot2::theme(legend.position = "none")
    
    if (uncertainty) {
       # Display the common pattern of proportions
@@ -133,13 +104,14 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       ind       <- (cnms == colnames(p)[ncl])
       xc[ind]   <- xc[ind] - sep_x / 4
       wdth[ind] <- wdth[ind] - sep_x / 2
-      common    <- rep(rowSums(x) / sum(x), ncl)
+      common <- ymn + rep(rowSums(x) / sum(x), ncl)
       if (!aligned) {
          common      <- 1 - cumsum(rowSums(x) / sum(x))
          common[nrw] <- sum(x[nrw, ]) / sum(x)
          common      <- rep(common, ncl)
       }
-      se    <- sqrt(common / (rep(colsums, each = nrw) * nrw * ncl))
+      # Is this formula correct?
+      se    <- sqrt(common / (colsums * nrw * ncl))
       ind   <- if (aligned) 1:nrow(d)
                else if (nrw == 2) which(rnms %in% levels(rnms)[1])
                else which(rnms %in% levels(rnms)[c(1, nrw)])
@@ -155,22 +127,25 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       if (!shading) {
          # Add horizontal lines to show the common proportions
          alpha <- 0.7
-         dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind],
-                             rnms = d$rnms[ind])
-         # plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y),
-         #                                      col = rp.colours['refline'], linewidth = 1,
-         #                                      alpha = alpha, data = dfrm)
+         dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind])
+         plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y),
+                                              col = rp.colours['reference'], linewidth = 1,
+                                              alpha = alpha, data = dfrm)
          # This line needs to be fixed to scale the densities
          dscl  <- 0.1 / max(dens)
          wdth  <- dens * dscl
          alpha <- rep(alpha, length(y))
       }
-      dgrd <- data.frame(x = rep(xc[ind],   each = ngrid), y, wdth, hght, alpha,
-                         rnms = rep(d$rnms, each = ngrid))
+      dgrd <- data.frame(x = rep(xc[ind],   each = ngrid), y, wdth, hght, alpha)
+      clr  <- if (aligned) 'grey25' else 'white'
       plt  <- plt +
          ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
                             alpha = alpha,
-                            fill = rp.colours['reference'],
+                            fill = clr,
+                            # fill = rp.colours['reference'],
+                            # fill = 'grey25',
+                            # fill = 'white',
+                            # fill = 'black',
                             data = dgrd)
       # if (shading)
       #    plt <- plt + ggplot2::scale_alpha(range = c(0.5, 0.8))
@@ -180,12 +155,12 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       xstop  <- if (shading) rep(xmx[ind], 2)
                 else rep(xc[ind] + dnorm(2) * dscl / 2, 2)
       ltype  <- if (shading)  'dashed' else 'solid'
-      dfrm   <- data.frame(x = xstart, xend = xstop, rnms = rep(d$rnms, 2),
+      dfrm   <- data.frame(x = xstart, xend = xstop,
                            y = c(common[ind] + 2 * se[ind],
                                  common[ind] - 2 * se[ind]))
-      clr    <- if (aligned) 'white' else 'grey25'
+      print(dfrm)
       plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y, xend = xend),
-                              col = clr, linetype = ltype,
+                              col = clr, linetype = 'dashed',
                               data = dfrm)
     }
    

@@ -8,6 +8,7 @@ export(
 # rp.checkbox.change,
   rp.clearlines,
   rp.combo,
+  rp.contingency,
   rp.control,
   rp.control.dispose,
   rp.deleteline,
