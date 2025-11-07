@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "ggforce"
+target    <- "unit"
 diry      <- "."
 diry      <- "testing"
 diry      <- "R"

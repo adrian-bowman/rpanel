@@ -4,7 +4,7 @@
 # library(devtools)
 # library(testthat)
 # load_all()
-rp.datalink("~/iCloud/teaching/book/data", "set local directory")
+# rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
 #----------------------------------------------------------------
 cat('\nRegression with one covariate\n')
@@ -25,6 +25,10 @@ test_that('Model as input', {
 })
 test_that('Error if no covariate is specified', {
    expect_error(rp.lm(Giving ~ 1, data = CofE))
+})
+test_that('Error if no covariate is specified', {
+   expect_no_error(pnl <- rp.lm(Speed ~ Mass, data = rodent))
+   rp.control.dispose(pnl)
 })
 
 #----------------------------------------------------------------

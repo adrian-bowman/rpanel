@@ -6,6 +6,13 @@
 # load_all()
 # rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
+cat("This doesn't work properly ...")
+path  <- rp.datalink("trout")
+trout <- read.table(path, header = TRUE, stringsAsFactors = TRUE)
+# ggplot(trout, aes(group, ration)) + geom_boxplot()
+with(trout, rp.t_test(ration ~ group, mu = 0, display = c(distribution = TRUE, detail = TRUE),
+                      ruler.position = 'reference', panel = FALSE) + coord_flip())
+
 sleep_wide <- tidyr::pivot_wider(sleep, values_from = extra, names_from = group,
                                  names_prefix = 'drug_')
 sleep_diff <- with(sleep_wide, drug_2 - drug_1)
@@ -27,6 +34,8 @@ test_that('Single sample: standard calls', {
                              display = c(distribution = TRUE)))
    expect_no_error(rp.t_test(sleep_diff, panel = FALSE, mu = 0, ruler.position = 'reference',
                              display = c(distribution = TRUE)))
+   expect_no_error(rp.t_test(sleep_diff, panel = FALSE, mu = 0, ruler.position = 'reference',
+                             display = c(detail = TRUE)))
 })
 
 test_that('Single sample: systematic calls with arguments', {

@@ -8,14 +8,13 @@ rp.colours
 rp.contingency
   - graphics and colours not yet ideal.
   - fix the span of the violins horizontally.
-  - check that the uncertainty formula is correct
   - allow observed and expected values to be displayed together.
   - also observed and expected proportions.
   - allow a single line of uncertainty on the mosaicplot when there are only two rows.
   - allow contributions to chi-squared statistic to be displayed? See mosaicplot shading.
-  - place column labels at the bottom?
   - change the cell fill colours with an added scale_discrete_manual layer?
   - allow a scale argument which places a proportion axis on the RHS.
+  - update the help file
 
 rp.t_test
   - two-sample case: zoom
@@ -31,7 +30,9 @@ rp.t_test
     this gives feedback but also gives an error and prints the t-test results.
 
 rp.lm
-  - check one factor for missing data and for category without data
+  - check one factor case for missing data and for category without data
+  - vertical axis can change for different models - hold fix by identifying the max
+    and min of fitted and observed values. See trout data for an example.
   - long variable names produces a messy node diagram (cofe_2019)
   - allow panel = FALSE in simple regression. Mimic ggplot style.
     The function can't be moved to ggplot because of the mouse interactions in
@@ -45,6 +46,7 @@ rp.lm
     Allow continued access to the standard graphics versions of these functions?
   - add rp.coefficients and rp.drop1 to simple regression case?
   - does panel.plot = FALSE work? Not appropriate?
+  - can we add + thm as in rp.t_test? See ancova section of the book.
 
 rp.coefficients
   - adjust width of densities to have area 1?
@@ -58,12 +60,6 @@ rp.sample
   - improve the plots created by standard graphics, when ggplot = FALSE,
     to match those when ggplot = TRUE. Is it worth it?
     (ggplot = FALSE not currenty activated)
-
-rp.radiogroup
-  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
-
-rp.control.dispose
-  - deal with the case where the panel object does not exist.
 
 rp.ancova
   - tidy up the code and make the ggplot version the default, with the
@@ -97,15 +93,13 @@ rp.geosim
     are required for consistency. Some thinking to be done here.
   - the help file also needs to be updated.
 
-rp.contingency
-  - colour of reference bands?
-  - allow more than one of obs., exp. and props.
-  - create a help file
-  - integrate into the package rather than as a separate file.
-   
 rp.likelihood: 2 variable case
    - neaten up the edges of the 3d surface
    - is transparency ok on Windows?
+
+rp.plot3d
+  - allow a factor (or character variable) to be passed in the col or size argument.
+    This avoids the need to create a specific colour variable to pass in.
 
 rp.plot4d:
   - check for Windows OS and, if so, force a uniform window rather
@@ -158,7 +152,11 @@ Can windows be manually adjusted as in tkRplotR?
 
 Add a data argument to functions.
 
-Allow a factor (or character variable) to be passed to rp.plot3d in the col or size argument. This avoids the need to create a specific colour variable to pass in.
+rp.radiogroup
+  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
+
+rp.control.dispose
+  - deal with the case where the panel object does not exist.
 
 
 --------------------------------------------------------------

@@ -98,7 +98,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
          ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
                         panel.grid.minor.x = ggplot2::element_blank(),
                         axis.title.x = ggplot2::element_blank(),
-                        panel.spacing.y = unit(1, "lines"))
+                        panel.spacing.y = ggplot2::unit(1, "lines"))
    }
    else
       plt <- plt +
