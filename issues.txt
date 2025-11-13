@@ -30,6 +30,7 @@ rp.t_test
     this gives feedback but also gives an error and prints the t-test results.
 
 rp.lm
+  - change the colour (green) of the fitted line in the single covariate case.
   - check one factor case for missing data and for category without data
   - vertical axis can change for different models - hold fix by identifying the max
     and min of fitted and observed values. See trout data for an example.
