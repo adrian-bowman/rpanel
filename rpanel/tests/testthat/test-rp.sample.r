@@ -6,6 +6,7 @@
 # load_all()
 # rp.datalink("~/iCloud/teaching/book/data", "set local directory")
 
+rp.sample(25, 0.5, distribution = 'binomial')
 
 test_that('Standard calls', {
    expect_no_error(pnl <- rp.sample())

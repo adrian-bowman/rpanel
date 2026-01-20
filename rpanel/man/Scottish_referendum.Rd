@@ -11,8 +11,7 @@ These data record the results of the Scottish referendum on independence held in
 \references{
 Scottish Independence Referendum 2014: Analysis of results.
 Research Paper 14/50, 30 September 2014.
-https://commonslibrary.parliament.uk/research-briefings/rp14-50/
-   }
+https://commonslibrary.parliament.uk/research-briefings/rp14-50/}
 
 \keyword{iplot}
 \keyword{dynamic}

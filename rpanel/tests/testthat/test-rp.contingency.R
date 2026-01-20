@@ -17,6 +17,11 @@ x <- t(matrix(c(887, 73, 64, 815, 25, 16, 909, 84, 92), ncol = 3,
 load_all()
 rp.contingency(x)
 rp.contingency(x, style = 'aligned')
+
+# This doesn't work
+load_all()
+rp.contingency(x, uncertainty = TRUE, uncertainty.style = 'shading')
+
 rp.contingency(x, uncertainty = TRUE)
 rp.contingency(x, style = 'proportions', uncertainty = TRUE)
 rp.contingency(x, style = 'proportions', uncertainty = TRUE, proportion.scale = 'free')

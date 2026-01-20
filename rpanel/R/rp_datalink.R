@@ -31,8 +31,6 @@ rp.datalink <- function(name, action = "retrieve filename") {
         "http://www.stats.gla.ac.uk/~adrian/data/DO_Clyde.rda",
       "global_temperature",      ".txt",
         "https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
-      "hyde",                    ".txt",
-        "http://www.stats.gla.ac.uk/~adrian/data/hyde.txt",
       "income_distribution",     ".ods",
         "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1140100/Table_3.1a_2021.ods",
       "mammal_speed",            ".rda",

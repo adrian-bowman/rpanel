@@ -5,7 +5,7 @@
 \title{Cholesterol and age for samples of women in Iowa and Nebraska}
 
 \description{
-Snedecor \& Cochran (1967) report a subsample of measurements from an early study of health and nutrition by Swanson et al. (1955), with a particular focus on cholesterol. Women were recruited from both Iowa and Nebraska and there is interest in whether there is any evidence of a systematic difference between the groups. If there is no evidence of a difference, the groups might reasonably be pooled. An upward trend in cholesterol with age is expected.
+Snedecor & Cochran (1967) report a subsample of measurements from an early study of health and nutrition by Swanson et al. (1955), with a particular focus on cholesterol. Women were recruited from both Iowa and Nebraska and there is interest in whether there is any evidence of a systematic difference between the groups. If there is no evidence of a difference, the groups might reasonably be pooled. An upward trend in cholesterol with age is expected.
 
 The \code{cholesterol} dataframe consists of three columns of data:
 \itemize{

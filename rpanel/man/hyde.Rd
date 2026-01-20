@@ -14,11 +14,13 @@ The \code{hyde} dataframe consists of three columns of data:
 \item \code{Frequency}: the number of cases with this combination of ages in the Hyde genealogy.
 }
 
-Access to these data was kindly facilitated by the Manuscript Division of the US Library of Congress.
+Access to these data was kindly facilitated by the Manuscript Division of the US Library of Congress where the Alexander Graham Bell family papers are held.
 }
 
 \references{
    Bell, A.G. (1918). The duration of life and conditions associated with longevity: a study of the Hyde genealogy. Genealogical Record Office.
+   
+   Alexander Graham Bell family papers, 1834-1974. US Library of Congress. https://lccn.loc.gov/mm76051268.
    
    Waiworth, R. H. (1864). Genealogy of the Hyde Family.
    }

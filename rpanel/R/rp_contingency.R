@@ -169,7 +169,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
                          rnms = rep(d$rnms, each = ngrid))
       plt  <- plt +
          ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
-                            alpha = alpha,
+                            alpha = dgrd$alpha,
                             fill = rp.colours['reference'],
                             data = dgrd)
       # if (shading)

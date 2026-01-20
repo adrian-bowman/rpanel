@@ -2,10 +2,40 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.lm
+  - doesn't work on the doughnut data from Snedecor and Cochran
+  - allow no model (display.model = NULL)
+  - call to rp.coefficients tries to show everything
+  - change the colour (green) of the fitted line in the single covariate case.
+  - check one factor case for missing data and for category without data
+  - vertical axis can change for different models - hold fix by identifying the max
+    and min of fitted and observed values. See trout data for an example.
+  - long variable names produces a messy node diagram (cofe_2019)
+  - allow panel = FALSE in simple regression. Mimic ggplot style.
+    The function can't be moved to ggplot because of the mouse interactions in
+    moving data points.
+  - allow reference as well as ci style in rp.coefficients
+  - Do anova and ancova work for other contrast settings?
+  - How to handle subset and labels?
+  - remove missing data?
+  - match the jitter to the width of the density strip
+  - consider how to deprecate rp.regression, rp.ancova and rp.anova.
+    Allow continued access to the standard graphics versions of these functions?
+  - add rp.coefficients and rp.drop1 to simple regression case?
+  - does panel.plot = FALSE work? Not appropriate?
+  - can we add + thm as in rp.t_test? See ancova section of the book.
+
+
+rp.datalink
+  - regular systematic checks needed on availability of datasets
+  - remove references to www.stats.gla.ac.uk
+  - problem with Ben Nevis data: see https://www.ceda.ac.uk
+  
 rp.colours
   - allow user-specified colours by creating a new variable?
 
 rp.contingency
+  - set uncertainty to 'none', 'violin' etc. and remove uncertainty.style
   - graphics and colours not yet ideal.
   - fix the span of the violins horizontally.
   - allow observed and expected values to be displayed together.
@@ -28,26 +58,6 @@ rp.t_test
   - trap group size 1 as an error. Remove the nmin code?
   - rp.t_test(sleep_diff, panel = FALSE, ruler.position = 'reference')
     this gives feedback but also gives an error and prints the t-test results.
-
-rp.lm
-  - change the colour (green) of the fitted line in the single covariate case.
-  - check one factor case for missing data and for category without data
-  - vertical axis can change for different models - hold fix by identifying the max
-    and min of fitted and observed values. See trout data for an example.
-  - long variable names produces a messy node diagram (cofe_2019)
-  - allow panel = FALSE in simple regression. Mimic ggplot style.
-    The function can't be moved to ggplot because of the mouse interactions in
-    moving data points.
-  - allow reference as well as ci style in rp.coefficients
-  - Do anova and ancova work for other contrast settings?
-  - How to handle subset and labels?
-  - remove missing data?
-  - match the jitter to the width of the density strip
-  - consider how to deprecate rp.regression, rp.ancova and rp.anova.
-    Allow continued access to the standard graphics versions of these functions?
-  - add rp.coefficients and rp.drop1 to simple regression case?
-  - does panel.plot = FALSE work? Not appropriate?
-  - can we add + thm as in rp.t_test? See ancova section of the book.
 
 rp.coefficients
   - adjust width of densities to have area 1?

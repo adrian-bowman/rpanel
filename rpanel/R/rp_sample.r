@@ -289,7 +289,9 @@ rp.sample <- function(n, mu, sigma,
    }
    
    sample.changepars <- function(panel) {
-      panel$mns <- NULL
+      panel$mns    <- NULL
+      panel$r.mns  <- NULL
+      panel$tstats <- NULL
       panel$samplesize <- as.numeric(panel$samplesize)
       # rp.control.put(panel$panelname, panel)
       panel <- sample.new(panel)
