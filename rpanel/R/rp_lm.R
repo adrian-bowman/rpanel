@@ -1,7 +1,8 @@
 #     A general function for linear models
 
 rp.lm <- function(x, ylab, xlab, zlab,
-                  panel = TRUE, panel.plot = TRUE, plot.nodes = FALSE,
+                  panel = TRUE, panel.plot = TRUE,
+                  style = 'ggplot', plot.nodes = FALSE,
                   uncertainty.display = 'density', inference = 'coefficients',
                   ci = TRUE, display.model, comparison.model,
                   residuals.showing, linewidth = 1,
@@ -10,9 +11,13 @@ rp.lm <- function(x, ylab, xlab, zlab,
    static <- !panel
    missing.display.model    <- missing(display.model)
    missing.comparison.model <- missing(comparison.model)
+   if (missing.display.model & panel & missing.comparison.model) {
+      display.model <- NULL
+      missing.display.model <- FALSE
+   }
    if (missing.comparison.model) comparison.model <- NULL
    if (missing(residuals.showing)) residuals.showing <- FALSE
-   style  <- if (requireNamespace('ggplot2', quietly = TRUE)) 'ggplot' else 'standard'
+   if (!requireNamespace('ggplot2', quietly = TRUE)) style <- 'old'
    # Other possibilities
    # refcol        <- '#E495A5'
    # notchcol      <- 'black' # or make it the bgdcol
@@ -99,9 +104,25 @@ rp.lm <- function(x, ylab, xlab, zlab,
                               one.way = 'One-way analysis of variance',
                               two.way = 'Two-way analysis of variance')
 
-   # Simple linear regression: export to a dedicated function
+   # Export to older functions if required
    if (type == 'regression.one')
       return(rp.regression(x, y, panel = panel, xlab = xlab, ylab = ylab))
+   if (style != 'ggplot') {
+      if (type == 'ancova') {
+         if (factor.ind == 2) {
+            temp <- z
+            z    <- x
+            x    <- temp
+         }
+         return(rp.ancova.old(x = x, y = y, g = z, panel = panel, panel.plot = panel.plot,
+                       xlab = xlab, ylab = ylab, hscale = hscale, vscale = vscale))
+      }
+      if (type == 'regression.two') {
+         return(rp.regression2(y, x, z,
+                               ylab = ylab, x1lab = xlab, x2lab = zlab, model = "None",
+                               residuals.showing = FALSE))
+      }
+   }
    
    # Set up the model nodes
    bgdcol      <- "grey85"

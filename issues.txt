@@ -2,49 +2,27 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+Update the local version to incorporate the (RGL?) changes made by the CRAN team.
+
 rp.lm
   - doesn't work on the doughnut data from Snedecor and Cochran
-  - allow no model (display.model = NULL)
-  - call to rp.coefficients tries to show everything
-  - change the colour (green) of the fitted line in the single covariate case.
-  - check one factor case for missing data and for category without data
-  - vertical axis can change for different models - hold fix by identifying the max
-    and min of fitted and observed values. See trout data for an example.
+  - call to rp.coefficients tries to show everything - show just the higher order terms.
   - long variable names produces a messy node diagram (cofe_2019)
-  - allow panel = FALSE in simple regression. Mimic ggplot style.
-    The function can't be moved to ggplot because of the mouse interactions in
-    moving data points.
   - allow reference as well as ci style in rp.coefficients
-  - Do anova and ancova work for other contrast settings?
-  - How to handle subset and labels?
+  - do anova and ancova work for other contrast settings?
+  - anova - and more generally - don't use transparency; let the means be obscured
+    by the reference distributions to a greater or lesser degree?
+  - How to handle subset and labels? Just show higher order terms?
   - remove missing data?
   - match the jitter to the width of the density strip
-  - consider how to deprecate rp.regression, rp.ancova and rp.anova.
-    Allow continued access to the standard graphics versions of these functions?
-  - add rp.coefficients and rp.drop1 to simple regression case?
-  - does panel.plot = FALSE work? Not appropriate?
-  - can we add + thm as in rp.t_test? See ancova section of the book.
+  - consider how to set up rp.anova - like rp.ancova - to
+    allow continued access to the standard graphics versions of these functions.
 
-
-rp.datalink
-  - regular systematic checks needed on availability of datasets
-  - remove references to www.stats.gla.ac.uk
-  - problem with Ben Nevis data: see https://www.ceda.ac.uk
-  
-rp.colours
-  - allow user-specified colours by creating a new variable?
-
-rp.contingency
-  - set uncertainty to 'none', 'violin' etc. and remove uncertainty.style
-  - graphics and colours not yet ideal.
-  - fix the span of the violins horizontally.
-  - allow observed and expected values to be displayed together.
-  - also observed and expected proportions.
-  - allow a single line of uncertainty on the mosaicplot when there are only two rows.
-  - allow contributions to chi-squared statistic to be displayed? See mosaicplot shading.
-  - change the cell fill colours with an added scale_discrete_manual layer?
-  - allow a scale argument which places a proportion axis on the RHS.
-  - update the help file
+rp.coefficients
+  - allow different functions to control the display of coefficients?
+    range, iqr, user-supplied?
+  - coefficients: allow vertical or horizontal display?
+    (vertical gives the same orientation as the response)
 
 rp.t_test
   - two-sample case: zoom
@@ -65,37 +43,36 @@ rp.coefficients
   - lines idea to give visual cues? (change in mean versus change from min(x))
   - this needs some thinking
   
-rp.drop1
-
 rp.sample
+  - warnings about missing values: see tests.
   - improve the plots created by standard graphics, when ggplot = FALSE,
     to match those when ggplot = TRUE. Is it worth it?
     (ggplot = FALSE not currenty activated)
+  - remove nbins for the data in the binomial case.
 
-rp.ancova
-  - tidy up the code and make the ggplot version the default, with the
-    function from the previous package version as an option (deprecated).
-  - opening should show just models and dataplot; think about how to
-    show coefficient effects and F-tests
-  - set the axis limits to handle all possible models so that the effects
-    plot doesn't jump around?
-  - line 102: rp.tkrplot fplot - should this be row 0?
-  - the help file example doesn't run because of the with construction.
+rp.datalink
+  - regular systematic checks needed on availability of datasets
+  - remove references to www.stats.gla.ac.uk
+  - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
+    after and incident.
+  
+rp.colours
+  - allow user-specified colours by creating a new variable?
+  - allow cex.axis to be changed in rp.colour.key.
+    See the code in rp_colour_key.R in the rental sector paper analysis.
 
-rp.regression:
-  - 1 covariate: add effects plot.
-  - 2 covariates: add effects plot.
-  - model: allow vertical or horizontal display
-    (vertical gives the same orientation as the response)
-  - the specification of models is very inflexible in the one and two 
-    covariate cases.  Can this be improved? See CoFE slides in the teaching
-    material for an example.
-  - display to show the significance of complete factors or covariates?
-    Multiples of error variance?
-  - glms: change the axis label to refer to 'linear predictor'.
-  - mixed models?
-  - allow different funtions to control the calculation of effect size?
-    range, iqr, user-supplied?
+rp.contingency
+  - set uncertainty to 'none', 'violin' etc. and remove uncertainty.style
+  - graphics and colours not yet ideal.
+  - fix the span of the violins horizontally.
+  - allow observed and expected values to be displayed together.
+    rp.contingency(x, values = c('observed', 'expected'))
+    Also observed and expected proportions.
+  - allow a single line of uncertainty on the mosaicplot when there are only two rows.
+  - allow contributions to chi-squared statistic to be displayed? See mosaicplot shading.
+  - change the cell fill colours with an added scale_discrete_manual layer?
+  - allow a scale argument which places a proportion axis on the RHS.
+  - update the help file
 
 rp.geosim
   - the variogram plot no longer disappears when the checkboxes are not checked.
@@ -103,6 +80,7 @@ rp.geosim
   - this has been changed to allow panel = FALSE but more extensive changes
     are required for consistency. Some thinking to be done here.
   - the help file also needs to be updated.
+  - add range = 0.
 
 rp.likelihood: 2 variable case
    - neaten up the edges of the 3d surface
@@ -129,6 +107,10 @@ rp.plot4d:
   - change l in hcl rather than s in hsv, to avoid grey points when a
     normal window is used.
     
+rp.spacetime
+  - allow regular data to be exploited, with marginal space and time input
+    and a matrix of spacetime values.
+
 rp.tables
   - add a vertical line at the appropriate value when using
     a fixed probability (as with p-values)?
@@ -141,14 +123,12 @@ rp.tables
 rp.mururoa
   - errors in contour levels for linear and quadratic predictions
    
-rp.spacetime
-  - allow regular data to be exploited, with marginal space and time input
-    and a matrix of spacetime values.
-
 rp.power
   - notice the existence of power.t.test in R. This also allows the 
     identification of n from a given power. This could give more 
     flexibility to the rp.power function.
+  - rp.power(panel = FALSE, populations.showing = TRUE)
+    Error: $ operator is invalid for atomic vectors
 
 rp.logistic:
   - binomial example
@@ -168,6 +148,10 @@ rp.radiogroup
 
 rp.control.dispose
   - deal with the case where the panel object does not exist.
+  
+rp.slider
+  - problem with reported ~09.01.19.
+    See e-mail and test code from Cecil Barnett-Neefs.
 
 
 --------------------------------------------------------------

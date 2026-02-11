@@ -1,4 +1,4 @@
-#     A function to set standard colours to be used by other rpanel functions
+#     Set standard colours to be used by other rpanel functions
 
 rp.colours <- c(estimate  = '#B3CDE3', estline = '#0093FF',
                 reference = '#FBB4AE', refline = '#FF7F00',

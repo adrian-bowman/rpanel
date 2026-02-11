@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "unit"
+target    <- "doughnut"
 diry      <- "."
 diry      <- "testing"
 diry      <- "R"

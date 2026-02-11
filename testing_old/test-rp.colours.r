@@ -4,7 +4,9 @@
 # library(devtools)
 # library(testthat)
 # load_all()
-# rp.datalink("~/iCloud/teaching/book/data", "set local directory")
+
+snk <- function(x) capture.output(x, '~/Desktop/temp.txt')
+snk(rp.datalink("~/iCloud/teaching/book/data", "set local directory"))
 
 # test_that('Standard calls', {
 #    expect_no_error(rp.colours())

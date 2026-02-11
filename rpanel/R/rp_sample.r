@@ -133,16 +133,20 @@ rp.sample <- function(n, mu, sigma,
                      }
                   }
                }
-               if (display %in% c('density', 'violin'))
+               if (display %in% c('density', 'violin')) {
+                  # Ensure the xgrid does not stretch beyond the x-limits
+                  df.dens.curt <- subset(df.dens, (xgrid > m.cur - 3 * s.cur) &
+                                                  (xgrid < m.cur + 3 * s.cur))
                   plt <- plt +
                      ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0, ymin = orig,
                                                      ymax = pmin(orig + scl * dgrid, 2 * d.cur)),
-                                          data = df.dens, col = col.dens, fill = col.dens)
+                                          data = df.dens.curt, col = col.dens, fill = col.dens)
+               }
                if (display == 'violin')
                   plt <- plt +
                      ggplot2::geom_ribbon(ggplot2::aes(x = xgrid, y = 0, ymax = orig,
                                                        ymin = pmax(orig - scl * dgrid, 0)),
-                                          data = df.dens, col = col.dens, fill = col.dens)
+                                          data = df.dens.curt, col = col.dens, fill = col.dens)
             }
             # Show individual points
             if ((length(y) < nmin) | ((display != 'histogram') & (length(y) <= nmax))) {
@@ -318,7 +322,7 @@ rp.sample <- function(n, mu, sigma,
          if (length(panel$ydata) >= panel$nmin) {
             dens            <- density(panel$ydata, bw = bw.norm(panel$ydata))
             panel$d.dens    <- data.frame(xgrid = dens$x, dgrid = dens$y)
-            dens.y          <- approx(dens$x, dens$y,xout = panel$ydata)$y
+            dens.y          <- approx(dens$x, dens$y, xout = panel$ydata)$y
          }
          else {
             panel$d.dens    <- data.frame(xgrid = xgrid, dgrid = 0)

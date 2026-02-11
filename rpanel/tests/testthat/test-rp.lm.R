@@ -4,10 +4,12 @@
 # library(devtools)
 # library(testthat)
 # load_all()
-# rp.datalink("~/iCloud/teaching/book/data", "set local directory")
+
+snk <- function(x) capture.output(x, '~/Desktop/temp.txt')
+snk(rp.datalink("~/iCloud/teaching/book/data", "set local directory"))
 
 #----------------------------------------------------------------
-cat('\nRegression with one covariate\n')
+# cat('\n** Regression with one covariate **\n')
 #----------------------------------------------------------------
 
 test_that('Standard call', {
@@ -26,13 +28,17 @@ test_that('Model as input', {
 test_that('Error if no covariate is specified', {
    expect_error(rp.lm(Giving ~ 1, data = CofE))
 })
-test_that('Error if no covariate is specified', {
-   expect_no_error(pnl <- rp.lm(Speed ~ Mass, data = rodent))
+test_that('Rodent data: lm', {
+   expect_no_error(pnl <- rp.lm(log(Speed) ~ log(Mass), data = rodent))
+   rp.control.dispose(pnl)
+})
+test_that('Rodent data: regression', {
+   expect_no_error(pnl <- with(rodent, rp.regression(log(Mass), log(Speed))))
    rp.control.dispose(pnl)
 })
 
 #----------------------------------------------------------------
-cat('\nRegression with two covariates\n')
+# cat('\n** Regression with two covariates **\n')
 #----------------------------------------------------------------
 
 test_that('Standard call', {
@@ -67,27 +73,37 @@ test_that('Static mode: select the null model to be displayed', {
                          display.model = ~ 1, residuals.showing = TRUE,
                          panel = FALSE))
 })
-cofe_2019 <- rp.wrangle('cofe_2019')
+cofe_2019 <- suppressMessages(rp.wrangle('cofe_2019'))
 test_that('Static mode: transformations with a data argument', {
    expect_no_error(rp.lm(log(Giving_per_member) ~ Attachment + IMD, data = cofe_2019,
-                         panel = FALSE, residuals.showing = TRUE)
-   )
+                         panel = FALSE, residuals.showing = TRUE))
 })
-Gpm <- cofe_2019$Giving_per_member
-Att <- cofe_2019$Attachment
-Imd <- cofe_2019$IMD
+test_that('Old style', {
+   expect_no_error(pnl <- rp.lm(Giving ~ Employ + Attend, data = CofE,
+                                display.model = ~ 1, residuals.showing = TRUE,
+                                style = 'old'))
+   rp.control.dispose(pnl)
+})
+test_that('rp.regression', {
+   expect_no_error(pnl <- with(CofE, rp.regression(cbind(Employ, Attend), Giving)))
+   rp.control.dispose(pnl)
+})
+
 test_that('Static mode: transformations without a data argument', {
-   expect_no_error(rp.lm(log(Gpm) ~ Att + Imd, panel = FALSE,
-                         residuals.showing = TRUE))
-   expect_no_error(rp.lm(Gpm ~ log(Att) + Imd, panel = FALSE,
-                         residuals.showing = TRUE))
+   Gpm <- cofe_2019$Giving_per_member
+   Att <- cofe_2019$Attachment
+   Imd <- cofe_2019$IMD
+   expect_no_error(rp.lm(log(Giving_per_member) ~ Attachment + IMD, panel = FALSE,
+                         residuals.showing = TRUE, data = cofe_2019))
+   expect_no_error(rp.lm(Giving_per_member ~ log(Attachment) + IMD, panel = FALSE,
+                         residuals.showing = TRUE, data = cofe_2019))
 })
 
 # Remove rgl windows
 rgl::close3d(rgl::rgl.dev.list())
 
 #----------------------------------------------------------------
-      cat('\nOne covariate and one factor\n')
+# cat('\n** One covariate and one factor **\n')
 #----------------------------------------------------------------
 
 gullweight <- dplyr::mutate(gullweight, month = factor(month))
@@ -97,17 +113,33 @@ test_that('Standard call', {
    rp.control.dispose(pnl)
 })
 
-path <- rp.datalink('rds')
-rds  <- read.table(path, header = TRUE, stringsAsFactors = TRUE)
-test_that('Static mode: adjust linewidth', {
-   expect_no_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE, linewidth = 2))
+test_that('Default display', {
+   # When panel is TRUE, the default display.model is NULL.
+   # When panel is FALSE, the default display.model is the specified model.
+   expect_no_error(rp.lm(weight ~ hab + month, data = gullweight, panel = FALSE))
+   expect_no_error(rp.lm(weight ~ hab * month, data = gullweight, panel = FALSE))
 })
-test_that('Static mode: adjust font sizes', {
+
+test_that('Old style of display', {
+   expect_no_error(pnl <- rp.lm(weight ~ hab + month, data = gullweight, style = 'old'))
+   rp.control.dispose(pnl)
+   # Check that the factor is correctly identified
+   expect_no_error(pnl <- rp.lm(weight ~ month + hab, data = gullweight, style = 'old'))
+   rp.control.dispose(pnl)
+})
+
+rds  <- read.table('~/iCloud/teaching/book/data/rds.txt', header = TRUE,
+                   stringsAsFactors = TRUE)
+test_that('rds data', {
+   # Adjust linewidth', {
+   expect_no_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE, linewidth = 2))
+   # Increase font size
    expect_no_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE, plot = FALSE) +
                       ggplot2::theme(plot.title = ggplot2::element_text(size = 20)) + 
                       ggplot2::theme(axis.text  = ggplot2::element_text(size = 20)) +
                       ggplot2::theme(axis.title = ggplot2::element_text(size = 20)))
 })
+   
 test_that('Error: character variable', {
    rds$RDS <- as.character(rds$RDS)
    expect_error(rp.lm(lrate ~ RDS * GA, data = rds, panel = FALSE))
@@ -115,13 +147,16 @@ test_that('Error: character variable', {
 })
 
 #----------------------------------------------------------------
-      cat('\nOne factor\n')
+# cat('\n** One factor **\n')
 #----------------------------------------------------------------
 
+if ('poisons' %in% ls()) rm(poisons)
 poisons           <- dplyr::mutate(poisons, poison = factor(poison),
                                    treatment = factor(treatment))
-poisons$poison    <- factor(paste('p', poisons$poison,    sep = ''))
-poisons$treatment <- factor(paste('t', poisons$treatment, sep = ''))
+if (!any(grepl('p', as.character(poisons$poison)))) {
+   poisons$poison    <- factor(paste('p', poisons$poison,    sep = ''))
+   poisons$treatment <- factor(paste('t', poisons$treatment, sep = ''))
+}
 
 test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison, data = poisons))
@@ -162,20 +197,29 @@ test_that('Static mode: missing data present', {
                          comparison.model = ~ 1))
 })
 test_that('Static mode: some categories with no data', {
-   ind      <- which((poisons$poison ==  'p1'))
-   poisons1 <- poisons[-ind, ]
+   poisons1 <- poisons
+   ind      <- which((poisons1$poison ==  'p1'))
+   poisons1 <- poisons1[-ind, ]
+   expect_no_error(rp.lm(stime ~ poison, data = poisons1, panel = FALSE,
+                         comparison.model = ~ 1))
+})
+test_that('Static mode: some categories are all missing', {
+   poisons1 <- poisons
+   ind      <- which((poisons1$poison ==  'p1'))
+   poisons1$poison[ind] <- NA
    expect_no_error(rp.lm(stime ~ poison, data = poisons1, panel = FALSE,
                          comparison.model = ~ 1))
 })
 
 #----------------------------------------------------------------
-      cat('\nTwo factors\n')
+# cat('\n** Two factors **\n')
 #----------------------------------------------------------------
 
 test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons))
    rp.control.dispose(pnl)
 })
+
 test_that('Specify a comparison model', {
    expect_no_error(pnl <- rp.lm(stime ~ poison + treatment, data = poisons,
                                 comparison.model = ~ poison))
@@ -234,7 +278,7 @@ test_that('Static mode: some categories with no data', {
 })
 
 #----------------------------------------------------------------
-cat('\nPlot model nodes\n')
+# cat('\n** Plot model nodes **\n')
 #----------------------------------------------------------------
 
 path <- rp.datalink("DO_Clyde")
@@ -257,7 +301,7 @@ test_that('Static mode: plot nodes - comparison', {
 })
 
 #----------------------------------------------------------------
-cat('\nSave and amend the ggplot object\n')
+# cat('\n** Save and amend the ggplot object **\n')
 #----------------------------------------------------------------
 
 test_that('Static mode: plot if no assignment', {
@@ -278,3 +322,4 @@ test_that('Static mode: no plot if there is an assignment', {
 
 # Remove rgl windows
 rgl::close3d(rgl::rgl.dev.list())
+

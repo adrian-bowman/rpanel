@@ -21,6 +21,8 @@ R code to detach the current package and install a new one:
       unloadNamespace("rpanel")
       install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
 
+Run tests
+      test()
 
 Checking
 --------

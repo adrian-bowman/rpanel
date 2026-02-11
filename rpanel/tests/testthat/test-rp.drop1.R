@@ -5,8 +5,11 @@
 # library(testthat)
 # load_all()
 
+snk <- function(x) capture.output(x, '~/Desktop/temp.txt')
+snk(rp.datalink("~/iCloud/teaching/book/data", "set local directory"))
+
 #----------------------------------------------------------------
-cat('\nRegression with two covariates\n')
+# cat('\n** One covariate **\n')
 #----------------------------------------------------------------
 
 model <- lm(Giving ~ Employ, data = CofE)

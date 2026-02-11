@@ -62,7 +62,7 @@ If \code{x} is a formula or a fitted linear model, then a static plot of the reg
 }
 
 \value{
-When \code{x} is a formula or a fitted linear model, the plot is returned as a \code{ggplot} object.  This allows details of the plot to be modified through further \code{ggplot} functions.  In other cases, where an interactive plot is created, nothing is returned.
+When \code{x} is a formula or a fitted linear model, the plot is returned as a \code{ggplot} object.  This allows details of the plot to be modified through further \code{ggplot} functions.  In other cases, the panel object is returned.
   }
 
 \references{

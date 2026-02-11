@@ -163,6 +163,7 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
          rp.menu(pnl, data.display, list(list('Data display', 'none', 'density', 'histogram')),
                  action = rp.ttest.redraw)
       }
+      return(invisible(pnl))
    }
    else{
       pnl <- list(x = x, y = y, col = clr, horizontal = horizontal,
@@ -178,7 +179,6 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
       return(plt)
    }
    
-   invisible(pnl)
 }
 
 rp.twosample <- function(lst) {

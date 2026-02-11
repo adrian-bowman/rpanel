@@ -24,36 +24,36 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
    rp.regression2.model <- function(panel, x, y) {
 
 
-     if (panel$interactive) {
-     if (missing(x))
-       panel$model = 'None'
-     else {
-       d.nodes <- (panel$model.nodes$x - x)^2 + (panel$model.nodes$y - y)^2
-       comp1   <- panel$model.nodes$comparison1
-       comp2   <- panel$model.nodes$comparison2
-       if (!is.null(comp1)) {
-          x.comps <- (panel$model.nodes$x[comp1] + panel$model.nodes$x[comp2]) / 2
-          y.comps <- (panel$model.nodes$y[comp1] + panel$model.nodes$y[comp2]) / 2
-          d.comps <- (x.comps - x)^2 + (y.comps - y)^2
-          d.nodes <- c(d.nodes, d.comps)
-       }
-       hpt <- which.min(d.nodes)
-       n.nodes <- length(panel$model.nodes$x)
-       panel$comparison <- NULL
-       if (hpt > n.nodes) {
-          hpt <- hpt - n.nodes
-          panel$highlighted.node <- c(comp1[hpt], comp2[hpt])
-          panel$comparison <- hpt
-       }
-       else
-          panel$highlighted.node <- hpt
-       panel$model <- switch(panel$highlighted.node[1],
-                             'No effects', xlab, zlab, paste(xlab, 'and', zlab))
-       rp.control.put(panel$panelname, panel)
-       rp.tkrreplot(panel, modelnodes)
-       rp.tkrreplot(panel, fplot)
-     }
-     }
+     # if (panel$interactive) {
+     # if (missing(x))
+     #   panel$model = 'None'
+     # else {
+     #   d.nodes <- (panel$model.nodes$x - x)^2 + (panel$model.nodes$y - y)^2
+     #   comp1   <- panel$model.nodes$comparison1
+     #   comp2   <- panel$model.nodes$comparison2
+     #   if (!is.null(comp1)) {
+     #      x.comps <- (panel$model.nodes$x[comp1] + panel$model.nodes$x[comp2]) / 2
+     #      y.comps <- (panel$model.nodes$y[comp1] + panel$model.nodes$y[comp2]) / 2
+     #      d.comps <- (x.comps - x)^2 + (y.comps - y)^2
+     #      d.nodes <- c(d.nodes, d.comps)
+     #   }
+     #   hpt <- which.min(d.nodes)
+     #   n.nodes <- length(panel$model.nodes$x)
+     #   panel$comparison <- NULL
+     #   if (hpt > n.nodes) {
+     #      hpt <- hpt - n.nodes
+     #      panel$highlighted.node <- c(comp1[hpt], comp2[hpt])
+     #      panel$comparison <- hpt
+     #   }
+     #   else
+     #      panel$highlighted.node <- hpt
+     #   panel$model <- switch(panel$highlighted.node[1],
+     #                         'No effects', xlab, zlab, paste(xlab, 'and', zlab))
+     #   rp.control.put(panel$panelname, panel)
+     #   rp.tkrreplot(panel, modelnodes)
+     #   rp.tkrreplot(panel, fplot)
+     # }
+     # }
      with(panel, {
           if (current.model != "None") {
              rgl::pop3d()
@@ -157,21 +157,20 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
                 fov = 1, current.model = "None", smat = smat,
                 fv = fv, model = model, residuals.showing = residuals.showing,
                 highlighted.node = NA, model.nodes = model.nodes)
-            rp.tkrplot(spin.panel, modelnodes, rp.lmsmall.modelnodes,
-                       action = rp.regression2.model,
-                       vscale = 0.5, background = "white")
+            # rp.tkrplot(spin.panel, modelnodes, rp.lmsmall.modelnodes,
+            #            action = rp.regression2.model,
+            #            vscale = 0.5, background = "white")
             # rp.doublebutton(spin.panel, theta, -1, title = "Theta", action = rp.rotate)
             # rp.doublebutton(spin.panel, phi,   -1, title = "Phi",   action = rp.rotate)
-            # rp.radiogroup(spin.panel, model, 
-            #     c("None", "No effects", xlab, zlab, paste(xlab, "and", zlab)), 
-            #     title = "Model", action = rp.regression2.model)
+            rp.radiogroup(spin.panel, model,
+                c("None", "No effects", xlab, zlab, paste(xlab, "and", zlab)),
+                title = "Model", action = rp.regression2.model)
             rp.checkbox(spin.panel, residuals.showing, rp.regression2.residuals, "Show residuals")
-            rp.tkrplot(spin.panel, fplot, rp.lmsmall.effectsplot,
-                       vscale = vscale * 0.5, 
-                       background = bgdcol)
+            # rp.tkrplot(spin.panel, fplot, rp.lmsmall.effectsplot,
+            #            vscale = vscale * 0.5, 
+            #            background = bgdcol)
             rp.do(spin.panel, rp.regression2.model)
             # invisible(list(panel.name = panel.name))
-            invisible()
         }
         else {
             if (missing(model)) {
@@ -189,10 +188,11 @@ rp.regression2 <- function (y, x1, x2, ylab = NA, x1lab = NA, x2lab = NA, panel 
                 fov = 1, current.model = "None", model = model,
                 interactive = FALSE,
                 smat = smat, fv = fv, residuals.showing = residuals.showing))
-            invisible()
         }
     }
     else {
         stop("regression2 requires the rgl package.")
     }
+   
+   invisible(spin.panel)
 }

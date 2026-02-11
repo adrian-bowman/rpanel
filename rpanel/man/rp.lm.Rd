@@ -36,7 +36,9 @@ The display of the data is adapted to the form of the explanatory variables. Whe
 
 When the model defined by \code{x} contains two explanatory variables, where at least one is a factor, the models which can be fitted include the interaction term, even where this is not explicitly included in \code{x}.
 
-When there are exactly two covariates in \code{x}, the function will not consider an interaction between these, even when \code{x} includes this. 
+When there are exactly two covariates in \code{x}, the function will not consider an interaction between these, even when \code{x} includes this.
+
+If \code{display.model} is not specified, its default setting is NULL when \code{panel = TRUE} and the model specified by \code{x} when \code{panel = FALSE}.
 }
 
 \value{
