@@ -4,7 +4,7 @@
 'Argyll and Bute' 26324 37143 49 63516
 'Clackmannanshire' 16350 19036 24 35410
 'Dumfries and Galloway' 36614 70039 122 106775
-'Dundee City' 53620 39880 92 93592]
+'Dundee City' 53620 39880 92 93592
 'East Ayrshire' 39762 44442 58 84262
 'East Dunbartonshire' 30624 48314 73 79011
 'East Lothian' 27467 44283 48 71798

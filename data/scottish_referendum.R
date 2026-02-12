@@ -17,4 +17,6 @@ Scottish_referendum <- cbind(d1, d2[ , 'Electorate'],
                                           'Unemployed', 'Age_65_or_over')])
 names(Scottish_referendum)[6] <- 'Electorate'
 
+write.table(Scottish_referendum, file = 'rpanel/data/Scottish_referendum.txt')
+
 save(Scottish_referendum, file = 'rpanel/data/Scottish_referendum.rda')
