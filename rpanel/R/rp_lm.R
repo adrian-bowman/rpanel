@@ -68,6 +68,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
    numeric.ind  <- which(var.types == 'numeric')
    numeric.ind  <- numeric.ind[numeric.ind != response.ind]
    factor.ind   <- which(var.types == 'factor')
+   contr        <- attributes(model$qr$qr)$contrasts
    trms         <- attr(model$terms, 'term.labels')
    
    if (length(trms) == 0) stop('at least one predictor variable is required.')
@@ -198,8 +199,8 @@ rp.lm <- function(x, ylab, xlab, zlab,
    if ('data' %in% names(lm.args))
       data.dfrm <- lm.args$data[ , nms]
    else {
-      data.dfrm <- cbind(get(nms[1]), get(nms[2]))
-      if (length(nms) > 2 ) data.dfrm <- cbind(data.dfrm, get(nms[3]))
+      data.dfrm <- mf[ , nms[1:2]]
+      if (length(nms) > 2 ) data.dfrm <- cbind(data.dfrm, mf[ , nms[3]])
       data.dfrm <- as.data.frame(data.dfrm)
       names(data.dfrm) <- nms
    }
@@ -261,8 +262,13 @@ rp.lm <- function(x, ylab, xlab, zlab,
    models  <- list()
    nmodels <- switch(type, regression.two = 4, ancova = 5,
                            one.way = 2, two.way = 5)
-   for (i in 1:nmodels)
-      models[[i]] <- update(model, model.nodes$label[i], data = data.dfrm)
+   for (i in 1:nmodels) {
+      indx <- c(FALSE, TRUE, FALSE, TRUE, TRUE)[i]
+      indz <- c(FALSE, FALSE, TRUE, TRUE, TRUE)[i]
+      ind  <- names(contr) %in% c(xterm, zterm)[c(indx, indz)]
+      models[[i]] <- update(model, model.nodes$label[i], data = data.dfrm,
+                            contrasts = contr[ind])
+   }
    if (type %in% c('one.way', 'two.way')) {
       model.est <- list()
       comp.est  <- list()

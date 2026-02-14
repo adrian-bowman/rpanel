@@ -52,7 +52,9 @@ the number of coefficients in the model to allow a consistent axis when models w
 different terms are viewed successively. In this case \code{labels} must include
 the names of all the effects in the model.
          
-The covariate range information is be added to the labels by the function.
+The covariate range information is added to the labels by the function.
+
+When coefficient labels are lengthy, or there are many coefficients in the model, some overlapping may occur. Options to deal with this are shown in the examples below.
 }
 
 \value{
@@ -63,5 +65,7 @@ A \code{ggplot} object is returned. This allows further annotation of the displa
 \dontrun{
    model <- lm(Giving ~ Employ + Elect + Attend + 1, data = CofE)
    rp.coefficients(model)
+   
+   
    }
 }

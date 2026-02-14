@@ -5,7 +5,7 @@
 # library(testthat)
 # load_all()
 
-snk <- function(x) capture.output(x, '~/Desktop/temp.txt')
+snk <- function(x) capture.output(x, file = '~/Desktop/temp.txt')
 snk(rp.datalink("~/iCloud/teaching/book/data", "set local directory"))
 
 #----------------------------------------------------------------
@@ -89,14 +89,18 @@ test_that('rp.regression', {
    rp.control.dispose(pnl)
 })
 
+Gpm <- cofe_2019$Giving_per_member
+Att <- cofe_2019$Attachment
+Imd <- cofe_2019$IMD
 test_that('Static mode: transformations without a data argument', {
-   Gpm <- cofe_2019$Giving_per_member
-   Att <- cofe_2019$Attachment
-   Imd <- cofe_2019$IMD
    expect_no_error(rp.lm(log(Giving_per_member) ~ Attachment + IMD, panel = FALSE,
                          residuals.showing = TRUE, data = cofe_2019))
    expect_no_error(rp.lm(Giving_per_member ~ log(Attachment) + IMD, panel = FALSE,
                          residuals.showing = TRUE, data = cofe_2019))
+})
+test_that('Model nodes when the names are long:', {
+   expect_no_error(rp.lm(log(Giving_per_member) ~ Attachment + IMD, panel = FALSE,
+                         data = cofe_2019, plot.nodes = TRUE))
 })
 
 # Remove rgl windows
@@ -211,6 +215,15 @@ test_that('Static mode: some categories are all missing', {
                          comparison.model = ~ 1))
 })
 
+# Doughnut data from Snedecor & Cochran p.258
+absorption <- c(64, 72, 68, 77, 56, 95, 78, 91, 97, 82, 85, 77,
+                75, 93, 78, 71, 63, 76, 55, 66, 49, 64, 70, 68)
+fat <- factor(rep(c('A', 'B', 'C', 'D'), each = 6))
+test_that('Standard call:', {
+   expect_no_error(rp.lm(absorption ~ fat, panel = FALSE,
+                   comparison.model = ~ 1))
+})
+
 #----------------------------------------------------------------
 # cat('\n** Two factors **\n')
 #----------------------------------------------------------------
@@ -237,6 +250,9 @@ test_that('Error: display and comparison models are not adjacent', {
 })
 test_that('Static mode: standard call', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE))
+})
+test_that('Static mode: transformation', {
+   expect_no_error(rp.lm(1/stime ~ poison + treatment, data = poisons, panel = FALSE))
 })
 test_that('Static mode: shading display', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
@@ -278,7 +294,22 @@ test_that('Static mode: some categories with no data', {
 })
 
 #----------------------------------------------------------------
-# cat('\n** Plot model nodes **\n')
+# Different contrasts
+#----------------------------------------------------------------
+
+test_that('Different contrasts', {
+   model <- lm(stime ~ poison + treatment,
+               contrasts = list(poison = 'contr.poly', treatment = 'contr.poly'), data = poisons)
+   expect_no_error(rp.lm(model, data = poisons, panel = FALSE))
+   model <- lm(stime ~ poison,
+               contrasts = list(poison = 'contr.poly'), data = poisons)
+   expect_no_error(rp.lm(model, data = poisons, panel = FALSE))
+   model <- lm(weight ~ hab + month, data = gullweight, contrasts = list(month = 'contr.poly'))
+   expect_no_error(rp.lm(model, data = gullweight, panel = FALSE))
+})
+
+#----------------------------------------------------------------
+# Plot model nodes
 #----------------------------------------------------------------
 
 path <- rp.datalink("DO_Clyde")

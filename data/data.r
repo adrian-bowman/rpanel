@@ -7,6 +7,13 @@ load("../data/worldbank.rda")
 save(co2, gdp, life.expectancy, population,
      file = "../data/worldbank.rda")
 
+poisons$poison    <- factor(poisons$poison)
+poisons$treatment <- factor(poisons$treatment)
+save(poisons, file = 'data/poisons.rda')
+
+gullweight$month <- factor(gullweight$month)
+save(gullweight, file = 'data/gullweight.rda')
+
 SO2 <- read.csv("../../SO2.dat")
 names(SO2)
 SO2 <- subset(SO2, !is.na(logSO2))

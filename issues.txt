@@ -2,27 +2,23 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
-Update the local version to incorporate the (RGL?) changes made by the CRAN team.
-
 rp.lm
-  - doesn't work on the doughnut data from Snedecor and Cochran
-  - call to rp.coefficients tries to show everything - show just the higher order terms.
-  - long variable names produces a messy node diagram (cofe_2019)
-  - allow reference as well as ci style in rp.coefficients
-  - do anova and ancova work for other contrast settings?
   - anova - and more generally - don't use transparency; let the means be obscured
     by the reference distributions to a greater or lesser degree?
-  - How to handle subset and labels? Just show higher order terms?
-  - remove missing data?
+    What about the data points? Make them transparent?
+  - remove missing data? Handled by lm?
   - match the jitter to the width of the density strip
   - consider how to set up rp.anova - like rp.ancova - to
     allow continued access to the standard graphics versions of these functions.
 
 rp.coefficients
+  - how to handle subset and labels? See test code line 30.
   - allow different functions to control the display of coefficients?
     range, iqr, user-supplied?
-  - coefficients: allow vertical or horizontal display?
-    (vertical gives the same orientation as the response)
+  - adjust width of densities to have area 1?
+  - t-distributions for linear models
+  - lines idea to give visual cues? (change in mean versus change from min(x))
+    This needs some thinking.
 
 rp.t_test
   - two-sample case: zoom
@@ -37,12 +33,6 @@ rp.t_test
   - rp.t_test(sleep_diff, panel = FALSE, ruler.position = 'reference')
     this gives feedback but also gives an error and prints the t-test results.
 
-rp.coefficients
-  - adjust width of densities to have area 1?
-  - t-distributions for linear models
-  - lines idea to give visual cues? (change in mean versus change from min(x))
-  - this needs some thinking
-  
 rp.sample
   - warnings about missing values: see tests.
   - improve the plots created by standard graphics, when ggplot = FALSE,
@@ -54,7 +44,7 @@ rp.datalink
   - regular systematic checks needed on availability of datasets
   - remove references to www.stats.gla.ac.uk
   - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
-    after and incident.
+    after an incident.
   
 rp.colours
   - allow user-specified colours by creating a new variable?
