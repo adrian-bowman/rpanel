@@ -2,14 +2,9 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+Create testthat style of tests for all functions.
+
 rp.lm
-  - anova - and more generally - don't use transparency; let the means be obscured
-    by the reference distributions to a greater or lesser degree?
-    What about the data points? Make them transparent?
-  - remove missing data? Handled by lm?
-  - match the jitter to the width of the density strip
-  - consider how to set up rp.anova - like rp.ancova - to
-    allow continued access to the standard graphics versions of these functions.
 
 rp.coefficients
   - how to handle subset and labels? See test code line 30.
@@ -19,6 +14,9 @@ rp.coefficients
   - t-distributions for linear models
   - lines idea to give visual cues? (change in mean versus change from min(x))
     This needs some thinking.
+  - check that *all* covariate interactions are disallowed.
+  - how should effects be computed for covariate:factor iteractions?
+    Observed range for each factor level?
 
 rp.t_test
   - two-sample case: zoom

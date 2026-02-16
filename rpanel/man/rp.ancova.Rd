@@ -6,6 +6,8 @@
 
 \description{
 This function plots a response variable against a covariate, with different groups of data identified by colour and symbol.  It also creates a panel which controls the model which is fitted to the data and displayed on the plot.
+
+The function is superseded by \code{rp.lm} which is strongly recommended as it has a more flexible interface and improved plotting, using \code{ggplot}.
 }
 
 \usage{

@@ -110,8 +110,6 @@ rgl::close3d(rgl::rgl.dev.list())
 # cat('\n** One covariate and one factor **\n')
 #----------------------------------------------------------------
 
-gullweight <- dplyr::mutate(gullweight, month = factor(month))
-
 test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(weight ~ hab + month, data = gullweight))
    rp.control.dispose(pnl)
@@ -154,13 +152,8 @@ test_that('Error: character variable', {
 # cat('\n** One factor **\n')
 #----------------------------------------------------------------
 
-if ('poisons' %in% ls()) rm(poisons)
-poisons           <- dplyr::mutate(poisons, poison = factor(poison),
-                                   treatment = factor(treatment))
-if (!any(grepl('p', as.character(poisons$poison)))) {
-   poisons$poison    <- factor(paste('p', poisons$poison,    sep = ''))
-   poisons$treatment <- factor(paste('t', poisons$treatment, sep = ''))
-}
+load_all()
+rp.anova(stime ~ poison * treatment, data = poisons, panel = FALSE)
 
 test_that('Standard call', {
    expect_no_error(pnl <- rp.lm(stime ~ poison, data = poisons))
@@ -222,6 +215,11 @@ fat <- factor(rep(c('A', 'B', 'C', 'D'), each = 6))
 test_that('Standard call:', {
    expect_no_error(rp.lm(absorption ~ fat, panel = FALSE,
                    comparison.model = ~ 1))
+})
+
+test_that('Old version of rp.anova', {
+   expect_no_error(pnl <- rp.anova(1/poisons$stime, poisons$treatment))
+   rp.control.dispose(pnl)
 })
 
 #----------------------------------------------------------------
@@ -291,6 +289,12 @@ test_that('Static mode: some categories with no data', {
    poisons1 <- poisons[-ind, ]
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons1, panel = FALSE,
                          comparison.model = ~ poison * treatment))
+})
+
+load_all()
+test_that('Old version of rp.anova', {
+   expect_no_error(pnl <- rp.anova(1/poisons$stime, poisons$treatment, poisons$poison))
+   rp.control.dispose(pnl)
 })
 
 #----------------------------------------------------------------

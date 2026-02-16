@@ -5,10 +5,9 @@
 \title{Interactive analysis of variance}
 
 \description{
-  This function plots response data, separated by one or two factors.  
-  It also creates a panel which controls the models which can be fitted to the
-  data and displayed on the plot.  A comparison model can also be selected
-  and the results of an F-test are displayed graphically.
+This function plots response data, separated by one or two factors. It also creates a panel which controls the models which can be fitted to the data and displayed on the plot.  A comparison model can also be selected and the results of an F-test are displayed graphically.
+
+The function is superseded by \code{rp.lm} which is strongly recommended as it has a more flexible interface and improved plotting, using \code{ggplot}. The \code{rp.anova} function is likely to be dropped in a future release of the \code{rpanel} package.
 }
 
 \usage{
@@ -21,8 +20,7 @@ rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = NA, zlab = NA, titl
 \item{y}{a vector of response values.}
 \item{x}{a factor which splits \code{y} into different groups.}
 \item{z}{an optional second factor which splits \code{y} into a second set of groups.}
-\item{model, model0}{logical vectors of length 2 or 4, for one or two factors respectively, defining the initial and comparison models to be fitted. For one factor, the two values determine whether each of the terms for the intercept and \code{x} appear.  For two factors, the four values determine whether each of the four terms intercept, \code{x}, \code{z} and
-\code{x:z} appear.}
+\item{model, model0}{logical vectors of length 2 or 4, for one or two factors respectively, defining the initial and comparison models to be fitted. For one factor, the two values determine whether each of the terms for the intercept and \code{x} appear.  For two factors, the four values determine whether each of the four terms intercept, \code{x}, \code{z} and \code{x:z} appear.}
 \item{ylab}{a character name used for the response variable.}
 \item{xlab}{a character name used for the first factor.}
 \item{zlab}{a character variable used for the response axis label.}

@@ -273,7 +273,7 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
                grid = "models", row = 5, column = 2, background = bgdcol)
       }
       rp.do(panel, action.fn)
-      return(invisible(panel))
+      return(invisible())
    }
    else {
       panel <- list(x = x, y = y, z = z, type = type, xlab = xlab, ylab = ylab, ttl = title,

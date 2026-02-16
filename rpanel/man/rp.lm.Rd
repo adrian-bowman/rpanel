@@ -39,6 +39,8 @@ When the model defined by \code{x} contains two explanatory variables, where at 
 When there are exactly two covariates in \code{x}, the function will not consider an interaction between these, even when \code{x} includes this.
 
 If \code{display.model} is not specified, its default setting is NULL when \code{panel = TRUE} and the model specified by \code{x} when \code{panel = FALSE}.
+
+Missing data are removed before the linear models are fitted.
 }
 
 \value{

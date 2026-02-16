@@ -575,13 +575,8 @@ rp.lm.draw <- function(panel) {
          # plt <- plt + ggplot2::geom_violin(bw = 'nrd', col = NA, fill = 'grey80')
       }
       
-      # Plot the data points
-      set.seed(panel$seed)
-      plt  <- plt +
-         # ggplot2::geom_point(ggplot2::aes(y, jitter.x), col = panel$clr['points']) +
-         ggplot2::geom_jitter(ggplot2::aes(y, x), height = 0.1, width = 0,
-                              col = panel$clr['points']) +
-         ggplot2::xlim(panel$response.range[1], panel$response.range[2])
+      # Set the range
+      plt  <- plt + ggplot2::xlim(panel$response.range[1], panel$response.range[2])
       
       # Plot the fitted values of the display model
       if (!any(is.na(hlight))) {
@@ -629,11 +624,19 @@ rp.lm.draw <- function(panel) {
          }
          else {
             dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se, na.rm = TRUE))
-            plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, x, height = dgrid),
-                                            col = NA, fill = panel$clr['ref'], alpha = 0.7,
+            plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)), height = dgrid),
+                                            col = NA, fill = panel$clr['ref'],
+                                            # alpha = 0.7,
                                             show.legend = FALSE, data = dfrm1)
          }
       }
+      
+      # Plot the data points
+      set.seed(panel$seed)
+      plt  <- plt +
+         ggplot2::geom_point(ggplot2::aes(y, jitter.x), col = panel$clr['points'])
+         # ggplot2::geom_jitter(ggplot2::aes(y, x), height = 0.1, width = 0,
+         #                      col = panel$clr['points'])
 
       plt  <- plt + ggplot2::coord_flip()
       if (panel$type == "two.way")
