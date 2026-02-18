@@ -27,15 +27,17 @@ test_that('Standard calls', {
   expect_no_error(rp.coefficients(model) + ggplot2::xlab("Covariates"))
 })
 
+# subset and labels currently disabled
 # rp.coefficients(model, subset = 2:3)
 # model0 <- lm(Giving ~ Employ + Attend, data = CofE)
 # rp.coefficients(model0, subset = 2:3, labels = names(coefficients(model))[-1])
 
 test_that('Options to deal with overlapping labels:', {
-   expect_no_error(rp.coefficients(model) + theme(axis.text.x = element_text(angle = 90)))
+   expect_no_error(rp.coefficients(model) +
+                      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90)))
    expect_no_error(suppressMessages(rp.coefficients(model) +
-                                       scale_x_discrete(labels = scales::label_wrap(5))))
-   expect_no_error(rp.coefficients(model) + coord_flip())
+                                       ggplot2::scale_x_discrete(labels = scales::label_wrap(5))))
+   expect_no_error(rp.coefficients(model) + ggplot2::coord_flip())
 })
 
 test_that('Errors:', {
@@ -66,5 +68,24 @@ test_that('Different contrasts', {
                contrasts = list(poison = 'contr.poly'), data = poisons)
    expect_no_error(rp.coefficients(model))
    model <- lm(weight ~ hab + month, data = gullweight, contrasts = list(month = 'contr.poly'))
+   expect_no_error(rp.coefficients(model))
+})
+
+test_that('Colours', {
+   model <- lm(log(Speed) ~ log(Mass), data = rodent, x = TRUE)
+   expect_no_error(rp.coefficients(model, cols = c('estimate' = 'darkgreen')))
+   expect_warning(rp.coefficients(model, cols = c('estmate' = 'darkgreen')))
+})
+
+test_that('Single term', {
+   model <- lm(log(Speed) ~ log(Mass), data = rodent, x = TRUE)
+   summary(model)$coefficients
+   expect_no_error(rp.coefficients(model))
+})
+
+test_that('glms', {
+   ethylene <- dplyr::filter(flour_beetles, Toxin == 'Ethylene_dichloride')
+   model <- glm(cbind(Dead, Living) ~ Concentration, family = 'binomial', data = ethylene, x = TRUE)
+   summary(model)$coefficients
    expect_no_error(rp.coefficients(model))
 })

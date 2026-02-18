@@ -5,20 +5,15 @@
 Create testthat style of tests for all functions.
 
 rp.lm
+  - add cols argument, as in rp.coefficients, for plots and for rp.coefficients.
 
 rp.coefficients
-  - how to handle subset and labels? See test code line 30.
-  - allow different functions to control the display of coefficients?
-    range, iqr, user-supplied?
-  - adjust width of densities to have area 1?
-  - t-distributions for linear models
-  - lines idea to give visual cues? (change in mean versus change from min(x))
-    This needs some thinking.
-  - check that *all* covariate interactions are disallowed.
   - how should effects be computed for covariate:factor iteractions?
     Observed range for each factor level?
+    Check that *all* covariate interactions are disallowed.
 
 rp.t_test
+  - add cols argument, as in rp.coefficients
   - two-sample case: zoom
       - axis (zoom) accounts for two-sided test even when mu is not specified?
       - the ruler is much larger in the zoom case
@@ -44,8 +39,7 @@ rp.datalink
   - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
     after an incident.
   
-rp.colours
-  - allow user-specified colours by creating a new variable?
+rp.colour.key
   - allow cex.axis to be changed in rp.colour.key.
     See the code in rp_colour_key.R in the rental sector paper analysis.
 
@@ -77,11 +71,14 @@ rp.likelihood: 2 variable case
 rp.plot3d
   - allow a factor (or character variable) to be passed in the col or size argument.
     This avoids the need to create a specific colour variable to pass in.
+    Where would the legend be placed?
 
 rp.plot4d:
   - check for Windows OS and, if so, force a uniform window rather
     than a normal one, as Windows doesn't support transparency.
     ggplot solution?
+  - change l in hcl rather than s in hsv, to avoid grey points when a
+    normal window is used.
   - example involving group in help file.
   - allow a function to control the plotting for the data inside the probe.
     Can/should aspects such as ylim be controllable here?  Easier not to in 
@@ -92,47 +89,59 @@ rp.plot4d:
     location plot, with default function(x, y) points(x, y).
   - allow axes to be suppressed (for example for map plotting).
     In fact, more general plotting control parameters might be passed by ....
-  - change l in hcl rather than s in hsv, to avoid grey points when a
-    normal window is used.
     
-rp.spacetime
-  - allow regular data to be exploited, with marginal space and time input
-    and a matrix of spacetime values.
-
 rp.tables
   - add a vertical line at the appropriate value when using
     a fixed probability (as with p-values)?
   - the t density function doesn't go to zero for small df's.
-  - construct a general distribution plotter, with controls added and
-    curves added for each new selected distribution?
-    Use a menu to select distributions.
-  - create an alias rp.distributions?
 
 rp.mururoa
   - errors in contour levels for linear and quadratic predictions
    
 rp.power
-  - notice the existence of power.t.test in R. This also allows the 
-    identification of n from a given power. This could give more 
-    flexibility to the rp.power function.
   - rp.power(panel = FALSE, populations.showing = TRUE)
     Error: $ operator is invalid for atomic vectors
 
+rp.radiogroup
+  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
+
+--------------------------------------------------------------
+	               Ideas for changes to rpanel
+--------------------------------------------------------------
+
+Can windows be manually adjusted as in tkRplotR?
+
+Add a data argument to functions.
+
+rp.coefficients
+  - allow different functions to control the display of coefficients?
+    range, iqr, user-supplied?
+  - lines idea to give visual cues? (change in mean versus change from min(x))
+    This needs some thinking.
+
+rp.spacetime
+  - allow regular data to be exploited, with marginal space and time input
+    and a matrix of spacetime values.
+
+rp.tables
+  - construct a general distribution plotter, with controls added and
+    curves added for each new selected distribution?
+    Use a menu to select distributions.
+  - create an alias rp.distributions?
+
+rp.power
+  - notice the existence of power.t.test in R. This also allows the 
+    identification of n from a given power. This could give more 
+    flexibility to the rp.power function.
+
 rp.logistic:
-  - binomial example
+  - add a binomial example
   
 rp.curve:
   - create this to match rp.surface?  Animate (linear regression) until a 
     request to stop, with other forms of display including density shading.
     uncertainty-sm1.r in India files - strange behaviour in trying to call
     a function repeatedly.
-
-Can windows be manually adjusted as in tkRplotR?
-
-Add a data argument to functions.
-
-rp.radiogroup
-  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
 
 rp.control.dispose
   - deal with the case where the panel object does not exist.

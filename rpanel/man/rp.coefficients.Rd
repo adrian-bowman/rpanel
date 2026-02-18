@@ -2,23 +2,19 @@
 
 \alias{rp.coefficients}
 
-\title{Graphical display of the effects of the coefficients in a linear model}
+\title{Graphical display of the effects of the coefficients in a linear or generalised linear model}
 
 \description{
-  The effects of the coefficients of a linear model are displayed in graphical
-  form. The effects are made comparable by viewing the change in the mean
-  value of the response as each predictor variable changes across its full
-  range.
+The effects of the coefficients of a linear or generalised linear model are displayed in graphical form. The effects are made comparable by viewing the change in the mean value of the response as each predictor variable changes across its range.
 }
 
 \usage{
 rp.coefficients(model, style = 'density', ci = TRUE, point.estimate = !ci,
-                 se.scale = FALSE, marks = c(-2, 2), labels, subset, col,
-                 ngrid = 200)
+                 se.scale = FALSE, marks, cols, ngrid)
 }
 
 \arguments{
-\item{model}{a linear model produced by the \code{lm} function.}
+\item{model}{a linear or generalised linear model produced by the \code{lm} or \code{glm} functions.}
 \item{style}{a character variables controlling whether effect uncertainties are
          displayed as densities (\code{'density'}) or shaded density strips
          (\code{'shading.'})}
@@ -26,32 +22,20 @@ rp.coefficients(model, style = 'density', ci = TRUE, point.estimate = !ci,
          estimated effect in confidence interval style or around 0 in the format
          of a hypothesis test.}
 \item{point.estimate}{a logical value controlling whether the estimated effect
-         is displayed.}
+         is displayed as a point estimate.}
 \item{se.scale}{a logical value controlling whether a standard error scale is
          superimposed on the uncertainty display.}
 \item{marks}{a vector of reference values to be highlighted on the standard
-         error scale.}
-\item{labels}{a character vector which allows amended labels to be used for each
-         model coefficient. See Details.}
-\item{subset}{an integer vector which specifies which model coefficients are
-         included in the display. The vector refers to the coefficients as
-         listed in the output of the summary function on the fitted model (with
-         the intercept, if present, as number 1). If this is not specified then
-         all model coefficients are included. In all cases, the intercept is
-         excluded.}
-\item{col}{the colour of the uncertainty display.}
+         error scale. If this is not supplied then the upper and lower 2.5\%
+         quantiles of a t-distribution will be used in the case of linear models
+         and +/-1.96 for generalised linear models.}
+\item{cols}{a named character vector of colours to be used in the display. If this is
+not specified then the colours defined by the \pkg{rpanel} package function \code{rp.colours} are used. The colours can be altered by setting the \code{cols} argument to a vector of colours, assigned according to the names of the vector.}
 \item{ngrid}{the number of grid points used in the construction of the
-         uncertainty display.}
+         uncertainty display. If not supplied, this will be set to 200.}
 }
 
 \details{
-If the length of \code{labels} matches the number of coefficients in the model (after the 
-application of the \code{subset} argument described below) then these labels
-are used in the display. The length of the labels vector can also be larger than
-the number of coefficients in the model to allow a consistent axis when models with
-different terms are viewed successively. In this case \code{labels} must include
-the names of all the effects in the model.
-         
 The covariate range information is added to the labels by the function.
 
 When coefficient labels are lengthy, or there are many coefficients in the model, some overlapping may occur. Options to deal with this are shown in the examples below.
@@ -66,6 +50,12 @@ A \code{ggplot} object is returned. This allows further annotation of the displa
    model <- lm(Giving ~ Employ + Elect + Attend + 1, data = CofE)
    rp.coefficients(model)
    
+   # Change colours
    
+   # Options for labelling
+   plt <- rp.coefficients(model)
+   plt + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
+   plt + ggplot2::scale_x_discrete(labels = scales::label_wrap(5))
+   plt + ggplot2::coord_flip()
    }
 }

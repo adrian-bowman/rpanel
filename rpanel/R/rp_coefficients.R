@@ -1,15 +1,14 @@
-# Effect plots for linear regression models
+# Effect plots for linear or generalised linear regression models
 
 rp.coefficients <- function(model, style = 'density',
                             ci = TRUE, point.estimate = !ci,
-                            se.scale = FALSE, marks = c(-2, 2),
-                            labels, subset, col, ngrid = 200) {
+                            se.scale = FALSE, marks, cols, ngrid) {
 
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
 
-   if (!('lm' %in% class(model)))
-      stop("'model' is not a linear model object.")
+   if (!('lm' %in% class(model)) & !('glm' %in% class(model)))
+      stop("'model' is not a linear or generalised linear model object.")
    if (is.null(attr(model$terms, 'term.labels')))
       stop('the model has no non-intercept terms.')
 
@@ -18,10 +17,18 @@ rp.coefficients <- function(model, style = 'density',
       style <- 'density'
    }
    
-   # Missing arguments (col - colorspace::rainbow_hcl(3)[2])
-	col     <- if (missing(col))    '#9BD5FF' else col
-	sbst    <- if (missing(subset)) NA else subset
-	lbls    <- if (missing(labels)) NA else labels
+   # Missing arguments
+   if (missing(marks)) {
+      marks <- if ('lm' %in% class(lm)) qt(0.975, model$df.residual) else 1.96
+      marks <- c(-marks, marks)
+   }
+	if (missing(ngrid)) ngrid <- 200
+	clrs <- rp.colours(cols)
+	fill.col <- if (ci) clrs['estimate'] else clrs['reference']
+	
+   # subset and labels are currently disabled
+	# sbst    <- if (missing(subset)) NA else subset
+	# lbls    <- if (missing(labels)) NA else labels
 	
 	if (!("x" %in% names(model)))
 	   model$x <- model.matrix(model, model.frame(model))
@@ -48,10 +55,14 @@ rp.coefficients <- function(model, style = 'density',
 	# keep     <- unlist(keep.cfs)
 	term.labels <- attr(model$terms, 'term.labels')
 	ind         <- which(term.labels %in% keep)
-	keep        <- model$assign %in% ind
+	mm          <- model.matrix(formula(model), model$model)
+	massign     <- attr(mm, 'assign')
+	keep        <- massign %in% ind
 	tbl         <- tbl.full[keep, , drop = FALSE]
 
 	# Apply subset, removing the intercept if subset is not specified
+   # Currently disabled
+	sbst <- NA
 	if (any(is.na(sbst))) {
 	   sbst <- 1:nrow(tbl)
 	   intcpt <- match('(Intercept)', rownames(tbl))
@@ -62,6 +73,8 @@ rp.coefficients <- function(model, style = 'density',
 	tbl <- tbl[sbst, , drop = FALSE]
 
 	# Check the labels
+	# Currently disabled
+	lbls <- NA
 	if (any(is.na(lbls)))
 	   lbls  <- rownames(tbl)
 	# else
@@ -116,18 +129,27 @@ rp.coefficients <- function(model, style = 'density',
 	se     <- rep(se, each = ngrid)
 	ygrid  <- seq(yrange[1], yrange[2], length = ngrid + 2)[2:(ngrid + 1)] # Avoid end-points
 	ygrid  <- rep(ygrid, ncoef)
-	dgrid  <- dnorm(ygrid, mn, se) * se # multiply by se to give common maximum intensity
+	dgrid  <- dnorm(ygrid, mn, se) * 1.5 * min(se)
 	dfrm   <- data.frame(x = rep(lbls, each = ngrid), y = ygrid, d = dgrid)
-	
-	# Create the main plot features
+
+	# Create the plot
 	plt <- ggplot2::ggplot(dfrm, ggplot2::aes(x, y))
+	
+	# Add point estimates if required
+	if (point.estimate | !ci) {
+	   dfrm.mn <- data.frame(x = as.numeric(lbls[lbls.coef]), y = coeff)
+	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x - 0.3, xend = x  + 0.3),
+	                                      col = clrs['estline'], data = dfrm.mn)
+	}
+
+   # 	Add the uncertainty
 	if (style == 'density')
 	   plt <- plt +
-	      ggplot2::geom_tile(width = dgrid, fill = col, show.legend = FALSE)
+	      ggplot2::geom_tile(width = dgrid, fill = fill.col, show.legend = FALSE)
 	else if (style == 'shading')
 	   plt <- plt +
 	      ggplot2::geom_tile(ggplot2::aes(fill = d), width = 0.6, show.legend = FALSE) +
-	      ggplot2::scale_fill_gradient(low = "grey92", high = col)
+	      ggplot2::scale_fill_gradient(low = "grey92", high = fill.col)
 	
 	# Add se scale if requested
 	if (se.scale) {
@@ -143,7 +165,7 @@ rp.coefficients <- function(model, style = 'density',
 	   dfrm.axes    <- data.frame(x    = lbls,
 	                              y    = mn - min(se.marks) * se,
 	                              yend = mn + min(se.marks) * se)
-	   col.scale <- 'grey50'
+	   col.scale <- clrs['points']
 	   plt <- plt +
 	      ggplot2::geom_segment(ggplot2::aes(x = x, y = y, yend = yend),
 	                            col = col.scale, data = dfrm.axes) +
@@ -163,7 +185,7 @@ rp.coefficients <- function(model, style = 'density',
 	                              se = rep(  se, each = length(marks)),
 	                              sc = rep(marks, ncoef))
 	   dfrm.scale$y <- dfrm.scale$mn + dfrm.scale$sc * dfrm.scale$se
-	   dfrm.scale$d <- dnorm(dfrm.scale$y, dfrm.scale$mn, dfrm.scale$se) * dfrm.scale$se
+	   dfrm.scale$d <- dnorm(dfrm.scale$y, dfrm.scale$mn, dfrm.scale$se) * 1.5 * min(dfrm.scale$se)
 	   del <- if (style == 'density') 0.5 * dfrm.scale$d else 0.3
 	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = x - del,
 	                                                   xend = x + del,
@@ -178,15 +200,8 @@ rp.coefficients <- function(model, style = 'density',
 	          ggplot2::ylab(paste("Change in mean", yname)) +
 	          ggplot2::xlab("Coefficients") +
 	          ggplot2::ylim(yrange[1], yrange[2]) +
-	          ggplot2::theme(panel.grid = ggplot2::element_blank(),
-	                         legend.position = "none")
-	if (point.estimate | !ci) {
-	   dfrm.mn <- data.frame(x = as.numeric(lbls[lbls.coef]), y = coeff)
-	   plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x - 0.3, xend = x  + 0.3,
-	                                                   fill = NULL, col = "red"),
-	                                      data = dfrm.mn)
-	}
-	   
+	          ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.position = "none")
+	
 	print(plt)
 	invisible(plt)
 }

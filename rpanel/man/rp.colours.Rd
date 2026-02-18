@@ -1,54 +1,39 @@
 \name{rp.colours}
 
-\alias{rp.colours}
+\alias{rp.colors}
 
-\title{Interactive analysis of covariance}
+\title{Specify the colours to be used in some \pkg{rpanel} functions.}
 
 \description{
-  This function plots a response variable against a covariate, with
-  different groups of data identified by colour and symbol.  It also
-  creates a panel which controls the model which is fitted to the
-  data and displayed on the plot.
+Returns a named vector specifying the colours to be used in some \pkg{rpanel} functions. Where colours for particular purposes are not specified default values are returned.
 }
 
 \usage{
-  rp.ancova(x, y, group, panel = TRUE, panel.plot = TRUE, model = NA, model0 = NA,
-       xlab, ylab, glab, hscale = NA, vscale = hscale, style = "new")
+rp.colours(cols)
 }
 
 \arguments{
-\item{x}{a vector of covariate values.}
-\item{y}{a vector of response values.}
-\item{group}{a vector of group indicators.  If this is not already a factor it will be converted into one.}
-\item{panel}{a logical variable which determines whether a panel is created to allow interactive control of the fitted models.}
-\item{panel.plot}{a logical parameter which determines whether the plot is placed inside the panel (TRUE) or the standard graphics window (FALSE)}
-\item{model, model0}{logical vectors of length 4 defining the initial and comparison models to be fitted.  The four values determine whether each of the four terms intercept, \code{x}, \code{z} and \code{x:z} appear.  This is appropriate only for \code{style = "new"}.}
-\item{xlab}{a character variable used for the covariate axis label.}
-\item{ylab}{a character variable used for the response axis label.}
-\item{glab}{a character variable used for the group variable label.}
-\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
-\item{style}{a character variable used to determine whether the style of controls in earlier version of the \code{rpanel} package is to be used.  The value \code{"new"} activates the new style and any other value activates the old one.}
+\item{cols}{a named vector of colours.}
+
 }
 
 \details{
-  Static plots, for printing or other purposes can be created by setting
-  the panel argument to FALSE and specifying the model of interest.
+Some \pkg{rpanel} functions have a \code{cols} argument which can be used to specify the colours used when creating some aspects of the resulting visual display. The \code{rp.colours} function is used internally to set these colours, altered where appropriate by the elements of \code{cols}. Users need not employ this function, except to view the default colours.
 }
 
 \value{
-  Nothing is returned.
+A named vector of the colours.
 }
-
-\references{
-   rpanel: Simple interactive controls for R functions using the tcltk package.
-      Journal of Statistical Software, 17, issue 9.
-   }
 
 \examples{
 \dontrun{
-   with(gullweight, {
-     rp.ancova(hab, weight, month)
-   })
+# View the defauklt colours.
+rp.colours()
+
+# Alter particular colours
+model <- lm(Giving ~ Attend + Employ, data = CofE)
+rp.coefficients(model)
+rp.coefficients(model, cols = c('estimate' = 'darkgreen'))
 }}
 
 \keyword{iplot}

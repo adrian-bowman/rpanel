@@ -54,6 +54,7 @@ export(
   rp.coefficients,
   rp.colour.key,
   rp.colours,
+  rp.colors,
   rp.contingency,
   rp.datalink,
   rp.drop1,
