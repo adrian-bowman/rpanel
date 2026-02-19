@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "size"
+target    <- "'node'"
 diry      <- "."
 diry      <- "testing"
 diry      <- "R"

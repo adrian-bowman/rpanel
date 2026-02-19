@@ -1,5 +1,6 @@
 \name{rp.colours}
 
+\alias{rp.colours}
 \alias{rp.colors}
 
 \title{Specify the colours to be used in some \pkg{rpanel} functions.}

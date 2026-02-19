@@ -3,8 +3,7 @@
 # Allow only the case of two rows in mosaic style?
 
 rp.contingency <- function(x, style = "mosaic", values = "observed",
-                           uncertainty = FALSE, uncertainty.style = 'violin',
-                           proportion.scale = 'fixed') {
+                           uncertainty = 'none', proportion.scale = 'fixed', cols) {
    
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
@@ -14,10 +13,12 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       stop("'values' should be of length 1.")
    if (length(proportion.scale) != 1)
       stop("'proportion.scale' should be of length 1.")
-   if (!(style %in% c('mosaic', 'aligned', 'proportions')))
+   if (!(style %in% c('mosaic', 'aligned')))
       stop("'style' setting not recognised.")
-   if (!(uncertainty.style %in% c('shading', 'violin')))
-      stop("'uncertainty.style' setting not recognised.")
+   # 'proportions' style disabled
+   if (!(uncertainty %in% c('none', 'shading')))
+      stop("'uncertainty' setting not recognised.")
+   # 'violin' style disabled
    if (!all(values %in% c('observed', 'proportions', 'expected')))
       stop("'values' setting not recognised.")
    if (!all(proportion.scale %in% c('fixed', 'free')))
@@ -35,13 +36,14 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    if (nrow(x) < 2 | ncol(x) < 2)
       stop("there must be at least two rows and columns.")
    if (proportion.scale == 'free') proportion.scale <- 'free_y'
+   clrs <- if (missing(cols)) rp.colours() else rp.colours(cols)
    
    nrw      <- nrow(x)
    ncl      <- ncol(x)
    # if (nrw == 1) uncertainty <- FALSE
    # aligned  <- (style == "aligned") | (style == "mosaic" & nrw > 3)
    aligned  <- (style == "aligned")
-   if (uncertainty & (nrw > 2)) aligned <- TRUE
+   if ((uncertainty != 'none') & (nrw > 2)) aligned <- TRUE
    sep_x    <- 0 # 0.02
    sep_y    <- if (aligned) 0.02 else 0
    colsums  <- colSums(x)
@@ -74,7 +76,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    #                  xend = c(xmx, xmx, xmn, xmn),
    #                  y    = c(ymn + common, ymn + common, ymn, ymn),
    #                  yend = c(ymn + common, ymn, ymn, ymn + common))
-   shading  <- (uncertainty.style == 'shading')
+   shading  <- (uncertainty == 'shading')
 
    clr  <- if (aligned) 'white' else 'grey25'
    plt <- ggplot2::ggplot(d)
@@ -82,7 +84,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       if (style == 'proportions')
          plt <- plt +
             ggplot2::geom_segment(ggplot2::aes(x = xmn, xend = xmx, y = p),
-                                  col = rp.colours['estline'])
+                                  col = clrs['estline'])
       else
          plt <- plt +
             ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
@@ -123,7 +125,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
                                      expand = rep(0, 2)) +
          ggplot2::theme(legend.position = "none")
    
-   if (uncertainty) {
+   if (uncertainty != 'none') {
       # Display the common pattern of proportions
       xc        <- (d$xmn + d$xmx) / 2
       wdth      <- (d$xmx - d$xmn) + sep_x
@@ -158,7 +160,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
          dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind],
                              rnms = d$rnms[ind])
          # plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y),
-         #                                      col = rp.colours['refline'], linewidth = 1,
+         #                                      col = clrs['refline'], linewidth = 1,
          #                                      alpha = alpha, data = dfrm)
          # This line needs to be fixed to scale the densities
          dscl  <- 0.1 / max(dens)
@@ -170,7 +172,7 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
       plt  <- plt +
          ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
                             alpha = dgrd$alpha,
-                            fill = rp.colours['reference'],
+                            fill = clrs['reference'],
                             data = dgrd)
       # if (shading)
       #    plt <- plt + ggplot2::scale_alpha(range = c(0.5, 0.8))

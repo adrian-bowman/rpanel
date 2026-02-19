@@ -5,23 +5,23 @@
 \title{Interactive demonstration of sampling variation}
 
 \description{
-Graphical exploration of variation in samples and sample means. The primary use of the function is in interactive mode, using a variety of controls for the display.
+Graphical exploration of variation in samples and sample means. The primary use of the function is in interactive mode, using a variety of controls for the display. Normal or binomial distributions can be used.
 }
 
 \usage{
-rp.sample(n = 25, mu = 0, sigma = 1, shape = 0,
-          ggplot = TRUE, panel = TRUE, nbins = 20, nbins.mean = 20,
-          display, display.sample, display.mean,
-          nsim = 50, show.out.of.range = TRUE,
+rp.sample(n, mu, sigma, distribution  = 'normal', shape = 0,
+          panel = TRUE, nbins = 20, nbins.mean = 20,
+          display, display.sample, display.mean, nsim = 50,
+          show.out.of.range = TRUE,
           hscale = NA, vscale = hscale, pause = 0.01)
 }
 
 \arguments{
-\item{n}{the size of the sample.}
-\item{mu}{the mean of the normal distribution from which samples are taken.}
-\item{sigma}{the standard deviation of the normal distribution.}
+\item{n}{the size of the sample. If this is missing, it is set to 25.}
+\item{mu}{the mean of the distribution from which samples are taken. If this is missing it is set to 5 for a normal distribution and 0.5 for a binomial distribution.}
+\item{sigma}{the standard deviation of the normal distribution. If this is missing it is set to 0.4.}
+\item{distribution}{a character value which determines whether a \code{'normal'} or \code{'binomial'} distribution is used.}
 \item{shape}{the shape parameter of the skew-normal distribution. When this is set to the default value of 0, samples are generated from a normal distribution. Setting non-zero values for this parameter gives some skewness to the distribution from which the data are sampled.}
-\item{ggplot}{a logical value which determines whether the \code{ggplot2} package is used to create the graphical displays. When this argument is set to \code{FALSE}, or when the \code{ggplot2} package is not available, standard graphics are used with simpler display options, along the lines of the function provided in version 1.1-5 of the package.}
 \item{panel}{a logical value which determines whether the function runs in interactive mode. See Details.}
 \item{nbins}{an integer value which sets the number of bins used in the data histograms.}
 \item{nbins.mean}{an integer value which sets the number of bins used in the histogram of the sample means.}
@@ -46,6 +46,9 @@ When \code{display} is set to \code{'density'} or \code{'violin'}, individual po
 The \code{display.sample} and \code{display.mean} arguments control the details of what is displayed initially and, more usefully, when the function operates in non-interactive mode. Each argument is a logical vector with named values. \code{display.sample} has the default setting \code{c(data = TRUE, population = FALSE, mean = FALSE, 'st.dev. scale' = FALSE)} while the default for \code{display.mean} is \code{c('sample mean' = FALSE, 'accumulate' = FALSE, 'se scale' = FALSE, 'distribution' = FALSE)}. Any elements of these arguments which are not explicitly identified are set to the default values. In the case of binomial data the \code{'st.dev. scale'} setting is disabled as it is not a helpful addition to the plot.
 
 The principal use of the function is in interactive mode, when \code{panel} is set to \code{TRUE}. If \code{panel} is set to \code{FALSE} then interactive mode is switched off. In this case, if the \code{ggplot2} package is available and the \code{ggplot} argument is set to \code{TRUE}, the function returns plots of a sample of data and of accumulated means as components \code{plotdata} and \code{plotmean} of the returned object. The number of accumulated means is set by the \code{nsim} argument.
+
+If the \code{ggplot2} package is not available, standard graphics are used with simpler display options, along the lines of the function provided in version 1.1-5 of the package.
+
 }
 
 \value{

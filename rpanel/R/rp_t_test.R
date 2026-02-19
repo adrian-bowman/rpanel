@@ -4,7 +4,7 @@
 rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'density',
                       display = c(distribution = FALSE, detail = FALSE),
                       ruler.position = 'none', candidate,
-                      clr, xlab, ylab, vlab, hscale = 1, vscale = hscale, ...) {
+                      cols, xlab, ylab, vlab, hscale = 1, vscale = hscale, ...) {
    
    if (!requireNamespace('ggplot2'))
       stop('the ggplot2 package is not available.')
@@ -106,8 +106,8 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
       y <- NULL
    }
    
-   clr    <- rp.colours
-   bgdcol <- clr['bgdcol']
+   clrs    <- if (missing(cols)) rp.colours() else rp.colours(cols)
+   bgdcol <- clrs['bgdcol']
    seed   <- round(runif(1) * 100000)
 
    if (missing(candidate)) {
@@ -116,7 +116,7 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
    }
    
    if (panel) {
-      pnl <- rp.control(x = x, y = y, col = clr, height = height, method = method,
+      pnl <- rp.control(x = x, y = y, col = clrs, height = height, method = method,
                   data.display = data.display, seed = seed, mu = mu,
                   candidate = candidate, display = display,
                   conf = attr(ttest$conf.int, 'conf.level'), static = !panel,
@@ -166,7 +166,7 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
       return(invisible(pnl))
    }
    else{
-      pnl <- list(x = x, y = y, col = clr, horizontal = horizontal,
+      pnl <- list(x = x, y = y, col = clrs, horizontal = horizontal,
                   method = method, height = height, mu = mu,
                   data.display = data.display, seed = seed,
                   candidate = candidate, display = display,
@@ -198,7 +198,7 @@ rp.twosample <- function(lst) {
    reference      <- lst$reference
    se.scale       <- (ruler.position != 'none')
    height         <- lst$height
-   clr            <- lst$col
+   clrs           <- lst$col
    lst            <- rp.sescale_ticks(lst)
    
    set.seed(lst$seed)
@@ -348,7 +348,7 @@ rp.twosample <- function(lst) {
    
    if (ruler.position != 'none') {
       ucol <- switch(ruler.position, 'candidate' = 'grey75',
-                  'sample mean' = clr['estimate'], 'reference' = clr['reference'])
+                  'sample mean' = clrs['estimate'], 'reference' = clrs['reference'])
       xpos <- switch(ruler.position, 'candidate' = lst$candidate,
                   'sample mean' = mns[2], 'reference' = mns[1] + mu)
       ulo  <- shi + 0.5 * ht['margin']
@@ -362,7 +362,7 @@ rp.twosample <- function(lst) {
    value     <- mns[2]
    linestart <- if (se.scale) shi else dpos
    lineend   <- 2.25 * ht['margin'] + ht['main'] + ht['axis']
-   gclr      <- clr['estline']
+   gclr      <- clrs['estline']
    group     <- 'sample mean difference'
    if (data.display != 'none') {
       value <- c(mns, value)
@@ -379,7 +379,7 @@ rp.twosample <- function(lst) {
       value     <- c(value,     mns[1] + mu)
       linestart <- c(linestart, linestart[3])
       lineend   <- c(lineend,   lineend[3])
-      gclr      <- c(gclr,      clr['refline'])
+      gclr      <- c(gclr,      clrs['refline'])
       group     <- c(group,     'reference')
    }
    if (ruler.position == 'candidate') {
@@ -404,7 +404,7 @@ rp.twosample <- function(lst) {
       xpos <- switch(ruler.position, 'candidate' = lst$candidate,
                      'sample mean' = mns[2], 'reference' = mns[1] + mu)
       sclr <- switch(ruler.position, 'candidate' = 'grey75',
-                     'sample mean' = clr['estline'], 'reference' =clr['refline'])
+                     'sample mean' = clrs['estline'], 'reference' = clrs['refline'])
       plt <- rp.add_sescale(plt, diff(mns), xpos, slo + 0.5 * ht['margin'],
                             shi + 0.5 * ht['margin'], lst)
    }
@@ -702,7 +702,7 @@ rp.add_uncertainty <- function(plt, xpos, ypos, yht, cipos, lst) {
       notch.x    <- q.fn(notch.p)
       notch.dfrm <- data.frame(x = notch.x, y = ypos + d.fn(notch.x) * scl)
       plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y, yend = ypos),
-                                         col = rp.colours['notch'], data = notch.dfrm)
+                                         col = lst$col['notch'], data = notch.dfrm)
    }
    # Add the confidence interval
    if (lst$display['detail'] & lst$ruler.position == 'sample mean') {

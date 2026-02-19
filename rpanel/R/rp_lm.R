@@ -4,7 +4,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   panel = TRUE, panel.plot = TRUE,
                   style = 'ggplot', plot.nodes = FALSE,
                   uncertainty.display = 'density', inference = 'coefficients',
-                  ci = TRUE, display.model, comparison.model,
+                  ci = TRUE, cols, display.model, comparison.model,
                   residuals.showing, linewidth = 1,
                   hscale = 1, vscale = hscale, ...) {
    
@@ -34,16 +34,13 @@ rp.lm <- function(x, ylab, xlab, zlab,
    # clr           <- c(est    = '#B3E2CD', estline   = '#B3E2CD',
    #                    ref    = '#FDCDAC', refline   = '#FDCDAC',
    # Pastel1 choices
-   clr           <- c(est    = '#B3CDE3', estline   = '#0093FF',
-                      ref    = '#FBB4AE', refline   = '#FF7F00',
-                      points = grey(0.5), node      = grey(0.8),
-                      notch  = 'black',   residuals = grey(0.5))
    current.model <- 'None'
    scaling       <- NULL
    smat          <- NULL
    fv            <- NULL
    xgrid         <- NULL
    zgrid         <- NULL
+   clrs          <- if (missing(cols)) rp.colours() else rp.colours(cols)
    
    # Deal with formula or model inputs
    class.x <- class(x)
@@ -73,8 +70,8 @@ rp.lm <- function(x, ylab, xlab, zlab,
    
    if (length(trms) == 0) stop('at least one predictor variable is required.')
    if (length(numeric.ind) + length(factor.ind) > 2) {
-      if (inference == 'coefficients') return(rp.coefficients(model, col = clr['est']))
-      if (inference == 'terms') return(drop1(model, col = clr['ref']))
+      if (inference == 'coefficients') return(rp.coefficients(model))
+      if (inference == 'terms') return(drop1(model))
    }
 
    # Extract the raw data
@@ -115,7 +112,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
             z    <- x
             x    <- temp
          }
-         return(rp.ancova.old(x = x, y = y, g = z, panel = panel, panel.plot = panel.plot,
+         return(rp.ancova.old(x = x, y = y, group = z, panel = panel, panel.plot = panel.plot,
                        xlab = xlab, ylab = ylab, hscale = hscale, vscale = vscale))
       }
       if (type == 'regression.two') {
@@ -171,7 +168,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
       yhi     <- max(yhi, smat)
       ylim    <- c(ylo, yhi)
       if (panel | !plot.nodes) scaling <- rp.plot3d(x, y, z, xlab = xlab, ylab = ylab,
-                           zlab = zlab, ylim = ylim, col = clr['points'])
+                           zlab = zlab, ylim = ylim, col = clrs['points'])
       else scaling <- NULL
    }
    opar <- par(oma = c(0, 0, 1, 0), plt = c(0, 1, 0, 1))
@@ -317,7 +314,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         type = type, style = style, labels.max = labels.max,
                         xlab = xlab, ylab = ylab, zlab = zlab, seed = round(runif(1) * 10000),
                         yterm = yterm, xterm = xterm, zterm = zterm,
-                        ci = ci, bgdcol = bgdcol, clr = clr,
+                        ci = ci, bgdcol = bgdcol, clrs = clrs,
                         highlighted.node = hlight, static = static,
                         model.nodes = model.nodes, click.coords = rep(NA, 2),
                         residuals.showing = residuals.showing, linewidth = linewidth,
@@ -325,7 +322,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
                         smat = smat, fv = fv, xgrid = xgrid, zgrid = zgrid)
       rp.menu(pnl, model.display,
               list(c('Inference', 'none', 'coefficients', 'terms')),
-              initval = 'none', action = rp.lm.redraw)
+              initval = inference, action = rp.lm.redraw)
       rp.grid(pnl, "models", row = 0, column = 0, background = bgdcol)
       rp.tkrplot(pnl, modelnodes, rp.lm.modelnodes, action = rp.lm.click,
                  hscale = 0.7 * hscale, vscale = 0.5 * vscale, 
@@ -359,7 +356,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   type = type, style = style, labels.max = labels.max,
                   xlab = xlab, ylab = ylab, zlab = zlab, seed = round(runif(1) * 10000),
                   yterm = yterm, xterm = xterm, zterm = zterm,
-                  ci = ci, clr = clr, bgdcol = bgdcol,
+                  ci = ci, clrs = clrs, bgdcol = bgdcol,
                   highlighted.node = hlight, static = static,
                   model.nodes = model.nodes, click.coords = rep(NA, 2),
                   current.model = current.model, scaling = scaling,
@@ -380,7 +377,7 @@ rp.lm <- function(x, ylab, xlab, zlab,
 rp.lm.modelnodes <- function(panel) {
    fillcol <- rep('white', 5)
    if (!any(is.na(panel$highlighted.node)))
-      fillcol[panel$highlighted.node] <- panel$clr['node']
+      fillcol[panel$highlighted.node] <- panel$clrs['node']
 
    with(panel$model.nodes, {
       par(oma = c(0, 0, 1, 0), plt = c(0, 1, 0, 1))
@@ -466,11 +463,11 @@ rp.lm.draw <- function(panel) {
          }
          if (!any(is.na(hlight))) {
             a <- scaling(xgrid, smat[ , , hlight[1]], zgrid)
-            rgl::surface3d(x = a$x, z = a$z, y = a$y, col = clr['est'], alpha = 0.5)
+            rgl::surface3d(x = a$x, z = a$z, y = a$y, col = clrs['estimate'], alpha = 0.5)
             if (residuals.showing) {
                a <- scaling(c(t(cbind(x, x))), c(t(cbind(y, fv[ , hlight[1]]))),
                             c(t(cbind(z, z))))
-               rgl::segments3d(a$x, a$y, a$z, col = clr['residuals'])
+               rgl::segments3d(a$x, a$y, a$z, col = clrs['residuals'])
             }
          }
       })
@@ -585,7 +582,7 @@ rp.lm.draw <- function(panel) {
          plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = fitted(mdl),
                                                          y    = afx - 0.45,
                                                          yend = afx + 0.45),
-                                            linewidth = 1, col = panel$clr['estline'])
+                                            linewidth = 1, col = panel$clrs['estline'])
       }
       
       # Plot the model comparison uncertainties
@@ -620,12 +617,12 @@ rp.lm.draw <- function(panel) {
             plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)),
                                             fill = dgrid, height = 0.8, alpha = 0.7),
                                             data = dfrm1, show.legend = FALSE) +
-               ggplot2::scale_fill_gradient(low = "grey90", high = panel$clr['ref'])
+               ggplot2::scale_fill_gradient(low = "grey90", high = panel$clrs['reference'])
          }
          else {
             dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se, na.rm = TRUE))
             plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)), height = dgrid),
-                                            col = NA, fill = panel$clr['ref'],
+                                            col = NA, fill = panel$clrs['reference'],
                                             # alpha = 0.7,
                                             show.legend = FALSE, data = dfrm1)
          }
@@ -634,9 +631,9 @@ rp.lm.draw <- function(panel) {
       # Plot the data points
       set.seed(panel$seed)
       plt  <- plt +
-         ggplot2::geom_point(ggplot2::aes(y, jitter.x), col = panel$clr['points'])
+         ggplot2::geom_point(ggplot2::aes(y, jitter.x), col = panel$clrs['points'])
          # ggplot2::geom_jitter(ggplot2::aes(y, x), height = 0.1, width = 0,
-         #                      col = panel$clr['points'])
+         #                      col = panel$clrs['points'])
 
       plt  <- plt + ggplot2::coord_flip()
       if (panel$type == "two.way")
@@ -668,9 +665,9 @@ rp.lm.effectsplot <- function(panel) {
          mdl <- models[[highlighted.node[1]]]
          if (nhl == 1) {
             if (model.display == 'coefficients')
-               print(rp.coefficients(mdl, ci = ci, labels = labels.max, col = clr['est']))
+               print(rp.coefficients(mdl, ci = ci))
             else if (model.display == 'terms')
-               print(rp.drop1(mdl, col = clr['ref']))
+               print(rp.drop1(mdl))
             else
                fn.blank()
          }
@@ -679,7 +676,7 @@ rp.lm.effectsplot <- function(panel) {
             r0   <- rownames(anova(mdl0))
             r1   <- rownames(anova(mdl))
             trm  <- r1[!(r1 %in% r0)]
-            print(rp.drop1(mdl, trm, col = clr['ref']))
+            print(rp.drop1(mdl, trm, col = clrs['reference']))
          }
       }
       else 
@@ -695,7 +692,7 @@ rp.regression2.residuals <- function(panel) {
             mdl <- model.nodes$label[highlighted.node[1]]
             a <- scaling(c(t(cbind(x, x))), c(t(cbind(y, fv[ , mdl]))),
                          c(t(cbind(z, z))))
-            rgl::segments3d(a$x, a$y, a$z, col = clr['residuals'])
+            rgl::segments3d(a$x, a$y, a$z, col = clrs['residuals'])
          }
          else
             rgl::pop3d()

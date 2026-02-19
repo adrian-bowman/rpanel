@@ -27,6 +27,20 @@ test_that('Standard calls', {
   expect_no_error(rp.coefficients(model) + ggplot2::xlab("Covariates"))
 })
 
+test_that('Interactions:', {
+   gw <- dplyr::mutate(gullweight, x = rnorm(nrow(gullweight)))
+   model <- lm(weight ~ hab * month, data = gullweight)
+   expect_no_error(rp.coefficients(model))
+   model <- lm(weight ~ hab * month * x, data = gw)
+   expect_error(rp.coefficients(model))
+})
+
+test_that('marks:', {
+   expect_no_error(rp.coefficients(model))
+   expect_no_error(rp.coefficients(model, marks = NULL))
+   expect_no_error(rp.coefficients(model, marks = 1))
+})
+
 # subset and labels currently disabled
 # rp.coefficients(model, subset = 2:3)
 # model0 <- lm(Giving ~ Employ + Attend, data = CofE)

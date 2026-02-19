@@ -9,14 +9,17 @@ A two-way contingency table is displayed graphically and the uncertainties assoc
 }
 
 \usage{
-rp.contingency(x, style = 'mosaic', values = 'observed', uncertainty = FALSE)
+rp.contingency(x, style = "mosaic", values = "observed",
+               uncertainty = 'none', proportion.scale = 'fixed', cols)
 }
 
 \arguments{
 \item{x}{a two-way table or matrix of observed counts.}
 \item{style}{a character value, either \code{'mosaic'} or \code{'separated'}, which determines the form of display.}
 \item{values}{a character value, either \code{'observed'}, \code{'proportions'} or \code{'expected'}, which controls what is printed inside each cell of the display.}
-\item{uncertainty}{a logical value which controls whether uncertainties associated with a chi-squared test are displayed for each cell.}
+\item{uncertainty}{a character value which controls whether uncertainties associated with a chi-squared test are displayed for each cell, in \code{'shading'} or \code{'violin'} style.}
+\item{proportion.scale}{a character value specifying whether the proportion scale is \code{'fixed'} or \code{'free'}.}
+\item{cols}{a named vector of characters specifying colours to be used in the plot. See \code{help(rp.colours)} for details.}
 }
 
 \details{
@@ -27,10 +30,7 @@ Missing data are not allowed.
 
 \value{
 A \code{ggplot} object is returned. This allows some features of the display to be modified, for example by adding a title.
-  }
-
-\references{
-   }
+}
 
 \examples{
 \dontrun{

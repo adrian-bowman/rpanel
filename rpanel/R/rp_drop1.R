@@ -1,15 +1,19 @@
 #     Anova on a regression model
 
-rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01), col) {
+rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01), cols) {
    
    tbl     <- drop1(model, test = 'F')[-1, ]
    # if (!missing(subset.terms) | is.null(subset.terms)) {
    if (!missing(subset.terms)) {
-      if ((is.character(subset.terms)))
+      if (!is.character(subset.terms))
+         stop('subset.terms is not character mode.')
+      else
          subset.terms <- match(subset.terms, rownames(tbl))
+      if (length(subset.terms) == 0)
+         stop('no terms remain after subsetting.')
       tbl <- tbl[subset.terms, ]
    }
-   if (missing(col)) col <- '#FFB56B'
+   clrs <- if (missing(cols)) rp.colours() else rp.colours(cols)
    tbl$df  <- tbl$Df
    tbl$Df  <- paste('Model terms with', tbl$Df, 'df')
    fmax    <- 1.1 * max(qf(1 - p.reference, tbl$df, model$df.residual), tbl$'F value')
@@ -32,9 +36,10 @@ rp.drop1 <- function(model, subset.terms, p.reference = c(0.05, 0.01), col) {
       
    plt <- ggplot2::ggplot(tbl, ggplot2::aes(`F value`, rownames(tbl))) +
       ggplot2::geom_ribbon(ggplot2::aes(x = fgrid, ymin = fhtlo, ymax = fht),
-                           fill = col, col = col,
+                           fill = clrs['reference'], col = clrs['reference'],
                            inherit.aes = FALSE, data = curv.df) +
       ggplot2::geom_point() +
+      ggplot2::xlab('F-value') +
       ggplot2::ylab('Model terms') +
       ggplot2::xlim(0, fmax) +
       ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),

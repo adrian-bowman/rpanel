@@ -13,36 +13,32 @@ mean, representing the null hypothesis in a t-test.
 }
 
 \usage{
-rp.t_test(x, y = NULL, mu = NULL, display = 'density',
-         uncertainty = 'sample mean', scale = TRUE, zoom = FALSE,
-         col = '#86B875', refcol = '#E495A5',
-         height = 0.2, refheight = 1.5 * height, ...)
+rp.t_test(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'density',
+          display = c(distribution = FALSE, detail = FALSE),
+          ruler.position = 'none', candidate,
+          cols, xlab, ylab, vlab, hscale = 1, vscale = hscale, ...)
 }
 
 \arguments{
 \item{x}{a vector of data on a continuous scale or a formula with a response variable and a single prediuctor variable which is a factor with two levels.}
 \item{y}{an optional second vector of data on a continuous scale, to allow two-sample or paired-sample analyses. Alternatively, \code{y} may be a character vector or a factor with two levels, defining the groups. If \code{x} is a formula then \code{y} is ignored.}
+\item{panel}{ a logical value which determines whether the function runs in interactive mode.}
 \item{mu}{a numerical value representing a reference mean of interest, for
             example a null hypothesis in a formal test. This is the same parameter
             as \code{mu} in \code{t.test} but its default value is \code{NULL}
             so that a reference value will be display only if requested.}
-\item{display}{a character value which controls the form of the data and
-            uncertainty displays. Valid options are \code{'histogram'},
+\item{data.display}{a character value which controls the form of the data and
+            display. Valid options are \code{'histogram'},
             \code{'density'} or \code{'violin'}.}
-\item{uncertainty}{a character value which controls the form of uncertainty to
-            be displayed. Valid options are \code{'none'}, \code{'sample mean'} or \code{'reference'}.}
-\item{scale}{a logical value which determines whether a standard error scale is
-            added to the plot.}
-\item{zoom}{a logical value which determines whether the plot contains only the 
-            uncertainty display.}
-\item{height}{the height of the uncertainty representation as a proportion of
-            the height of the plot.}
-\item{mnheight}{the height of the lines marking mean values, when this is present.}
-\item{col}{the col of the uncertainty representation.}
-\item{notch}{the position of notches on the uncertainty representation,
-            in units of standard error.}
-\item{notchcol}{the col of the notches on the uncertainty representation.}
-\item{refcol}{the col of the reference line, when this is present.}
+\item{display}{a named logical vector which controls the form of uncertainty to
+            be displayed. The named elements are \code{'distribution'} for display of the reference
+            distribution and \code{'detail'} for the display of further details.}
+\item{ruler.position}{a character value which determines whether a standard error scale is
+            added to the plot and its location, \code{'candidate'} or \code{'sample mean'}.}
+\item{candidate}{a numeric value controlling where the standard error ruler is located when \code{ruler.position} is set to \code{'candidate'}.}
+\item{cols}{the colours to be used in constructing the display. The default values are set by the \code{rp.colours} function whose help file give the details.}
+\item{xlab, ylab, vlab}{character values providing labels for the group(s) to be analysed and for the measurement scale (\code{vlab}).}
+\item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel} is set to \code{TRUE}.  The default values are 1.}
 \item{...}{further named argument, which will be passed on to the \code{t.test}
             function. Useful arguments include \code{paired} and
             \code{var.equal} which both take logical values.}

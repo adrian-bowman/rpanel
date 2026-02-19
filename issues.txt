@@ -4,16 +4,7 @@
 
 Create testthat style of tests for all functions.
 
-rp.lm
-  - add cols argument, as in rp.coefficients, for plots and for rp.coefficients.
-
-rp.coefficients
-  - how should effects be computed for covariate:factor iteractions?
-    Observed range for each factor level?
-    Check that *all* covariate interactions are disallowed.
-
 rp.t_test
-  - add cols argument, as in rp.coefficients
   - two-sample case: zoom
       - axis (zoom) accounts for two-sided test even when mu is not specified?
       - the ruler is much larger in the zoom case
@@ -42,19 +33,6 @@ rp.datalink
 rp.colour.key
   - allow cex.axis to be changed in rp.colour.key.
     See the code in rp_colour_key.R in the rental sector paper analysis.
-
-rp.contingency
-  - set uncertainty to 'none', 'violin' etc. and remove uncertainty.style
-  - graphics and colours not yet ideal.
-  - fix the span of the violins horizontally.
-  - allow observed and expected values to be displayed together.
-    rp.contingency(x, values = c('observed', 'expected'))
-    Also observed and expected proportions.
-  - allow a single line of uncertainty on the mosaicplot when there are only two rows.
-  - allow contributions to chi-squared statistic to be displayed? See mosaicplot shading.
-  - change the cell fill colours with an added scale_discrete_manual layer?
-  - allow a scale argument which places a proportion axis on the RHS.
-  - update the help file
 
 rp.geosim
   - the variogram plot no longer disappears when the checkboxes are not checked.
@@ -104,6 +82,10 @@ rp.power
 
 rp.radiogroup
   - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
+  
+Remove keywords from help files?
+
+Rename the colour names? Extend to 'residuals'. Also in help files.
 
 --------------------------------------------------------------
 	               Ideas for changes to rpanel
@@ -113,11 +95,25 @@ Can windows be manually adjusted as in tkRplotR?
 
 Add a data argument to functions.
 
+rp.lm
+  - the cols argument needs to be cascaded down to the specialist function for different data types.
+
 rp.coefficients
   - allow different functions to control the display of coefficients?
     range, iqr, user-supplied?
   - lines idea to give visual cues? (change in mean versus change from min(x))
     This needs some thinking.
+
+rp.drop1
+  - extend this to glms.
+
+rp.contingency
+  - allow observed and expected values to be displayed together.
+    rp.contingency(x, values = c('observed', 'expected'))
+    Also observed and expected proportions.
+  - allow contributions to chi-squared statistic to be displayed? See mosaicplot shading.
+  - change the cell fill colours with an added scale_discrete_manual layer?
+  - activate style = 'proportions', with a plot similar to rp.anova and with violins?
 
 rp.spacetime
   - allow regular data to be exploited, with marginal space and time input

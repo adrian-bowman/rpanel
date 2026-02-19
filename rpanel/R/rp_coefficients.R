@@ -19,11 +19,11 @@ rp.coefficients <- function(model, style = 'density',
    
    # Missing arguments
    if (missing(marks)) {
-      marks <- if ('lm' %in% class(lm)) qt(0.975, model$df.residual) else 1.96
+      marks <- if ('lm' %in% class(model)) qt(0.975, model$df.residual) else 1.96
       marks <- c(-marks, marks)
    }
 	if (missing(ngrid)) ngrid <- 200
-	clrs <- rp.colours(cols)
+	clrs <- if (missing(cols)) rp.colours() else rp.colours(cols)
 	fill.col <- if (ci) clrs['estimate'] else clrs['reference']
 	
    # subset and labels are currently disabled
@@ -108,7 +108,7 @@ rp.coefficients <- function(model, style = 'density',
 	   ind <- which((involved[ , trm, drop = FALSE] == 1) & (var.types == 'numeric'))
 	   ind <- rownames(involved)[ind]
 	   if (length(ind) > 1)
-	       stop('this functions cannot handle interaction between numeric variables.')
+	       stop('rp.coefficients cannot handle interaction between numeric variables.')
 	   result <- if (length(ind) == 0) 0:1 else range(model$x[ , ind])
 	   result
 	}
@@ -176,7 +176,7 @@ rp.coefficients <- function(model, style = 'density',
 	                         col = col.scale, size = 3, data = dfrm.scale)
 	}
 	
-	# Add se marks if requested
+	# Add ci marks if requested
 	if (!is.null(marks)) {
 	   mn           <- if (ci) coeff else rep(0, ncoef)
 	   se           <- tbl[ , 2] * (rng[2, ] - rng[1, ])
