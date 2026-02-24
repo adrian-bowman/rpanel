@@ -93,7 +93,7 @@ The colour black should be avoided when using a normal window shape for \code{z}
 }
 
 \value{
-Nothing is returned.
+The \code{tcltk} panel object is returned.
 }
 
 \references{

@@ -34,7 +34,7 @@ rp.power(panel = TRUE, display = "tcltk",  panel.plot = TRUE,
 The sample size refer to the total sample size, assuming two groups of equal size.  A checkbox allows plots of the population distributions also to be displayed.}
 
 \value{
-Nothing is returned.
+The \code{tcltk} panel object is returned.
 }
 
 \references{

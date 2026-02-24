@@ -9,7 +9,7 @@ snk <- function(x) capture.output(x, file = '~/Desktop/temp.txt')
 snk(rp.datalink("~/iCloud/teaching/book/data", "set local directory"))
 
 #----------------------------------------------------------------
-# cat('\n** Regression with one covariate **\n')
+#     Regression with one covariate
 #----------------------------------------------------------------
 
 test_that('Standard call', {

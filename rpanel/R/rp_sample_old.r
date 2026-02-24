@@ -122,4 +122,5 @@ rp.sample.old <- function(mu = 0, sigma = 1, n = 25, panel.plot = TRUE,
    rp.checkbox(panel, display.sample, action.fn, names(display.sample), title = "Sample")
    rp.checkbox(panel, display.mean,   action.fn, names(display.mean),   title = "Sample mean")
 
+   invisible(panel)
 }

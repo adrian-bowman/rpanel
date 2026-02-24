@@ -2,30 +2,36 @@ rp.sample <- function(n, mu, sigma,
                       distribution  = 'normal', shape = 0,
                       panel = TRUE, nbins = 20, nbins.mean = 20,
                       display, display.sample, display.mean, nsim = 50,
-                      show.out.of.range = TRUE,
+                      show.out.of.range = TRUE, ggplot = TRUE,
                       hscale = NA, vscale = hscale, pause = 0.01) {
 
-   ggplot     <- TRUE
+   if (ggplot) {
+      ggplot <- requireNamespace('ggplot2', quietly = TRUE)
+      # This line tests functionality as if ggplot were unavailable
+      # ggplot <- FALSE
+      if (!ggplot)
+         message('The ggplot package is not available - reverting to standard graphics.')
+   }
+   
    shape0     <- (abs(shape) < 2 * .Machine$double.eps)
    sn.present <- requireNamespace('sn', quietly = TRUE)
    if (!shape0 & !sn.present)
       message('the sn package is not available so the shape parameter has been reset to 0.')
-   if (ggplot & !requireNamespace('ggplot2', quietly = TRUE)) {
-      ggplot <- FALSE
-      message('the ggplot package is not available - reverting to standard graphics.')
-   }
    if (!(distribution %in% c('normal', 'binomial')))
       stop('the distribution must be normal or binomial.')
    normal <- (distribution == 'normal')
    if (missing(n)) n <- 25
    if (missing(mu)) {
-      mu <- if (normal) 5 else 0.5
+      mu <- if (normal | !ggplot) 5 else 0.5
    }
    if (missing(sigma)) sigma <- 0.4
    
-   if (!ggplot)
-      return(rp.sample.old(mu = 0, sigma = 1, n = 25,
-                    panel.plot = TRUE, hscale = NA, vscale = hscale))
+   if (!ggplot) {
+      if (!normal)
+         message('Binomial distributions are not available for this version - reverting to normal.')
+      return(rp.sample.old(mu = mu, sigma = sigma, n = n,
+                           panel.plot = TRUE, hscale = hscale, vscale = hscale))
+   }
    
    # -----------------------------------------------------------------
    #       Main plotting function
@@ -539,9 +545,11 @@ rp.sample <- function(n, mu, sigma,
       rp.checkbox(panel, display.sample, sample.redraw, names(display.sample),
                   title = "Sample",
                   grid = "datacontrols", row = 0, column = 0, sticky = "ew")
-      Sys.sleep(pause)
-      rp.slider(panel, nbins, 10, 100, sample.redraw, resolution = 1,
-                grid = 'datacontrols', row = 1, column = 0, sticky = 'ew')
+      if (normal) {
+         Sys.sleep(pause)
+         rp.slider(panel, nbins, 10, 100, sample.redraw, resolution = 1,
+                   grid = 'datacontrols', row = 1, column = 0, sticky = 'ew')
+      }
       Sys.sleep(pause)
       rp.checkbox(panel, display.mean, sample.redraw, names(display.mean),
                   title = "Sample mean",

@@ -55,3 +55,8 @@ test_that('Static mode', {
                          plot.title = ggplot2::element_text(size = 22))
    print(result$sample + thm + ggplot2::ggtitle('Sample size: 25'))
 })
+
+test_that('Standard calls', {
+   expect_no_error(pnl <- rp.sample(ggplot = FALSE))
+   rp.control.dispose(pnl)
+})

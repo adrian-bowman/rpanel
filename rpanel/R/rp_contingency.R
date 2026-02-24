@@ -1,26 +1,17 @@
 #     A new go at graphics for a contingency table
 
-# Allow only the case of two rows in mosaic style?
-
-rp.contingency <- function(x, style = "mosaic", values = "observed",
-                           uncertainty = 'none', proportion.scale = 'fixed', cols) {
+rp.contingency <- function(x, uncertainty = 'none', proportion.scale = 'fixed', cols) {
    
    if (!requireNamespace("ggplot2", quietly = TRUE))
       stop("the ggplot2 package is not available.")
-   if (length(style) != 1)
-      stop("'style' should be of length 1.")
-   if (length(values) != 1)
-      stop("'values' should be of length 1.")
    if (length(proportion.scale) != 1)
       stop("'proportion.scale' should be of length 1.")
-   if (!(style %in% c('mosaic', 'aligned')))
-      stop("'style' setting not recognised.")
-   # 'proportions' style disabled
-   if (!(uncertainty %in% c('none', 'shading')))
+   if (!(uncertainty %in% c('none', 'shading', 'violin')))
       stop("'uncertainty' setting not recognised.")
-   # 'violin' style disabled
-   if (!all(values %in% c('observed', 'proportions', 'expected')))
-      stop("'values' setting not recognised.")
+   # if (length(values) != 1)
+   #    stop("'values' should be of length 1.")
+   # if (!all(values %in% c('observed', 'proportions', 'expected')))
+   #    stop("'values' setting not recognised.")
    if (!all(proportion.scale %in% c('fixed', 'free')))
       stop("'proportion.scale' setting not recognised.")
    if (any(is.na(x)))
@@ -40,152 +31,96 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    
    nrw      <- nrow(x)
    ncl      <- ncol(x)
-   # if (nrw == 1) uncertainty <- FALSE
-   # aligned  <- (style == "aligned") | (style == "mosaic" & nrw > 3)
-   aligned  <- (style == "aligned")
-   if ((uncertainty != 'none') & (nrw > 2)) aligned <- TRUE
-   sep_x    <- 0 # 0.02
-   sep_y    <- if (aligned) 0.02 else 0
-   colsums  <- colSums(x)
-   p        <- sweep(x, 2, colsums, "/")
-   pmx      <- apply(p, 1, max)
-   x_wdth   <- if (style == 'proportions') rep(1, ncl) else colsums
-   x_wdth   <- x_wdth / sum(x_wdth)
-   xmn_mar  <- c(0, cumsum(x_wdth + sep_x)[-ncl])
-   xmx_mar  <- xmn_mar + x_wdth
-   xbrks    <- (xmn_mar + xmx_mar) / 2
-   xmn      <- rep(xmn_mar, each = nrw)
-   xmx      <- rep(xmx_mar, each = nrw)
+   sep_x    <- 0
+   sep_y    <- 0.02
+   csums    <- colSums(x)
+   rsums    <- rowSums(x)
+   p        <- sweep(x, 2, csums, "/")
    rnms     <- factor(rep(rownames(p), ncl), levels = rownames(p))
    cnms     <- factor(rep(colnames(p), each = nrw), levels = colnames(p))
-   expected <- round(outer(rowSums(x), colSums(x)) / sum(x), 1)
-   lbl      <- switch(values, "proportions" = c(signif(p, 2)),
-                              "observed"    = c(x),
-                              "expected"    = c(expected))
-   p_vec    <- if (style == "mosaic") c(p) else rep(pmx, ncl)
-   colt     <- sum(p_vec[1:nrw])
-   ymn      <- rep((1:ncl) * (colt + nrw * sep_y), each = nrw) - cumsum(p_vec + sep_y)
-   ymx      <- ymn + c(p)
-   lblht    <- if (aligned) pmx else p[ , 1]
-   ybrks    <- ymn[1:nrw] + lblht / 2
-   d        <- data.frame(p = c(p), x = c(x), xmn, xmx, ymn, ymx, rnms, cnms,
-                          pmx = ymn + rep(pmx, ncl), lbl = lbl, row.names = NULL)
-   # db <- data.frame(xmn_mar, xmx_mar,
-   #                  ymn_mar = rep(0, ncl), ymx_mar = rep(max(ymx), ncl))
-   # dc <- data.frame(x    = c(xmn, xmx, xmx, xmn),
-   #                  xend = c(xmx, xmx, xmn, xmn),
-   #                  y    = c(ymn + common, ymn + common, ymn, ymn),
-   #                  yend = c(ymn + common, ymn, ymn, ymn + common))
+   expected <- round(outer(rsums, csums) / sum(x), 1)
+   # lbl      <- switch(values, "proportions" = c(signif(p, 2)),
+   #                            "observed"    = c(x),
+   #                            "expected"    = c(expected))
+   lbl      <- c(x)
+   wdth     <- rep(csums / max(csums), each = ncl)
    shading  <- (uncertainty == 'shading')
+   lstart   <- if (shading)  0.5 - wdth / 2 else 0.3
+   lstop    <- if (shading)  0.5 + wdth / 2 else 0.7
+   d        <- data.frame(p = c(p), x = c(x), rnms, cnms,
+                          wdth, lstart, lstop, lbl = lbl, row.names = NULL)
 
-   clr  <- if (aligned) 'white' else 'grey25'
-   plt <- ggplot2::ggplot(d)
-   if (aligned) {
-      if (style == 'proportions')
-         plt <- plt +
-            ggplot2::geom_segment(ggplot2::aes(x = xmn, xend = xmx, y = p),
-                                  col = clrs['estline'])
-      else
-         plt <- plt +
-            ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-                                            ymin = 0, ymax = p), fill = 'grey75', col = clr) +
-            ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2, y = p / 2, label = lbl))
-      plt <- plt +
-         ggplot2::ylab('proportion within column') +
-         ggplot2::facet_wrap(~rnms, ncol = 1, strip.position = 'left',
-                             scales = proportion.scale) +
-         ggplot2::scale_x_continuous(breaks = xbrks, labels = colnames(x),
-                                     expand = rep(0.01, 2), position = "top") +
-         ggplot2::scale_y_continuous(position = "right") +
-         ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
-                        panel.grid.minor.x = ggplot2::element_blank(),
-                        axis.title.x = ggplot2::element_blank(),
-                        panel.spacing.y = ggplot2::unit(1, "lines"))
-   }
-   else
-      plt <- plt +
-         ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-                                       ymin = ymn, ymax = ymx,
-                                       fill = rnms), col = clr) +
-         ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2,
-                                      y = (ymn + ymx) / 2, label = lbl)) +
-         ggplot2::theme_minimal() +
-         ggplot2::theme(panel.background = ggplot2::element_rect(fill   = 'white',
-                                                                 colour = 'white'),
-                     panel.grid.major = ggplot2::element_blank(),
-                     panel.grid.minor = ggplot2::element_blank(),
-                     axis.ticks.x = ggplot2::element_blank(),
-                     axis.title.x = ggplot2::element_blank(),
-                     axis.title.y = ggplot2::element_blank(),
-                     axis.text.y  = ggplot2::element_text(angle = 90,
-                                                          vjust = 0.5, hjust = 1)) +
-         ggplot2::scale_x_continuous(breaks = xbrks, labels = colnames(x),
-                                     expand = rep(0, 2), position = "top") +
-         ggplot2::scale_y_continuous(breaks = ybrks, labels = rownames(x),
-                                     expand = rep(0, 2)) +
-         ggplot2::theme(legend.position = "none")
-   
+   plt <- ggplot2::ggplot(d) +
+          ggplot2::geom_rect(ggplot2::aes(xmin = 0.5 - wdth / 2, xmax = 0.5 + wdth / 2,
+                                          ymin = 0, ymax = p), fill = 'grey75', col = 'grey75') +
+          ggplot2::geom_text(ggplot2::aes(x = 0.5, y = min(p) / 2, label = lbl)) +
+          ggplot2::ylab('proportion within column') +
+          ggplot2::facet_grid(rnms ~ cnms, switch = 'y', scales = proportion.scale) +
+          ggplot2::scale_y_continuous(position = "right", expand = c(0, 0.05 * max(p))) +
+          ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),
+                         panel.grid.minor.x = ggplot2::element_blank(),
+                         panel.grid.major.y = ggplot2::element_blank(),
+                         panel.grid.minor.y = ggplot2::element_blank(),
+                         # panel.spacing.y = ggplot2::unit(1, "lines"),
+                         axis.title.x = ggplot2::element_blank(),
+                         axis.text.x  = ggplot2::element_blank(),
+                         axis.ticks.x = ggplot2::element_blank())
+                         # panel.background = ggplot2::element_rect(fill = 'white', colour = 'white'))
+
    if (uncertainty != 'none') {
+      # Add horizontal lines to highlight the observed proportions
+      plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = lstart, xend = lstop, y = p),
+                                           col = clrs['estline'], linewidth = 1,
+                                           data = d)
       # Display the common pattern of proportions
-      xc        <- (d$xmn + d$xmx) / 2
-      wdth      <- (d$xmx - d$xmn) + sep_x
-      ind       <- (cnms == colnames(p)[1])
-      xc[ind]   <- xc[ind] + sep_x / 4
-      wdth[ind] <- wdth[ind] - sep_x / 2
-      ind       <- (cnms == colnames(p)[ncl])
-      xc[ind]   <- xc[ind] - sep_x / 4
-      wdth[ind] <- wdth[ind] - sep_x / 2
-      common    <- rep(rowSums(x) / sum(x), ncl)
-      if (!aligned) {
-         common      <- 1 - cumsum(rowSums(x) / sum(x))
-         common[nrw] <- sum(x[nrw, ]) / sum(x)
-         common      <- rep(common, ncl)
+      xc     <- rep(0.5, nrw * ncl)
+      wdth   <- rep(1,   nrw * ncl)
+      common <- rep(rsums / sum(x), ncl)
+      # As in graphics for uncertainty paper
+      # se    <- sqrt(common / (rep(csums, each = nrw) * nrw * ncl))
+      # Equivalent to adjusted Pearson residuals
+      se     <- sqrt((common / rep(csums, each = nrw)) *
+                                 (1 - rep(csums, each = nrw) / sum(x)) *
+                                 (1 - rep(rsums, ncl) / sum(x)))
+      # For checking against chisq.test$stdres
+      # stdres <- (p - common) / se
+      # print(stdres)
+      ngrid  <- 101
+      dlim   <- 3
+      ygrid  <- seq(-dlim, dlim, length = ngrid)
+      dens   <- rep(dnorm(ygrid), nrw)
+      fn     <- function(x) common[x] + ygrid * se[x]
+      ind    <- 1:(nrw * ncl)
+      y      <- c(sapply(ind, fn))
+      wdth   <- rep(wdth, each = ngrid)
+      hght   <- rep((ygrid[2] - ygrid[1]) * se, each = ngrid)
+      dgrd <- data.frame(x = rep(xc, each = ngrid), y, wdth, hght,
+                         rnms = rep(rnms, each = ngrid), cnms = rep(cnms, each = ngrid))
+      if (shading) {
+         dgrd$alpha <- dens * 0.7 / max(dens)
+         plt  <- plt +
+            ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght, alpha = alpha),
+                               fill = clrs['reference'], data = dgrd) +
+            ggplot2::scale_alpha(guide = 'none')
       }
-      se    <- sqrt(common / (rep(colsums, each = nrw) * nrw * ncl))
-      ind   <- if (aligned) 1:nrow(d)
-               else if (nrw == 2) which(rnms %in% levels(rnms)[1])
-               else which(rnms %in% levels(rnms)[c(1, nrw)])
-      ngrid <- 101
-      dlim  <- 3
-      ygrid <- seq(-dlim, dlim, length = ngrid)
-      dens  <- rep(dnorm(ygrid), (nrw - as.numeric(!aligned)) * ncl)
-      fn    <- function(x) common[x] + ygrid * se[x]
-      y     <- c(sapply(ind, fn))
-      wdth  <- rep(wdth[ind], each = ngrid)
-      hght  <- rep((ygrid[2] - ygrid[1]) * se[ind], each = ngrid)
-      alpha <- dens * 0.7 / max(dens)
-      if (!shading) {
-         # Add horizontal lines to show the common proportions
-         alpha <- 0.7
-         dfrm  <- data.frame(x = xmn[ind], xend = xmx[ind], y = common[ind],
-                             rnms = d$rnms[ind])
-         # plt   <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, xend = xend, y = y),
-         #                                      col = clrs['refline'], linewidth = 1,
-         #                                      alpha = alpha, data = dfrm)
-         # This line needs to be fixed to scale the densities
-         dscl  <- 0.1 / max(dens)
-         wdth  <- dens * dscl
-         alpha <- rep(alpha, length(y))
+      else {
+         # This line needs to be altered to scale the densities
+         dscl      <- 0.3 / max(dens)
+         dgrd$wdth <- dens * dscl
+         plt  <- plt +
+            ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
+                               fill = clrs['reference'], data = dgrd)
       }
-      dgrd <- data.frame(x = rep(xc[ind],   each = ngrid), y, wdth, hght, alpha,
-                         rnms = rep(d$rnms, each = ngrid))
-      plt  <- plt +
-         ggplot2::geom_tile(ggplot2::aes(x, y, width = wdth, height = hght),
-                            alpha = dgrd$alpha,
-                            fill = clrs['reference'],
-                            data = dgrd)
-      # if (shading)
-      #    plt <- plt + ggplot2::scale_alpha(range = c(0.5, 0.8))
       # Add notches
-      xstart <- if (shading) rep(xmn[ind], 2)
+      xstart <- if (shading) rep(0, 2)
                 else rep(xc[ind] - dnorm(2) * dscl / 2, 2)
-      xstop  <- if (shading) rep(xmx[ind], 2)
+      xstop  <- if (shading) rep(1, 2)
                 else rep(xc[ind] + dnorm(2) * dscl / 2, 2)
       ltype  <- if (shading)  'dashed' else 'solid'
-      dfrm   <- data.frame(x = xstart, xend = xstop, rnms = rep(d$rnms, 2),
-                           y = c(common[ind] + 2 * se[ind],
-                                 common[ind] - 2 * se[ind]))
-      clr    <- if (aligned) 'white' else 'grey25'
+      dfrm   <- data.frame(x = xstart, xend = xstop,
+                           rnms = rep(rnms, 2), cnms = rep(cnms, 2),
+                           y = c(common + 2 * se, common - 2 * se))
+      clr    <- 'white'
       plt <- plt + ggplot2::geom_segment(ggplot2::aes(x = x, y = y, xend = xend),
                               col = clr, linetype = ltype,
                               data = dfrm)
@@ -199,51 +134,3 @@ rp.contingency <- function(x, style = "mosaic", values = "observed",
    print(plt)
    return(invisible(plt))
 }
-
-# Density strip
-
-# Tom W and others - something like the original attachment can be done as follows: note the use of a "ypos" variable to set the y position of each strip, and the "height" aesthetic for the strip thickness. 
-# 
-# x <- seq(-1, 5, by=0.01) # points to evaluate the density at
-# df2 <- data.frame( x = rep(x, 3),
-#                    dens = c(dnorm(x, 1.25, .35),  dnorm(x, -.5, .15),  dnorm(x,  2, 1)),
-#                    ypos = rep(c(1, 4, 5), each=length(x)))
-# 
-# ggplot(df2, aes(x = x, y = ypos)) + theme_bw() +
-#    geom_tile(aes(fill =  dens), height=0.2) +
-#    scale_fill_continuous(low="white", high="black")
-# 
-# or if you want the maximum density to be black in every strip (see the paper for discussion of this):
-#    
-#    df2$maxdens <- rep(with(df2, tapply(dens, factor(ypos, levels=unique(ypos)), max)), each=length(x))
-# df2$dens.unscaled <- df2$dens / df2$maxdens
-# 
-# ggplot(df2, aes(x = x, y = ypos)) + theme_bw() +
-#    geom_tile(aes(fill =  dens.unscaled), height=0.2) +
-#    scale_fill_continuous(low="white", high="black")
-
-# Old code for a 'comparison'
-# if ("comparison" %in% display) {
-#    pmx   <- apply(p, 1, max)
-#    base  <- c(0, cumsum(pmx[-nrw]))
-#    ymn   <- rep(base, ncl)
-#    ymx   <- c(sweep(p, 1, base, "+"))
-#    d     <- data.frame(p = c(p), x = c(x), xmn, xmx, ymn, ymx)
-#    ybrks <- base + pmx / 2
-#    plt <- ggplot2::ggplot(d) +
-#       ggplot2::geom_rect(ggplot2::aes(xmin = xmn, xmax = xmx,
-#                                       ymin = ymn, ymax = ymx),
-#                          fill = "lightgrey", col = "white") +
-#       ggplot2::geom_text(ggplot2::aes(x = (xmn + xmx) / 2,
-#                                       y = (ymn + ymx) / 2, label = lbl)) +
-#       ggplot2::theme_minimal() +
-#       ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-#                      axis.title.y = ggplot2::element_blank(),
-#                      panel.grid.major = ggplot2::element_blank(),
-#                      panel.grid.minor = ggplot2::element_blank()) +
-#       ggplot2::scale_x_continuous(breaks = xbrks, labels = colnames(x),
-#                                   expand = rep(0, 2)) +
-#       ggplot2::scale_y_continuous(breaks = ybrks, labels = rownames(x),
-#                                   expand = rep(0, 2))
-# }
-

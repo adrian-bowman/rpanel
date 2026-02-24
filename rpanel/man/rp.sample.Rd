@@ -12,7 +12,7 @@ Graphical exploration of variation in samples and sample means. The primary use 
 rp.sample(n, mu, sigma, distribution  = 'normal', shape = 0,
           panel = TRUE, nbins = 20, nbins.mean = 20,
           display, display.sample, display.mean, nsim = 50,
-          show.out.of.range = TRUE,
+          show.out.of.range = TRUE, ggplot = TRUE,
           hscale = NA, vscale = hscale, pause = 0.01)
 }
 
@@ -30,6 +30,7 @@ rp.sample(n, mu, sigma, distribution  = 'normal', shape = 0,
 \item{display.mean}{a logical vector which controls options for graphical display of the sample means, used initially or in non-interactive mode. See Details.}
 \item{nsim}{an integer value which the number of accumulated mean values which are plotted when the function runs in non-interactive mode. See Details.}
 \item{show.out.of.range}{a logical value which controls whether observations lying beyond 3 standard deviations (for samples) or 3 standard errors (for sample means) are indicated. The scales of the plots are fixed at 3 standard deviations above and below the mean so that the axes are fixed for all samples.}
+\item{ggplot}{a logical value which controls whether \code{ggplot} graphics are used. If this is set to \code{FALSE} or the \pkg{ggplot2} package is not available, functionality reverts to the standard graphics version available in \pkg{rpanel} 1.1-5 which has simpler functionality. The \code{ggplot} version of the function is recommended.}
 \item{hscale, vscale}{scaling parameters for the size of the plot when \code{panel.plot} is set to \code{TRUE}.  The default values are 1.}
 \item{pause}{a time delay, in seconds, for the insertion of components into the control panel. The speed of some computing systems can create a panel which does not expand in time to contain all its components. The \code{pause} argument adds a short delay to each component to avoid this.}
 }

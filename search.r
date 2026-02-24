@@ -1,14 +1,15 @@
 #     Search for text in all files
 
-target    <- "'node'"
+target    <- "lattice"
 diry      <- "."
-diry      <- "testing"
+diry      <- "tests"
+diry      <- 'man'
 diry      <- "R"
 recursive <- TRUE
 
 files <- list.files(diry, full.names = TRUE, recursive = recursive)
 ind   <- c(grep(".rda", files), grep(".gif", files))
-files <- files[-ind]
+if (length(ind) > 0) files <- files[-ind]
 
 for (ifl in files) {
    # cat(ifl, "\n")

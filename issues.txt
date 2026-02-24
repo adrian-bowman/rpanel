@@ -4,6 +4,15 @@
 
 Create testthat style of tests for all functions.
 
+Rename the colour names? Extend to 'residuals'. Also in help files.
+
+lm
+  - remove references to lattice and denstrip packages in anova
+  -  consider what's happening with the displayed densities
+  
+rp.surface
+  - remove references to lattice package
+
 rp.t_test
   - two-sample case: zoom
       - axis (zoom) accounts for two-sided test even when mu is not specified?
@@ -17,25 +26,13 @@ rp.t_test
   - rp.t_test(sleep_diff, panel = FALSE, ruler.position = 'reference')
     this gives feedback but also gives an error and prints the t-test results.
 
-rp.sample
-  - warnings about missing values: see tests.
-  - improve the plots created by standard graphics, when ggplot = FALSE,
-    to match those when ggplot = TRUE. Is it worth it?
-    (ggplot = FALSE not currenty activated)
-  - remove nbins for the data in the binomial case.
-
 rp.datalink
   - regular systematic checks needed on availability of datasets
   - remove references to www.stats.gla.ac.uk
   - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
     after an incident.
   
-rp.colour.key
-  - allow cex.axis to be changed in rp.colour.key.
-    See the code in rp_colour_key.R in the rental sector paper analysis.
-
 rp.geosim
-  - the variogram plot no longer disappears when the checkboxes are not checked.
   - display the values of the anisotropy parameters in the plot title.
   - this has been changed to allow panel = FALSE but more extensive changes
     are required for consistency. Some thinking to be done here.
@@ -45,47 +42,6 @@ rp.geosim
 rp.likelihood: 2 variable case
    - neaten up the edges of the 3d surface
    - is transparency ok on Windows?
-
-rp.plot3d
-  - allow a factor (or character variable) to be passed in the col or size argument.
-    This avoids the need to create a specific colour variable to pass in.
-    Where would the legend be placed?
-
-rp.plot4d:
-  - check for Windows OS and, if so, force a uniform window rather
-    than a normal one, as Windows doesn't support transparency.
-    ggplot solution?
-  - change l in hcl rather than s in hsv, to avoid grey points when a
-    normal window is used.
-  - example involving group in help file.
-  - allow a function to control the plotting for the data inside the probe.
-    Can/should aspects such as ylim be controllable here?  Easier not to in 
-    the first instance.  This might work perfectly well for non-response
-    data too (in which case the radiobuttons for histogram and density 
-    might be removed?).
-  - provide an argument which defines a function to be used to create the 
-    location plot, with default function(x, y) points(x, y).
-  - allow axes to be suppressed (for example for map plotting).
-    In fact, more general plotting control parameters might be passed by ....
-    
-rp.tables
-  - add a vertical line at the appropriate value when using
-    a fixed probability (as with p-values)?
-  - the t density function doesn't go to zero for small df's.
-
-rp.mururoa
-  - errors in contour levels for linear and quadratic predictions
-   
-rp.power
-  - rp.power(panel = FALSE, populations.showing = TRUE)
-    Error: $ operator is invalid for atomic vectors
-
-rp.radiogroup
-  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
-  
-Remove keywords from help files?
-
-Rename the colour names? Extend to 'residuals'. Also in help files.
 
 --------------------------------------------------------------
 	               Ideas for changes to rpanel
@@ -115,6 +71,9 @@ rp.contingency
   - change the cell fill colours with an added scale_discrete_manual layer?
   - activate style = 'proportions', with a plot similar to rp.anova and with violins?
 
+rp.plot4d
+  - remove references to lattice package
+
 rp.spacetime
   - allow regular data to be exploited, with marginal space and time input
     and a matrix of spacetime values.
@@ -124,6 +83,38 @@ rp.tables
     curves added for each new selected distribution?
     Use a menu to select distributions.
   - create an alias rp.distributions?
+
+rp.plot3d
+  - allow a factor (or character variable) to be passed in the col or size argument.
+    This avoids the need to create a specific colour variable to pass in.
+    Where would the legend be placed?
+
+rp.plot4d:
+  - check for Windows OS and, if so, force a uniform window rather
+    than a normal one, as Windows doesn't support transparency.
+    ggplot solution?
+  - change l in hcl rather than s in hsv, to avoid grey points when a
+    normal window is used.
+  - allow a function to control the plotting for the data inside the probe.
+    Can/should aspects such as ylim be controllable here?  Easier not to in 
+    the first instance.  This might work perfectly well for non-response
+    data too (in which case the radiobuttons for histogram and density 
+    might be removed?).
+  - provide an argument which defines a function to be used to create the 
+    location plot, with default function(x, y) points(x, y).
+  - allow axes to be suppressed (for example for map plotting).
+    In fact, more general plotting control parameters might be passed by ....
+  - is the colour range plotted properly in the model example in the test file.
+    See note on zlim and midpoint of the range in the help file for image.
+    
+rp.colour.key
+  - allow cex.axis to be changed in rp.colour.key.
+    See the code in rp_colour_key.R in the rental sector paper analysis.
+
+rp.tables
+  - add a vertical line at the appropriate value when using
+    a fixed probability (as with p-values)?
+  - the t density function doesn't go to zero for small df's.
 
 rp.power
   - notice the existence of power.t.test in R. This also allows the 
@@ -139,6 +130,9 @@ rp.curve:
     uncertainty-sm1.r in India files - strange behaviour in trying to call
     a function repeatedly.
 
+rp.radiogroup
+  - the reference to 'not implemented' in the vals section of the help file is a bit confusing.
+  
 rp.control.dispose
   - deal with the case where the panel object does not exist.
   
@@ -158,8 +152,6 @@ See errors reported by Megan: research/rpanel/megan/Rpanel Report/rpanel 1.1-3 e
 
 Is this still a problem?
 Communication from level 2.  See the rp.sample (new) cartoon and the passing of display and display.old.  Stripped down version could help to isolate the problem.
-
-A function to create R-Shiny code in simple cases?
 
 rp.text: 
  - this is centred.  More flexibility?

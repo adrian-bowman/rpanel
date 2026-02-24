@@ -14,25 +14,21 @@ x <- matrix(c(19, 41, 32, 28), ncol = 2,
 
 x2 <- t(matrix(c(87, 73, 64, 15, 25, 16, 59, 84, 92), ncol = 3,
                dimnames = list(c("red", "yellow", "blue"),
-                                c("round", "square", "oblong"))))
+                               c("round", "square", "oblong"))))
+
+x3 <- t(matrix(c(887, 73, 64, 815, 25, 16, 859, 84, 92), ncol = 3,
+               dimnames = list(c("red", "yellow", "blue"),
+                               c("round", "square", "oblong"))))
 
 test_that('Standard calls', {
-   expect_no_error(rp.contingency(x))
-   expect_no_error(rp.contingency(t(x)))
-   expect_no_error(rp.contingency(x2))
-   expect_no_error(rp.contingency(x2, style = 'aligned'))
-   expect_error(rp.contingency(x2, style = 'proportions'))
-   expect_no_error(rp.contingency(x, uncertainty = 'shading'))
-   expect_no_error(rp.contingency(x, uncertainty = 'shading'))
-   expect_no_error(rp.contingency(x, uncertainty = 'shading', proportion.scale = 'free'))
-   expect_no_error(rp.contingency(x, style = 'aligned', uncertainty = 'shading'))
-   expect_no_error(rp.contingency(x, style = 'aligned', uncertainty = 'shading',
-                                  proportion.scale = 'free'))
-   expect_no_error(rp.contingency(x, uncertainty = 'shading'))
-   expect_no_error(rp.contingency(x, style = 'aligned', uncertainty = 'shading'))
-   expect_no_error(rp.contingency(x, style = 'aligned', uncertainty = 'shading'))
-   expect_no_error(rp.contingency(x, uncertainty = 'shading') + ggplot2::coord_flip())
-   expect_no_error(rp.contingency(x, style = "aligned"))
+   for (i in 1:3) {
+      xx <- switch(i, x, x2, x3)
+      for (uncertainty in c('none', 'shading', 'violin')) {
+         for (proportion.scale in c('fixed', 'free')) {
+            expect_no_error(rp.contingency(xx, uncertainty, proportion.scale))
+         }
+      }
+   }
 })
 
 test_that('Errors in input', {
@@ -46,12 +42,4 @@ test_that('Add to the ggplot object', {
    p <- rp.contingency(x)
    expect_no_error(p + ggplot2::ggtitle("A contingency table"))
    expect_no_error(rp.contingency(x) + ggplot2::ggtitle("A contingency table"))
-})
-
-test_that('Displayed values', {
-   p <- rp.contingency(x)
-   expect_no_error(rp.contingency(x, values = 'observed'))
-   expect_no_error(rp.contingency(x, values = 'expected'))
-   expect_no_error(rp.contingency(x, values = 'proportions'))
-   expect_error(rp.contingency(x, values = 'ddd'))
 })

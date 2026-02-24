@@ -86,16 +86,25 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
       rp.control.put(panel$panelname, panel)
       rp.tkrreplot(panel, plot1)
 
+      print(panel$vgm.checks)
       if (any(panel$vgm.checks)) {
          if (!panel$vgm.present) {
       	     rp.tkrplot(panel, plot2, vario.update, hscale = panel$hscale, vscale = panel$vscale, 
                 grid = "rightplot", row = 0, column = 0)
             panel$vgm.present <- TRUE
          }
-      else
-         rp.tkrreplot(panel, plot2)
+         else
+            rp.tkrreplot(panel, plot2)
       }
-      
+      else {
+         print(panel$vgm.present)
+         if (panel$vgm.present) {
+            print('here')
+            rp.widget.dispose(panel, 'plot2')
+            panel$vgm.present <- FALSE
+         }
+      }
+
       if (("rgl plot" %in% names(panel$display.checks)) && (panel$display.checks["rgl plot"])) {
          w  <- panel$data
          x  <- panel$fieldnug$coords[, 1]

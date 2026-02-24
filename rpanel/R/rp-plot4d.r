@@ -711,7 +711,7 @@ rp.plot4d <- function(x, z, y, model, group, subset,
       layout(1)
    }
 
-   invisible()
+   invisible(panel)
 }
 
    rp.spacetime <- function(space, time, y, model, group, subset,
