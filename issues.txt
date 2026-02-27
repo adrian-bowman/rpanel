@@ -32,13 +32,6 @@ rp.datalink
   - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
     after an incident.
   
-rp.geosim
-  - display the values of the anisotropy parameters in the plot title.
-  - this has been changed to allow panel = FALSE but more extensive changes
-    are required for consistency. Some thinking to be done here.
-  - the help file also needs to be updated.
-  - add range = 0.
-
 rp.likelihood: 2 variable case
    - neaten up the edges of the 3d surface
    - is transparency ok on Windows?
@@ -107,6 +100,9 @@ rp.plot4d:
   - is the colour range plotted properly in the model example in the test file.
     See note on zlim and midpoint of the range in the help file for image.
     
+rp.geosim
+  - add range = 0.
+
 rp.colour.key
   - allow cex.axis to be changed in rp.colour.key.
     See the code in rp_colour_key.R in the rental sector paper analysis.

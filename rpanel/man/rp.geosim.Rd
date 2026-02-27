@@ -26,7 +26,7 @@ rp.geosim(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa = 10,
 \item{ngrid}{the number of grid points in each dimension of the sampled locations. The default is 15.}
 \item{Range, pSill, Nugget}{the initial values of the range, partial sill and nugget parameters. the defaults values are 0.1, 0.5 and 0 respectively.}
 \item{kappa}{the initial value of the smoothness parameter of the Matern covariance function. The default is 4.}
-\item{aniso.angle, aniso.ratio}{the initial values of the anisotropy and and ratio parameters. the defaulkt values are 0 and 1 respectively.}
+\item{aniso.angle, aniso.ratio}{the initial values of the anisotropy angle (in radians) and and ratio parameters. The default values are 0 and 1 respectively.}
 \item{col.palette}{the colour palette used to display the random fields.}
 \item{panel}{a logical variable which determines whether an interactive panel is created.}
 }
@@ -42,7 +42,7 @@ Note that the Matern covariance function is parameterised in the form described 
 }
 
 \value{
-  Nothing is returned.
+The \code{tcltk} panel object is returned.
 }
 
 \references{

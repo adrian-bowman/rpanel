@@ -33,8 +33,6 @@ rp.datalink <- function(name, action = "retrieve filename") {
         "https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
       "income_distribution",     ".ods",
         "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1140100/Table_3.1a_2021.ods",
-      "mammal_speed",            ".rda",
-        "http://www.stats.gla.ac.uk/~adrian/data/mammal_speed.rda",
       "married_men",             ".xls",
         "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/marriagecohabitationandcivilpartnerships/datasets/marriagestatisticscohabitationandcohortanalyses/2011/cohabitationandcohortanalyses11.xls",
       "NAO",                     ".txt",

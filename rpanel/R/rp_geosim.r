@@ -333,8 +333,8 @@ rp.geosim <- function(max.Range = 0.5, max.pSill = 1, max.Nugget = 1, max.Kappa 
                     points.only = FALSE, points.id = NA, surface.id = NA, col.palette = col.palette)
       panel <- field.new(panel)
       cont.update(panel)
-      invisible()
    }
+   invisible(panel)
 }
 
 rp.colour.chart <- function(cols, zlim)  {
