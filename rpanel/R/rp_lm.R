@@ -8,6 +8,8 @@ rp.lm <- function(x, ylab, xlab, zlab,
                   residuals.showing, linewidth = 1,
                   hscale = 1, vscale = hscale, ...) {
    
+   if (!requireNamespace('ggplot2', quietly = TRUE)) stop('this function requires the ggplot2 package.')
+   
    static <- !panel
    missing.display.model    <- missing(display.model)
    missing.comparison.model <- missing(comparison.model)

@@ -34,7 +34,7 @@ rp.anova(y, x, z, model = NA, model0 = NA, ylab = NA, xlab = NA, zlab = NA, titl
 
 \details{
 The data are displayed as points superimposed on a density strip created by the 
-\pkg{denstrip} package.  Selected models are displayed through the fitted values for each
+\pkg{ggplot2} package.  Selected models are displayed through the fitted values for each
 group.  When a valid comparison model is selected, its fitted values are displayed along
 with a shaded regions expressing the contribution of the differences between the two sets
 of fitted values to the F-statistic.  The F-test is displayed in graphical form with a density
@@ -46,8 +46,8 @@ the panel argument to FALSE and specifying the models of interest.
 }
 
 \value{
-  Nothing is returned.
-  }
+When the funcction is called in interactive mode, the \code{tcltk} panel object is returned, otherwise the \code{ggplot} object containing the requested plot is returned.
+}
 
 \references{
    rpanel: Simple interactive controls for R functions using the tcltk package.

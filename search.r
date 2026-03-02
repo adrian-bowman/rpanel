@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "reading"
+target    <- "rp.surface"
 diry      <- "."
 diry      <- "tests"
 diry      <- 'man'

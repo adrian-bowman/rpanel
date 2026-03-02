@@ -4,12 +4,6 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
                      ylab = NA, xlab = NA, zlab = NA, title = NULL, lines = TRUE,
                      panel = TRUE, panel.plot = TRUE, hscale = 1.3, vscale = hscale / 1.3) {
 
-   # The denstrip package has direct references to lattice, so lattice needs to be loaded.
-   # An alternative is to use the code at the end of this file which copies the denstrip functions.
-   if (!requireNamespace("lattice")) stop("the lattice package is not available.")
-   if (!requireNamespace("denstrip", quietly = TRUE)) stop("the denstrip package is not available.")
-   if (!requireNamespace("colorspace", quietly = TRUE)) stop("the colorspace package is not available.")
-  
    type <- if (missing(z)) "One-way" else "Two-way"
 
    if (is.na(ylab)) ylab <- deparse(substitute(y))
@@ -98,7 +92,7 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
          form <- as.formula(form)
          ngps <- nrow(unique(data.frame(x, z)))
          if (graphics != "boxplot") {
-            clr  <- colorspace::rainbow_hcl(3)
+            clr  <- c("#E495A5", "#86B875", "#7DB0DD")
          	dfrm <- data.frame(x, y, z, jitter.x)
            	plt  <- ggplot2::ggplot(dfrm, ggplot2::aes(y, x)) + ggplot2::xlab(ylab) + ggplot2::ylab(xlab) +
          	          ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
