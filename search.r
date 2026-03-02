@@ -1,6 +1,6 @@
 #     Search for text in all files
 
-target    <- "lattice"
+target    <- "reading"
 diry      <- "."
 diry      <- "tests"
 diry      <- 'man'
