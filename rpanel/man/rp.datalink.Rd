@@ -34,7 +34,7 @@ The file associated with `name` can be a zip file, in which case the \code{unz} 
 \examples{
 \dontrun{
   rp.datalink()
-  rp.datalink("~/Desktop/temp", "set directory")
+  rp.datalink("~/Desktop/temp", "set local directory")
   rp.datalink("global_temperature")
   
   # Reading from a file within a zip file

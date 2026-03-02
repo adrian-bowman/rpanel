@@ -31,7 +31,7 @@ rp.datalink
   - remove references to www.stats.gla.ac.uk
   - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
     after an incident.
-  
+
 rp.likelihood: 2 variable case
    - neaten up the edges of the 3d surface
    - is transparency ok on Windows?

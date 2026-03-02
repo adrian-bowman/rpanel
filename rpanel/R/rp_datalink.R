@@ -5,8 +5,8 @@
 rp.datalink <- function(name, action = "retrieve filename") {
    
    datasets <- matrix(c(
-      "Ben_Nevis",               ".csv",
-        "https://dap.ceda.ac.uk/badc/deposited2019/operation-weather-rescue/data/ben-nevis-data/ben-nevis/daily/ben_nevis_summit_daily_v1.csv",
+      # "Ben_Nevis",               ".csv",
+      #   "https://dap.ceda.ac.uk/badc/deposited2019/operation-weather-rescue/data/ben-nevis-data/ben-nevis/daily/ben_nevis_summit_daily_v1.csv",
       "centenarians",            ".txt",
         "http://www.stats.gla.ac.uk/~adrian/data/centenarians.txt",
       "children_services",       ".zip",
@@ -54,9 +54,9 @@ rp.datalink <- function(name, action = "retrieve filename") {
       "UN_demography",           ".xlsx",
         "https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/EXCEL_FILES/1_General/WPP2024_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT.xlsx",
       "UN_country_codes",   ".xlsx",
-        "https://population.un.org/wpp/assets/Excel%20Files/4_Metadata/WPP2024_F01_LOCATIONS.xlsx",
-      "UK_parliamentary_boundaries_2024", ".zip",
-        "https://geoportal.statistics.gov.uk/datasets/ons::westminster-parliamentary-constituencies-july-2024-boundaries-uk-buc-2.zip"
+        "https://population.un.org/wpp/assets/Excel%20Files/4_Metadata/WPP2024_F01_LOCATIONS.xlsx"
+      # "UK_parliamentary_boundaries_2024", ".zip",
+        # "https://geoportal.statistics.gov.uk/datasets/ons::westminster-parliamentary-constituencies-july-2024-boundaries-uk-buc-2.zip"
    ), ncol = 3, byrow = TRUE)
    datasets <- as.data.frame(datasets)
    names(datasets) <- c("name", "type", "remote_file")
