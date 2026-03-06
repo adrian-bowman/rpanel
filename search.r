@@ -1,10 +1,10 @@
 #     Search for text in all files
 
-target    <- "rp.surface"
-diry      <- "."
+target    <- "caged"
 diry      <- "tests"
 diry      <- 'man'
 diry      <- "R"
+diry      <- "."
 recursive <- TRUE
 
 files <- list.files(diry, full.names = TRUE, recursive = recursive)

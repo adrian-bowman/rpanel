@@ -74,6 +74,12 @@ test_that('Standard calls: anova', {
    expect_no_error(rp.coefficients(lm(1/stime ~ poison * treatment, data = poisons), ci = FALSE))
 })
 
+test_that('Anova with cells with no data', {
+   ind      <- which((poisons$poison ==  '1') & (poisons$treatment == '3'))
+   poisons1 <- poisons[-ind, ]
+   expect_no_error(rp.coefficients(lm(stime ~ poison * treatment, data = poisons1)))
+})
+
 test_that('Different contrasts', {
    model <- lm(stime ~ poison * treatment,
                contrasts = list(poison = 'contr.poly', treatment = 'contr.poly'), data = poisons)

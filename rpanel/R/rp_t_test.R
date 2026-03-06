@@ -74,6 +74,7 @@ rp.t_test <- function(x, y = NULL, panel = TRUE, mu = NULL, data.display = 'dens
          msg <- paste(msg, 'Setting is reference but mu has not been specified.')
       msg <- paste(msg, 'Reverting to none.')
       message(msg)
+      ruler.position <- 'none'
    }
    if (!is.logical(display)) stop('display is not logical.')
    if (!('distribution' %in% names(display)))

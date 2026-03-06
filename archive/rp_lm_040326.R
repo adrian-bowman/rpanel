@@ -268,7 +268,6 @@ rp.lm <- function(x, ylab, xlab, zlab,
       models[[i]] <- update(model, model.nodes$label[i], data = data.dfrm,
                             contrasts = contr[ind])
    }
-   
    if (type %in% c('one.way', 'two.way')) {
       model.est <- list()
       comp.est  <- list()
@@ -284,20 +283,12 @@ rp.lm <- function(x, ylab, xlab, zlab,
          df1     <- mdl$df.residual
          model.est[[i]] <- tapply(fitted(mdlm), lst, mean)
          comp.est[[i]]  <- tapply(fitted(mdl0), lst, mean)
-         # if (any(is.na(coef(mdlm))))
-         #    comp.se[[i]] <- comp.est[[i]] * NA
-         # else {
          H   <- model.matrix(mdl)
-         ind <- which(is.na(coef(mdl)))
-         if (length(ind) > 0) H <- H[ , -ind]
          H   <- H %*% solve(crossprod(H)) %*% t(H)
          H0  <- model.matrix(mdl0)
-         ind <- which(is.na(coef(mdl0)))
-         if (length(ind) > 0) H0 <- H0[ , -ind]
          H0  <- H0 %*% solve(crossprod(H0)) %*% t(H0)
          cse <- sqrt(diag(tcrossprod(H - H0))) * summary(mdl)$sigma
          comp.se[[i]] <- tapply(cse, lst, mean)
-         # }
          # Old version based on the contributions to the global test statistic
          # comp.se[[i]] <- tapply(fitted(mdl0), lst, length)
          # comp.se[[i]] <- summary(mdl)$sigma * sqrt(abs(df0 - df1)) /
@@ -307,13 +298,11 @@ rp.lm <- function(x, ylab, xlab, zlab,
                               unlist(comp.est) + 3 * unlist(comp.se),
                               unlist(comp.est) - 3 * unlist(comp.se),
                               na.rm = TRUE)
-      drr <- 0.01 * diff(response.range)
-      response.range <- response.range + c(-drr, drr)
    }
    else {
       model.est <- NULL
       comp.est  <- NULL
-      comp.se   <- NULL
+      comp.se  <- NULL
       response.range <- range(y)
    }
    
@@ -593,8 +582,8 @@ rp.lm.draw <- function(panel) {
       }
       
       # Set the range
-      plt  <- plt + ggplot2::xlim(panel$response.range[1] - del, panel$response.range[2] + del)
-
+      plt  <- plt + ggplot2::xlim(panel$response.range[1], panel$response.range[2])
+      
       # Plot the data points
       set.seed(panel$seed)
       plt  <- plt +
@@ -605,82 +594,63 @@ rp.lm.draw <- function(panel) {
       # Plot the fitted values of the display model
       if (!any(is.na(hlight))) {
          mdl <- panel$models[[hlight[1]]]
-         if (mdl$df.residual > 0) {
-            afx <- as.numeric(factor(dfrm$x))
-            plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = fitted(mdl),
-                                                            y    = afx - 0.45,
-                                                            yend = afx + 0.45),
-                                             linewidth = 1, col = panel$clrs['estline'])
-         }
-         else
-            plt <- plt + ggplot2::ggtitle('There is insufficient data to fit this model.')
+         afx <- as.numeric(factor(dfrm$x))
+         plt <- plt + ggplot2::geom_segment(ggplot2::aes(x    = fitted(mdl),
+                                                         y    = afx - 0.45,
+                                                         yend = afx + 0.45),
+                                            linewidth = 1, col = panel$clrs['estline'])
       }
       
       # Plot the model comparison uncertainties
       if (length(hlight) == 2) {
-         m1 <- panel$models[[hlight[1]]]
-         m2 <- panel$models[[hlight[2]]]
-         if (m1$df.residual * m2$df.residual == 0)
-            plt <- plt + ggplot2::ggtitle('There is insufficient data to fit both these models.')
+         fn       <- function(x) all(hlight %in% x)
+         comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
+         # The [1] below is a fix for the one-way case
+         comp.ind <- which(apply(comps, 1, fn))[1]
+         est      <- panel$comp.est[[comp.ind]]
+         se       <- panel$comp.se[[comp.ind]]
+         # Ensure xgrid covers the detail of each normal distribution as there may be very different se's
+         cest     <- c(est)
+         cse      <- c(se)
+         xgrid    <- numeric(0)
+         fun      <- function(i) seq(cest[i] - 3 * cse[i], cest[i] + 3 * cse[i], length = 50)
+         xgrid    <- c(sapply(1:length(c(est)), fun))
+         ngrid    <- length(xgrid)
+         # xgrid    <- seq(panel$response.range[1] + del, panel$response.range[2] - del,
+         #                 length = ngrid)
+         if (panel$type == 'two.way') {
+            dfrm1 <- data.frame(y = c(est), x = rep(rownames(est), ncol(est)),
+                                            z = rep(colnames(est), each = nrow(est)))
+            dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
+                                x = factor(rep(dfrm1$x, ngrid), levels = levels(panel$x)),
+                                z = factor(rep(dfrm1$z, ngrid), levels = levels(panel$z)))
+            dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[cbind(dfrm1$x, dfrm1$z)], se[cbind(dfrm1$x, dfrm1$z)]) /
+                           dnorm(0, 0, se[cbind(dfrm1$x, dfrm1$z)])
+            ind   <- apply(dfrm1, 1, function(x) any(is.na(x)))
+            dfrm1 <- dfrm1[!ind, ]
+         }
          else {
-            fn       <- function(x) all(hlight %in% x)
-            comps    <- as.matrix(panel$model.nodes[ , c('comparison1', 'comparison2')])
-            # The [1] below is a fix for the one-way case
-            comp.ind <- which(apply(comps, 1, fn))[1]
-            if (!all(is.na(panel$comp.se[[comp.ind]]))) {
-               est      <- panel$comp.est[[comp.ind]]
-               se       <- panel$comp.se[[comp.ind]]
-               # Ensure xgrid covers the detail of each normal distribution as there may be very different se's
-               cest     <- c(est)
-               cse      <- c(se)
-               cest     <- cest[!is.na(cest)]
-               cse      <- cse[!is.na(cse)]
-               ugrid    <- 100
-               fun      <- function(i) seq(cest[i] - 3 * cse[i], cest[i] + 3 * cse[i], length = ugrid)
-               xgrid    <- c(sapply(1:length(cest), fun))
-               ngrid    <- length(xgrid)
-               xwdth    <- rep(6 * cse / ugrid, each = ugrid)
-               # xgrid    <- seq(panel$response.range[1] + del, panel$response.range[2] - del,
-               #                 length = ngrid)
-               if (panel$type == 'two.way') {
-                  dfrm1 <- data.frame(y = c(est), x = rep(rownames(est), ncol(est)),
-                                                  z = rep(colnames(est), each = nrow(est)))
-                  dfrm1 <- dfrm1[!is.na(dfrm1$y), ]
-                  dfrm1 <- data.frame(xgrid = xgrid, xwdth = xwdth,
-                                      x = factor(rep(dfrm1$x, each = ugrid), levels = levels(panel$x)),
-                                      z = factor(rep(dfrm1$z, each = ugrid), levels = levels(panel$z)))
-                  dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[cbind(dfrm1$x, dfrm1$z)], se[cbind(dfrm1$x, dfrm1$z)]) /
-                                 dnorm(0, 0, se[cbind(dfrm1$x, dfrm1$z)])
-               }
-               else {
-                  dfrm1 <- data.frame(y = est, x = names(est))
-                  dfrm1 <- data.frame(xgrid = xgrid, xwdth = xwdth,
-                                      x = factor(rep(dfrm1$x, each = ugrid), levels = levels(panel$x)))
-                  dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[dfrm1$x], se[dfrm1$x]) / dnorm(0, 0, se[dfrm1$x])
-               }
-               ind   <- apply(dfrm1, 1, function(x) any(is.na(x)))
-               dfrm1 <- dfrm1[!ind, ]
-               if (panel$uncertainty.display == 'shading') {
-                  plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)),
-                                                  fill = dgrid, height = 0.8, width = xwdth + del, alpha = 0.9),
-                                                  data = dfrm1, show.legend = FALSE) +
-                     ggplot2::scale_fill_gradient(low = "grey90", high = panel$clrs['reference'])
-               }
-               else {
-                  dfrm1$dgrid <- 0.8 * dfrm1$dgrid
-                  # dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se, na.rm = TRUE))
-                  plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(x),
-                                                               height = dgrid, width = xwdth + del),
-                                                  col = NA, fill = panel$clrs['reference'],
-                                                  # alpha = 0.7,
-                                                  show.legend = FALSE, data = dfrm1)
-               }
-            }
+            dfrm1 <- data.frame(y = est, x = names(est))
+            dfrm1 <- data.frame(xgrid = rep(xgrid, each = nrow(dfrm1)),
+                                x = factor(rep(dfrm1$x, ngrid), levels = levels(panel$x)))
+            dfrm1$dgrid <- dnorm(dfrm1$xgrid, est[dfrm1$x], se[dfrm1$x]) / dnorm(0, 0, se[dfrm1$x])
+         }
+         if (panel$uncertainty.display == 'shading') {
+            plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)),
+                                            fill = dgrid, height = 0.8, alpha = 0.7),
+                                            data = dfrm1, show.legend = FALSE) +
+               ggplot2::scale_fill_gradient(low = "grey90", high = panel$clrs['reference'])
+         }
+         else {
+            dfrm1$dgrid <- 0.8 * dfrm1$dgrid
+            # dfrm1$dgrid <- 0.8 * dfrm1$dgrid / dnorm(0, 0, min(se, na.rm = TRUE))
+            plt <- plt + ggplot2::geom_tile(ggplot2::aes(xgrid, as.numeric(factor(x)), height = dgrid),
+                                            col = NA, fill = panel$clrs['reference'],
+                                            # alpha = 0.7,
+                                            show.legend = FALSE, data = dfrm1)
          }
       }
       
-      # plt <- plt + ggplot2::scale_y_discrete(labels = levels(x), breaks = 1:nlevels(x))
-
       plt  <- plt + ggplot2::coord_flip()
       if (panel$type == "two.way")
          plt <- plt + ggplot2::facet_grid(. ~ z)
@@ -702,19 +672,14 @@ rp.lm.effectsplot <- function(panel) {
       nhl    <- length(highlighted.node)
       hlight <- (!any(is.na(highlighted.node)) && 
                  (highlighted.node[1] > 1 | nhl > 1))
-      fn.blank <- function(text = '') {
+      fn.blank <- function() {
          plot(c(0, 1), c(0, 1), type = "n", xlab = "", ylab = "", axes = FALSE,
               mar = c(0, 0, 0, 0) + 0.1, bg = bgdcol)
-         text(0.5, 0.5, text)
          invisible()
       }
       if (hlight) {
          mdl <- models[[highlighted.node[1]]]
          if (nhl == 1) {
-            if (mdl$df.residual == 0) {
-               fn.blank('There is insufficient data to fit this model.')
-               return(panel)
-            }
             if (model.display == 'coefficients')
                print(rp.coefficients(mdl, ci = ci))
             else if (model.display == 'terms')
@@ -722,12 +687,8 @@ rp.lm.effectsplot <- function(panel) {
             else
                fn.blank()
          }
-         if (nhl == 2) {
+         else if (nhl == 2) {
             mdl0 <- models[[highlighted.node[2]]]
-            if (mdl0$df.residual == 0) {
-               fn.blank('There is insufficient data to fit these models.')
-               return(panel)
-            }
             r0   <- rownames(anova(mdl0))
             r1   <- rownames(anova(mdl))
             trm  <- r1[!(r1 %in% r0)]

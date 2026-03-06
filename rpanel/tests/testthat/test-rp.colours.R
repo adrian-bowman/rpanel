@@ -1,9 +1,9 @@
 #     Tests for the rp.datalink
 
-setwd('rpanel')
-library(devtools)
-library(testthat)
-load_all()
+# setwd('rpanel')
+# library(devtools)
+# library(testthat)
+# load_all()
 
 test_that('Standard calls', {
    expect_no_error(rp.colours())

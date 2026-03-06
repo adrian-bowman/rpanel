@@ -125,7 +125,7 @@ rp.anova <- function(y, x, z, model = NA, model0 = NA,
             }
         	  if (model.check) {
                plt <- plt + ggplot2::stat_summary(ggplot2::aes(x = fitted(mdl)), width = 0,
-                                  fun = "mean", size = 1,
+                                  fun = "mean", linewidth = 1,
           	     				       fun.min = function(x) mean(x) - 0.45,
           	     				       fun.max = function(x) mean(x) + 0.45,
           						       geom = "crossbar", orientation = "x", col = clr[1])

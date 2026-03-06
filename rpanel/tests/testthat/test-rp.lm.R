@@ -199,7 +199,7 @@ test_that('Static mode: some categories with no data', {
 })
 test_that('Static mode: some categories are all missing', {
    poisons1 <- poisons
-   ind      <- which((poisons1$poison ==  'p1'))
+   ind      <- which((poisons1$poison ==  '1'))
    poisons1$poison[ind] <- NA
    expect_no_error(rp.lm(stime ~ poison, data = poisons1, panel = FALSE,
                          comparison.model = ~ 1))
@@ -210,8 +210,7 @@ absorption <- c(64, 72, 68, 77, 56, 95, 78, 91, 97, 82, 85, 77,
                 75, 93, 78, 71, 63, 76, 55, 66, 49, 64, 70, 68)
 fat <- factor(rep(c('A', 'B', 'C', 'D'), each = 6))
 test_that('Standard call:', {
-   expect_no_error(rp.lm(absorption ~ fat, panel = FALSE,
-                   comparison.model = ~ 1))
+   expect_no_error(rp.lm(absorption ~ fat, panel = FALSE, comparison.model = ~ 1))
 })
 
 test_that('Old version of rp.anova', {
@@ -269,11 +268,18 @@ test_that('Static mode: valid comparison.model', {
    expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                          display.model = ~ poison * treatment,
                          comparison.model = ~ poison + treatment))
+   expect_no_error(rp.lm(1/stime ~ poison + treatment, data = poisons, panel = FALSE,
+                         display.model = ~ poison * treatment,
+                         comparison.model = ~ poison + treatment))
 })
 test_that('Static mode: display.model and comparison.model are not adjacent', {
    expect_error(rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
                       display = ~ poison, comparison.model = ~ poison * treatment))
 })
+
+rp.lm(stime ~ poison + treatment, data = poisons, panel = FALSE,
+      comparison.model = ~ poison * treatment)
+
 test_that('Static mode: missing data present', {
    poisons1 <- poisons
    poisons1[cbind(sample(1:nrow(poisons1), 8), sample(1:3, 8, replace = TRUE))] <- NA
@@ -284,8 +290,26 @@ test_that('Static mode: missing data present', {
 test_that('Static mode: some categories with no data', {
    ind      <- which((poisons$poison ==  '1') & (poisons$treatment == '3'))
    poisons1 <- poisons[-ind, ]
-   expect_no_error(rp.lm(stime ~ poison + treatment, data = poisons1, panel = FALSE,
+   expect_no_error(rp.lm(stime ~ poison * treatment, data = poisons1, panel = FALSE,
                          comparison.model = ~ poison * treatment))
+})
+
+test_that('Very different sample sizes in factor levels', {
+   y <- c(rnorm(10), rnorm(1000), rnorm(10), rnorm(10))
+   x <- factor(c(rep(1, 1010), rep(2, 20)))
+   z <- factor(c(rep(1, 10), rep(2, 1000), rep(1, 10), rep(2, 10)))
+   expect_no_error(rp.lm(y ~ x + z, panel = FALSE, display.model = ~ x * z, comparison.model = ~ x + z))
+   expect_no_error(rp.lm(y ~ x + z, panel = FALSE, display.model = ~ x * z, comparison.model = ~ x + z,
+         uncertainty.display = 'shading'))
+   expect_no_error(rp.lm(y ~ x, comparison.model = ~1, panel = FALSE))
+   expect_no_error(rp.lm(y ~ x, comparison.model = ~1, panel = FALSE, uncertainty.display = 'shading'))
+})
+
+test_that('One observation per cell, so no interaction can be fitted', {
+   y <- rnorm(4)
+   x <- factor(rep(1:2, 2))
+   z <- factor(rep(1:2, each = 2))
+   expect_no_error(rp.lm(y ~ x + z, panel = FALSE, display.model = ~ x + z, comparison.model = ~ x * z))
 })
 
 test_that('Old version of rp.anova', {
@@ -312,8 +336,7 @@ test_that('Different contrasts', {
 # Plot model nodes
 #----------------------------------------------------------------
 
-path <- rp.datalink("DO_Clyde")
-load(path)
+load('~/iCloud/teaching/book/data/DO_Clyde.rda')
 clyde.sub  <- subset(clyde, Station == 4)
 
 test_that('Static mode: plot nodes - one highlight', {
