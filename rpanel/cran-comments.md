@@ -1,10 +1,27 @@
 ## Test environments
-* local R installation, R 4.0.2
-* ubuntu 16.04 (on travis-ci), R 4.0.2
-* win-builder (devel)
+* local R installation, R 4.5.2 (macos)
+* win_devel
+* win_release
+* win_old_release
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+local system:    0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
-* This is a new release.  The main change is that a check is now made on whether the BWidget Tcl/Tk module is available.  This allows the package to be installed under Macos, which previously failed.  If BWidget is not available then three functions (rp.combo, rp.notebook, rp.notebook.raise) are disabled and advisory messges printed if these functions are called.
+## Checks on dependencies
+
+check_packages_in_dir("..", reverse = list()) followed by summarize_check_packages_in_dir_results("..")
+produces these results:
+
+```
+Check status summary:
+                  ERROR OK
+  Source packages     1 10
+  Reverse depends     0  1
+```
+
+For some reason, the `stpp` package could not be installed
+
+## Comments
+
+This release includes new functions rp.t_test, rp.lm, rp.coefficients and rp.drop1 to express the results of fitting (mostly linear) models graphically. It also includes some minor bug fixes.

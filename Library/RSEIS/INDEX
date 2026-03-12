@@ -1,0 +1,289 @@
+ASCII.SEISN             ASCII RSEIS data dump
+AUGMENTbutfilt          Butterworth filter with Augmentation
+BUTREPLOT               Replot Function for SELBUT
+CE1                     Single Seismogram
+CHOP.SEISN              CHOP SEISmic structure
+COMPorder               Seismic Component Order
+Comp1Dvel               Compare a pair of 1D models
+Comp1Dvels              Compare 1D models
+DAYSperYEAR             Days per Year
+DECIMATE.SEISN          Decimate a set of traces
+DISPLACE.SEISN          Displacement seismogram
+DISTxsec                Distance Cross section
+DO.PMOT.ARR             Particle Motion Analysis with arrows
+DOsgram                 Gabor transform
+EPOCHday                Epoch Day
+EPOCHyear               Epoch Year
+ETECTG                  Event Detection
+EmptyPickfile           Create an empty RSEIS pickfile structure
+EmptySEIS               Create an empty RSEIS structure
+FAKEDATA                Fake Data for Examples.
+FILT.SEISN              Filter Traces
+FILT.spread             Filter trace with a spread of filters
+FRWDft                  Forward fourier Transform
+GAZI                    Get azimuthal particle motion
+GET.seis                Reads various seismic file formats
+GETARAIC                Auto-Regressive AIC estimate of arrival time
+GH                      Earthquake Seismic Data
+GLUE.GET.seis           GLUE.GET.seis
+GLUEseisMAT             GLUEseisMAT
+Get1Dvel                Read 1D velocity model
+GreatDist               Distance Along Great Circle Arc
+INSTFREQS               Instrument Frequencies
+INSTresponse            Instrument Respnse Function
+INVRft                  Inverse Fourier Transform
+JBLACK                  Gray scale Color Palette
+JGRAY                   Gray scale Color Palette
+JSAC.seis               JSAC.seis
+Jtim                    Decimal Julian Day
+KH                      Volcano Seismic Data
+LocalUnwrap             Unwrap spectrum phase
+MTM.drive               Interactive MTM driver
+MTMdisp                 MTMdisp
+MTMgabor                Evolutive MTM Spectrum
+MTMplot                 Plot Multi-taper Spectrum
+Mine.seis               Mine a seismic data base to extract secions of
+                        time limited data
+Mmorlet                 Morlet Wavelet
+NEW.getUWSTAS           get UW station file
+NEWPLOT.WPX             Plot Window Picks (WPX)
+OH                      Delta-O18 isotpe record
+P2GH                    XTR button to RSEIS
+PDE2list                Convert PDEs to List
+PICK.DOC                Documentation for swig
+PLOT.ALLPX              plot all phase arrival picks
+PLOT.MATN               plot a matrix of several seismograms
+PLOT.SEISN              Plot Seismic Section
+PLOT.TTCURVE            Plot Seismic Section, travel time curve
+PLTpicks                Plot picks on seismic record
+PMOT.drive              Interactive Particle Motion Plot
+PPIX                    P-picking
+PSTLTcurve              Short Term/Long Term curve
+Plot1Dvel               Plot 1D Velocity Model
+PreSet.Instr            Set up Standard Instrument Responses
+Put1Dvel                Dump a velocity model to an ascii file
+RSEIS-package           Seismic Analysis and Display
+Ray.time1D              Seismic 1D Travel Time and raypath
+ReadInstr               Read Instrument Response in IRIS SEED format
+ReadSet.Instr           Read Instrument Response file
+SEARCHPIX               Search Pix
+SEIS2list               Convert a SEIS list to a list of seismograms
+SEISNtime               Minimum time in an RSEIS list
+SELBUT                  Select Buttons
+SELSTA                  Pick stations and components interactively
+SENSORsensitivity       Sensor Sensitivity from a known set of
+                        seismo/acoustic sensor
+SNET.drive              stereonet representation of particle motion
+SPECT.drive             Interactive Spectrogram Driver
+STALTA                  Short term, long term average ratio
+STLTcurve               Short-term/Long-term Average curve
+Spectrum                Calculate Different Spectrum Types in Physical
+                        Units
+T12.pix                 Get T1, T2
+TAPER.SEISN             Taper Traces
+TOCART                  Convert to Cartesian coordinates
+Thresh.J                Threshold Adjuster
+VELMOD1D                Sample Velocity Model
+VELOCITY.SEISN          Velocity Seismogram
+WINGH                   Window a GH structure and extract data
+X2RSEIS                 Extract data to RSEIS file
+X2SAC                   Extract Data to SAC format
+XTR                     Buttons for swig
+YPIX                    PICK Buttons for swig
+YRsecdif                Return difference in seconds
+ZOOM.SEISN              ZOOM SEISMIC Panel
+Zdate                   Date functions
+addWPX                  Add one pick to WPX file
+addpoints.hodo          Add points to a hodogram plot
+addtix                  add tix to plot
+applytaper              Apply taper to seismic trace
+attime12                Epoch Time Window
+autoreg                 Auto-Regressive Spectrum Estimate
+brune.doom              Brune Modeling
+brune.func              Brune Earquake Model
+brune.search            Search for Brune fit to displacement spectrum
+butfilt                 Butterworth filter
+catWPX                  Concatenate two WPX lists
+checkWPX                Check WPX
+choosfilt               INteractive CHoice of Filter
+circ                    Draw a circle
+cleanWPX                Clean WPX
+cleanpickfile           Clean up Pickfile structure
+colorwig                Plot a seimic trace colored in time
+combineSEIS             Combine SEIS lists
+comp.env                Compare Envelopes
+complex.hodo            HodoGram Plot
+contwlet                Contour Wavelet Transform
+convert2Rseis           Convert Seismic data to RSEIS
+convertATT              DateHour to List
+correct.moveout         Moveout Correction
+deconinst               Deconvolve instrument response from seismic
+                        data
+deleteWPX               Delete picks to WPX file
+detail.pick             Detail Pick on 3-component seismogram
+detrend                 Remove trend from time series signal
+distseisnXY             Distances from an RSEIS list
+doGABOR.AR              Gabor Transform with AR spectrum method
+doGABOR.MTM             Evolutive MTM Spectrum
+doMYBUTTS               Dummy Button Function
+dowiggles               Plot wiggles
+downsample              Interpolate time series at higher sample rate.
+editDB                  Edit Data Base
+envelope                Envelope Function with Hilbert Transform
+evolAR                  Evolutive Auto-Regressive Spectrum
+evolMTM                 Evolutive Multi-taper Spectrum
+evolfft                 Spectrogram fft
+filedatetime            Create a character string from a date
+filterstamp             Make Filter Stamp
+finteg                  Integration in Frequency Domain
+fixNA                   Fix NA values.
+fixUWstasLL             fixUWstasLL
+fixcompname             Fix component names for uniformity
+fixcomps                Fix Station Component Names
+fromjul                 given julian day and year get month/day
+gaddtix                 add tic marks
+genrick                 Ricker Wavelet
+get.corner              Get Corner Frequency: Linear Model
+get.slepians            Get Slepian Tapers
+getEcard                Error Card
+getFcard                Parse UW F Card
+getGHtime               Get Seismic reference time
+getHcard                Parse UW Hires location Card
+getIRIS                 get Hypocenters from IRIS web site
+getNcard                Parse Name Card
+getPDEcsv               Unpack PDE file
+getb1b2                 Event Detection
+getjul                  Get Julian day
+getmoday                Get Month Day
+getpfile                Get Pick File
+getphaselag2            Phase Lag
+getrdpix                get read picks
+getseis24               Get 24 Hours of Seismic Data
+getvertsorder           Get Order of Picks from P-wave Arrivals
+ghstamp                 Identification stamp for RSEIS data
+gpoly                   Convert Poles and Zeros to Polynomial
+grotseis                Get seismic rotation matrix
+hilbert                 Hilbert Transform
+hilow                   Find Maxima and Minima
+hodogram                HodoGram Plot
+hypot                   Hypot
+idpoints.hodo           ID points on Hodogram
+info.seis               Information on a Seismic record
+infoDB                  Print information about the seismic database
+insertNAs               Insert NA in a vector at given break points
+integ1                  Integrate seismogram
+j2posix                 Convert RSEIS date list to Posix
+jadjust.length          Zero Padding
+jitter.lab              Jitter a set of labels
+jlegend                 plot a legend
+jpolyval                Polynomial Value
+jstats                  statistics of a vector
+lagplot                 Plot phase lags
+leests                  Time Series Structure
+legitpix                Legitimate picks in swig
+letter.it               Add letters to the corners of plots in multiple
+                        figures
+logspace                Logarithm
+longfft                 Long FFT Spectrogram
+makeDB                  Create a seismic Waveform Database
+makefreq                Make Frequency
+markseis24              Mark 24 hour seismic display
+matsquiggle             Matrix Seismic Record
+mirror.matrix           mirror matrix
+mtapspec                MTM spectrum
+next2                   Next Power of Two
+one                     one plotting region
+parse.pde               Parse PDE file
+parseFN2STA             get station from file name
+partmotnet              Particle Motion on Stereonet
+peaks                   Peaks
+pickgeninfo             print swig information
+pickhandler             Handle Pick in RSEIS
+pickit                  Automatic Picking Algorithm
+pickseis24              Pick zooms on 24 hour display
+plocator                Specialized Locator function
+plotDB                  Plot a time line of a DB set in RSEIS
+plotGH                  Plot a seismic trace.
+plotJGET                Plot JGET output
+plotarrivals            plot theoretical arrival times for a seismic
+                        section
+plotevol                Plot Spectrogram
+plotseis24              Plot 24 hours of seismic data
+plotwlet                Plot Wavelet Transform
+plt.MTM0                Plot MTM structure
+posix2RSEIS             Posix to RSEIS DATE/TIME
+prep1wig                Prepare structure for RSEIS
+prepSEIS                Prepare structure for RSEIS
+pwlet2freqs             Convert Wavelet Axis to Frequency
+rDUMPLOC                DUMP vectors to screen in list format
+rangedatetime           Range of Date Time
+rdistaz                 Distance and Azimuth from two points
+read1segy               Read one SEGY/SAC file
+readUW.OSTAS            Parse UW O-Cards
+recdate                 Rectify Date
+repairWPX               Repair WPX
+replaceWPX              Replace picks in WPX file
+rseis2segy              Convert RSEIS to SEGY/SAC format
+rseis2ts                Convert RSEIS to TS
+rsspec.taper            Taper spectrum
+ruler                   Column Ruler
+save.wpix               Save WPIX from swig output
+saveWPX                 Save WPX
+scal2freqs              Wavelet Frequency Scale
+screens                 screens
+secdif                  Return difference in seconds
+secdifL                 Seconds Difference
+secdifv                 Seconds Difference
+segy2rseis              Read in multiple segy files.
+seiscols                Set colors for seismic display
+seisorder               Order seismic traces
+selAPX                  Select Picks
+selpgen                 Pick stations and components interactively
+selstas                 Select Stations
+setPrePix               Set list of arrival times for swig.
+setWPX                  Set WPX
+setstas                 Set Station information
+setupDB                 Set up a seismic data base
+setwelch                Set up Matrix of fft for Welch method
+setwpix                 Set Window Pix for swig
+setypx                  Create an empty window pick list
+showdatetime            Print Date/TIME
+sigconv                 Convolve spikes with wavelets
+sigconvGR               convolve for Ground roll
+swig                    Seismic Wiggle Analysis
+swig.ALLPX              plot all phase arrival picks
+symshot1                Simulate a seismic shot
+sysinfo                 System Information
+tojul                   Julian Day
+tomo.colors             Tomography Colors
+trapz                   Integrate using trapezoidal rule
+travel.time1D           Seismic Travel Time 1D
+tung.pulse              Volcanic Pulse Analysis
+unpackAcard             Parse Acard from UW-format pickfile
+uwpfile2ypx             UW pickfile to pphase pick data.frame
+varsquig                Var-Squiggle plot
+varsquiggle             Var-Squiggle Plot
+view.seis               Veiw seismic data window
+vlen                    vector length
+vline                   vertical line on trace panel
+wiggle.env              Plot time series envelope
+wiggleimage             Seismic section
+winmark                 Window Mark
+winseis24               Locator for plotseis24
+wlet.do                 Return Wavelet transform
+wlet.drive              Interactive wavelet transform driver
+write1segy              Write One segy/sac file
+writeUW.Acard           writeUW.Acard
+writeUW.Commentcard     writeUW.Commentcard
+writeUW.DOTcard         writeUW.DOTcard
+writeUW.Ecard           writeUW.Ecard
+writeUW.Fcard           writeUW.Fcard
+writeUW.Hcard           writeUW.Hcard
+writeUW.Ncard           writeUW.Ncard
+writeUW.OSTAScard       writeUW.OSTAScard
+writeUWpickfile         UW formatted ascii pickfile
+xcor2                   Cross Correlation
+xprod                   Vector Cross Product
+xtract.trace            Extract trace
+yeardate                time in decimal years
+zlocator                zlocator

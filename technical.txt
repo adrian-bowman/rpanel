@@ -4,10 +4,7 @@ Installation
 ------------
 
 To install using devtools to unload the current version:
-      devtools::install("../rpanel")
-
-To install the old-fashioned way:
-      install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
+      install()
 
 To install from GitHub:
 		devtools::install_github("adrian-bowman/rpanel/rpanel")
@@ -21,36 +18,37 @@ R code to detach the current package and install a new one:
       unloadNamespace("rpanel")
       install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
 
-Run tests
-      test()
+To install the old-fashioned way:
+      install.packages("~/research/rpanel/rpanel/", repos = NULL, type = "source")
 
 Checking
 --------
 
-To check that rpanel works without BWidget, use a terminal to move the BWidget directory to and from its storage location.
-      cd /usr/local/lib
-      mv ~/research/rpanel/bwidget/bwidget-1.9.10 .
-      mv bwidget-1.9.10 ~/research/rpanel/bwidget/
-
 Update the inst/history, ChangeLog, NAMESPACE, DESCRIPTION, R/rpanel.r (onAttach) 
 inst/CITATION and man/rpanel.package.Rd (date, version number, function names) files as required.
 
-From the devtools and related packages, use
-      devtools::check("rpanel")
-      devtools::spell_check("rpanel")
-      devtools::check_rhub("rpanel")
+To run the code tests in testthat using devtools:
+      test()
 
-To check that it can be built under Windows
-      devtools::check_win_devel("rpanel")
-      devtools::check_win_release("rpanel")
-      devtools::check_win_oldrelease("rpanel")
+To check the package, set the clock to overcome an issue then use devtools:
+      Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
+      check(args = '--no-tests', build_args = '--resave-data')
+      spell_check()
+      url_check()
 
-Check package dependencies
-      R CMD build rpanel (from a terminal)
-      tools::check_packages_in_dir(".", reverse = list())
-      tools::summarize_check_packages_in_dir_results(".")
+To check that it can be built under other operating systems:
+      check_win_devel(args = '--resave-data')
+      check_win_release(args = '--resave-data')
+      check_win_oldrelease(args = '--resave-data')
+      check_mac_release(args = '--resave-data')
+
+Check package dependencies using the tools package:
+      R CMD build --resave-data rpanel (from a terminal)
+      check_packages_in_dir("..")
+      check_packages_in_dir("..", reverse = list())
+      summarize_check_packages_in_dir_results("..")
       
-The approved way of checking dependencies is the revdepcheck page but I can't get this to work. On a Mac, the current CRAN version of rpanel can't be installed while other things go wrong on Windows.
+The approved way of checking dependencies is the revdepcheck page but I can't get this to work. On a Mac, the current CRAN version of rpanel and the github version doesn't install properly either.
       devtools::revdep("rpanel")
       setwd("rpanel")
       usethis::use_revdep()
@@ -60,9 +58,15 @@ The approved way of checking dependencies is the revdepcheck page but I can't ge
 If data needs to be saved more efficiently, then this should be
       R CMD build --resave-data rpanel
 
-The old-fashioned checking procedure, which is also worth doing, is invoked from a terminal by
-      R CMD build rpanel
-      R CMD CHECK --as-cran rpanel    
+To check that rpanel works without BWidget, use a terminal to move the BWidget directory to and from its storage location.
+      cd /usr/local/lib
+      mv ~/research/rpanel/bwidget/bwidget-1.9.10 .
+      mv bwidget-1.9.10 ~/research/rpanel/bwidget/
+
+The old-fashioned checking procedure, which is also worth doing but doesn't seem to work any more, is invoked from a terminal by
+      R CMD check --resave-data rpanel
+      R CMD check --as-cran rpanel    
+      R CMD build --resave-data rpanel
       
 The old-fashioned method of creating a Windows binary version is to upload to
       win-builder.r-project.org/
@@ -70,8 +74,10 @@ The old-fashioned method of creating a Windows binary version is to upload to
 Submission to CRAN
 ------------------
 
-Submit by
-      devtools::release("rpanel")
+Submit with devtools to include checks as
+      release('rpanel', args = '--resave-data')
+or, if checks are all complete, as
+      submit_cran('rpanel', args = '--resave-data')
       
 The old web form is at
           https://cran.r-project.org/submit.html

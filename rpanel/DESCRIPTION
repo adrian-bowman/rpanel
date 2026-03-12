@@ -2,9 +2,21 @@ Package: rpanel
 Type: Package
 Title: Simple Interactive Controls for R using the 'tcltk' Package
 Version: 1.1-6
-Date: 2021-09-02
-Author: Bowman, Bowman, Gibson and Crawford
-Maintainer: Adrian Bowman <adrian.bowman@glasgow.ac.uk>
+Date: 2026-03-09
+Authors@R: 
+  c(person(given = "Adrian",
+           family = "Bowman",
+           role = c("aut", "cre", "cph"),
+           email = "adrian.bowman@glasgow.ac.uk"),
+    person(given = "Ewan",
+           family = "Crawford",
+           role = "aut"),
+    person(given = "Gavin",
+           family = "Alexander",
+           role = "aut"),
+    person(given = "Richard",
+           family = "Bowman",
+           role = "aut"))
 Depends: R (>= 4.1), tcltk
 Suggests: 
     rgl,
@@ -19,6 +31,14 @@ Suggests:
     mgcv,
     colorspace,
     ggplot2,
+    dplyr,
+    scales,
+    tidyr,
+    fields,
+    ggforce,
+    readr,
+    readxl,
+    sn,
     testthat (>= 3.0.0)
 Description: A set of functions to build simple 
         GUI controls for R functions.  These are built on the 'tcltk' package. 

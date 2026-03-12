@@ -1,0 +1,51 @@
+Eastbourne              Eastbourne traffic accident data
+Medellin                Medellin traffic accident data
+STLFinhom               Inhomogeneous empty space function for
+                        spatio-temporal point processes on linear
+                        networks
+STLHinhom               Inhomogeneous nearest neighbour function for
+                        spatio-temporal point processes on linear
+                        networks
+STLJinhom               Inhomogeneous J-function for spatio-temporal
+                        point processes on linear networks
+STLK                    K-function for spatio-temporal point processes
+                        on linear networks
+STLKinhom               Inhomogeneous K-function for spatio-temporal
+                        point processes on linear networks
+STLg                    Pair correlation function for spatio-temporal
+                        point processes on linear networks
+STLginhom               Inhomogeneous pair correlation function for
+                        spatio-temporal point processes on linear
+                        networks
+as.lpp.stlpp            Methods for spatio-temporal point patterns on a
+                        linear network
+as.stlpp                Convert data to a spatio-temporal point pattern
+                        on a linear network
+as.tpp.stlpp            Convert data to a one-dimensional point pattern
+density.stlpp           Kernel estimation of intensity of
+                        spatio-temporal point patterns on a linear
+                        network
+density.tpp             Kernel estimation of intensity of
+                        one-dimensional point patterns
+densityVoronoi.stlpp    Intensity estimate of spatio-temporal point
+                        pattern using Voronoi-Dirichlet tessellation
+densityVoronoi.tpp      Intensity estimate of temporal point patterns
+                        using Voronoi-Dirichlet tessellation
+easynet                 A simple linear network
+methods.stlpp           Methods for space-time point patterns on a
+                        linear network
+methods.tpp             Methods for one-dimensional point patterns
+rpoistlpp               Simulating spatio-temporal Poisson point
+                        processes on a linear network
+rpoistpp                Simulating one-dimensional Poisson point
+                        patterns
+rthin.stlpp             Random thinning
+stlnpp-package          The stlnpp Package.
+stlpp                   Create spatio-temporal point pattern on linear
+                        network
+superimpose.stlpp       Methods for spatio-temporal point patterns on a
+                        linear network
+superimpose.tpp         Methods for temporal point patterns
+tpp                     Create a temporal point pattern
+unique.stlpp            Extract unique points from a spatio-temporal
+                        point pattern on a linear network

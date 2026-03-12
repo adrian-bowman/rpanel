@@ -1,10 +1,12 @@
 #     Search for text in all files
 
-target    <- "caged"
+target    <- "snk"
 diry      <- "tests"
+diry      <- "."
 diry      <- 'man'
 diry      <- "R"
 diry      <- "."
+diry      <- "tests"
 recursive <- TRUE
 
 files <- list.files(diry, full.names = TRUE, recursive = recursive)

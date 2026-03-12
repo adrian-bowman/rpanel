@@ -1,0 +1,30 @@
+adjust_loglik           Loglikelihood adjustment using the sandwich
+                        estimator
+anova.chandwich         Comparison of nested models
+chandwich-package       chandwich: Chandler-Bate Sandwich Loglikelihood
+                        Adjustment
+coef.chandwich          Extract model coefficients method for objects
+                        of class "chandwich"
+compare_models          Comparison of nested models
+conf_intervals          Confidence intervals
+conf_region             Two-dimensional confidence regions
+confint.chandwich       Confidence intervals for model parameters
+logLik.chandwich        Extract log-likelihood for objects of class
+                        "chandwich"
+log_gev                 The Generalised Extreme Value Log-Density
+                        Function
+owtemps                 Oxford and Worthing annual maximum temperatures
+plot.chandwich          Plot diagnostics for a chandwich object
+plot.confint            Plot diagnostics for a confint object
+plot.confreg            Plot diagnostics for a confreg object
+print.chandwich         Print method for objects of class "chandwich"
+print.compmod           Print method for objects of class "compmod"
+print.confint           Print method for objects of class "confint"
+print.summary.chandwich
+                        Print method for objects of class
+                        "summary.chandwich"
+profile_loglik          Profile loglikelihood
+rats                    Rat tumor data
+summary.chandwich       Summarizing adjusted loglikelihoods
+vcov.chandwich          Calculate the variance-covariance matrix for an
+                        object of class "chandwich"

@@ -10,6 +10,8 @@ Create testthat style of tests for all functions?
 
 Rename the colour names? Extend to 'residuals'. Also in help files.
 
+Remove the globalVariables call in rpanel.R and replace with suitable coding.
+
 rp.datalink
   - regular systematic checks needed on availability of datasets
   - problem with Ben Nevis data: see https://www.ceda.ac.uk. Data not yet restored
@@ -24,8 +26,10 @@ Can windows be manually adjusted as in tkRplotR?
 Add a data argument to functions.
 
 rp.lm
+  - the horizontal axis sometimes switches to numeric
   - the cols argument needs to be cascaded down to the specialist function for different data types.
   - catch degenerate nmodels (as in two-way anova case) more generally
+  - allow the effectsplot to be printed separately, when panel = FALSE.
 
 rp.coefficients
   - allow different functions to control the display of coefficients?

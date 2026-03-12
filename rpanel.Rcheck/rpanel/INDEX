@@ -1,0 +1,112 @@
+Astrand                 Physical working capacity in relation to sex
+                        and age
+Clyde                   Water quality in the River Clyde
+CofE                    Giving in the Church of England
+Hyde                    Data on longevity and father's age, from the
+                        Hyde genealogy
+Loch_Leven              Data on longevity and father's age, from the
+                        Hyde genealogy
+SO2                     Sulphur dioxide measurements over Europe
+Scottish_referendum     The Scottish referendum on independence
+aircond                 Intervals between the failure of
+                        air-conditioning equipment in aircraft
+cholesterol             Cholesterol and age for samples of women in
+                        Iowa and Nebraska
+doctors_smoking         Smoking habits among doctors
+flour_beetles           Toxins for the eradication of flour beetles
+gullweight              The weights of herring gulls captured at
+                        different times of year
+luthor                  Repeated measurements on leutinizing hormone in
+                        cows
+mammal_speed            Data on maximal running speed and body mass in
+                        terrestrial mammals
+poisons                 Survival times of animals subjected to
+                        different poisons and treatment
+river                   Temperature and DO threshold in the River Clyde
+rodent                  The mass and speed of quadrupedal rodents
+rp.ancova               Interactive analysis of covariance
+rp.anova                Interactive analysis of variance
+rp.block                Blocks use of the R console until a panel is
+                        closed
+rp.bubbleplot           Animated scatterplot
+rp.button               Button control for rpanel
+rp.cartoons             Access to a collection of rpanel illustrations
+rp.checkbox             A checkbox control for rpanel
+rp.ci                   Simulations of normal-based confidence
+                        intervals
+rp.clearlines           Remove lines from an rpanel image
+rp.coefficients         Graphical display of the effects of the
+                        coefficients in a linear or generalised linear
+                        model
+rp.colour.key           Creates a colour key.
+rp.colours              Specify the colours to be used in some 'rpanel'
+                        functions.
+rp.combo                A 'combo' for a panel
+rp.contingency          Visualisation of two-way contingency tables
+                        with uncertainties
+rp.control              Create or dispose of an rpanel
+rp.control.put          Updates the panel environment with the current
+                        value of the panel list object.
+rp.datalink             Links for datasets
+rp.deleteline           Removes a line from an rpanel image
+rp.do                   Runs a user-written action function
+rp.doublebutton         Double-button widget for rpanel
+rp.drop1                Display in graphical form the results of
+                        dropping all single terms from a model.
+rp.firth                Geostatistical sampling and analysis simulation
+                        tool
+rp.geosim               Interactive visualisation of spatially
+                        correlated random fields
+rp.grid                 Define a subsidiary grid within an rpanel
+rp.gulls                STEPS module: the Birds and the Bees
+rp.image                Placement of an image within a rpanel
+rp.likelihood           Interactive inspection of one- or two-parameter
+                        likelihood surfaces
+rp.line                 Draws a line on an rpanel image
+rp.listbox              Listbox for a panel
+rp.lm                   Graphical display of linear models with no more
+                        than two explanatory variables
+rp.logistic             Interactive display of logistic regression with
+                        a single covariate
+rp.menu                 Top level menu for a panel
+rp.messagebox           Displays a message
+rp.mururoa              Sampling in Mururoa Atoll
+rp.normal               Interactive fitting of a normal distribution
+rp.notebook             Define a notebook within an rpanel
+rp.panel                Returns a panel
+rp.plot3d               Interactive display of a plot of three
+                        variables
+rp.plot4d               Animated scatterplot
+rp.pos                  Positioning controls in an rpanel
+rp.power                Interactive power calculations for a two-sample
+                        t-test
+rp.radiogroup           Radiobuttons for a panel
+rp.regression           Graphical display of regression effects
+                        (interactive with one or two covariates)
+rp.rmplot               Interactive plotting of repeated measurement
+                        data
+rp.sample               Interactive exploration of sampling variation
+rp.screenresolution     Screen resolution
+rp.slider               Slider for an rpanel
+rp.surface              Interactive visualisation of a surface and its
+                        uncertainty
+rp.t_test               Graphical display for inference in comparing
+                        the means of one or two samples
+rp.tables               Interactive statistical tables
+rp.text                 Text boxes for a panel
+rp.textentry            Text entry boxes for a panel
+rp.timer                Creates a series of timed actions
+rp.tkrplot              Facilities for placing R plots inside 'tcltk'
+                        windows.
+rp.var.get              Retrieves an object from the rpanel
+                        environment, usually from a panel.
+rp.var.put              Places an object in the rpanel environment,
+                        usually within a panel.
+rp.widget.dispose       Removes a widget
+rp.wrangle              Collate and organise specific datasets
+rpanel-package          Simple interactive controls for R functions
+                        using the tcltk package
+vasoconstriction        Toxins for the eradication of flour beetles
+worldbank               Data on CO2 emissions, GDP, life.expectancy and
+                        population for the countries of the world
+                        between 1960 and 2007

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+<head><title>R: Seismic Time Series Analysis Tools</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body><div class="container">
+<h1> Seismic Time Series Analysis Tools
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]">
+</h1>
+<hr>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]"></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]"></a>
+</div><h2>Documentation for package &lsquo;RSEIS&rsquo; version 4.2-4</h2>
+
+<ul><li><a href="../DESCRIPTION" type="text/plain">DESCRIPTION file</a>.</li>
+<li><a href="../demo">Code demos</a>.  Use <a href="../../utils/help/demo">demo()</a> to run them.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="# "> </a>
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#H">H</a>
+<a href="#I">I</a>
+<a href="#J">J</a>
+<a href="#K">K</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#U">U</a>
+<a href="#V">V</a>
+<a href="#W">W</a>
+<a href="#X">X</a>
+<a href="#Y">Y</a>
+<a href="#Z">Z</a>
+</p>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="RSEIS-package.html">RSEIS-package</a></td>
+<td>Seismic Analysis and Display</td></tr>
+</table>
+
+<h2><a id="A">-- A --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="addpoints.hodo.html">addpoints.hodo</a></td>
+<td>Add points to a hodogram plot</td></tr>
+<tr><td style="width: 25%;"><a href="addtix.html">addtix</a></td>
+<td>add tix to plot</td></tr>
+<tr><td style="width: 25%;"><a href="addWPX.html">addWPX</a></td>
+<td>Add one pick to WPX file</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">Apic</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="applytaper.html">applytaper</a></td>
+<td>Apply taper to seismic trace</td></tr>
+<tr><td style="width: 25%;"><a href="ASCII.SEISN.html">ASCII.SEISN</a></td>
+<td>ASCII RSEIS data dump</td></tr>
+<tr><td style="width: 25%;"><a href="attime12.html">attime12</a></td>
+<td>Epoch Time Window</td></tr>
+<tr><td style="width: 25%;"><a href="AUGMENTbutfilt.html">AUGMENTbutfilt</a></td>
+<td>Butterworth filter with Augmentation</td></tr>
+<tr><td style="width: 25%;"><a href="autoreg.html">autoreg</a></td>
+<td>Auto-Regressive Spectrum Estimate</td></tr>
+</table>
+
+<h2><a id="B">-- B --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="plotevol.html">blankevol</a></td>
+<td>Plot Spectrogram</td></tr>
+<tr><td style="width: 25%;"><a href="brune.doom.html">brune.doom</a></td>
+<td>Brune Modeling</td></tr>
+<tr><td style="width: 25%;"><a href="brune.func.html">brune.func</a></td>
+<td>Brune Earquake Model</td></tr>
+<tr><td style="width: 25%;"><a href="brune.search.html">brune.search</a></td>
+<td>Search for Brune fit to displacement spectrum</td></tr>
+<tr><td style="width: 25%;"><a href="butfilt.html">butfilt</a></td>
+<td>Butterworth filter</td></tr>
+<tr><td style="width: 25%;"><a href="BUTREPLOT.html">BUTREPLOT</a></td>
+<td>Replot Function for SELBUT</td></tr>
+</table>
+
+<h2><a id="C">-- C --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="catWPX.html">catWPX</a></td>
+<td>Concatenate two WPX lists</td></tr>
+<tr><td style="width: 25%;"><a href="CE1.html">CE1</a></td>
+<td>Single Seismogram</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">CENTER</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="checkWPX.html">checkWPX</a></td>
+<td>Check WPX</td></tr>
+<tr><td style="width: 25%;"><a href="choosfilt.html">choosfilt</a></td>
+<td>INteractive CHoice of Filter</td></tr>
+<tr><td style="width: 25%;"><a href="CHOP.SEISN.html">CHOP.SEISN</a></td>
+<td>CHOP SEISmic structure</td></tr>
+<tr><td style="width: 25%;"><a href="circ.html">circ</a></td>
+<td>Draw a circle</td></tr>
+<tr><td style="width: 25%;"><a href="cleanpickfile.html">cleanpickfile</a></td>
+<td>Clean up Pickfile structure</td></tr>
+<tr><td style="width: 25%;"><a href="cleanWPX.html">cleanWPX</a></td>
+<td>Clean WPX</td></tr>
+<tr><td style="width: 25%;"><a href="colorwig.html">colorwig</a></td>
+<td>Plot a seimic trace colored in time</td></tr>
+<tr><td style="width: 25%;"><a href="combineSEIS.html">combineSEIS</a></td>
+<td>Combine SEIS lists</td></tr>
+<tr><td style="width: 25%;"><a href="comp.env.html">comp.env</a></td>
+<td>Compare Envelopes</td></tr>
+<tr><td style="width: 25%;"><a href="Comp1Dvel.html">Comp1Dvel</a></td>
+<td>Compare a pair of 1D models</td></tr>
+<tr><td style="width: 25%;"><a href="Comp1Dvels.html">Comp1Dvels</a></td>
+<td>Compare 1D models</td></tr>
+<tr><td style="width: 25%;"><a href="complex.hodo.html">complex.hodo</a></td>
+<td>HodoGram Plot</td></tr>
+<tr><td style="width: 25%;"><a href="COMPorder.html">COMPorder</a></td>
+<td>Seismic Component Order</td></tr>
+<tr><td style="width: 25%;"><a href="contwlet.html">contwlet</a></td>
+<td>Contour Wavelet Transform</td></tr>
+<tr><td style="width: 25%;"><a href="convert2Rseis.html">convert2Rseis</a></td>
+<td>Convert Seismic data to RSEIS</td></tr>
+<tr><td style="width: 25%;"><a href="convertATT.html">convertATT</a></td>
+<td>DateHour to List</td></tr>
+<tr><td style="width: 25%;"><a href="correct.moveout.html">correct.moveout</a></td>
+<td>Moveout Correction</td></tr>
+</table>
+
+<h2><a id="D">-- D --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Zdate.html">dateList</a></td>
+<td>Date functions</td></tr>
+<tr><td style="width: 25%;"><a href="Zdate.html">dateStamp</a></td>
+<td>Date functions</td></tr>
+<tr><td style="width: 25%;"><a href="DAYSperYEAR.html">DAYSperYEAR</a></td>
+<td>Days per Year</td></tr>
+<tr><td style="width: 25%;"><a href="DECIMATE.SEISN.html">DECIMATE.SEISN</a></td>
+<td>Decimate a set of traces</td></tr>
+<tr><td style="width: 25%;"><a href="deconinst.html">deconinst</a></td>
+<td>Deconvolve instrument response from seismic data</td></tr>
+<tr><td style="width: 25%;"><a href="deleteWPX.html">deleteWPX</a></td>
+<td>Delete picks to WPX file</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">DELpix</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="detail.pick.html">detail.pick</a></td>
+<td>Detail Pick on 3-component seismogram</td></tr>
+<tr><td style="width: 25%;"><a href="detrend.html">detrend</a></td>
+<td>Remove trend from time series signal</td></tr>
+<tr><td style="width: 25%;"><a href="DISPLACE.SEISN.html">DISPLACE.SEISN</a></td>
+<td>Displacement seismogram</td></tr>
+<tr><td style="width: 25%;"><a href="distseisnXY.html">distseisnXY</a></td>
+<td>Distances from an RSEIS list</td></tr>
+<tr><td style="width: 25%;"><a href="DISTxsec.html">DISTxsec</a></td>
+<td>Distance Cross section</td></tr>
+<tr><td style="width: 25%;"><a href="DO.PMOT.ARR.html">DO.PMOT.ARR</a></td>
+<td>Particle Motion Analysis with arrows</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">DOC</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="doGABOR.AR.html">doGABOR.AR</a></td>
+<td>Gabor Transform with AR spectrum method</td></tr>
+<tr><td style="width: 25%;"><a href="doGABOR.MTM.html">doGABOR.MTM</a></td>
+<td>Evolutive MTM Spectrum</td></tr>
+<tr><td style="width: 25%;"><a href="doMYBUTTS.html">doMYBUTTS</a></td>
+<td>Dummy Button Function</td></tr>
+<tr><td style="width: 25%;"><a href="DOsgram.html">DOsgram</a></td>
+<td>Gabor transform</td></tr>
+<tr><td style="width: 25%;"><a href="dowiggles.html">dowiggles</a></td>
+<td>Plot wiggles</td></tr>
+<tr><td style="width: 25%;"><a href="downsample.html">downsample</a></td>
+<td>Interpolate time series at higher sample rate.</td></tr>
+</table>
+
+<h2><a id="E">-- E --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="editDB.html">editDB</a></td>
+<td>Edit Data Base</td></tr>
+<tr><td style="width: 25%;"><a href="EmptyPickfile.html">EmptyPickfile</a></td>
+<td>Create an empty RSEIS pickfile structure</td></tr>
+<tr><td style="width: 25%;"><a href="EmptySEIS.html">EmptySEIS</a></td>
+<td>Create an empty RSEIS structure</td></tr>
+<tr><td style="width: 25%;"><a href="envelope.html">envelope</a></td>
+<td>Envelope Function with Hilbert Transform</td></tr>
+<tr><td style="width: 25%;"><a href="EPOCHday.html">EPOCHday</a></td>
+<td>Epoch Day</td></tr>
+<tr><td style="width: 25%;"><a href="EPOCHyear.html">EPOCHyear</a></td>
+<td>Epoch Year</td></tr>
+<tr><td style="width: 25%;"><a href="ETECTG.html">ETECTG</a></td>
+<td>Event Detection</td></tr>
+<tr><td style="width: 25%;"><a href="evolAR.html">evolAR</a></td>
+<td>Evolutive Auto-Regressive Spectrum</td></tr>
+<tr><td style="width: 25%;"><a href="evolfft.html">evolfft</a></td>
+<td>Spectrogram fft</td></tr>
+<tr><td style="width: 25%;"><a href="evolMTM.html">evolMTM</a></td>
+<td>Evolutive Multi-taper Spectrum</td></tr>
+</table>
+
+<h2><a id="F">-- F --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="FAKEDATA.html">FAKEDATA</a></td>
+<td>Fake Data for Examples.</td></tr>
+<tr><td style="width: 25%;"><a href="filedatetime.html">filedatetime</a></td>
+<td>Create a character string from a date</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">FILLPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">FILT</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="FILT.SEISN.html">FILT.SEISN</a></td>
+<td>Filter Traces</td></tr>
+<tr><td style="width: 25%;"><a href="FILT.spread.html">FILT.spread</a></td>
+<td>Filter trace with a spread of filters</td></tr>
+<tr><td style="width: 25%;"><a href="filterstamp.html">filterstamp</a></td>
+<td>Make Filter Stamp</td></tr>
+<tr><td style="width: 25%;"><a href="finteg.html">finteg</a></td>
+<td>Integration in Frequency Domain</td></tr>
+<tr><td style="width: 25%;"><a href="fixcompname.html">fixcompname</a></td>
+<td>Fix component names for uniformity</td></tr>
+<tr><td style="width: 25%;"><a href="fixcomps.html">fixcomps</a></td>
+<td>Fix Station Component Names</td></tr>
+<tr><td style="width: 25%;"><a href="fixNA.html">fixNA</a></td>
+<td>Fix NA values.</td></tr>
+<tr><td style="width: 25%;"><a href="fixUWstasLL.html">fixUWstasLL</a></td>
+<td>fixUWstasLL</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">FLIP</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="makeDB.html">FmakeDB</a></td>
+<td>Create a seismic Waveform Database</td></tr>
+<tr><td style="width: 25%;"><a href="fromjul.html">fromjul</a></td>
+<td>given julian day and year get month/day</td></tr>
+<tr><td style="width: 25%;"><a href="FRWDft.html">FRWDft</a></td>
+<td>Forward fourier Transform</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">fspread</a></td>
+<td>Buttons for swig</td></tr>
+</table>
+
+<h2><a id="G">-- G --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="gaddtix.html">gaddtix</a></td>
+<td>add tic marks</td></tr>
+<tr><td style="width: 25%;"><a href="GAZI.html">GAZI</a></td>
+<td>Get azimuthal particle motion</td></tr>
+<tr><td style="width: 25%;"><a href="genrick.html">genrick</a></td>
+<td>Ricker Wavelet</td></tr>
+<tr><td style="width: 25%;"><a href="get.corner.html">get.corner</a></td>
+<td>Get Corner Frequency: Linear Model</td></tr>
+<tr><td style="width: 25%;"><a href="GET.seis.html">GET.seis</a></td>
+<td>Reads various seismic file formats</td></tr>
+<tr><td style="width: 25%;"><a href="get.slepians.html">get.slepians</a></td>
+<td>Get Slepian Tapers</td></tr>
+<tr><td style="width: 25%;"><a href="Get1Dvel.html">Get1Dvel</a></td>
+<td>Read 1D velocity model</td></tr>
+<tr><td style="width: 25%;"><a href="getIRIS.html">getANSS</a></td>
+<td>get Hypocenters from IRIS web site</td></tr>
+<tr><td style="width: 25%;"><a href="GETARAIC.html">GETARAIC</a></td>
+<td>Auto-Regressive AIC estimate of arrival time</td></tr>
+<tr><td style="width: 25%;"><a href="getb1b2.html">getb1b2</a></td>
+<td>Event Detection</td></tr>
+<tr><td style="width: 25%;"><a href="getEcard.html">getEcard</a></td>
+<td>Error Card</td></tr>
+<tr><td style="width: 25%;"><a href="getFcard.html">getFcard</a></td>
+<td>Parse UW F Card</td></tr>
+<tr><td style="width: 25%;"><a href="getGHtime.html">getGHtime</a></td>
+<td>Get Seismic reference time</td></tr>
+<tr><td style="width: 25%;"><a href="getHcard.html">getHcard</a></td>
+<td>Parse UW Hires location Card</td></tr>
+<tr><td style="width: 25%;"><a href="getIRIS.html">getIRIS</a></td>
+<td>get Hypocenters from IRIS web site</td></tr>
+<tr><td style="width: 25%;"><a href="getjul.html">getjul</a></td>
+<td>Get Julian day</td></tr>
+<tr><td style="width: 25%;"><a href="getmoday.html">getmoday</a></td>
+<td>Get Month Day</td></tr>
+<tr><td style="width: 25%;"><a href="getNcard.html">getNcard</a></td>
+<td>Parse Name Card</td></tr>
+<tr><td style="width: 25%;"><a href="getPDEcsv.html">getPDEcsv</a></td>
+<td>Unpack PDE file</td></tr>
+<tr><td style="width: 25%;"><a href="getPDEcsv.html">getPDEscreen</a></td>
+<td>Unpack PDE file</td></tr>
+<tr><td style="width: 25%;"><a href="getpfile.html">getpfile</a></td>
+<td>Get Pick File</td></tr>
+<tr><td style="width: 25%;"><a href="getphaselag2.html">getphaselag2</a></td>
+<td>Phase Lag</td></tr>
+<tr><td style="width: 25%;"><a href="getrdpix.html">getrdpix</a></td>
+<td>get read picks</td></tr>
+<tr><td style="width: 25%;"><a href="getseis24.html">getseis24</a></td>
+<td>Get 24 Hours of Seismic Data</td></tr>
+<tr><td style="width: 25%;"><a href="getvertsorder.html">getvertsorder</a></td>
+<td>Get Order of Picks from P-wave Arrivals</td></tr>
+<tr><td style="width: 25%;"><a href="GH.html">GH</a></td>
+<td>Earthquake Seismic Data</td></tr>
+<tr><td style="width: 25%;"><a href="ghstamp.html">ghstamp</a></td>
+<td>Identification stamp for RSEIS data</td></tr>
+<tr><td style="width: 25%;"><a href="GLUE.GET.seis.html">GLUE.GET.seis</a></td>
+<td>GLUE.GET.seis</td></tr>
+<tr><td style="width: 25%;"><a href="GLUEseisMAT.html">GLUEseisMAT</a></td>
+<td>GLUEseisMAT</td></tr>
+<tr><td style="width: 25%;"><a href="gpoly.html">gpoly</a></td>
+<td>Convert Poles and Zeros to Polynomial</td></tr>
+<tr><td style="width: 25%;"><a href="GreatDist.html">GreatDist</a></td>
+<td>Distance Along Great Circle Arc</td></tr>
+<tr><td style="width: 25%;"><a href="grotseis.html">grotseis</a></td>
+<td>Get seismic rotation matrix</td></tr>
+</table>
+
+<h2><a id="H">-- H --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="XTR.html">HALF</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="hilbert.html">hilbert</a></td>
+<td>Hilbert Transform</td></tr>
+<tr><td style="width: 25%;"><a href="hilow.html">hilow</a></td>
+<td>Find Maxima and Minima</td></tr>
+<tr><td style="width: 25%;"><a href="hodogram.html">hodogram</a></td>
+<td>HodoGram Plot</td></tr>
+<tr><td style="width: 25%;"><a href="hypot.html">hypot</a></td>
+<td>Hypot</td></tr>
+</table>
+
+<h2><a id="I">-- I --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="idpoints.hodo.html">idpoints.hodo</a></td>
+<td>ID points on Hodogram</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">iNEXT</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="info.seis.html">info.seis</a></td>
+<td>Information on a Seismic record</td></tr>
+<tr><td style="width: 25%;"><a href="infoDB.html">infoDB</a></td>
+<td>Print information about the seismic database</td></tr>
+<tr><td style="width: 25%;"><a href="insertNAs.html">insertNAs</a></td>
+<td>Insert NA in a vector at given break points</td></tr>
+<tr><td style="width: 25%;"><a href="INSTFREQS.html">INSTFREQS</a></td>
+<td>Instrument Frequencies</td></tr>
+<tr><td style="width: 25%;"><a href="INSTresponse.html">INSTresponse</a></td>
+<td>Instrument Respnse Function</td></tr>
+<tr><td style="width: 25%;"><a href="integ1.html">integ1</a></td>
+<td>Integrate seismogram</td></tr>
+<tr><td style="width: 25%;"><a href="INVRft.html">INVRft</a></td>
+<td>Inverse Fourier Transform</td></tr>
+</table>
+
+<h2><a id="J">-- J --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="j2posix.html">j2posix</a></td>
+<td>Convert RSEIS date list to Posix</td></tr>
+<tr><td style="width: 25%;"><a href="jadjust.length.html">jadjust.length</a></td>
+<td>Zero Padding</td></tr>
+<tr><td style="width: 25%;"><a href="JBLACK.html">JBLACK</a></td>
+<td>Gray scale Color Palette</td></tr>
+<tr><td style="width: 25%;"><a href="GET.seis.html">JGET.seis</a></td>
+<td>Reads various seismic file formats</td></tr>
+<tr><td style="width: 25%;"><a href="JGRAY.html">JGRAY</a></td>
+<td>Gray scale Color Palette</td></tr>
+<tr><td style="width: 25%;"><a href="jitter.lab.html">jitter.lab</a></td>
+<td>Jitter a set of labels</td></tr>
+<tr><td style="width: 25%;"><a href="jlegend.html">jlegend</a></td>
+<td>plot a legend</td></tr>
+<tr><td style="width: 25%;"><a href="jpolyval.html">jpolyval</a></td>
+<td>Polynomial Value</td></tr>
+<tr><td style="width: 25%;"><a href="JSAC.seis.html">JSAC.seis</a></td>
+<td>JSAC.seis</td></tr>
+<tr><td style="width: 25%;"><a href="JSAC.seis.html">JSEGY.seis</a></td>
+<td>JSAC.seis</td></tr>
+<tr><td style="width: 25%;"><a href="jstats.html">jstats</a></td>
+<td>statistics of a vector</td></tr>
+<tr><td style="width: 25%;"><a href="Jtim.html">Jtim</a></td>
+<td>Decimal Julian Day</td></tr>
+<tr><td style="width: 25%;"><a href="Jtim.html">JtimL</a></td>
+<td>Decimal Julian Day</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">JustE</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">JustF</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">JustN</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">JustV</a></td>
+<td>PICK Buttons for swig</td></tr>
+</table>
+
+<h2><a id="K">-- K --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="KH.html">KH</a></td>
+<td>Volcano Seismic Data</td></tr>
+</table>
+
+<h2><a id="L">-- L --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="lagplot.html">lagplot</a></td>
+<td>Plot phase lags</td></tr>
+<tr><td style="width: 25%;"><a href="leests.html">leests</a></td>
+<td>Time Series Structure</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">LEFT</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="legitpix.html">legitpix</a></td>
+<td>Legitimate picks in swig</td></tr>
+<tr><td style="width: 25%;"><a href="letter.it.html">letter.it</a></td>
+<td>Add letters to the corners of plots in multiple figures</td></tr>
+<tr><td style="width: 25%;"><a href="LocalUnwrap.html">LocalUnwrap</a></td>
+<td>Unwrap spectrum phase</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">LocStyle</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="logspace.html">logspace</a></td>
+<td>Logarithm</td></tr>
+<tr><td style="width: 25%;"><a href="longfft.html">longfft</a></td>
+<td>Long FFT Spectrogram</td></tr>
+<tr><td style="width: 25%;"><a href="longfft.html">longpstart</a></td>
+<td>Long FFT Spectrogram</td></tr>
+<tr><td style="width: 25%;"><a href="longfft.html">longreset</a></td>
+<td>Long FFT Spectrogram</td></tr>
+</table>
+
+<h2><a id="M">-- M --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="makeDB.html">makeDB</a></td>
+<td>Create a seismic Waveform Database</td></tr>
+<tr><td style="width: 25%;"><a href="makefreq.html">makefreq</a></td>
+<td>Make Frequency</td></tr>
+<tr><td style="width: 25%;"><a href="travel.time1D.html">many.time1D</a></td>
+<td>Seismic Travel Time 1D</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">MARK</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="markseis24.html">markseis24</a></td>
+<td>Mark 24 hour seismic display</td></tr>
+<tr><td style="width: 25%;"><a href="matsquiggle.html">matsquiggle</a></td>
+<td>Matrix Seismic Record</td></tr>
+<tr><td style="width: 25%;"><a href="Mine.seis.html">Mine.seis</a></td>
+<td>Mine a seismic data base to extract secions of time limited data</td></tr>
+<tr><td style="width: 25%;"><a href="mirror.matrix.html">mirror.matrix</a></td>
+<td>mirror matrix</td></tr>
+<tr><td style="width: 25%;"><a href="Mmorlet.html">Mmorlet</a></td>
+<td>Morlet Wavelet</td></tr>
+<tr><td style="width: 25%;"><a href="mtapspec.html">mtapspec</a></td>
+<td>MTM spectrum</td></tr>
+<tr><td style="width: 25%;"><a href="MTM.drive.html">MTM.drive</a></td>
+<td>Interactive MTM driver</td></tr>
+<tr><td style="width: 25%;"><a href="MTMdisp.html">MTMdisp</a></td>
+<td>MTMdisp</td></tr>
+<tr><td style="width: 25%;"><a href="MTMgabor.html">MTMgabor</a></td>
+<td>Evolutive MTM Spectrum</td></tr>
+<tr><td style="width: 25%;"><a href="MTMplot.html">MTMplot</a></td>
+<td>Plot Multi-taper Spectrum</td></tr>
+</table>
+
+<h2><a id="N">-- N --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="NEW.getUWSTAS.html">NEW.getUWSTAS</a></td>
+<td>get UW station file</td></tr>
+<tr><td style="width: 25%;"><a href="NEWPLOT.WPX.html">NEWPLOT.WPX</a></td>
+<td>Plot Window Picks (WPX)</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">NEXT</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="next2.html">next2</a></td>
+<td>Next Power of Two</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">NOPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">noPS</a></td>
+<td>PICK Buttons for swig</td></tr>
+</table>
+
+<h2><a id="O">-- O --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="OH.html">OH</a></td>
+<td>Delta-O18 isotpe record</td></tr>
+<tr><td style="width: 25%;"><a href="one.html">one</a></td>
+<td>one plotting region</td></tr>
+</table>
+
+<h2><a id="P">-- P --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="P2GH.html">P2GH</a></td>
+<td>XTR button to RSEIS</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">pADDPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="parse.pde.html">parse.pde</a></td>
+<td>Parse PDE file</td></tr>
+<tr><td style="width: 25%;"><a href="parseFN2STA.html">parseFN2STA</a></td>
+<td>get station from file name</td></tr>
+<tr><td style="width: 25%;"><a href="partmotnet.html">partmotnet</a></td>
+<td>Particle Motion on Stereonet</td></tr>
+<tr><td style="width: 25%;"><a href="editDB.html">pathDB</a></td>
+<td>Edit Data Base</td></tr>
+<tr><td style="width: 25%;"><a href="PDE2list.html">PDE2list</a></td>
+<td>Convert PDEs to List</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">Pdown</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="peaks.html">peaks</a></td>
+<td>Peaks</td></tr>
+<tr><td style="width: 25%;"><a href="PICK.DOC.html">PICK.DOC</a></td>
+<td>Documentation for swig</td></tr>
+<tr><td style="width: 25%;"><a href="pickgeninfo.html">pickgeninfo</a></td>
+<td>print swig information</td></tr>
+<tr><td style="width: 25%;"><a href="pickhandler.html">pickhandler</a></td>
+<td>Handle Pick in RSEIS</td></tr>
+<tr><td style="width: 25%;"><a href="pickit.html">pickit</a></td>
+<td>Automatic Picking Algorithm</td></tr>
+<tr><td style="width: 25%;"><a href="pickseis24.html">pickseis24</a></td>
+<td>Pick zooms on 24 hour display</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">PickWin</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">Pinfo</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="plocator.html">plocator</a></td>
+<td>Specialized Locator function</td></tr>
+<tr><td style="width: 25%;"><a href="PLOT.ALLPX.html">PLOT.ALLPX</a></td>
+<td>plot all phase arrival picks</td></tr>
+<tr><td style="width: 25%;"><a href="PLOT.MATN.html">PLOT.MATN</a></td>
+<td>plot a matrix of several seismograms</td></tr>
+<tr><td style="width: 25%;"><a href="PLOT.SEISN.html">PLOT.SEISN</a></td>
+<td>Plot Seismic Section</td></tr>
+<tr><td style="width: 25%;"><a href="PLOT.TTCURVE.html">PLOT.TTCURVE</a></td>
+<td>Plot Seismic Section, travel time curve</td></tr>
+<tr><td style="width: 25%;"><a href="Plot1Dvel.html">Plot1Dvel</a></td>
+<td>Plot 1D Velocity Model</td></tr>
+<tr><td style="width: 25%;"><a href="plotarrivals.html">plotarrivals</a></td>
+<td>plot theoretical arrival times for a seismic section</td></tr>
+<tr><td style="width: 25%;"><a href="plotDB.html">plotDB</a></td>
+<td>Plot a time line of a DB set in RSEIS</td></tr>
+<tr><td style="width: 25%;"><a href="plotevol.html">plotevol</a></td>
+<td>Plot Spectrogram</td></tr>
+<tr><td style="width: 25%;"><a href="plotevol.html">plotevol2</a></td>
+<td>Plot Spectrogram</td></tr>
+<tr><td style="width: 25%;"><a href="plotGH.html">plotGH</a></td>
+<td>Plot a seismic trace.</td></tr>
+<tr><td style="width: 25%;"><a href="plotJGET.html">plotJGET</a></td>
+<td>Plot JGET output</td></tr>
+<tr><td style="width: 25%;"><a href="plotseis24.html">plotseis24</a></td>
+<td>Plot 24 hours of seismic data</td></tr>
+<tr><td style="width: 25%;"><a href="plotwlet.html">plotwlet</a></td>
+<td>Plot Wavelet Transform</td></tr>
+<tr><td style="width: 25%;"><a href="plt.MTM0.html">plt.MTM0</a></td>
+<td>Plot MTM structure</td></tr>
+<tr><td style="width: 25%;"><a href="PLTpicks.html">PLTpicks</a></td>
+<td>Plot picks on seismic record</td></tr>
+<tr><td style="width: 25%;"><a href="PMOT.drive.html">PMOT.drive</a></td>
+<td>Interactive Particle Motion Plot</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">Pnil</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">POLSWITCH</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="posix2RSEIS.html">posix2RSEIS</a></td>
+<td>Posix to RSEIS DATE/TIME</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">Ppic</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="PPIX.html">PPIX</a></td>
+<td>P-picking</td></tr>
+<tr><td style="width: 25%;"><a href="prep1wig.html">prep1wig</a></td>
+<td>Prepare structure for RSEIS</td></tr>
+<tr><td style="width: 25%;"><a href="prepSEIS.html">prepSEIS</a></td>
+<td>Prepare structure for RSEIS</td></tr>
+<tr><td style="width: 25%;"><a href="PreSet.Instr.html">PreSet.Instr</a></td>
+<td>Set up Standard Instrument Responses</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">PREV</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">PSEL</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="PSTLTcurve.html">PSTLTcurve</a></td>
+<td>Short Term/Long Term curve</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">PTS</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">Pup</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="Put1Dvel.html">Put1Dvel</a></td>
+<td>Dump a velocity model to an ascii file</td></tr>
+<tr><td style="width: 25%;"><a href="pwlet2freqs.html">pwlet2freqs</a></td>
+<td>Convert Wavelet Axis to Frequency</td></tr>
+</table>
+
+<h2><a id="R">-- R --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="rangedatetime.html">rangedatetime</a></td>
+<td>Range of Date Time</td></tr>
+<tr><td style="width: 25%;"><a href="Ray.time1D.html">Ray.time1D</a></td>
+<td>Seismic 1D Travel Time and raypath</td></tr>
+<tr><td style="width: 25%;"><a href="rdistaz.html">rdistaz</a></td>
+<td>Distance and Azimuth from two points</td></tr>
+<tr><td style="width: 25%;"><a href="rDUMPLOC.html">rDUMPLOC</a></td>
+<td>DUMP vectors to screen in list format</td></tr>
+<tr><td style="width: 25%;"><a href="read1segy.html">read1sac</a></td>
+<td>Read one SEGY/SAC file</td></tr>
+<tr><td style="width: 25%;"><a href="read1segy.html">read1segy</a></td>
+<td>Read one SEGY/SAC file</td></tr>
+<tr><td style="width: 25%;"><a href="ReadInstr.html">ReadInstr</a></td>
+<td>Read Instrument Response in IRIS SEED format</td></tr>
+<tr><td style="width: 25%;"><a href="ReadSet.Instr.html">ReadSet.Instr</a></td>
+<td>Read Instrument Response file</td></tr>
+<tr><td style="width: 25%;"><a href="readUW.OSTAS.html">readUW.OSTAS</a></td>
+<td>Parse UW O-Cards</td></tr>
+<tr><td style="width: 25%;"><a href="recdate.html">recdate</a></td>
+<td>Rectify Date</td></tr>
+<tr><td style="width: 25%;"><a href="recdate.html">recdatel</a></td>
+<td>Rectify Date</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">REFRESH</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="repairWPX.html">repairWPX</a></td>
+<td>Repair WPX</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">REPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="replaceWPX.html">replaceWPX</a></td>
+<td>Replace picks in WPX file</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">RESTORE</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">RIDPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">RIGHT</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">RMS</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">ROT.RT</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="RSEIS-package.html">RSEIS</a></td>
+<td>Seismic Analysis and Display</td></tr>
+<tr><td style="width: 25%;"><a href="rseis2segy.html">rseis2sac</a></td>
+<td>Convert RSEIS to SEGY/SAC format</td></tr>
+<tr><td style="width: 25%;"><a href="rseis2segy.html">rseis2segy</a></td>
+<td>Convert RSEIS to SEGY/SAC format</td></tr>
+<tr><td style="width: 25%;"><a href="rseis2ts.html">rseis2ts</a></td>
+<td>Convert RSEIS to TS</td></tr>
+<tr><td style="width: 25%;"><a href="rsspec.taper.html">rsspec.taper</a></td>
+<td>Taper spectrum</td></tr>
+<tr><td style="width: 25%;"><a href="ruler.html">ruler</a></td>
+<td>Column Ruler</td></tr>
+</table>
+
+<h2><a id="S">-- S --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="segy2rseis.html">sac2rseis</a></td>
+<td>Read in multiple segy files.</td></tr>
+<tr><td style="width: 25%;"><a href="save.wpix.html">save.wpix</a></td>
+<td>Save WPIX from swig output</td></tr>
+<tr><td style="width: 25%;"><a href="saveWPX.html">saveWPX</a></td>
+<td>Save WPX</td></tr>
+<tr><td style="width: 25%;"><a href="scal2freqs.html">scal2freqs</a></td>
+<td>Wavelet Frequency Scale</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">SCALE</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="screens.html">screens</a></td>
+<td>screens</td></tr>
+<tr><td style="width: 25%;"><a href="SEARCHPIX.html">SEARCHPIX</a></td>
+<td>Search Pix</td></tr>
+<tr><td style="width: 25%;"><a href="secdif.html">secdif</a></td>
+<td>Return difference in seconds</td></tr>
+<tr><td style="width: 25%;"><a href="secdifL.html">secdifL</a></td>
+<td>Seconds Difference</td></tr>
+<tr><td style="width: 25%;"><a href="secdifv.html">secdifv</a></td>
+<td>Seconds Difference</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">SEEPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="segy2rseis.html">segy2rseis</a></td>
+<td>Read in multiple segy files.</td></tr>
+<tr><td style="width: 25%;"><a href="SEIS2list.html">SEIS2list</a></td>
+<td>Convert a SEIS list to a list of seismograms</td></tr>
+<tr><td style="width: 25%;"><a href="seiscols.html">seiscols</a></td>
+<td>Set colors for seismic display</td></tr>
+<tr><td style="width: 25%;"><a href="SEISNtime.html">SEISNtime</a></td>
+<td>Minimum time in an RSEIS list</td></tr>
+<tr><td style="width: 25%;"><a href="seisorder.html">seisorder</a></td>
+<td>Order seismic traces</td></tr>
+<tr><td style="width: 25%;"><a href="selAPX.html">selAPX</a></td>
+<td>Select Picks</td></tr>
+<tr><td style="width: 25%;"><a href="SELBUT.html">SELBUT</a></td>
+<td>Select Buttons</td></tr>
+<tr><td style="width: 25%;"><a href="selpgen.html">selpgen</a></td>
+<td>Pick stations and components interactively</td></tr>
+<tr><td style="width: 25%;"><a href="SELSTA.html">SELSTA</a></td>
+<td>Pick stations and components interactively</td></tr>
+<tr><td style="width: 25%;"><a href="selstas.html">selstas</a></td>
+<td>Select Stations</td></tr>
+<tr><td style="width: 25%;"><a href="selAPX.html">selWPX</a></td>
+<td>Select Picks</td></tr>
+<tr><td style="width: 25%;"><a href="SENSORsensitivity.html">SENSORsensitivity</a></td>
+<td>Sensor Sensitivity from a known set of seismo/acoustic sensor</td></tr>
+<tr><td style="width: 25%;"><a href="setPrePix.html">setPrePix</a></td>
+<td>Set list of arrival times for swig.</td></tr>
+<tr><td style="width: 25%;"><a href="setstas.html">setstas</a></td>
+<td>Set Station information</td></tr>
+<tr><td style="width: 25%;"><a href="setupDB.html">setupDB</a></td>
+<td>Set up a seismic data base</td></tr>
+<tr><td style="width: 25%;"><a href="setwelch.html">setwelch</a></td>
+<td>Set up Matrix of fft for Welch method</td></tr>
+<tr><td style="width: 25%;"><a href="setwpix.html">setwpix</a></td>
+<td>Set Window Pix for swig</td></tr>
+<tr><td style="width: 25%;"><a href="setWPX.html">setWPX</a></td>
+<td>Set WPX</td></tr>
+<tr><td style="width: 25%;"><a href="setypx.html">setypx</a></td>
+<td>Create an empty window pick list</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">SGRAM</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">SHOW3</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="showdatetime.html">showdatetime</a></td>
+<td>Print Date/TIME</td></tr>
+<tr><td style="width: 25%;"><a href="sigconv.html">sigconv</a></td>
+<td>Convolve spikes with wavelets</td></tr>
+<tr><td style="width: 25%;"><a href="sigconvGR.html">sigconvGR</a></td>
+<td>convolve for Ground roll</td></tr>
+<tr><td style="width: 25%;"><a href="SNET.drive.html">SNET.drive</a></td>
+<td>stereonet representation of particle motion</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">SPEC</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="SPECT.drive.html">SPECT.drive</a></td>
+<td>Interactive Spectrogram Driver</td></tr>
+<tr><td style="width: 25%;"><a href="Spectrum.html">Spectrum</a></td>
+<td>Calculate Different Spectrum Types in Physical Units</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">Spic</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="STALTA.html">STALTA</a></td>
+<td>Short term, long term average ratio</td></tr>
+<tr><td style="width: 25%;"><a href="STLTcurve.html">STLTcurve</a></td>
+<td>Short-term/Long-term Average curve</td></tr>
+<tr><td style="width: 25%;"><a href="swig.html">swig</a></td>
+<td>Seismic Wiggle Analysis</td></tr>
+<tr><td style="width: 25%;"><a href="swig.ALLPX.html">swig.ALLPX</a></td>
+<td>plot all phase arrival picks</td></tr>
+<tr><td style="width: 25%;"><a href="symshot1.html">symshot1</a></td>
+<td>Simulate a seismic shot</td></tr>
+<tr><td style="width: 25%;"><a href="sysinfo.html">sysinfo</a></td>
+<td>System Information</td></tr>
+</table>
+
+<h2><a id="T">-- T --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="T12.pix.html">T12.pix</a></td>
+<td>Get T1, T2</td></tr>
+<tr><td style="width: 25%;"><a href="TAPER.SEISN.html">TAPER.SEISN</a></td>
+<td>Taper Traces</td></tr>
+<tr><td style="width: 25%;"><a href="Thresh.J.html">Thresh.J</a></td>
+<td>Threshold Adjuster</td></tr>
+<tr><td style="width: 25%;"><a href="TOCART.html">TOCART</a></td>
+<td>Convert to Cartesian coordinates</td></tr>
+<tr><td style="width: 25%;"><a href="tojul.html">tojul</a></td>
+<td>Julian Day</td></tr>
+<tr><td style="width: 25%;"><a href="tomo.colors.html">tomo.colors</a></td>
+<td>Tomography Colors</td></tr>
+<tr><td style="width: 25%;"><a href="trapz.html">trapz</a></td>
+<td>Integrate using trapezoidal rule</td></tr>
+<tr><td style="width: 25%;"><a href="travel.time1D.html">travel.time1D</a></td>
+<td>Seismic Travel Time 1D</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">TSHIFT</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="tung.pulse.html">tung.pulse</a></td>
+<td>Volcanic Pulse Analysis</td></tr>
+</table>
+
+<h2><a id="U">-- U --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="XTR.html">UNFILT</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="unpackAcard.html">unpackAcard</a></td>
+<td>Parse Acard from UW-format pickfile</td></tr>
+<tr><td style="width: 25%;"><a href="uwpfile2ypx.html">uwpfile2ypx</a></td>
+<td>UW pickfile to pphase pick data.frame</td></tr>
+</table>
+
+<h2><a id="V">-- V --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="varsquig.html">varsquig</a></td>
+<td>Var-Squiggle plot</td></tr>
+<tr><td style="width: 25%;"><a href="varsquiggle.html">varsquiggle</a></td>
+<td>Var-Squiggle Plot</td></tr>
+<tr><td style="width: 25%;"><a href="VELMOD1D.html">VELMOD1D</a></td>
+<td>Sample Velocity Model</td></tr>
+<tr><td style="width: 25%;"><a href="VELOCITY.SEISN.html">VELOCITY.SEISN</a></td>
+<td>Velocity Seismogram</td></tr>
+<tr><td style="width: 25%;"><a href="view.seis.html">view.seis</a></td>
+<td>Veiw seismic data window</td></tr>
+<tr><td style="width: 25%;"><a href="vlen.html">vlen</a></td>
+<td>vector length</td></tr>
+<tr><td style="width: 25%;"><a href="vline.html">vline</a></td>
+<td>vertical line on trace panel</td></tr>
+</table>
+
+<h2><a id="W">-- W --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="wiggle.env.html">wiggle.env</a></td>
+<td>Plot time series envelope</td></tr>
+<tr><td style="width: 25%;"><a href="wiggleimage.html">wiggleimage</a></td>
+<td>Seismic section</td></tr>
+<tr><td style="width: 25%;"><a href="WINGH.html">WINGH</a></td>
+<td>Window a GH structure and extract data</td></tr>
+<tr><td style="width: 25%;"><a href="winmark.html">winmark</a></td>
+<td>Window Mark</td></tr>
+<tr><td style="width: 25%;"><a href="winseis24.html">winseis24</a></td>
+<td>Locator for plotseis24</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">WLET</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="wlet.do.html">wlet.do</a></td>
+<td>Return Wavelet transform</td></tr>
+<tr><td style="width: 25%;"><a href="wlet.drive.html">wlet.drive</a></td>
+<td>Interactive wavelet transform driver</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">WPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="write1segy.html">write1sac</a></td>
+<td>Write One segy/sac file</td></tr>
+<tr><td style="width: 25%;"><a href="write1segy.html">write1segy</a></td>
+<td>Write One segy/sac file</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.Acard.html">writeUW.Acard</a></td>
+<td>writeUW.Acard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.Commentcard.html">writeUW.Commentcard</a></td>
+<td>writeUW.Commentcard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.DOTcard.html">writeUW.DOTcard</a></td>
+<td>writeUW.DOTcard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.Ecard.html">writeUW.Ecard</a></td>
+<td>writeUW.Ecard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.Fcard.html">writeUW.Fcard</a></td>
+<td>writeUW.Fcard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.Hcard.html">writeUW.Hcard</a></td>
+<td>writeUW.Hcard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.Ncard.html">writeUW.Ncard</a></td>
+<td>writeUW.Ncard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUW.OSTAScard.html">writeUW.OSTAScard</a></td>
+<td>writeUW.OSTAScard</td></tr>
+<tr><td style="width: 25%;"><a href="writeUWpickfile.html">writeUWpickfile</a></td>
+<td>UW formatted ascii pickfile</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">WWIN</a></td>
+<td>Buttons for swig</td></tr>
+</table>
+
+<h2><a id="X">-- X --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="X2RSEIS.html">X2RSEIS</a></td>
+<td>Extract data to RSEIS file</td></tr>
+<tr><td style="width: 25%;"><a href="X2SAC.html">X2SAC</a></td>
+<td>Extract Data to SAC format</td></tr>
+<tr><td style="width: 25%;"><a href="xcor2.html">xcor2</a></td>
+<td>Cross Correlation</td></tr>
+<tr><td style="width: 25%;"><a href="xprod.html">xprod</a></td>
+<td>Vector Cross Product</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">XTR</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="xtract.trace.html">xtract.trace</a></td>
+<td>Extract trace</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">Xwin</a></td>
+<td>Buttons for swig</td></tr>
+</table>
+
+<h2><a id="Y">-- Y --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="yeardate.html">yeardate</a></td>
+<td>time in decimal years</td></tr>
+<tr><td style="width: 25%;"><a href="YPIX.html">YPIX</a></td>
+<td>PICK Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="YRsecdif.html">YRsecdif</a></td>
+<td>Return difference in seconds</td></tr>
+<tr><td style="width: 25%;"><a href="YRsecdif.html">YRsecdifL</a></td>
+<td>Return difference in seconds</td></tr>
+</table>
+
+<h2><a id="Z">-- Z --</a></h2>
+
+<table style="width: 100%;">
+<tr><td style="width: 25%;"><a href="Zdate.html">Zdate</a></td>
+<td>Date functions</td></tr>
+<tr><td style="width: 25%;"><a href="zlocator.html">zlocator</a></td>
+<td>zlocator</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">ZOOM.in</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="XTR.html">ZOOM.out</a></td>
+<td>Buttons for swig</td></tr>
+<tr><td style="width: 25%;"><a href="ZOOM.SEISN.html">ZOOM.SEISN</a></td>
+<td>ZOOM SEISMIC Panel</td></tr>
+</table>
+</div></body></html>
