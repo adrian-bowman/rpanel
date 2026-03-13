@@ -1,0 +1,5 @@
+
+See
+  ‘/Users/adrianbowman/github/rpanel/stpp.Rcheck/00check.log’
+for details.
+

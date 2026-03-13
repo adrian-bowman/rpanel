@@ -1,12 +1,12 @@
 #     Search for text in all files
 
-target    <- "snk"
+target    <- "requireN"
 diry      <- "tests"
 diry      <- "."
 diry      <- 'man'
 diry      <- "R"
-diry      <- "."
 diry      <- "tests"
+diry      <- "."
 recursive <- TRUE
 
 files <- list.files(diry, full.names = TRUE, recursive = recursive)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.24)  11 MAR 2026 18:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.24)  13 MAR 2026 15:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -329,8 +329,8 @@ File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count289
 \l__pdf_internal_box=\box57
 )
-(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/RtmpuLRJzc/Rd2pdfef73
-4c1b9648/Rd2.aux)
+(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/Rtmp2xQmX4/Rd2pdf1563
+594bb235/Rd2.aux)
 \openout1 = `Rd2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -383,10 +383,10 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/RtmpuLRJzc/Rd2pdfef73
-4c1b9648/Rd2.out)
-(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/RtmpuLRJzc/Rd2pdfef73
-4c1b9648/Rd2.out)
+(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/Rtmp2xQmX4/Rd2pdf1563
+594bb235/Rd2.out)
+(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/Rtmp2xQmX4/Rd2pdf1563
+594bb235/Rd2.out)
 \@outlinefile=\write4
 \openout4 = `Rd2.out'.
 
@@ -428,8 +428,8 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 34
 (/usr/local/texlive/2022/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/RtmpuLRJzc/Rd2pdfef73
-4c1b9648/Rd2.toc [1
+(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/Rtmp2xQmX4/Rd2pdf1563
+594bb235/Rd2.toc [1
 
 
 {/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2])
@@ -731,8 +731,8 @@ r []\T1/zi4/m/n/10 http://www.google.com/publicdata/directory
  []
 
 [93]
-(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/RtmpuLRJzc/Rd2pdfef73
-4c1b9648/Rd2.ind [94] [95
+(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/Rtmp2xQmX4/Rd2pdf1563
+594bb235/Rd2.ind [94] [95
 
 ]
 
@@ -742,8 +742,8 @@ LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
 (Font)              scaled to size 10.0pt on input line 177.
 [96] [97])
-(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/RtmpuLRJzc/Rd2pdfef73
-4c1b9648/Rd2.aux)
+(/private/var/folders/th/76hf527d5x3fbnpft9663cjw0000gn/T/Rtmp2xQmX4/Rd2pdf1563
+594bb235/Rd2.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -770,7 +770,7 @@ live/2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/20
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/
 type1/urw/times/utmr8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on Rd2.pdf (97 pages, 334777 bytes).
+Output written on Rd2.pdf (97 pages, 334776 bytes).
 PDF statistics:
  2162 PDF objects out of 2487 (max. 8388607)
  2025 compressed objects within 21 object streams

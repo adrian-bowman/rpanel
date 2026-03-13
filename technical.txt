@@ -34,7 +34,7 @@ To check the package, set the clock to overcome an issue then use devtools:
       Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
       check(args = '--no-tests', build_args = '--resave-data')
       spell_check()
-      url_check()
+      urlchecker::url_check()
 
 To check that it can be built under other operating systems:
       check_win_devel(args = '--resave-data')
@@ -44,7 +44,7 @@ To check that it can be built under other operating systems:
 
 Check package dependencies using the tools package:
       R CMD build --resave-data rpanel (from a terminal)
-      check_packages_in_dir("..")
+      # check_packages_in_dir("..") # This is covered by the following function call.
       check_packages_in_dir("..", reverse = list())
       summarize_check_packages_in_dir_results("..")
       

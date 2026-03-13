@@ -16,12 +16,12 @@ produces these results:
 ```
 Check status summary:
                   ERROR OK
-  Source packages     1 10
-  Reverse depends     0  1
+  Source packages     0  1
+  Reverse depends     1  8
 ```
 
 For some reason, the `stpp` package could not be installed
 
 ## Comments
 
-This release includes new functions rp.t_test, rp.lm, rp.coefficients and rp.drop1 to express the results of fitting (mostly linear) models graphically. It also includes some minor bug fixes.
+A small bug in the function rp.sample came to light when the previous version of the package, submitted earlier this week, was tested on multiple platforms. This arose intermittently through particular configurations of randomly generated data. Apologies for missing this. The bug has now been corrected.
