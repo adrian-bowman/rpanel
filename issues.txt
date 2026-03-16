@@ -2,14 +2,16 @@
 	               Immediate changes to rpanel
 --------------------------------------------------------------
 
+rp.lm
+  - if 'Show residuals' is checked while a model is not fitted, an error is generated.
+  - Extend rp.colour to 'residuals'. This will fix a bug in rp.lm with two covariates.
+    Remeber the help file.
 
 --------------------------------------------------------------
 	               Ideas for changes to rpanel
 --------------------------------------------------------------
 
 Create testthat style of tests for all functions?
-
-Rename the colour names? Extend to 'residuals'. Also in help files.
 
 Remove the globalVariables call in rpanel.R and replace with suitable coding.
 
@@ -30,10 +32,10 @@ rp.lm
   - the horizontal axis sometimes switches to numeric
   - the cols argument needs to be cascaded down to the specialist function for different data types.
   - catch degenerate nmodels (as in two-way anova case) more generally
-  - allow the effectsplot to be printed separately, when panel = FALSE.
+  - allow the effectsplot to be printed separately, when panel = FALSE. Already availabel in rp.drop1?
 
 rp.coefficients
-  - allow different functions to control the display of coefficients?
+  - allow different functions to control the size of the coefficient effects?
     range, iqr, user-supplied?
   - lines idea to give visual cues? (change in mean versus change from min(x))
     This needs some thinking.
