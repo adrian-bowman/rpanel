@@ -3,10 +3,12 @@
 * win_devel
 * win_release
 * win_old_release
+* mac_release
 
 ## R CMD check results
 
-local system:    0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+Local system:    0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+Other test environments:     Status: OK
 
 ## Checks on dependencies
 
@@ -24,4 +26,8 @@ For some reason, the `stpp` package could not be installed
 
 ## Comments
 
-A small bug in the function rp.sample came to light when the previous version of the package, submitted earlier this week, was tested on multiple platforms. This arose intermittently through particular configurations of randomly generated data. Apologies for missing this. The bug has now been corrected.
+A small bug in the rp.plot4d function occurs for occasional configurations of random data and this has been circumvented at the testing stage.
+
+One or two other very minor bugs have also been dealt with.
+
+As requested, failure to download remote files in the rp.datalink package has been trapped and the function finishes smoothly.

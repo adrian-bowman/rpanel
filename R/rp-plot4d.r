@@ -217,6 +217,7 @@ rp.plot4d <- function(x, z, y, model, group, subset,
                xord <- xord[group[ord] == group.level, ]
                cord <- cord[group[ord] == group.level]
             }
+            print(xord[ , 1])
             if (is.list(model)) points(xord[ , 1], xord[ , 2])
             points(xord[ , 1], xord[ , 2], pch = 16, col = cord)
             if (!is.null(foreground.plot) && is.character(foreground.plot) && foreground.plot == "regression") {
