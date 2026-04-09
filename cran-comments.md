@@ -12,7 +12,8 @@ Other test environments:     Status: OK
 
 ## Checks on dependencies
 
-check_packages_in_dir("..", reverse = list()) followed by summarize_check_packages_in_dir_results("..")
+check_packages_in_dir("..", reverse = list()) followed by
+summarize_check_packages_in_dir_results("..")
 produces these results:
 
 ```
@@ -31,3 +32,5 @@ A small bug in the rp.plot4d function occurs for occasional configurations of ra
 One or two other very minor bugs have also been dealt with.
 
 As requested, failure to download remote files in the rp.datalink package has been trapped and the function finishes smoothly.
+
+I apologise that a version (1.1-6.2) submitted to CRAN last night had some last minute manual checking code which had inadvertently been left in the systematic tests and which caused a problem.
