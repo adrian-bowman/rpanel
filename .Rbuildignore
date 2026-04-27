@@ -3,3 +3,5 @@
 ^\.Rproj\.user$
 ^\.github$
 ^CRAN-SUBMISSION$
+^\.positai$
+^\.claude$
